@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Japankuru クーポンページ (最終機能完成版)</title>
-    <style>
+      <style>
         :root {
             --primary-color: #007bff;
             --dark-blue: #1a2c4e;
@@ -17,13 +17,61 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             background-color: var(--light-gray); margin: 0; color: var(--text-color);
         }
-        .stylish-header {
-            background-image: linear-gradient(rgba(26, 44, 78, 0.6), rgba(26, 44, 78, 0.6)), url('https://images.unsplash.com/photo-1542051841857-5f90071e7989?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
-            background-size: cover; background-position: center; background-attachment: fixed;
-            color: #ffffff; text-align: center; padding: 80px 20px; position: relative;
-        }
-        .stylish-header h1 { font-size: 52px; font-weight: 800; margin: 0 0 10px 0; text-shadow: 0 2px 10px rgba(0,0,0,0.3); animation: fadeInDown 1s ease-out; }
-        .stylish-header p { font-size: 18px; opacity: 0.9; margin: 0; text-shadow: 0 1px 5px rgba(0,0,0,0.3); animation: fadeInUp 1s ease-out; }
+        /* --- 히어로 섹션으로 통합된 헤더 스타일 --- */
+.site-header-hero {
+    /* 기존 .stylish-header의 배경 스타일을 그대로 사용 */
+    background-image: linear-gradient(rgba(26, 44, 78, 0.65), rgba(26, 44, 78, 0.65)), url('https://images.unsplash.com/photo-1542051841857-5f90071e7989?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    
+    color: #ffffff;
+    text-align: center;
+    position: relative;
+
+    /* 패딩을 이용해 내부 요소들의 여백을 자연스럽게 조정 */
+    padding: 20px 20px 80px 20px;
+}
+
+.site-nav {
+    /* position: absolute 제거 */
+    width: 100%;
+    z-index: 100;
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    /* 로고를 왼쪽에 배치 */
+    display: flex;
+    justify-content: flex-start;
+}
+
+.nav-logo-link img {
+    height: 35px;
+    display: block;
+}
+
+.hero-content {
+    /* 로고와의 간격을 위해 margin-top 추가 */
+    margin-top: 40px;
+}
+
+.hero-content h1 {
+    font-size: 52px;
+    font-weight: 800;
+    margin: 0 0 10px 0;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    animation: fadeInDown 1s ease-out;
+}
+
+.hero-content p {
+    font-size: 18px;
+    opacity: 0.9;
+    margin: 0;
+    text-shadow: 0 1px 5px rgba(0,0,0,0.3);
+    animation: fadeInUp 1s ease-out;
+}
         .coupon-container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
         .interaction-notice { background-color: #e3f2fd; border: 1px solid #90caf9; color: #1e3c72; padding: 15px 20px; border-radius: 12px; margin: 0 auto 40px auto; text-align: center; font-size: 16px; max-width: 800px; }
         .filter-controls { display: flex; justify-content: center; gap: 10px; margin-bottom: 40px; flex-wrap: wrap; }
@@ -146,14 +194,132 @@
     font-size: 13px;
     font-weight: bold;
 }
+/* --- 히어로 배경 애니메이션 스타일 --- */
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+    100% { transform: translateY(0px); }
+}
+
+.floating-elements {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 1; /* 콘텐츠보다 뒤에 위치 */
+}
+
+.floating-elements span {
+    position: absolute;
+    display: block;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: rgba(255, 255, 255, 0.4);
+    border-radius: 12px;
+    padding: 10px 20px;
+    font-weight: bold;
+    animation: float 10s ease-in-out infinite;
+    user-select: none;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+.floating-elements .floating-logo-icon {
+    height: 50px;
+    opacity: 0.2;
+}
+
+/* 각 요소의 위치와 애니메이션 시간 지연을 다르게 설정 */
+.floating-elements span:nth-child(1) { top: 20%; left: 5%; font-size: 24px; animation-duration: 15s; }
+.floating-elements span:nth-child(2) { top: 65%; left: 10%; font-size: 18px; animation-duration: 12s; animation-delay: -5s; }
+.floating-elements span:nth-child(3) { top: 10%; left: 40%; background: transparent; border: none; animation-duration: 18s;}
+.floating-elements span:nth-child(4) { top: 80%; left: 30%; font-size: 22px; animation-duration: 10s; animation-delay: -2s; }
+.floating-elements span:nth-child(5) { top: 15%; left: 75%; font-size: 20px; animation-duration: 13s; animation-delay: -7s; }
+.floating-elements span:nth-child(6) { top: 50%; left: 60%; font-size: 16px; animation-duration: 11s; }
+.floating-elements span:nth-child(7) { top: 85%; left: 80%; font-size: 26px; animation-duration: 16s; animation-delay: -3s; }
+.floating-elements span:nth-child(8) { top: 5%; left: 20%; font-size: 14px; animation-duration: 9s; }
+.floating-elements span:nth-child(9) { top: 70%; left: 50%; font-size: 30px; animation-duration: 14s; animation-delay: -4s; color: rgba(255,255,255,0.1); }
+
+/* --- 히어로 검색창 스타일 --- */
+.hero-search-form {
+    margin-top: 25px;
+    position: relative;
+    z-index: 2; /* 떠다니는 요소보다 위에 위치 */
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.hero-search-form input {
+    width: 100%;
+    padding: 20px 25px;
+    font-size: 18px;
+    border-radius: 50px;
+    border: 2px solid rgba(255,255,255,0.5);
+    background-color: rgba(255, 255, 255, 0.95);
+    color: #333;
+    box-sizing: border-box;
+}
+.hero-search-form input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 15px rgba(0, 123, 255, 0.5);
+}
+
+.hero-search-form button {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 12px 25px;
+    border-radius: 30px;
+    border: none;
+    background-color: var(--primary-color);
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* 기존 히어로 콘텐츠 p 태그는 삭제되었으므로, 해당 스타일도 제거하거나 수정 */
+.hero-content p {
+    display: none; /* p태그 대신 검색창을 사용하므로 숨김 처리 */
+}
     </style>
 </head>
 <body>
+    <header class="site-header-hero">
+        <div class="floating-elements">
+            <span>💻 家電</span>
+            <span>🍜 グルメ</span>
+            <span><img src="https://i.imgur.com/u1KxVwv.png" alt="logo icon" class="floating-logo-icon"></span>
+            <span>#免税</span>
+            <span>👕 ファッション</span>
+            <span>#渋谷</span>
+            <span>🚆 交通</span>
+            <span>#お得</span>
+            <span>JAPANKURU</span>
+        </div>
     
-    <header class="stylish-header">
-        <h1>Japankuru 特別クーポン</h1>
-        <p>あなたの日本旅行を、もっと特別にする割引特典をお見逃しなく！</p>
+        <nav class="site-nav">
+            <div class="nav-container">
+                <a href="#" class="nav-logo-link">
+                    <img src="https://japankuru.com/gld-kanri/data/themes/japankuru/assets/images/logo.svg" alt="Japankuru Logo">
+                </a>
+            </div>
+        </nav>
+    
+        <div class="hero-content">
+            <h1>Japankuru 特別クーポン</h1>
+            <div class="hero-search-form">
+                <input type="search" id="coupon-search" placeholder="店名、地域、キーワードで検索 (例: 新宿、ラーメン)">
+                <button type="submit">検索</button>
+            </div>
+        </div>
     </header>
+
 
     <div class="coupon-container">
         <div class="interaction-notice">💡 <b>ヒント:</b> 各カードをクリックすると、裏面の詳細情報とGoogleマップが確認できます！</div>
