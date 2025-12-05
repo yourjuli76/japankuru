@@ -1,7 +1,9 @@
 <!-- ==============================
      JAPANKURU SAKURA 2026 LANDING
-     SVG Map + 베스트 시기 + 공유 버튼
-     JMA 평년 데이터 기반
+     한국어 버전 v2
+     - Web Share API 적용
+     - 모바일 지도/리스트 뷰 토글
+     JMA 平年値 기준
      ============================== -->
      <style>
         /* CSS 변수 */
@@ -19,7 +21,7 @@
         }
       
         .jk-sakura2026 {
-          font-family: "Noto Sans KR", "Noto Sans JP", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+          font-family: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
           padding: 32px 16px 60px;
           box-sizing: border-box;
           background: #fffdfd;
@@ -147,6 +149,27 @@
           height: 14px;
           fill: currentColor;
         }
+        /* 네이티브 공유 버튼 (모바일) */
+        .jk-share-btn-native {
+          background: var(--jk-pink);
+          color: #fff;
+          border-color: var(--jk-pink);
+        }
+        .jk-share-btn-native:hover {
+          background: var(--jk-pink-dark);
+        }
+        /* 데스크톱 전용 버튼 */
+        .jk-share-desktop-only {
+          display: none;
+        }
+        @media (min-width: 768px) {
+          .jk-share-desktop-only {
+            display: inline-flex;
+          }
+          .jk-share-mobile-only {
+            display: none;
+          }
+        }
       
         /* ========== SVG MAP SECTION ========== */
         .jk-sakura2026-map-section {
@@ -192,11 +215,55 @@
           margin: 0;
         }
       
+        /* ===== 뷰 토글 버튼 ===== */
+        .jk-view-toggle {
+          display: flex;
+          justify-content: center;
+          gap: 8px;
+          margin: 16px 0;
+        }
+        .jk-view-toggle-btn {
+          padding: 8px 16px;
+          font-size: 0.8rem;
+          font-weight: 600;
+          border-radius: 999px;
+          border: 1px solid var(--jk-pink-border);
+          background: #fff;
+          color: var(--jk-pink);
+          cursor: pointer;
+          transition: all 0.15s ease;
+        }
+        .jk-view-toggle-btn.is-active {
+          background: var(--jk-pink);
+          color: #fff;
+          border-color: var(--jk-pink);
+        }
+        .jk-view-toggle-btn svg {
+          width: 14px;
+          height: 14px;
+          vertical-align: -2px;
+          margin-right: 4px;
+          fill: currentColor;
+        }
+        /* 데스크톱에서는 토글 숨김 */
+        @media (min-width: 768px) {
+          .jk-view-toggle {
+            display: none;
+          }
+        }
+      
+        /* ===== 지도 뷰 ===== */
         .jk-sakura-map-wrapper {
           position: relative;
           width: 100%;
           aspect-ratio: 4 / 5;
           max-height: 620px;
+        }
+        .jk-map-view {
+          display: block;
+        }
+        .jk-map-view.is-hidden {
+          display: none;
         }
       
         .jk-japan-svg {
@@ -208,7 +275,7 @@
           height: 100%;
         }
       
-        /* 라벨 박스 - 확장 버전 */
+        /* 라벨 박스 */
         .jk-bloom-label {
           position: absolute;
           background: #fff;
@@ -263,7 +330,7 @@
           border-radius: 4px;
         }
       
-        /* 핀 도트 */
+        /* 핀 점 */
         .jk-map-dot {
           position: absolute;
           width: 12px;
@@ -274,6 +341,78 @@
           box-shadow: 0 2px 6px rgba(0,0,0,0.25);
           z-index: 5;
           transform: translate(-50%, -50%);
+        }
+      
+        /* ===== 리스트 뷰 ===== */
+        .jk-list-view {
+          display: none;
+        }
+        .jk-list-view.is-active {
+          display: block;
+        }
+        .jk-city-list {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+          max-height: 500px;
+          overflow-y: auto;
+          padding: 4px;
+        }
+        .jk-city-card {
+          display: flex;
+          align-items: center;
+          gap: 14px;
+          padding: 14px;
+          background: #fff;
+          border: 1px solid var(--jk-pink-border);
+          border-radius: 12px;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .jk-city-card-num {
+          width: 36px;
+          height: 36px;
+          background: var(--jk-pink);
+          color: #fff;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 0.85rem;
+          font-weight: 700;
+          flex-shrink: 0;
+        }
+        .jk-city-card-info {
+          flex: 1;
+          min-width: 0;
+        }
+        .jk-city-card-name {
+          font-size: 1rem;
+          font-weight: 700;
+          color: var(--jk-pink);
+          margin: 0 0 4px;
+        }
+        .jk-city-card-dates {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 8px;
+          font-size: 0.8rem;
+          color: #555;
+        }
+        .jk-city-card-dates span {
+          display: flex;
+          align-items: center;
+          gap: 3px;
+        }
+        .jk-city-card-best {
+          margin-top: 6px;
+          font-size: 0.75rem;
+          color: var(--jk-pink-dark);
+          font-weight: 600;
+        }
+        .jk-city-card-best span {
+          background: var(--jk-pink-light);
+          padding: 3px 8px;
+          border-radius: 6px;
         }
       
         /* 범례 */
@@ -371,28 +510,41 @@
         }
       
         /* 모바일 대응 */
-        @media (max-width: 700px) {
+        @media (max-width: 767px) {
           .jk-sakura-map-wrapper {
             aspect-ratio: 3 / 5;
           }
           .jk-bloom-label {
-            font-size: 0.62rem;
-            padding: 6px 8px;
+            font-size: 0.58rem;
+            padding: 5px 6px;
           }
           .jk-bloom-label-city {
-            font-size: 0.7rem;
+            font-size: 0.65rem;
           }
           .jk-bloom-label-row {
-            font-size: 0.58rem;
+            font-size: 0.52rem;
           }
           .jk-bloom-label-best {
-            font-size: 0.58rem;
+            font-size: 0.52rem;
           }
           .jk-sakura-map-title {
             font-size: 1.4rem;
           }
           .jk-japan-svg {
             width: 90%;
+          }
+          /* 모바일 기본: 리스트 뷰 */
+          .jk-map-view {
+            display: none;
+          }
+          .jk-map-view.is-active {
+            display: block;
+          }
+          .jk-list-view {
+            display: block;
+          }
+          .jk-list-view.is-hidden {
+            display: none;
           }
         }
       
@@ -638,27 +790,35 @@
               <img src="https://images.unsplash.com/photo-1522383225653-ed111181a951?auto=format&fit=crop&w=1200&q=80" alt="일본 벚꽃" loading="lazy" />
             </div>
             <div class="jk-sakura2026-hero-text">
-              <div class="jk-sakura2026-kicker">JAPANKURU 사쿠라 스페셜 2026</div>
-              <h1>2026년 일본 벚꽃 개화 예상 &amp; 여행 가이드</h1>
+              <div class="jk-sakura2026-kicker">JAPANKURU 벚꽃 스페셜 2026</div>
+              <h1>2026년 일본 벚꽃 개화 예상 & 여행 가이드</h1>
               <p>여행 날짜만 알면 어디로 가야 할지 바로 찾을 수 있어요. 이 페이지를 <strong>북마크</strong>해두고 벚꽃 여행 계획에 활용하세요!</p>
               <div class="jk-sakura2026-hero-badges">
-                <span class="jk-sakura2026-badge">🌸 본격 시즌: 3월 하순 - 5월 초순</span>
+                <span class="jk-sakura2026-badge">🌸 본격 시즌: 3월 하순~5월 초</span>
                 <span class="jk-sakura2026-badge">📍 주요 거점: 도쿄 / 교토 / 오사카</span>
               </div>
-              <p class="jk-sakura2026-hero-note">* JMA 평년값 기준. 실제 개화일은 기상 조건에 따라 1-2주 차이 날 수 있습니다.</p>
+              <p class="jk-sakura2026-hero-note">※ 기상청 평년값 기준입니다. 실제 개화일은 기상 조건에 따라 1~2주 전후할 수 있어요.</p>
               
               <!-- 공유 버튼 -->
               <div class="jk-share-bar">
                 <span class="jk-share-bar-label">친구에게 공유:</span>
-                <button type="button" class="jk-share-btn" onclick="window.open('https://twitter.com/intent/tweet?text=2026년 일본 벚꽃 개화 예상 지도 🌸&url=' + encodeURIComponent(window.location.href), '_blank')">
+                
+                <!-- 모바일: 네이티브 공유 -->
+                <button type="button" class="jk-share-btn jk-share-btn-native jk-share-mobile-only" onclick="handleNativeShare()">
+                  <svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg>
+                  공유하기
+                </button>
+                
+                <!-- 데스크톱: 개별 버튼 -->
+                <button type="button" class="jk-share-btn jk-share-desktop-only" onclick="shareToX()">
                   <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
                   X
                 </button>
-                <button type="button" class="jk-share-btn" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(window.location.href), '_blank')">
+                <button type="button" class="jk-share-btn jk-share-desktop-only" onclick="shareToFacebook()">
                   <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
                   Facebook
                 </button>
-                <button type="button" class="jk-share-btn" onclick="navigator.clipboard.writeText(window.location.href).then(()=>alert('링크가 복사되었습니다!'))">
+                <button type="button" class="jk-share-btn" onclick="copyLink()">
                   <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
                   링크 복사
                 </button>
@@ -669,7 +829,7 @@
           <!-- ========== SVG MAP ========== -->
           <section class="jk-sakura2026-map-section">
             <h2 class="jk-sakura2026-section-title">2026년 전국 벚꽃 개화 지도</h2>
-            <p class="jk-sakura2026-section-sub">각 도시의 <strong>베스트 방문 시기</strong>를 확인하세요. 개화 후 약 7일이 만개, 만개 전후 1주일이 절정입니다.</p>
+            <p class="jk-sakura2026-section-sub">각 도시의 <strong>베스트 방문 시기</strong>를 확인하세요. 개화 후 약 7일이면 만개, 만개 전후 1주일이 가장 예뻐요!</p>
       
             <div class="jk-sakura-map-container">
               
@@ -681,232 +841,373 @@
                   <span>BLOOMING TIME</span>
                 </div>
                 <h3 class="jk-sakura-map-title">2026 일본 벚꽃</h3>
-                <p class="jk-sakura-map-subtitle">개화 지도 (JMA 평년값)</p>
+                <p class="jk-sakura-map-subtitle">개화 지도 (기상청 평년값)</p>
               </div>
       
-              <!-- 지도 영역 -->
-              <div class="jk-sakura-map-wrapper">
-                
-                <!-- 일본 지도 SVG -->
-                <svg class="jk-japan-svg" viewBox="0 0 400 520" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="일본 지도">
-                  <defs>
-                    <linearGradient id="sakura-grad" x1="0%" y1="0%" x2="0%" y2="100%">
-                      <stop offset="0%" style="stop-color:#fff9fc;stop-opacity:1" />
-                      <stop offset="100%" style="stop-color:#fce4ec;stop-opacity:0.3" />
-                    </linearGradient>
-                  </defs>
-                  <rect width="400" height="520" fill="url(#sakura-grad)"/>
+              <!-- 뷰 토글 (모바일만) -->
+              <div class="jk-view-toggle">
+                <button type="button" class="jk-view-toggle-btn" data-view="list" onclick="toggleView('list')">
+                  <svg viewBox="0 0 24 24"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg>
+                  리스트
+                </button>
+                <button type="button" class="jk-view-toggle-btn" data-view="map" onclick="toggleView('map')">
+                  <svg viewBox="0 0 24 24"><path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/></svg>
+                  지도
+                </button>
+              </div>
+      
+              <!-- ===== 지도 뷰 ===== -->
+              <div class="jk-map-view" id="mapView">
+                <div class="jk-sakura-map-wrapper">
                   
-                  <!-- 홋카이도 -->
-                  <path d="M280 45 Q315 35 335 55 Q355 75 345 105 Q335 125 305 135 Q275 140 255 125 Q245 105 255 75 Q265 55 280 45Z" 
-                        fill="#fce4ec" stroke="#f48fb1" stroke-width="1.5"/>
+                  <!-- 일본 지도 SVG -->
+                  <svg class="jk-japan-svg" viewBox="0 0 400 520" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="일본 지도">
+                    <defs>
+                      <linearGradient id="sakura-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style="stop-color:#fff9fc;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#fce4ec;stop-opacity:0.3" />
+                      </linearGradient>
+                    </defs>
+                    <rect width="400" height="520" fill="url(#sakura-grad)"/>
+                    
+                    <!-- 홋카이도 -->
+                    <path d="M280 45 Q315 35 335 55 Q355 75 345 105 Q335 125 305 135 Q275 140 255 125 Q245 105 255 75 Q265 55 280 45Z" 
+                          fill="#fce4ec" stroke="#f48fb1" stroke-width="1.5"/>
+                    
+                    <!-- 혼슈 -->
+                    <path d="M195 150 Q255 140 285 160 Q305 180 295 210 Q280 245 260 270 
+                             Q240 300 220 320 Q200 345 175 365 Q150 380 130 385 
+                             Q110 385 100 365 Q95 340 115 305 Q135 270 155 245 
+                             Q175 220 180 195 Q185 170 195 150Z" 
+                          fill="#fce4ec" stroke="#f48fb1" stroke-width="1.5"/>
+                    
+                    <!-- 시코쿠 -->
+                    <path d="M115 395 Q150 388 168 400 Q180 415 172 432 Q158 445 130 445 Q105 438 98 420 Q100 402 115 395Z" 
+                          fill="#fce4ec" stroke="#f48fb1" stroke-width="1.5"/>
+                    
+                    <!-- 규슈 -->
+                    <path d="M65 405 Q100 392 115 415 Q122 440 108 462 Q88 480 60 472 Q38 458 35 432 Q38 410 65 405Z" 
+                          fill="#fce4ec" stroke="#f48fb1" stroke-width="1.5"/>
+                    
+                    <!-- 개화 전선 라인 -->
+                    <path d="M50 455 Q95 430 135 405 Q175 380 200 345 Q225 310 255 275 Q285 240 300 200" 
+                          stroke="#c73a7a" stroke-width="2.5" stroke-dasharray="8 4" fill="none" opacity="0.4"/>
+                    
+                    <!-- 벚꽃 데코레이션 -->
+                    <g transform="translate(340, 55)">
+                      <circle cx="0" cy="0" r="14" fill="#f8bbd9" opacity="0.8"/>
+                      <circle cx="18" cy="10" r="11" fill="#f48fb1" opacity="0.9"/>
+                      <circle cx="10" cy="24" r="9" fill="#f8bbd9" opacity="0.7"/>
+                    </g>
+                  </svg>
+      
+                  <!-- ===== 도시 라벨 (개화 + 만개 + 베스트) ===== -->
                   
-                  <!-- 혼슈 -->
-                  <path d="M195 150 Q255 140 285 160 Q305 180 295 210 Q280 245 260 270 
-                           Q240 300 220 320 Q200 345 175 365 Q150 380 130 385 
-                           Q110 385 100 365 Q95 340 115 305 Q135 270 155 245 
-                           Q175 220 180 195 Q185 170 195 150Z" 
-                        fill="#fce4ec" stroke="#f48fb1" stroke-width="1.5"/>
+                  <!-- 삿포로 -->
+                  <div class="jk-map-dot" style="top: 17%; left: 72%;"></div>
+                  <div class="jk-bloom-label" style="top: 6%; left: 73%;">
+                    <div class="jk-bloom-label-city">삿포로</div>
+                    <div class="jk-bloom-label-row">
+                      <span class="jk-bloom-label-icon">🌸</span>
+                      <span>개화</span>
+                      <span class="jk-bloom-label-date">5/1</span>
+                    </div>
+                    <div class="jk-bloom-label-row">
+                      <span class="jk-bloom-label-icon">🌺</span>
+                      <span>만개</span>
+                      <span class="jk-bloom-label-date">5/6</span>
+                    </div>
+                    <div class="jk-bloom-label-best">✨ <span>베스트 5/3~10</span></div>
+                  </div>
+      
+                  <!-- 아오모리 -->
+                  <div class="jk-map-dot" style="top: 28%; left: 66%;"></div>
+                  <div class="jk-bloom-label" style="top: 20%; left: 70%;">
+                    <div class="jk-bloom-label-city">아오모리</div>
+                    <div class="jk-bloom-label-row">
+                      <span class="jk-bloom-label-icon">🌸</span>
+                      <span>개화</span>
+                      <span class="jk-bloom-label-date">4/22</span>
+                    </div>
+                    <div class="jk-bloom-label-row">
+                      <span class="jk-bloom-label-icon">🌺</span>
+                      <span>만개</span>
+                      <span class="jk-bloom-label-date">4/28</span>
+                    </div>
+                    <div class="jk-bloom-label-best">✨ <span>베스트 4/25~5/2</span></div>
+                  </div>
+      
+                  <!-- 센다이 -->
+                  <div class="jk-map-dot" style="top: 38%; left: 64%;"></div>
+                  <div class="jk-bloom-label" style="top: 33%; left: 70%;">
+                    <div class="jk-bloom-label-city">센다이</div>
+                    <div class="jk-bloom-label-row">
+                      <span class="jk-bloom-label-icon">🌸</span>
+                      <span>개화</span>
+                      <span class="jk-bloom-label-date">4/8</span>
+                    </div>
+                    <div class="jk-bloom-label-row">
+                      <span class="jk-bloom-label-icon">🌺</span>
+                      <span>만개</span>
+                      <span class="jk-bloom-label-date">4/14</span>
+                    </div>
+                    <div class="jk-bloom-label-best">✨ <span>베스트 4/12~18</span></div>
+                  </div>
+      
+                  <!-- 도쿄 -->
+                  <div class="jk-map-dot" style="top: 50%; left: 62%;"></div>
+                  <div class="jk-bloom-label" style="top: 46%; left: 68%;">
+                    <div class="jk-bloom-label-city">도쿄</div>
+                    <div class="jk-bloom-label-row">
+                      <span class="jk-bloom-label-icon">🌸</span>
+                      <span>개화</span>
+                      <span class="jk-bloom-label-date">3/24</span>
+                    </div>
+                    <div class="jk-bloom-label-row">
+                      <span class="jk-bloom-label-icon">🌺</span>
+                      <span>만개</span>
+                      <span class="jk-bloom-label-date">3/31</span>
+                    </div>
+                    <div class="jk-bloom-label-best">✨ <span>베스트 3/29~4/5</span></div>
+                  </div>
+      
+                  <!-- 가나자와 -->
+                  <div class="jk-map-dot" style="top: 44%; left: 46%;"></div>
+                  <div class="jk-bloom-label" style="top: 36%; left: 24%;">
+                    <div class="jk-bloom-label-city">가나자와</div>
+                    <div class="jk-bloom-label-row">
+                      <span class="jk-bloom-label-icon">🌸</span>
+                      <span>개화</span>
+                      <span class="jk-bloom-label-date">4/3</span>
+                    </div>
+                    <div class="jk-bloom-label-row">
+                      <span class="jk-bloom-label-icon">🌺</span>
+                      <span>만개</span>
+                      <span class="jk-bloom-label-date">4/9</span>
+                    </div>
+                    <div class="jk-bloom-label-best">✨ <span>베스트 4/7~13</span></div>
+                  </div>
+      
+                  <!-- 교토 -->
+                  <div class="jk-map-dot" style="top: 58%; left: 42%;"></div>
+                  <div class="jk-bloom-label" style="top: 50%; left: 16%;">
+                    <div class="jk-bloom-label-city">교토</div>
+                    <div class="jk-bloom-label-row">
+                      <span class="jk-bloom-label-icon">🌸</span>
+                      <span>개화</span>
+                      <span class="jk-bloom-label-date">3/26</span>
+                    </div>
+                    <div class="jk-bloom-label-row">
+                      <span class="jk-bloom-label-icon">🌺</span>
+                      <span>만개</span>
+                      <span class="jk-bloom-label-date">4/2</span>
+                    </div>
+                    <div class="jk-bloom-label-best">✨ <span>베스트 3/31~4/7</span></div>
+                  </div>
+      
+                  <!-- 오사카 -->
+                  <div class="jk-map-dot" style="top: 63%; left: 40%;"></div>
+                  <div class="jk-bloom-label" style="top: 63%; left: 46%;">
+                    <div class="jk-bloom-label-city">오사카</div>
+                    <div class="jk-bloom-label-row">
+                      <span class="jk-bloom-label-icon">🌸</span>
+                      <span>개화</span>
+                      <span class="jk-bloom-label-date">3/27</span>
+                    </div>
+                    <div class="jk-bloom-label-row">
+                      <span class="jk-bloom-label-icon">🌺</span>
+                      <span>만개</span>
+                      <span class="jk-bloom-label-date">4/3</span>
+                    </div>
+                    <div class="jk-bloom-label-best">✨ <span>베스트 4/1~8</span></div>
+                  </div>
+      
+                  <!-- 히로시마 -->
+                  <div class="jk-map-dot" style="top: 66%; left: 30%;"></div>
+                  <div class="jk-bloom-label" style="top: 58%; left: 2%;">
+                    <div class="jk-bloom-label-city">히로시마</div>
+                    <div class="jk-bloom-label-row">
+                      <span class="jk-bloom-label-icon">🌸</span>
+                      <span>개화</span>
+                      <span class="jk-bloom-label-date">3/25</span>
+                    </div>
+                    <div class="jk-bloom-label-row">
+                      <span class="jk-bloom-label-icon">🌺</span>
+                      <span>만개</span>
+                      <span class="jk-bloom-label-date">4/1</span>
+                    </div>
+                    <div class="jk-bloom-label-best">✨ <span>베스트 3/30~4/6</span></div>
+                  </div>
+      
+                  <!-- 후쿠오카 -->
+                  <div class="jk-map-dot" style="top: 78%; left: 20%;"></div>
+                  <div class="jk-bloom-label" style="top: 72%; left: 1%;">
+                    <div class="jk-bloom-label-city">후쿠오카</div>
+                    <div class="jk-bloom-label-row">
+                      <span class="jk-bloom-label-icon">🌸</span>
+                      <span>개화</span>
+                      <span class="jk-bloom-label-date">3/22</span>
+                    </div>
+                    <div class="jk-bloom-label-row">
+                      <span class="jk-bloom-label-icon">🌺</span>
+                      <span>만개</span>
+                      <span class="jk-bloom-label-date">3/29</span>
+                    </div>
+                    <div class="jk-bloom-label-best">✨ <span>베스트 3/27~4/3</span></div>
+                  </div>
+      
+                  <!-- 가고시마 -->
+                  <div class="jk-map-dot" style="top: 88%; left: 22%;"></div>
+                  <div class="jk-bloom-label" style="top: 84%; left: 30%;">
+                    <div class="jk-bloom-label-city">가고시마</div>
+                    <div class="jk-bloom-label-row">
+                      <span class="jk-bloom-label-icon">🌸</span>
+                      <span>개화</span>
+                      <span class="jk-bloom-label-date">3/26</span>
+                    </div>
+                    <div class="jk-bloom-label-row">
+                      <span class="jk-bloom-label-icon">🌺</span>
+                      <span>만개</span>
+                      <span class="jk-bloom-label-date">4/2</span>
+                    </div>
+                    <div class="jk-bloom-label-best">✨ <span>베스트 3/31~4/7</span></div>
+                  </div>
+      
+                </div>
+              </div>
+      
+              <!-- ===== 리스트 뷰 ===== -->
+              <div class="jk-list-view" id="listView">
+                <div class="jk-city-list">
                   
-                  <!-- 시코쿠 -->
-                  <path d="M115 395 Q150 388 168 400 Q180 415 172 432 Q158 445 130 445 Q105 438 98 420 Q100 402 115 395Z" 
-                        fill="#fce4ec" stroke="#f48fb1" stroke-width="1.5"/>
-                  
-                  <!-- 규슈 -->
-                  <path d="M65 405 Q100 392 115 415 Q122 440 108 462 Q88 480 60 472 Q38 458 35 432 Q38 410 65 405Z" 
-                        fill="#fce4ec" stroke="#f48fb1" stroke-width="1.5"/>
-                  
-                  <!-- 개화 전선 라인 -->
-                  <path d="M50 455 Q95 430 135 405 Q175 380 200 345 Q225 310 255 275 Q285 240 300 200" 
-                        stroke="#c73a7a" stroke-width="2.5" stroke-dasharray="8 4" fill="none" opacity="0.4"/>
-                  
-                  <!-- 벚꽃 장식 -->
-                  <g transform="translate(340, 55)">
-                    <circle cx="0" cy="0" r="14" fill="#f8bbd9" opacity="0.8"/>
-                    <circle cx="18" cy="10" r="11" fill="#f48fb1" opacity="0.9"/>
-                    <circle cx="10" cy="24" r="9" fill="#f8bbd9" opacity="0.7"/>
-                  </g>
-                </svg>
+                  <div class="jk-city-card">
+                    <div class="jk-city-card-num">1</div>
+                    <div class="jk-city-card-info">
+                      <h4 class="jk-city-card-name">후쿠오카</h4>
+                      <div class="jk-city-card-dates">
+                        <span>🌸 개화 3/22</span>
+                        <span>🌺 만개 3/29</span>
+                      </div>
+                      <div class="jk-city-card-best">✨ <span>베스트 3/27~4/3</span></div>
+                    </div>
+                  </div>
       
-                <!-- ===== 도시 라벨들 (개화 + 만개 + 베스트) ===== -->
-                
-                <!-- 삿포로 -->
-                <div class="jk-map-dot" style="top: 17%; left: 72%;"></div>
-                <div class="jk-bloom-label" style="top: 6%; left: 73%;">
-                  <div class="jk-bloom-label-city">삿포로</div>
-                  <div class="jk-bloom-label-row">
-                    <span class="jk-bloom-label-icon">🌸</span>
-                    <span>개화</span>
-                    <span class="jk-bloom-label-date">5/1</span>
+                  <div class="jk-city-card">
+                    <div class="jk-city-card-num">2</div>
+                    <div class="jk-city-card-info">
+                      <h4 class="jk-city-card-name">도쿄</h4>
+                      <div class="jk-city-card-dates">
+                        <span>🌸 개화 3/24</span>
+                        <span>🌺 만개 3/31</span>
+                      </div>
+                      <div class="jk-city-card-best">✨ <span>베스트 3/29~4/5</span></div>
+                    </div>
                   </div>
-                  <div class="jk-bloom-label-row">
-                    <span class="jk-bloom-label-icon">🌺</span>
-                    <span>만개</span>
-                    <span class="jk-bloom-label-date">5/6</span>
+      
+                  <div class="jk-city-card">
+                    <div class="jk-city-card-num">3</div>
+                    <div class="jk-city-card-info">
+                      <h4 class="jk-city-card-name">히로시마</h4>
+                      <div class="jk-city-card-dates">
+                        <span>🌸 개화 3/25</span>
+                        <span>🌺 만개 4/1</span>
+                      </div>
+                      <div class="jk-city-card-best">✨ <span>베스트 3/30~4/6</span></div>
+                    </div>
                   </div>
-                  <div class="jk-bloom-label-best">✨ <span>베스트 5/3~10</span></div>
+      
+                  <div class="jk-city-card">
+                    <div class="jk-city-card-num">4</div>
+                    <div class="jk-city-card-info">
+                      <h4 class="jk-city-card-name">교토</h4>
+                      <div class="jk-city-card-dates">
+                        <span>🌸 개화 3/26</span>
+                        <span>🌺 만개 4/2</span>
+                      </div>
+                      <div class="jk-city-card-best">✨ <span>베스트 3/31~4/7</span></div>
+                    </div>
+                  </div>
+      
+                  <div class="jk-city-card">
+                    <div class="jk-city-card-num">5</div>
+                    <div class="jk-city-card-info">
+                      <h4 class="jk-city-card-name">가고시마</h4>
+                      <div class="jk-city-card-dates">
+                        <span>🌸 개화 3/26</span>
+                        <span>🌺 만개 4/2</span>
+                      </div>
+                      <div class="jk-city-card-best">✨ <span>베스트 3/31~4/7</span></div>
+                    </div>
+                  </div>
+      
+                  <div class="jk-city-card">
+                    <div class="jk-city-card-num">6</div>
+                    <div class="jk-city-card-info">
+                      <h4 class="jk-city-card-name">오사카</h4>
+                      <div class="jk-city-card-dates">
+                        <span>🌸 개화 3/27</span>
+                        <span>🌺 만개 4/3</span>
+                      </div>
+                      <div class="jk-city-card-best">✨ <span>베스트 4/1~8</span></div>
+                    </div>
+                  </div>
+      
+                  <div class="jk-city-card">
+                    <div class="jk-city-card-num">7</div>
+                    <div class="jk-city-card-info">
+                      <h4 class="jk-city-card-name">가나자와</h4>
+                      <div class="jk-city-card-dates">
+                        <span>🌸 개화 4/3</span>
+                        <span>🌺 만개 4/9</span>
+                      </div>
+                      <div class="jk-city-card-best">✨ <span>베스트 4/7~13</span></div>
+                    </div>
+                  </div>
+      
+                  <div class="jk-city-card">
+                    <div class="jk-city-card-num">8</div>
+                    <div class="jk-city-card-info">
+                      <h4 class="jk-city-card-name">센다이</h4>
+                      <div class="jk-city-card-dates">
+                        <span>🌸 개화 4/8</span>
+                        <span>🌺 만개 4/14</span>
+                      </div>
+                      <div class="jk-city-card-best">✨ <span>베스트 4/12~18</span></div>
+                    </div>
+                  </div>
+      
+                  <div class="jk-city-card">
+                    <div class="jk-city-card-num">9</div>
+                    <div class="jk-city-card-info">
+                      <h4 class="jk-city-card-name">아오모리</h4>
+                      <div class="jk-city-card-dates">
+                        <span>🌸 개화 4/22</span>
+                        <span>🌺 만개 4/28</span>
+                      </div>
+                      <div class="jk-city-card-best">✨ <span>베스트 4/25~5/2</span></div>
+                    </div>
+                  </div>
+      
+                  <div class="jk-city-card">
+                    <div class="jk-city-card-num">10</div>
+                    <div class="jk-city-card-info">
+                      <h4 class="jk-city-card-name">삿포로</h4>
+                      <div class="jk-city-card-dates">
+                        <span>🌸 개화 5/1</span>
+                        <span>🌺 만개 5/6</span>
+                      </div>
+                      <div class="jk-city-card-best">✨ <span>베스트 5/3~10</span></div>
+                    </div>
+                  </div>
+      
                 </div>
-      
-                <!-- 아오모리 -->
-                <div class="jk-map-dot" style="top: 28%; left: 66%;"></div>
-                <div class="jk-bloom-label" style="top: 20%; left: 70%;">
-                  <div class="jk-bloom-label-city">아오모리</div>
-                  <div class="jk-bloom-label-row">
-                    <span class="jk-bloom-label-icon">🌸</span>
-                    <span>개화</span>
-                    <span class="jk-bloom-label-date">4/22</span>
-                  </div>
-                  <div class="jk-bloom-label-row">
-                    <span class="jk-bloom-label-icon">🌺</span>
-                    <span>만개</span>
-                    <span class="jk-bloom-label-date">4/28</span>
-                  </div>
-                  <div class="jk-bloom-label-best">✨ <span>베스트 4/25~5/2</span></div>
-                </div>
-      
-                <!-- 센다이 -->
-                <div class="jk-map-dot" style="top: 38%; left: 64%;"></div>
-                <div class="jk-bloom-label" style="top: 33%; left: 70%;">
-                  <div class="jk-bloom-label-city">센다이</div>
-                  <div class="jk-bloom-label-row">
-                    <span class="jk-bloom-label-icon">🌸</span>
-                    <span>개화</span>
-                    <span class="jk-bloom-label-date">4/8</span>
-                  </div>
-                  <div class="jk-bloom-label-row">
-                    <span class="jk-bloom-label-icon">🌺</span>
-                    <span>만개</span>
-                    <span class="jk-bloom-label-date">4/14</span>
-                  </div>
-                  <div class="jk-bloom-label-best">✨ <span>베스트 4/12~18</span></div>
-                </div>
-      
-                <!-- 도쿄 -->
-                <div class="jk-map-dot" style="top: 50%; left: 62%;"></div>
-                <div class="jk-bloom-label" style="top: 46%; left: 68%;">
-                  <div class="jk-bloom-label-city">도쿄</div>
-                  <div class="jk-bloom-label-row">
-                    <span class="jk-bloom-label-icon">🌸</span>
-                    <span>개화</span>
-                    <span class="jk-bloom-label-date">3/24</span>
-                  </div>
-                  <div class="jk-bloom-label-row">
-                    <span class="jk-bloom-label-icon">🌺</span>
-                    <span>만개</span>
-                    <span class="jk-bloom-label-date">3/31</span>
-                  </div>
-                  <div class="jk-bloom-label-best">✨ <span>베스트 3/29~4/5</span></div>
-                </div>
-      
-                <!-- 가나자와 -->
-                <div class="jk-map-dot" style="top: 44%; left: 46%;"></div>
-                <div class="jk-bloom-label" style="top: 36%; left: 24%;">
-                  <div class="jk-bloom-label-city">가나자와</div>
-                  <div class="jk-bloom-label-row">
-                    <span class="jk-bloom-label-icon">🌸</span>
-                    <span>개화</span>
-                    <span class="jk-bloom-label-date">4/3</span>
-                  </div>
-                  <div class="jk-bloom-label-row">
-                    <span class="jk-bloom-label-icon">🌺</span>
-                    <span>만개</span>
-                    <span class="jk-bloom-label-date">4/9</span>
-                  </div>
-                  <div class="jk-bloom-label-best">✨ <span>베스트 4/7~13</span></div>
-                </div>
-      
-                <!-- 교토 -->
-                <div class="jk-map-dot" style="top: 58%; left: 42%;"></div>
-                <div class="jk-bloom-label" style="top: 50%; left: 16%;">
-                  <div class="jk-bloom-label-city">교토</div>
-                  <div class="jk-bloom-label-row">
-                    <span class="jk-bloom-label-icon">🌸</span>
-                    <span>개화</span>
-                    <span class="jk-bloom-label-date">3/26</span>
-                  </div>
-                  <div class="jk-bloom-label-row">
-                    <span class="jk-bloom-label-icon">🌺</span>
-                    <span>만개</span>
-                    <span class="jk-bloom-label-date">4/2</span>
-                  </div>
-                  <div class="jk-bloom-label-best">✨ <span>베스트 3/31~4/7</span></div>
-                </div>
-      
-                <!-- 오사카 -->
-                <div class="jk-map-dot" style="top: 63%; left: 40%;"></div>
-                <div class="jk-bloom-label" style="top: 63%; left: 46%;">
-                  <div class="jk-bloom-label-city">오사카</div>
-                  <div class="jk-bloom-label-row">
-                    <span class="jk-bloom-label-icon">🌸</span>
-                    <span>개화</span>
-                    <span class="jk-bloom-label-date">3/27</span>
-                  </div>
-                  <div class="jk-bloom-label-row">
-                    <span class="jk-bloom-label-icon">🌺</span>
-                    <span>만개</span>
-                    <span class="jk-bloom-label-date">4/3</span>
-                  </div>
-                  <div class="jk-bloom-label-best">✨ <span>베스트 4/1~8</span></div>
-                </div>
-      
-                <!-- 히로시마 -->
-                <div class="jk-map-dot" style="top: 66%; left: 30%;"></div>
-                <div class="jk-bloom-label" style="top: 58%; left: 2%;">
-                  <div class="jk-bloom-label-city">히로시마</div>
-                  <div class="jk-bloom-label-row">
-                    <span class="jk-bloom-label-icon">🌸</span>
-                    <span>개화</span>
-                    <span class="jk-bloom-label-date">3/25</span>
-                  </div>
-                  <div class="jk-bloom-label-row">
-                    <span class="jk-bloom-label-icon">🌺</span>
-                    <span>만개</span>
-                    <span class="jk-bloom-label-date">4/1</span>
-                  </div>
-                  <div class="jk-bloom-label-best">✨ <span>베스트 3/30~4/6</span></div>
-                </div>
-      
-                <!-- 후쿠오카 -->
-                <div class="jk-map-dot" style="top: 78%; left: 20%;"></div>
-                <div class="jk-bloom-label" style="top: 72%; left: 1%;">
-                  <div class="jk-bloom-label-city">후쿠오카</div>
-                  <div class="jk-bloom-label-row">
-                    <span class="jk-bloom-label-icon">🌸</span>
-                    <span>개화</span>
-                    <span class="jk-bloom-label-date">3/22</span>
-                  </div>
-                  <div class="jk-bloom-label-row">
-                    <span class="jk-bloom-label-icon">🌺</span>
-                    <span>만개</span>
-                    <span class="jk-bloom-label-date">3/29</span>
-                  </div>
-                  <div class="jk-bloom-label-best">✨ <span>베스트 3/27~4/3</span></div>
-                </div>
-      
-                <!-- 가고시마 -->
-                <div class="jk-map-dot" style="top: 88%; left: 22%;"></div>
-                <div class="jk-bloom-label" style="top: 84%; left: 30%;">
-                  <div class="jk-bloom-label-city">가고시마</div>
-                  <div class="jk-bloom-label-row">
-                    <span class="jk-bloom-label-icon">🌸</span>
-                    <span>개화</span>
-                    <span class="jk-bloom-label-date">3/26</span>
-                  </div>
-                  <div class="jk-bloom-label-row">
-                    <span class="jk-bloom-label-icon">🌺</span>
-                    <span>만개</span>
-                    <span class="jk-bloom-label-date">4/2</span>
-                  </div>
-                  <div class="jk-bloom-label-best">✨ <span>베스트 3/31~4/7</span></div>
-                </div>
-      
               </div>
       
               <!-- 범례 -->
               <div class="jk-sakura-map-legend">
                 <div class="jk-legend-item">
                   <span>🌸</span>
-                  <span>개화 (5-6송이)</span>
+                  <span>개화 (5~6송이)</span>
                 </div>
                 <div class="jk-legend-item">
                   <span>🌺</span>
@@ -920,7 +1221,7 @@
       
               <!-- 출처 -->
               <div class="jk-sakura-map-source">
-                출처: <a href="https://www.data.jma.go.jp/sakura/data/sakura_kaika.html" target="_blank" rel="noopener">일본 기상청(JMA)</a> 평년값 기준 (만개: 개화+7일 계산)
+                출처: <a href="https://www.data.jma.go.jp/sakura/data/sakura_kaika.html" target="_blank" rel="noopener">일본 기상청</a> 평년값 기준 (만개: 개화+7일 계산)
               </div>
       
             </div>
@@ -932,45 +1233,45 @@
                 
                 <div class="jk-timing-card">
                   <div class="jk-timing-card-period">3월 하순</div>
-                  <div class="jk-timing-card-dates">3/20 ~ 3/31</div>
+                  <div class="jk-timing-card-dates">3/20~3/31</div>
                   <div class="jk-timing-card-cities">
                     <span class="jk-timing-city">후쿠오카</span>
                     <span class="jk-timing-city">도쿄</span>
                     <span class="jk-timing-city">히로시마</span>
                   </div>
-                  <div class="jk-timing-card-note">개화~만개 시작. 도쿄는 3/29부터 절정!</div>
+                  <div class="jk-timing-card-note">개화~만개 시작. 도쿄는 3/29부터 만개!</div>
                 </div>
       
                 <div class="jk-timing-card">
-                  <div class="jk-timing-card-period">4월 초순</div>
-                  <div class="jk-timing-card-dates">4/1 ~ 4/10</div>
+                  <div class="jk-timing-card-period">4월 초</div>
+                  <div class="jk-timing-card-dates">4/1~4/10</div>
                   <div class="jk-timing-card-cities">
                     <span class="jk-timing-city">도쿄</span>
                     <span class="jk-timing-city">교토</span>
                     <span class="jk-timing-city">오사카</span>
                     <span class="jk-timing-city">가나자와</span>
                   </div>
-                  <div class="jk-timing-card-note">🔥 황금 타이밍! 주요 도시 만개 절정기</div>
+                  <div class="jk-timing-card-note">🔥 골든타임! 주요 도시 만개 피크</div>
                 </div>
       
                 <div class="jk-timing-card">
                   <div class="jk-timing-card-period">4월 중순</div>
-                  <div class="jk-timing-card-dates">4/11 ~ 4/20</div>
+                  <div class="jk-timing-card-dates">4/11~4/20</div>
                   <div class="jk-timing-card-cities">
                     <span class="jk-timing-city">센다이</span>
                     <span class="jk-timing-city">가나자와</span>
                   </div>
-                  <div class="jk-timing-card-note">도호쿠 지방 절정. 인파 적어 여유로움</div>
+                  <div class="jk-timing-card-note">동북 지방 벚꽃. 혼잡 적고 여유롭게</div>
                 </div>
       
                 <div class="jk-timing-card">
-                  <div class="jk-timing-card-period">4월 하순 ~ 5월</div>
-                  <div class="jk-timing-card-dates">4/21 ~ 5/10</div>
+                  <div class="jk-timing-card-period">4월 하순~5월</div>
+                  <div class="jk-timing-card-dates">4/21~5/10</div>
                   <div class="jk-timing-card-cities">
                     <span class="jk-timing-city">아오모리</span>
                     <span class="jk-timing-city">삿포로</span>
                   </div>
-                  <div class="jk-timing-card-note">늦은 벚꽃 원한다면 북쪽으로! 히로사키 성 추천</div>
+                  <div class="jk-timing-card-note">늦은 벚꽃을 즐기려면 북쪽으로! 히로사키성 추천</div>
                 </div>
       
               </div>
@@ -980,45 +1281,45 @@
           <!-- TRIP TYPE -->
           <section class="jk-sakura2026-trips">
             <h2 class="jk-sakura2026-section-title">나에게 맞는 벚꽃 여행 스타일</h2>
-            <p class="jk-sakura2026-section-sub">일정과 스타일에 맞춰 선택하세요.</p>
+            <p class="jk-sakura2026-section-sub">일정과 스타일에 맞게 골라보세요.</p>
       
             <div class="jk-sakura2026-trip-grid">
               <article class="jk-sakura2026-trip-card">
                 <div class="jk-sakura2026-trip-label">첫 일본 여행</div>
-                <h3 class="jk-sakura2026-trip-title">도쿄 + 교토/오사카</h3>
-                <div class="jk-sakura2026-trip-days">5-7일 / 3월 말 ~ 4월 초 추천</div>
+                <h3 class="jk-sakura2026-trip-title">도쿄+교토/오사카</h3>
+                <div class="jk-sakura2026-trip-days">5~7일 / 3월 말~4월 초 추천</div>
                 <ul>
-                  <li>도쿄 우에노, 메구로강 → 신칸센 → 교토 철학의 길 → 오사카 성</li>
-                  <li>클래식한 벚꽃 명소 완전 정복</li>
+                  <li>도쿄 우에노·메구로강 → 신칸센 → 교토 철학의 길 → 오사카성</li>
+                  <li>정석 벚꽃 스팟 완전 정복</li>
                 </ul>
                 <div class="jk-sakura2026-trip-cta">
-                  <button type="button" class="jk-sakura2026-trip-btn">샘플 일정 보기 →</button>
+                  <button type="button" class="jk-sakura2026-trip-btn">모델 코스 보기 →</button>
                 </div>
               </article>
       
               <article class="jk-sakura2026-trip-card">
                 <div class="jk-sakura2026-trip-label">짧은 여행</div>
-                <h3 class="jk-sakura2026-trip-title">도쿄 집중 3-4일</h3>
-                <div class="jk-sakura2026-trip-days">3-4일 / 3월 29일 ~ 4월 5일</div>
+                <h3 class="jk-sakura2026-trip-title">도쿄 집중 3~4일</h3>
+                <div class="jk-sakura2026-trip-days">3~4일 / 3월 29일~4월 5일</div>
                 <ul>
-                  <li>한 도시에서 알차게! 우에노+메구로강+신주쿠교엔</li>
-                  <li>경유 또는 주말 여행에 딱</li>
+                  <li>1도시 알차게! 우에노+메구로강+신주쿠교엔</li>
+                  <li>경유 여행이나 주말 여행에 딱</li>
                 </ul>
                 <div class="jk-sakura2026-trip-cta">
-                  <button type="button" class="jk-sakura2026-trip-btn">샘플 일정 보기 →</button>
+                  <button type="button" class="jk-sakura2026-trip-btn">모델 코스 보기 →</button>
                 </div>
               </article>
       
               <article class="jk-sakura2026-trip-card">
-                <div class="jk-sakura2026-trip-label">리피터용</div>
-                <h3 class="jk-sakura2026-trip-title">도호쿠 & 홋카이도</h3>
-                <div class="jk-sakura2026-trip-days">7일+ / 4월 중순 ~ 5월 초</div>
+                <div class="jk-sakura2026-trip-label">재방문자</div>
+                <h3 class="jk-sakura2026-trip-title">동북&홋카이도</h3>
+                <div class="jk-sakura2026-trip-days">7일+ / 4월 중순~5월 초</div>
                 <ul>
-                  <li>센다이 → 히로사키 성 → 삿포로로 북상</li>
+                  <li>센다이 → 히로사키성 → 삿포로 북상 루트</li>
                   <li>인파 피해 여유롭게, 다른 분위기의 벚꽃</li>
                 </ul>
                 <div class="jk-sakura2026-trip-cta">
-                  <button type="button" class="jk-sakura2026-trip-btn">샘플 일정 보기 →</button>
+                  <button type="button" class="jk-sakura2026-trip-btn">모델 코스 보기 →</button>
                 </div>
               </article>
             </div>
@@ -1027,7 +1328,7 @@
           <!-- SPOTS -->
           <section class="jk-sakura2026-spots">
             <h2 class="jk-sakura2026-section-title">JAPANKURU 추천 벚꽃 명소</h2>
-            <p class="jk-sakura2026-section-sub">꼭 가봐야 할 대표 스팟 6곳</p>
+            <p class="jk-sakura2026-section-sub">꼭 가봐야 할 정석 스팟 6곳</p>
       
             <div class="jk-sakura2026-spot-grid">
               <article class="jk-sakura2026-spot-card">
@@ -1036,17 +1337,17 @@
                 </div>
                 <div class="jk-sakura2026-spot-body">
                   <h4>우에노 공원 (도쿄)</h4>
-                  <p>1,000그루+ 벚나무. 도쿄 대표 하나미 명소. 박물관과 함께 하루 코스로!</p>
+                  <p>1,000그루 이상의 벚나무. 도쿄 대표 꽃놀이 성지. 박물관과 함께 하루 코스로!</p>
                 </div>
               </article>
       
               <article class="jk-sakura2026-spot-card">
                 <div class="jk-sakura2026-spot-img">
-                  <img src="https://images.unsplash.com/photo-1545569341-9eb8b30979d9?auto=format&fit=crop&w=600&q=80" alt="메구로 강" loading="lazy" />
+                  <img src="https://images.unsplash.com/photo-1545569341-9eb8b30979d9?auto=format&fit=crop&w=600&q=80" alt="메구로강" loading="lazy" />
                 </div>
                 <div class="jk-sakura2026-spot-body">
-                  <h4>메구로 강 (도쿄)</h4>
-                  <p>강변 800그루 벚나무 터널. 저녁 조명이 로맨틱. 카페 거리와 함께!</p>
+                  <h4>메구로강 (도쿄)</h4>
+                  <p>강변 800그루 벚꽃 터널. 밤 라이트업이 로맨틱. 카페 거리도 함께!</p>
                 </div>
               </article>
       
@@ -1056,27 +1357,27 @@
                 </div>
                 <div class="jk-sakura2026-spot-body">
                   <h4>철학의 길 (교토)</h4>
-                  <p>은각사~난젠지 2km 산책로. 수로 양쪽 벚나무가 운치 있는 분위기.</p>
+                  <p>긴카쿠지~난젠지 2km 산책로. 수로 옆 벚꽃이 운치 있는 분위기.</p>
                 </div>
               </article>
       
               <article class="jk-sakura2026-spot-card">
                 <div class="jk-sakura2026-spot-img">
-                  <img src="https://images.unsplash.com/photo-1589308078059-be1415eab4c3?auto=format&fit=crop&w=600&q=80" alt="오사카 성" loading="lazy" />
+                  <img src="https://images.unsplash.com/photo-1589308078059-be1415eab4c3?auto=format&fit=crop&w=600&q=80" alt="오사카성 공원" loading="lazy" />
                 </div>
                 <div class="jk-sakura2026-spot-body">
-                  <h4>오사카 성 공원 (오사카)</h4>
-                  <p>천수각 배경 3,000그루 벚꽃 장관. 야간 조명 행사도 인기!</p>
+                  <h4>오사카성 공원 (오사카)</h4>
+                  <p>천수각 배경 3,000그루 벚꽃 장관. 야간 라이트업도 인기!</p>
                 </div>
               </article>
       
               <article class="jk-sakura2026-spot-card">
                 <div class="jk-sakura2026-spot-img">
-                  <img src="https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?auto=format&fit=crop&w=600&q=80" alt="히로사키 성" loading="lazy" />
+                  <img src="https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?auto=format&fit=crop&w=600&q=80" alt="히로사키성" loading="lazy" />
                 </div>
                 <div class="jk-sakura2026-spot-body">
-                  <h4>히로사키 성 (아오모리)</h4>
-                  <p>2,600그루 + 해자의 "꽃 뗏목". 4월 하순이 피크. 리피터 필수!</p>
+                  <h4>히로사키성 (아오모리)</h4>
+                  <p>2,600그루 벚꽃+해자의 '꽃뗏목'. 4월 하순 피크. 재방문자 필수!</p>
                 </div>
               </article>
       
@@ -1086,7 +1387,7 @@
                 </div>
                 <div class="jk-sakura2026-spot-body">
                   <h4>마이즈루 공원 (후쿠오카)</h4>
-                  <p>후쿠오카 성터 + 1,000그루 벚나무. 라멘 투어와 함께!</p>
+                  <p>후쿠오카성터+1,000그루 벚꽃. 라멘 투어와 함께!</p>
                 </div>
               </article>
             </div>
@@ -1100,7 +1401,7 @@
                 <div class="jk-sakura2026-faq-q">개화일과 만개일, 언제 가야 예쁜가요?</div>
                 <div class="jk-sakura2026-faq-a">
                   <div class="jk-sakura2026-faq-a-inner">
-                    <strong>만개 전후 1주일</strong>이 가장 예쁩니다. 개화는 5-6송이 피기 시작한 날, 만개는 80% 핀 날이에요. 보통 개화 후 약 7일이면 만개하고, 만개 후 3-4일에 벚꽃비가 흩날려요.
+                    <strong>만개 전후 1주일</strong>이 가장 예뻐요. 개화는 5~6송이 피기 시작한 날, 만개는 80% 핀 날이에요. 보통 개화 후 약 7일이면 만개하고, 만개 후 3~4일부터 벚꽃비가 흩날려요.
                   </div>
                 </div>
               </div>
@@ -1109,7 +1410,7 @@
                 <div class="jk-sakura2026-faq-q">숙소 예약은 언제 해야 하나요?</div>
                 <div class="jk-sakura2026-faq-a">
                   <div class="jk-sakura2026-faq-a-inner">
-                    도쿄/교토는 <strong>3-6개월 전</strong> 예약을 권장해요. 3월 말~4월 초 주말은 금방 차니까 취소 가능한 옵션으로 일단 잡아두세요!
+                    도쿄·교토는 <strong>3~6개월 전</strong> 예약을 추천해요. 3월 말~4월 초 주말은 금방 마감되니, 취소 가능한 플랜으로 일단 잡아두세요!
                   </div>
                 </div>
               </div>
@@ -1118,7 +1419,7 @@
                 <div class="jk-sakura2026-faq-q">피해야 할 시기가 있나요?</div>
                 <div class="jk-sakura2026-faq-a">
                   <div class="jk-sakura2026-faq-a-inner">
-                    <strong>황금연휴(4/29~5/5)</strong>는 일본 국내 여행객으로 엄청 붐벼요. 3월 마지막 주~4월 첫째 주 평일이 가장 무난합니다.
+                    <strong>골든위크(4/29~5/5)</strong>는 일본 국내 여행객으로 매우 혼잡해요. 3월 마지막 주~4월 첫째 주 평일이 가장 무난합니다.
                   </div>
                 </div>
               </div>
@@ -1127,7 +1428,7 @@
                 <div class="jk-sakura2026-faq-q">만개 시기를 놓쳤어요!</div>
                 <div class="jk-sakura2026-faq-a">
                   <div class="jk-sakura2026-faq-a-inner">
-                    북쪽으로 가세요! 센다이(4월 중순), 아오모리(4월 하순), 삿포로(5월 초)까지 벚꽃이 계속됩니다. 겹벚꽃은 일반 벚꽃보다 1-2주 늦게 피니까 그것도 찾아보세요.
+                    북쪽으로 가세요! 센다이(4월 중순), 아오모리(4월 하순), 삿포로(5월 초)까지 벚꽃이 이어져요. 겹벚꽃은 일반 벚꽃보다 1~2주 늦게 피니 그것도 체크!
                   </div>
                 </div>
               </div>
@@ -1138,28 +1439,35 @@
           <section class="jk-sakura2026-source">
             <div class="jk-sakura2026-source-inner">
               <div class="jk-sakura2026-kicker">데이터 출처</div>
-              <p class="jk-sakura2026-source-main">이 페이지의 개화일 정보는 <strong>일본 기상청(JMA) 평년값</strong>을 바탕으로 정리했습니다. 실제 2026년 개화일은 기상 조건에 따라 1-2주 차이 날 수 있습니다.</p>
+              <p class="jk-sakura2026-source-main">이 페이지의 개화일 정보는 <strong>일본 기상청 평년값</strong>을 기준으로 작성했어요. 실제 2026년 개화일은 기상 조건에 따라 1~2주 전후할 수 있습니다.</p>
               <p class="jk-sakura2026-source-link">
-                출처: <a href="https://www.data.jma.go.jp/sakura/data/sakura_kaika.html" target="_blank" rel="noopener noreferrer">기상청 사쿠라 개화 데이터</a>
+                출처: <a href="https://www.data.jma.go.jp/sakura/data/sakura_kaika.html" target="_blank" rel="noopener noreferrer">일본 기상청 벚꽃 개화 데이터</a>
               </p>
-              <p class="jk-sakura2026-source-note">* 2026년 예측은 1-2월경 일본기상협회 등에서 발표됩니다. 여행 전 최신 정보를 확인하세요!</p>
-              <p class="jk-sakura2026-source-updated">최종 업데이트: 2025-12-05</p>
+              <p class="jk-sakura2026-source-note">※ 2026년 예측은 1~2월경 일본기상협회 등에서 발표됩니다. 여행 전 최신 정보를 확인하세요!</p>
+              <p class="jk-sakura2026-source-updated">마지막 업데이트: 2025-12-05</p>
             </div>
           </section>
       
           <!-- 하단 CTA -->
           <div class="jk-bottom-cta">
-            <p class="jk-bottom-cta-text">🌸 이 페이지가 유용했다면 <strong>북마크</strong>하고 친구에게 공유해주세요!</p>
+            <p class="jk-bottom-cta-text">🌸 이 페이지가 도움이 됐다면 <strong>북마크</strong>해두고 친구에게도 공유해주세요!</p>
             <div class="jk-bottom-share-btns">
-              <button type="button" class="jk-share-btn" onclick="window.open('https://twitter.com/intent/tweet?text=2026년 일본 벚꽃 개화 지도 🌸&url=' + encodeURIComponent(window.location.href), '_blank')">
+              <!-- 모바일: 네이티브 공유 -->
+              <button type="button" class="jk-share-btn jk-share-btn-native jk-share-mobile-only" onclick="handleNativeShare()">
+                <svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg>
+                친구에게 공유하기
+              </button>
+              
+              <!-- 데스크톱: 개별 버튼 -->
+              <button type="button" class="jk-share-btn jk-share-desktop-only" onclick="shareToX()">
                 <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-                X로 공유
+                X에 공유
               </button>
-              <button type="button" class="jk-share-btn" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(window.location.href), '_blank')">
+              <button type="button" class="jk-share-btn jk-share-desktop-only" onclick="shareToFacebook()">
                 <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-                Facebook 공유
+                Facebook에 공유
               </button>
-              <button type="button" class="jk-share-btn" onclick="navigator.clipboard.writeText(window.location.href).then(()=>alert('링크가 복사되었습니다!'))">
+              <button type="button" class="jk-share-btn" onclick="copyLink()">
                 <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
                 링크 복사
               </button>
@@ -1180,5 +1488,83 @@
             if (!isOpen) item.classList.add("is-open");
           });
         });
+      
+        // 뷰 토글 초기화 (모바일 기본: 리스트)
+        function initViewToggle() {
+          var isMobile = window.innerWidth < 768;
+          var listBtn = document.querySelector('[data-view="list"]');
+          var mapBtn = document.querySelector('[data-view="map"]');
+          
+          if (isMobile) {
+            listBtn && listBtn.classList.add('is-active');
+            mapBtn && mapBtn.classList.remove('is-active');
+          }
+        }
+        initViewToggle();
+        window.addEventListener('resize', initViewToggle);
       })();
+      
+      // 뷰 토글 함수
+      function toggleView(view) {
+        var mapView = document.getElementById('mapView');
+        var listView = document.getElementById('listView');
+        var listBtn = document.querySelector('[data-view="list"]');
+        var mapBtn = document.querySelector('[data-view="map"]');
+        
+        if (view === 'map') {
+          mapView.classList.add('is-active');
+          mapView.classList.remove('is-hidden');
+          listView.classList.remove('is-active');
+          listView.classList.add('is-hidden');
+          mapBtn.classList.add('is-active');
+          listBtn.classList.remove('is-active');
+        } else {
+          listView.classList.add('is-active');
+          listView.classList.remove('is-hidden');
+          mapView.classList.remove('is-active');
+          mapView.classList.add('is-hidden');
+          listBtn.classList.add('is-active');
+          mapBtn.classList.remove('is-active');
+        }
+      }
+      
+      // 네이티브 공유 (Web Share API)
+      function handleNativeShare() {
+        if (navigator.share) {
+          navigator.share({
+            title: '2026 일본 벚꽃 개화 지도 🌸',
+            text: '여행 날짜별 벚꽃 베스트 시기 한눈에 보기!',
+            url: window.location.href
+          }).catch(function(err) {
+            // 사용자가 취소하거나 에러 시 조용히 무시
+            console.log('Share cancelled or failed:', err);
+          });
+        } else {
+          // fallback: 링크 복사
+          copyLink();
+        }
+      }
+      
+      // X(Twitter) 공유
+      function shareToX() {
+        var text = encodeURIComponent('2026 일본 벚꽃 개화 지도 🌸 여행 날짜별 베스트 시기 확인!');
+        var url = encodeURIComponent(window.location.href);
+        window.open('https://twitter.com/intent/tweet?text=' + text + '&url=' + url, '_blank');
+      }
+      
+      // Facebook 공유
+      function shareToFacebook() {
+        var url = encodeURIComponent(window.location.href);
+        window.open('https://www.facebook.com/sharer/sharer.php?u=' + url, '_blank');
+      }
+      
+      // 링크 복사
+      function copyLink() {
+        navigator.clipboard.writeText(window.location.href).then(function() {
+          alert('링크가 복사되었습니다! 📋');
+        }).catch(function() {
+          // fallback
+          prompt('아래 링크를 복사하세요:', window.location.href);
+        });
+      }
       </script>
