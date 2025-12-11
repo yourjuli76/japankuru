@@ -4,12 +4,11 @@
      - 히어로 슬라이더
      - 날짜 → 추천도시 카드 (추천 기준 설명 포함)
      - 벚꽃 4단계
-     - Leaflet 지도 + 카드 + 모바일용 오버레이
+     - Leaflet 지도 + 카드 + 모바일용 리스트 + 점/카드 연동
      - 스팟 설문 (로컬 통계 + 막대 애니메이션)
      - 도시별 추천 명소 카드
      - FAQ
      - 플로팅 배너 (추천 스팟 섹션으로 점프)
-     - 결과 카드 캡쳐 저장 + 공유
    ============================== -->
 
    <link
@@ -17,7 +16,6 @@
    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
  />
  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
- <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
  
  <style>
    @import url("https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@500;700&display=swap");
@@ -181,11 +179,7 @@
      border-color: var(--jk-pink);
      color: var(--jk-pink);
    }
-   .jk-header-btn span {
-     font-size: 0.95em;
-   }
  
-   /* 북마크 토스트 */
    .jk-header-toast {
      position: fixed;
      left: 50%;
@@ -520,7 +514,7 @@
    }
    .jk-result-btn {
      flex: 1;
-     min-width: 100px;
+     min-width: 110px;
      padding: 9px 10px;
      font-size: 0.78rem;
      font-weight: 600;
@@ -793,16 +787,20 @@
      box-shadow: var(--jk-shadow);
      border: 1px solid var(--jk-border);
      min-width: 120px;
-     max-width: 140px;
+     max-width: 160px;
      font-size: 0.7rem;
      z-index: 400;
      transition: all 0.2s;
+     cursor: pointer;
    }
    .jk-map-city-card:hover {
-     transform: scale(1.05);
+     transform: translateY(-2px);
      box-shadow: var(--jk-shadow-hover);
-     z-index: 450;
+   }
+   .jk-map-city-card.is-active {
      border-color: var(--jk-pink);
+     box-shadow: 0 0 0 2px rgba(212, 96, 122, 0.4);
+     transform: translateY(-3px);
    }
    .jk-map-city-card-name {
      font-size: 0.85rem;
@@ -842,7 +840,22 @@
      stroke-dasharray: 4 3;
    }
  
-   /* 지도 오버레이 (터치해서 활성화) */
+   /* Marker 핀 */
+   .jk-map-pin {
+     width: 12px;
+     height: 12px;
+     background: #d4607a;
+     border-radius: 50%;
+     border: 2px solid #fff;
+     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+     transition: transform 0.2s, box-shadow 0.2s;
+   }
+   .jk-map-pin.is-active {
+     transform: scale(1.3);
+     box-shadow: 0 0 0 4px rgba(212, 96, 122, 0.4);
+   }
+ 
+   /* 지도 오버레이 */
    .jk-map-overlay {
      position: absolute;
      inset: 0;
@@ -900,6 +913,17 @@
        box-shadow: var(--jk-shadow);
        border: 1px solid var(--jk-border);
        font-size: 0.75rem;
+       cursor: pointer;
+       transition: all 0.2s;
+     }
+     .jk-map-mobile-card:hover {
+       transform: translateY(-2px);
+       box-shadow: var(--jk-shadow-hover);
+     }
+     .jk-map-mobile-card.is-active {
+       border-color: var(--jk-pink);
+       box-shadow: 0 0 0 2px rgba(212, 96, 122, 0.4);
+       background: var(--jk-pink-light);
      }
      .jk-map-mobile-card-name {
        font-size: 0.85rem;
@@ -1052,6 +1076,22 @@
    .jk-spot-card:hover {
      box-shadow: var(--jk-shadow-hover);
      transform: translateY(-3px);
+   }
+   .jk-spot-card--highlight-temp {
+     box-shadow: 0 0 0 2px rgba(212, 96, 122, 0.5),
+       0 8px 25px rgba(0, 0, 0, 0.2);
+     animation: jkSpotPulse 1s ease-out 2;
+   }
+   @keyframes jkSpotPulse {
+     0% {
+       transform: translateY(-2px) scale(1);
+     }
+     50% {
+       transform: translateY(-4px) scale(1.02);
+     }
+     100% {
+       transform: translateY(-2px) scale(1);
+     }
    }
    .jk-spot-card-img {
      position: relative;
@@ -1298,6 +1338,70 @@
        display: none;
      }
    }
+   /* === 모바일 핀셋 튜닝 === */
+@media (max-width: 768px) {
+  .jk-hero {
+    height: 68vh;
+    min-height: 380px;
+  }
+
+  .jk-section {
+    padding: 36px 0;
+  }
+
+  .jk-map-container {
+    height: 420px;
+  }
+
+  .jk-spot-survey {
+    padding: 18px;
+  }
+
+  .jk-spots-grid {
+    grid-template-columns: 1fr; /* 도시별 스팟 카드 한 줄씩 */
+  }
+
+  .jk-spot-card-body {
+    padding: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .jk-header-tagline {
+    display: none; /* 로고 옆 부제목 숨겨서 상단 여유 확보 */
+  }
+
+  .jk-hero-content {
+    padding-bottom: 28px;
+  }
+
+  .jk-hero-lead {
+    font-size: 0.85rem;
+  }
+
+  .jk-result-body {
+    padding: 16px;
+  }
+
+  .jk-result-actions {
+    flex-direction: column;
+  }
+
+  .jk-map-mobile-cards {
+    grid-template-columns: 1fr; /* 도시 리스트도 한 줄씩 */
+  }
+
+  .jk-floating-banner {
+    right: 10px;
+    left: 10px;
+    bottom: 18px;
+  }
+
+  .jk-sticky-summary {
+    bottom: 10px;
+  }
+}
+
  </style>
  
  <div class="jk-sakura2026">
@@ -1513,9 +1617,6 @@
                  rel="noopener"
                  >📰 관련 기사</a
                >
-               <button type="button" class="jk-result-btn" id="jkSaveImage">
-                 💾 카드 저장
-               </button>
                <button type="button" class="jk-result-btn" id="jkShareResult">
                  ↗ 친구에게 보내기
                </button>
@@ -1532,7 +1633,7 @@
        <span id="jkStickyEmoji">🌺</span>
        <span id="jkStickyStageText">BLOOMING</span>
      </div>
-     <div id="jkStickyText">도쿄 · 3/31 전후 2~3일 추천</div>
+     <div id="jkStickyText">도시 · 3/31 전후 2~3일 추천</div>
      <div class="jk-sticky-actions">
        <button
          type="button"
@@ -1720,7 +1821,7 @@
              <img
                src="https://images.unsplash.com/photo-1545569341-9eb8b30979d9?auto=format&fit=crop&w=200&q=80"
                class="jk-spot-thumb"
-               alt="메구로강"
+               alt="우에노 공원"
              />
              <div class="jk-spot-info">
                <h4>도쿄 · 우에노 공원</h4>
@@ -2108,6 +2209,39 @@
        },
      ];
  
+     const STAGE_INFO = {
+       before: {
+         icon: "🌱",
+         badge: "COMING SOON",
+         status: "곧 피기 시작할 타이밍이에요.",
+         label: "개화 직전",
+       },
+       bloom: {
+         icon: "🌸",
+         badge: "BLOOMING",
+         status: "개화 중! 하루하루 꽃이 피어나는 시기예요.",
+         label: "개화 전후",
+       },
+       full: {
+         icon: "🌺",
+         badge: "BEST MATCH",
+         status: "만개! 가장 화려한 벚꽃을 볼 수 있는 타이밍이에요.",
+         label: "만개 전후",
+       },
+       fall: {
+         icon: "🍃",
+         badge: "FALLING",
+         status: "꽃잎이 흩날리는, 사진 찍기 좋은 분위기예요.",
+         label: "꽃비 시기",
+       },
+       snow: {
+         icon: "💨",
+         badge: "FUBUKI",
+         status: "벚꽃눈·꽃뗏목을 즐기기 좋은 시기예요.",
+         label: "벚꽃눈",
+       },
+     };
+ 
      // ===== 헤더 북마크/공유 =====
      const headerToast = document.getElementById("jkHeaderToast");
      function showToast() {
@@ -2159,6 +2293,64 @@
      // ===== Leaflet 지도 =====
      const mapEl = document.getElementById("jk-sakura-map");
      let map;
+     const markers = {};
+     function selectCity(cityId, options = {}) {
+       const city = CITIES.find((c) => c.id === cityId);
+       if (!city) return;
+ 
+       // 마커 하이라이트
+       Object.entries(markers).forEach(([id, marker]) => {
+         const el = marker.getElement();
+         if (!el) return;
+         const pin = el.querySelector(".jk-map-pin");
+         if (!pin) return;
+         pin.classList.toggle("is-active", id === cityId);
+       });
+ 
+       // PC 카드 하이라이트
+       document.querySelectorAll(".jk-map-city-card").forEach((card) => {
+         card.classList.toggle(
+           "is-active",
+           card.dataset.city === cityId
+         );
+       });
+ 
+       // 모바일 카드 하이라이트 + 살짝 스크롤
+       document
+         .querySelectorAll(".jk-map-mobile-card")
+         .forEach((card) => {
+           const active = card.dataset.city === cityId;
+           card.classList.toggle("is-active", active);
+           if (active && options.scrollMobile) {
+             card.scrollIntoView({
+               behavior: "smooth",
+               block: "nearest",
+               inline: "center",
+             });
+           }
+         });
+ 
+       // 지도 이동
+       if (map && options.pan !== false) {
+         map.panTo([city.lat, city.lng]);
+       }
+ 
+       // 스티키 요약 업데이트 (지도에서 선택한 경우)
+       if (options.from === "marker" || options.from === "card") {
+         const sticky = document.getElementById("jkStickySummary");
+         if (sticky) {
+           document.getElementById("jkStickyEmoji").textContent = "🌸";
+           document.getElementById("jkStickyStageText").textContent =
+             "SAKURA";
+           document.getElementById(
+             "jkStickyText"
+           ).textContent = `${city.name} · 開花 ${city.bloom} / 満開 ${city.full}`;
+           sticky.dataset.city = cityId;
+           sticky.classList.add("is-visible");
+         }
+       }
+     }
+ 
      if (mapEl && typeof L !== "undefined") {
        map = L.map("jk-sakura-map", {
          scrollWheelZoom: false,
@@ -2178,15 +2370,19 @@
        const container = document.querySelector(".jk-map-container");
        const linesSvg = document.getElementById("jkMapLines");
  
-       const markers = {};
        CITIES.forEach((c) => {
          const icon = L.divIcon({
            className: "",
-           html: `<div style="width:12px;height:12px;background:#d4607a;border:2px solid #fff;border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,0.3);"></div>`,
+           html: `<div class="jk-map-pin"></div>`,
            iconSize: [12, 12],
            iconAnchor: [6, 6],
          });
-         markers[c.id] = L.marker([c.lat, c.lng], { icon }).addTo(map);
+         const marker = L.marker([c.lat, c.lng], { icon }).addTo(map);
+         markers[c.id] = marker;
+ 
+         marker.on("click", () =>
+           selectCity(c.id, { from: "marker", scrollMobile: true })
+         );
  
          const card = document.createElement("div");
          card.className = "jk-map-city-card";
@@ -2207,6 +2403,9 @@
            card.style.top = c.cardPos.top + "px";
            card.style.left = c.cardPos.left + "px";
          }
+         card.addEventListener("click", () =>
+           selectCity(c.id, { from: "card", scrollMobile: true })
+         );
          container.appendChild(card);
        });
  
@@ -2240,16 +2439,26 @@
        setTimeout(drawLines, 500);
        window.addEventListener("resize", drawLines);
  
-       // 모바일용 카드 리스트
+       // 모바일용 카드 리스트 (4단계 모두 표시)
        const mobileCards = document.getElementById("jkMapMobileCards");
        CITIES.forEach((c) => {
          const card = document.createElement("div");
          card.className = "jk-map-mobile-card";
+         card.dataset.city = c.id;
          card.innerHTML = `
            <div class="jk-map-mobile-card-name">${c.nameJp}</div>
            <div class="jk-map-mobile-card-row"><span>🌸 開花</span><span>${c.bloom}</span></div>
            <div class="jk-map-mobile-card-row"><span>🌺 満開</span><span>${c.full}</span></div>
+           <div class="jk-map-mobile-card-row"><span>🍃 散り始め</span><span>${c.fall}</span></div>
+           <div class="jk-map-mobile-card-row"><span>💨 桜吹雪</span><span>~${c.snow}</span></div>
          `;
+         card.addEventListener("click", () =>
+           selectCity(c.id, {
+             from: "card",
+             pan: true,
+             scrollMobile: false,
+           })
+         );
          mobileCards.appendChild(card);
        });
  
@@ -2291,45 +2500,30 @@
        spotsGrid.appendChild(card);
      });
  
-     // ===== 날짜 → 추천 도시 계산 =====
      function parseMonthDay(str, year = 2026) {
        const [m, d] = str.split("/").map(Number);
        return new Date(year, m - 1, d);
      }
  
-     const STAGE_INFO = {
-       before: {
-         icon: "🌱",
-         badge: "COMING SOON",
-         status: "곧 피기 시작할 타이밍이에요.",
-         label: "개화 직전",
-       },
-       bloom: {
-         icon: "🌸",
-         badge: "BLOOMING",
-         status: "개화 중! 하루하루 꽃이 피어나는 시기예요.",
-         label: "개화 전후",
-       },
-       full: {
-         icon: "🌺",
-         badge: "BEST MATCH",
-         status: "만개! 가장 화려한 벚꽃을 볼 수 있는 타이밍이에요.",
-         label: "만개 전후",
-       },
-       fall: {
-         icon: "🍃",
-         badge: "FALLING",
-         status: "꽃잎이 흩날리는, 사진 찍기 좋은 분위기예요.",
-         label: "꽃비 시기",
-       },
-       snow: {
-         icon: "💨",
-         badge: "FUBUKI",
-         status: "벚꽃눈·꽃뗏목을 즐기기 좋은 시기예요.",
-         label: "벚꽃눈",
-       },
-     };
+     function scrollToCityCard(cityId) {
+       const card = document.querySelector(
+         `.jk-spot-card[data-city="${cityId}"]`
+       );
+       if (!card) {
+         document
+           .getElementById("spot-section")
+           .scrollIntoView({ behavior: "smooth" });
+         return;
+       }
+       card.classList.add("jk-spot-card--highlight-temp");
+       card.scrollIntoView({ behavior: "smooth", block: "center" });
+       setTimeout(
+         () => card.classList.remove("jk-spot-card--highlight-temp"),
+         1500
+       );
+     }
  
+     // ===== 날짜 → 추천 도시 계산 =====
      function handleDateSubmit() {
        const sv = document.getElementById("jkTravelStart").value;
        const ev = document.getElementById("jkTravelEnd").value;
@@ -2356,7 +2550,7 @@
  
          const os = new Date(Math.max(start, bloom));
          const oe = new Date(Math.min(end, snow));
-         const overlap = (oe - os) / 864e5 + 1; // 겹치는 일수
+         const overlap = (oe - os) / 864e5 + 1;
  
          if (overlap <= 0) return;
  
@@ -2440,7 +2634,10 @@
        sticky.dataset.city = best.id;
        sticky.classList.add("is-visible");
  
-       // "이 도시 스팟 더 보기" 버튼용
+       // 지도/카드 연동
+       selectCity(best.id, { pan: true, scrollMobile: true });
+ 
+       // "이 도시 스팟 더 보기" 버튼
        const moreBtn = document.getElementById("jkResultMoreSpots");
        moreBtn.onclick = () => scrollToCityCard(best.id);
      }
@@ -2448,47 +2645,7 @@
        .getElementById("jkDateSubmit")
        .addEventListener("click", handleDateSubmit);
  
-     function scrollToCityCard(cityId) {
-       const card = document.querySelector(
-         `.jk-spot-card[data-city="${cityId}"]`
-       );
-       if (!card) {
-         document
-           .getElementById("spot-section")
-           .scrollIntoView({ behavior: "smooth" });
-         return;
-       }
-       card.classList.add("jk-spot-card--highlight-temp");
-       card.scrollIntoView({ behavior: "smooth", block: "center" });
-       setTimeout(
-         () => card.classList.remove("jk-spot-card--highlight-temp"),
-         1500
-       );
-     }
- 
-     // ===== 결과 카드 캡쳐 =====
-     document
-       .getElementById("jkSaveImage")
-       .addEventListener("click", async function () {
-         const target = document.getElementById("jkResultCard");
-         if (!target || !target.classList.contains("is-visible")) {
-           alert("먼저 여행 날짜를 입력해서 결과를 확인해주세요.");
-           return;
-         }
-         try {
-           const canvas = await html2canvas(target, {
-             backgroundColor: "#ffffff",
-             scale: 2,
-           });
-           const link = document.createElement("a");
-           link.download = "sakura-2026.png";
-           link.href = canvas.toDataURL("image/png");
-           link.click();
-         } catch (e) {
-           alert("이미지 저장이 잘 안 되면, 화면 캡처를 이용해 주세요.");
-         }
-       });
- 
+     // 결과 공유 버튼
      document
        .getElementById("jkShareResult")
        .addEventListener("click", () => handleShare());
@@ -2546,7 +2703,6 @@
        html += "</div>";
        surveyResult.innerHTML = html;
  
-       // 애니메이션
        requestAnimationFrame(() => {
          Object.entries(spotLabels).forEach(([key]) => {
            const bar = surveyResult.querySelector(
