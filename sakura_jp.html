@@ -1,457 +1,2862 @@
-<!-- ==============================
-     JAPANKURU SAKURA 2026 LANDING
-     日本語 完全版 (Full Version)
-     - 4段階の桜ライフサイクル
-     - 画像付き凡例
-     - 旅行スタイル/名所/FAQ等全て
-     - Web Share API / モバイル最適化
-     JMA 平年値基準
-     ============================== -->
-<style>
-  .jk-sakura2026 {
-    --jk-pink: #c73a7a;
-    --jk-pink-dark: #a9316a;
-    --jk-pink-light: #ffe3ef;
-    --jk-pink-bg: #fff9fc;
-    --jk-pink-border: #f3bcd5;
-    --jk-text: #333;
-    --jk-text-sub: #555;
-    --jk-text-muted: #888;
-    --jk-radius: 16px;
-    --jk-shadow: 0 6px 16px rgba(0,0,0,0.06);
-  }
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>JAPANKURU · 2026 桜ガイド</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  .jk-sakura2026 {
-    font-family: "Noto Sans JP", "Hiragino Sans", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-    padding: 32px 16px 60px;
-    box-sizing: border-box;
-    background: #fffdfd;
-    color: #222;
-  }
-  .jk-sakura2026 *, .jk-sakura2026 *::before, .jk-sakura2026 *::after { box-sizing: border-box; }
-  .jk-sakura2026-inner { max-width: 1080px; margin: 0 auto; }
-  .jk-sakura2026 h1, .jk-sakura2026 h2, .jk-sakura2026 h3 { font-weight: 700; letter-spacing: -0.01em; }
+  <!-- Leaflet -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""
+  />
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""
+  ></script>
 
-  .jk-sakura2026-section-title { font-size: 1.4rem; margin: 0 0 6px; color: var(--jk-pink); }
-  .jk-sakura2026-section-sub { margin: 0 0 18px; color: #666; font-size: 0.95rem; }
-  .jk-sakura2026-kicker { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--jk-pink); margin-bottom: 6px; font-weight: 600; }
+  <!-- Noto Serif JPのみ使用、Pretendard はローカル／ウェブフォント想定 -->
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@500;700&display=swap"
+  />
 
-  /* HERO */
-  .jk-sakura2026-hero { display: grid; gap: 20px; margin-bottom: 48px; }
-  @media (min-width: 900px) { .jk-sakura2026-hero { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); align-items: center; } }
-  .jk-sakura2026-hero-img-wrap { border-radius: var(--jk-radius); overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.12); border: 1px solid var(--jk-pink-border); }
-  .jk-sakura2026-hero-img-wrap img { display: block; width: 100%; height: auto; }
-  .jk-sakura2026-hero-text h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); margin: 0 0 10px; color: var(--jk-pink); }
-  .jk-sakura2026-hero-text p { margin: 0 0 12px; line-height: 1.7; color: #444; font-size: 0.95rem; }
-  .jk-sakura2026-hero-badges { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
-  .jk-sakura2026-badge { font-size: 0.8rem; padding: 6px 12px; border-radius: 999px; background: var(--jk-pink-light); color: var(--jk-pink-dark); border: 1px solid var(--jk-pink-border); }
-  .jk-sakura2026-hero-note { font-size: 0.8rem; color: var(--jk-text-muted); }
+  <style>
+    :root {
+      color-scheme: light;
+    }
 
-  /* シェアボタン */
-  .jk-share-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 16px; padding-top: 16px; border-top: 1px dashed var(--jk-pink-border); }
-  .jk-share-bar-label { font-size: 0.8rem; color: var(--jk-text-muted); }
-  .jk-share-btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; font-size: 0.78rem; font-weight: 600; border-radius: 999px; border: 1px solid var(--jk-pink-border); background: #fff; color: var(--jk-pink); cursor: pointer; transition: all 0.15s ease; }
-  .jk-share-btn:hover { background: var(--jk-pink); color: #fff; border-color: var(--jk-pink); }
-  .jk-share-btn svg { width: 14px; height: 14px; fill: currentColor; }
-  .jk-share-btn-native { background: var(--jk-pink); color: #fff; border-color: var(--jk-pink); }
-  .jk-share-btn-native:hover { background: var(--jk-pink-dark); }
-  .jk-share-desktop-only { display: none; }
-  @media (min-width: 768px) { .jk-share-desktop-only { display: inline-flex; } .jk-share-mobile-only { display: none; } }
+    .jk-sakura2026 {
+      --jk-pink: #d4607a;
+      --jk-pink-dark: #b84d65;
+      --jk-pink-soft: #f2d4dc;
+      --jk-pink-light: #fff0f5;
+      --jk-pink-bg: #fdf5f8;
+      --jk-cream: #faf8f5;
+      --jk-warm-gray: #6b635d;
+      --jk-text: #2d2926;
+      --jk-text-sub: #5c5652;
+      --jk-text-muted: #9a918a;
+      --jk-border: #e8e4e0;
+      --jk-radius: 12px;
+      --jk-radius-lg: 20px;
+      --jk-shadow: 0 4px 20px rgba(45, 41, 38, 0.08);
+      --jk-shadow-hover: 0 8px 30px rgba(45, 41, 38, 0.12);
+    }
 
-  /* MAP */
-  .jk-sakura2026-map-section { margin-bottom: 48px; }
-  .jk-sakura-map-container { position: relative; max-width: 900px; margin: 0 auto; padding: 24px 20px; background: linear-gradient(180deg, #fff9fc 0%, #fff 100%); border-radius: 20px; border: 1px solid var(--jk-pink-border); box-shadow: var(--jk-shadow); }
-  .jk-sakura-map-header { text-align: center; margin-bottom: 16px; }
-  .jk-sakura-map-header-top { display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--jk-pink); text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 8px; max-width: 400px; margin-left: auto; margin-right: auto; }
-  .jk-sakura-map-title { font-size: 1.8rem; font-weight: 700; color: var(--jk-pink); margin: 0 0 4px; }
-  .jk-sakura-map-subtitle { font-size: 1.1rem; color: var(--jk-pink-dark); margin: 0; }
+    .jk-sakura2026 {
+      font-family: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui,
+        sans-serif;
+      background: var(--jk-cream);
+      color: var(--jk-text);
+      line-height: 1.7;
+    }
 
-  .jk-view-toggle { display: flex; justify-content: center; gap: 8px; margin: 16px 0; }
-  .jk-view-toggle-btn { padding: 8px 16px; font-size: 0.8rem; font-weight: 600; border-radius: 999px; border: 1px solid var(--jk-pink-border); background: #fff; color: var(--jk-pink); cursor: pointer; transition: all 0.15s ease; }
-  .jk-view-toggle-btn.is-active { background: var(--jk-pink); color: #fff; border-color: var(--jk-pink); }
-  .jk-view-toggle-btn svg { width: 14px; height: 14px; vertical-align: -2px; margin-right: 4px; fill: currentColor; }
-  @media (min-width: 768px) { .jk-view-toggle { display: none; } }
+    .jk-sakura2026 *,
+    .jk-sakura2026 *::before,
+    .jk-sakura2026 *::after {
+      box-sizing: border-box;
+    }
 
-  .jk-sakura-map-wrapper { position: relative; width: 100%; aspect-ratio: 4 / 5; max-height: 620px; }
-  .jk-map-view { display: block; }
-  .jk-map-view.is-hidden { display: none; }
-  .jk-japan-svg { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 80%; height: 100%; }
+    .jk-title-jp {
+      font-family: "Noto Serif JP", serif;
+      font-weight: 700;
+    }
 
-  .jk-bloom-label { position: absolute; background: #fff; border: 1px solid var(--jk-pink-border); border-radius: 10px; padding: 8px 10px; font-size: 0.72rem; box-shadow: 0 2px 10px rgba(0,0,0,0.1); white-space: nowrap; z-index: 10; transition: transform 0.15s ease, box-shadow 0.15s ease; }
-  .jk-bloom-label:hover { transform: scale(1.05); box-shadow: 0 4px 14px rgba(199,58,122,0.25); z-index: 20; }
-  .jk-bloom-label-city { font-weight: 700; color: var(--jk-pink); font-size: 0.8rem; border-bottom: 1px solid var(--jk-pink-light); padding-bottom: 4px; margin-bottom: 5px; }
-  .jk-bloom-label-row { display: flex; align-items: center; gap: 4px; color: #555; font-size: 0.65rem; margin: 2px 0; }
-  .jk-bloom-label-icon { font-size: 0.7rem; width: 16px; text-align: center; }
-  .jk-bloom-label-stage { color: #777; min-width: 52px; }
-  .jk-bloom-label-date { font-weight: 600; color: #333; }
-  .jk-bloom-label-row.is-late { color: #999; }
-  .jk-bloom-label-row.is-late .jk-bloom-label-date { color: #777; }
-  .jk-map-dot { position: absolute; width: 12px; height: 12px; background: var(--jk-pink); border: 2px solid #fff; border-radius: 50%; box-shadow: 0 2px 6px rgba(0,0,0,0.25); z-index: 5; transform: translate(-50%, -50%); }
+    /* 共通レイアウト */
+    .jk-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
 
-  .jk-list-view { display: none; }
-  .jk-list-view.is-active { display: block; }
-  .jk-city-list { display: flex; flex-direction: column; gap: 12px; max-height: 600px; overflow-y: auto; padding: 4px; }
-  .jk-city-card { display: flex; gap: 14px; padding: 14px; background: #fff; border: 1px solid var(--jk-pink-border); border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-  .jk-city-card-num { width: 36px; height: 36px; background: var(--jk-pink); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 700; flex-shrink: 0; }
-  .jk-city-card-info { flex: 1; min-width: 0; }
-  .jk-city-card-name { font-size: 1rem; font-weight: 700; color: var(--jk-pink); margin: 0 0 6px; }
-  .jk-city-card-stages { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px 12px; font-size: 0.78rem; }
-  .jk-city-card-stage { display: flex; align-items: center; gap: 4px; color: #555; }
-  .jk-city-card-stage.is-late { color: #999; }
-  .jk-city-card-stage-icon { font-size: 0.85rem; }
-  .jk-city-card-stage-date { font-weight: 600; color: #333; }
-  .jk-city-card-stage.is-late .jk-city-card-stage-date { color: #777; }
+    .jk-section {
+      padding: 56px 0;
+    }
 
-  .jk-stages-legend { margin-top: 24px; padding: 20px; background: var(--jk-pink-bg); border-radius: var(--jk-radius); border: 1px solid var(--jk-pink-border); }
-  .jk-stages-legend-title { font-size: 1rem; font-weight: 700; color: var(--jk-pink); margin: 0 0 14px; text-align: center; }
-  .jk-stages-legend-grid { display: grid; gap: 12px; }
-  @media (min-width: 600px) { .jk-stages-legend-grid { grid-template-columns: repeat(2, 1fr); } }
-  @media (min-width: 900px) { .jk-stages-legend-grid { grid-template-columns: repeat(4, 1fr); } }
-  .jk-stage-card { background: #fff; border-radius: 12px; padding: 0; border: 1px solid var(--jk-pink-border); text-align: center; overflow: hidden; }
-  .jk-stage-card-img { width: 100%; height: 100px; object-fit: cover; }
-  .jk-stage-card-content { padding: 12px 14px 14px; }
-  .jk-stage-card-icon { font-size: 1.4rem; margin-bottom: 4px; }
-  .jk-stage-card-name { font-size: 0.95rem; font-weight: 700; color: var(--jk-pink); margin-bottom: 2px; }
-  .jk-stage-card-name-sub { font-size: 0.75rem; color: #999; margin-bottom: 8px; }
-  .jk-stage-card-desc { font-size: 0.8rem; color: var(--jk-text-sub); line-height: 1.5; }
-  .jk-stage-card-timing { margin-top: 8px; font-size: 0.72rem; color: var(--jk-pink-dark); font-weight: 600; background: var(--jk-pink-light); padding: 4px 8px; border-radius: 6px; display: inline-block; }
+    .jk-section--white {
+      background: #fff;
+    }
+    .jk-section--cream {
+      background: var(--jk-cream);
+    }
+    .jk-section--pink {
+      background: var(--jk-pink-bg);
+    }
 
-  .jk-key-message { margin-top: 16px; padding: 14px 18px; background: linear-gradient(135deg, #fff9fc 0%, #ffe3ef 100%); border-radius: 12px; border: 2px solid var(--jk-pink); text-align: center; }
-  .jk-key-message-text { font-size: 0.95rem; color: var(--jk-pink-dark); font-weight: 600; margin: 0; }
-  .jk-key-message-text strong { color: var(--jk-pink); font-size: 1.1rem; }
+    .jk-section-header {
+      margin-bottom: 28px;
+    }
+    .jk-section-header--center {
+      text-align: center;
+    }
 
-  .jk-sakura-map-source { text-align: center; margin-top: 16px; font-size: 0.7rem; color: #999; }
-  .jk-sakura-map-source a { color: var(--jk-pink-dark); text-decoration: underline; }
+    .jk-section-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--jk-pink);
+      margin-bottom: 5px;
+    }
 
-  .jk-timing-guide { margin-top: 32px; padding: 20px; background: var(--jk-pink-bg); border-radius: var(--jk-radius); border: 1px solid var(--jk-pink-border); }
-  .jk-timing-guide-title { font-size: 1.1rem; font-weight: 700; color: var(--jk-pink); margin: 0 0 16px; text-align: center; }
-  .jk-timing-grid { display: grid; gap: 12px; }
-  @media (min-width: 700px) { .jk-timing-grid { grid-template-columns: repeat(2, 1fr); } }
-  @media (min-width: 900px) { .jk-timing-grid { grid-template-columns: repeat(4, 1fr); } }
-  .jk-timing-card { background: #fff; border-radius: 12px; padding: 14px; border: 1px solid var(--jk-pink-border); }
-  .jk-timing-card-period { font-size: 0.9rem; font-weight: 700; color: var(--jk-pink); margin-bottom: 4px; }
-  .jk-timing-card-dates { font-size: 0.72rem; color: var(--jk-text-muted); margin-bottom: 8px; }
-  .jk-timing-card-cities { display: flex; flex-wrap: wrap; gap: 5px; }
-  .jk-timing-city { font-size: 0.72rem; padding: 4px 8px; background: var(--jk-pink-light); color: var(--jk-pink-dark); border-radius: 6px; }
-  .jk-timing-card-note { margin-top: 8px; font-size: 0.7rem; color: var(--jk-text-muted); line-height: 1.4; }
+    .jk-section-title {
+      font-size: clamp(1.25rem, 3.5vw, 1.7rem);
+      margin: 0 0 6px;
+    }
 
-  .jk-sakura2026-trips { margin-bottom: 48px; }
-  .jk-sakura2026-trip-grid { display: grid; gap: 16px; }
-  @media (min-width: 800px) { .jk-sakura2026-trip-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-  .jk-sakura2026-trip-card { border-radius: var(--jk-radius); border: 1px solid var(--jk-pink-border); background: var(--jk-pink-bg); padding: 16px; box-shadow: 0 6px 14px rgba(0,0,0,0.04); display: flex; flex-direction: column; height: 100%; }
-  .jk-sakura2026-trip-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--jk-pink); margin-bottom: 4px; font-weight: 600; }
-  .jk-sakura2026-trip-title { font-size: 1rem; margin: 0 0 6px; color: var(--jk-text); }
-  .jk-sakura2026-trip-days { font-size: 0.82rem; color: #666; margin-bottom: 10px; }
-  .jk-sakura2026-trip-card ul { padding-left: 1.1rem; margin: 0 0 12px; font-size: 0.85rem; color: var(--jk-text-sub); }
-  .jk-sakura2026-trip-card li { margin-bottom: 5px; }
-  .jk-sakura2026-trip-cta { margin-top: auto; }
-  .jk-sakura2026-trip-btn { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 10px 18px; font-size: 0.85rem; font-weight: 600; border-radius: 999px; border: none; background: var(--jk-pink); color: #fff; cursor: pointer; transition: background 0.15s ease; }
-  .jk-sakura2026-trip-btn:hover { background: var(--jk-pink-dark); }
+    .jk-section-desc {
+      font-size: 0.88rem;
+      color: var(--jk-text-sub);
+      margin: 0;
+      max-width: 480px;
+    }
 
-  .jk-sakura2026-spots { margin-bottom: 48px; }
-  .jk-sakura2026-spot-grid { display: grid; gap: 16px; }
-  @media (min-width: 600px) { .jk-sakura2026-spot-grid { grid-template-columns: repeat(2, 1fr); } }
-  @media (min-width: 900px) { .jk-sakura2026-spot-grid { grid-template-columns: repeat(3, 1fr); } }
-  .jk-sakura2026-spot-card { border-radius: var(--jk-radius); overflow: hidden; background: #fff; border: 1px solid var(--jk-pink-border); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-  .jk-sakura2026-spot-img img { display: block; width: 100%; height: 160px; object-fit: cover; }
-  .jk-sakura2026-spot-body { padding: 14px; }
-  .jk-sakura2026-spot-body h4 { font-size: 0.95rem; margin: 0 0 6px; color: var(--jk-pink); }
-  .jk-sakura2026-spot-body p { margin: 0; font-size: 0.82rem; color: var(--jk-text-sub); line-height: 1.55; }
+    .jk-section-header--center .jk-section-desc {
+      margin: 0 auto;
+    }
 
-  .jk-sakura2026-faq { margin-bottom: 48px; }
-  .jk-sakura2026-faq-list { display: flex; flex-direction: column; gap: 10px; }
-  .jk-sakura2026-faq-item { border: 1px solid var(--jk-pink-border); border-radius: var(--jk-radius); background: #fff; overflow: hidden; }
-  .jk-sakura2026-faq-q { padding: 14px 16px; font-weight: 600; color: var(--jk-text); cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: background 0.15s ease; }
-  .jk-sakura2026-faq-q:hover { background: var(--jk-pink-bg); }
-  .jk-sakura2026-faq-q::after { content: "+"; font-size: 1.2rem; color: var(--jk-pink); transition: transform 0.2s ease; }
-  .jk-sakura2026-faq-item.is-open .jk-sakura2026-faq-q::after { transform: rotate(45deg); }
-  .jk-sakura2026-faq-a { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
-  .jk-sakura2026-faq-item.is-open .jk-sakura2026-faq-a { max-height: 300px; }
-  .jk-sakura2026-faq-a-inner { padding: 0 16px 14px; font-size: 0.9rem; color: var(--jk-text-sub); line-height: 1.65; }
+    /* ヘッダー */
+    .jk-header {
+      position: sticky;
+      top: 0;
+      z-index: 900;
+      background: rgba(250, 248, 245, 0.96);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(232, 228, 224, 0.8);
+    }
 
-  .jk-sakura2026-source { padding: 20px; border-radius: var(--jk-radius); background: var(--jk-pink-bg); border: 1px solid var(--jk-pink-border); }
-  .jk-sakura2026-source-inner { max-width: 700px; margin: 0 auto; }
-  .jk-sakura2026-source-main { margin: 0 0 6px; color: #444; line-height: 1.6; }
-  .jk-sakura2026-source-link { margin: 0 0 4px; font-size: 0.85rem; }
-  .jk-sakura2026-source-link a { color: var(--jk-pink-dark); text-decoration: underline; }
-  .jk-sakura2026-source-note { margin: 4px 0 0; color: #777; font-size: 0.8rem; line-height: 1.5; }
-  .jk-sakura2026-source-updated { margin: 8px 0 0; color: #999; font-size: 0.78rem; }
+    .jk-header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 8px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
 
-  .jk-bottom-cta { margin-top: 32px; padding: 24px; background: linear-gradient(135deg, var(--jk-pink-light) 0%, #fff 100%); border-radius: var(--jk-radius); border: 1px solid var(--jk-pink-border); text-align: center; }
-  .jk-bottom-cta-text { font-size: 0.95rem; color: var(--jk-text); margin: 0 0 12px; }
-  .jk-bottom-cta-text strong { color: var(--jk-pink); }
-  .jk-bottom-share-btns { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; }
+    .jk-header-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
 
-  @media (max-width: 767px) {
-    .jk-sakura-map-wrapper { aspect-ratio: 3 / 5; }
-    .jk-bloom-label { font-size: 0.55rem; padding: 5px 6px; }
-    .jk-bloom-label-city { font-size: 0.62rem; }
-    .jk-bloom-label-row { font-size: 0.5rem; }
-    .jk-bloom-label-icon { font-size: 0.55rem; width: 12px; }
-    .jk-bloom-label-stage { min-width: 40px; }
-    .jk-sakura-map-title { font-size: 1.4rem; }
-    .jk-japan-svg { width: 90%; }
-    .jk-map-view { display: none; }
-    .jk-map-view.is-active { display: block; }
-    .jk-list-view { display: block; }
-    .jk-list-view.is-hidden { display: none; }
-  }
+    .jk-header-logo img {
+      display: block;
+      height: 26px;
+    }
 
-  @media (prefers-reduced-motion: reduce) { .jk-sakura2026 * { transition: none !important; } }
-</style>
+    .jk-header-tagline {
+      font-size: 0.7rem;
+      color: var(--jk-text-muted);
+      white-space: nowrap;
+      display: none;
+    }
 
+    @media (min-width: 640px) {
+      .jk-header-tagline {
+        display: block;
+      }
+    }
+
+    .jk-header-nav-wrap {
+      flex: 1;
+      display: flex;
+      justify-content: flex-end;
+      min-width: 0;
+    }
+
+    .jk-header-nav {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px;
+      border-radius: 999px;
+      background: #fff;
+      border: 1px solid rgba(232, 228, 224, 0.9);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .jk-header-link {
+      border: none;
+      background: transparent;
+      font-size: 0.75rem;
+      padding: 6px 10px;
+      border-radius: 999px;
+      white-space: nowrap;
+      color: var(--jk-text-sub);
+      cursor: pointer;
+      flex: 0 0 auto;
+    }
+
+    .jk-header-link.is-active {
+      background: var(--jk-pink);
+      color: #fff;
+      font-weight: 600;
+    }
+
+    /* ヒーロー */
+    .jk-hero {
+      position: relative;
+      height: 70vh;
+      min-height: 420px;
+      max-height: 620px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .jk-hero-slider {
+      position: absolute;
+      inset: 0;
+    }
+
+    .jk-hero-slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 1.2s ease-in-out;
+    }
+
+    .jk-hero-slide.is-active {
+      opacity: 1;
+    }
+
+    .jk-hero-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scale(1.03);
+    }
+
+    .jk-hero-slide.is-active img {
+      animation: jkKenBurns 10s ease-out forwards;
+    }
+
+    @keyframes jkKenBurns {
+      from {
+        transform: scale(1.03);
+      }
+      to {
+        transform: scale(1.08);
+      }
+    }
+
+    .jk-hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to top,
+        rgba(17, 12, 10, 0.9) 0%,
+        rgba(17, 12, 10, 0.3) 55%,
+        rgba(17, 12, 10, 0.05) 100%
+      );
+      z-index: 1;
+    }
+
+    .jk-hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      color: #fff;
+      padding: 0 20px 40px;
+      max-width: 640px;
+    }
+
+    .jk-hero-lead {
+      font-size: 0.95rem;
+      opacity: 0.95;
+      margin: 8px 0 20px;
+    }
+
+    .jk-hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 12px 24px;
+      border-radius: 999px;
+      background: var(--jk-pink);
+      color: #fff;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.35);
+      transition: transform 0.18s ease, box-shadow 0.18s ease,
+        background 0.18s ease;
+    }
+
+    .jk-hero-cta:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45);
+      background: var(--jk-pink-dark);
+    }
+
+    .jk-hero-caption {
+      position: absolute;
+      right: 24px;
+      bottom: 18px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(0, 0, 0, 0.55);
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 0.7rem;
+      z-index: 2;
+    }
+
+    .jk-hero-dots {
+      position: absolute;
+      left: 50%;
+      bottom: 12px;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 6px;
+      z-index: 2;
+    }
+
+    .jk-hero-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.45);
+      cursor: pointer;
+      transition: transform 0.18s, background 0.18s;
+    }
+
+    .jk-hero-dot.is-active {
+      background: #fff;
+      transform: scale(1.3);
+    }
+
+    /* 日付セクション */
+    .jk-date-section {
+      background: linear-gradient(
+        135deg,
+        var(--jk-pink) 0%,
+        var(--jk-pink-dark) 100%
+      );
+      color: #fff;
+      padding: 40px 0 44px;
+      scroll-margin-top: 68px;
+    }
+
+    .jk-date-inner {
+      max-width: 540px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .jk-date-form {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .jk-date-input-wrap {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 10px 3px 3px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .jk-date-input {
+      border: none;
+      border-radius: 999px;
+      padding: 8px 10px;
+      font-family: inherit;
+      font-size: 0.85rem;
+      width: 130px;
+    }
+
+    .jk-date-input:focus {
+      outline: 2px solid var(--jk-pink-soft);
+    }
+
+    .jk-date-label {
+      font-size: 0.7rem;
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    .jk-date-submit {
+      padding: 10px 24px;
+      border-radius: 999px;
+      border: 2px solid #fff;
+      background: #fff;
+      color: var(--jk-pink);
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+
+    .jk-date-submit:hover {
+      background: transparent;
+      color: #fff;
+    }
+
+    .jk-date-hint {
+      font-size: 0.78rem;
+      opacity: 0.9;
+      margin-top: 8px;
+    }
+
+    /* 結果カード */
+    .jk-result-card {
+      display: none;
+      background: #fff;
+      border-radius: var(--jk-radius-lg);
+      overflow: hidden;
+      margin-top: 18px;
+      text-align: left;
+      color: var(--jk-text);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.23);
+    }
+
+    .jk-result-card.is-visible {
+      display: block;
+      animation: jkFadeUp 0.4s ease-out;
+    }
+
+    @keyframes jkFadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .jk-result-img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+    }
+
+    .jk-result-body {
+      padding: 18px 18px 16px;
+    }
+
+    .jk-result-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .jk-result-icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: var(--jk-pink-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      flex-shrink: 0;
+    }
+
+    .jk-result-badge {
+      font-size: 0.7rem;
+      color: var(--jk-pink);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+    }
+
+    .jk-result-city {
+      margin: 2px 0 0;
+      font-size: 1.3rem;
+    }
+
+    .jk-result-status {
+      padding: 8px 11px;
+      background: linear-gradient(
+        90deg,
+        var(--jk-pink-soft) 0%,
+        transparent 100%
+      );
+      border-left: 4px solid var(--jk-pink);
+      border-radius: 0 4px 4px 0;
+      font-size: 0.88rem;
+      margin-bottom: 8px;
+    }
+
+    .jk-result-dates {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 5px;
+      margin-bottom: 10px;
+      font-size: 0.78rem;
+    }
+
+    .jk-result-date-item {
+      padding: 5px 7px;
+      background: var(--jk-cream);
+      border-radius: 6px;
+      color: var(--jk-text-sub);
+    }
+
+    .jk-result-date-item.is-match {
+      background: var(--jk-pink);
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .jk-result-spot {
+      padding: 10px;
+      background: #faf8f5;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      margin-bottom: 8px;
+    }
+
+    .jk-result-spot-title {
+      font-size: 0.74rem;
+      color: var(--jk-text-muted);
+      margin-bottom: 2px;
+    }
+
+    .jk-result-spot-name {
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    .jk-result-spot-desc {
+      color: var(--jk-text-sub);
+    }
+
+    .jk-result-explain {
+      font-size: 0.74rem;
+      color: var(--jk-text-muted);
+      margin-bottom: 10px;
+    }
+
+    .jk-result-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .jk-result-btn {
+      flex: 1 1 100px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--jk-border);
+      background: #fff;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      text-decoration: none;
+      color: var(--jk-text);
+      transition: all 0.18s ease;
+    }
+
+    .jk-result-btn:hover {
+      border-color: var(--jk-pink);
+      color: var(--jk-pink);
+    }
+
+    .jk-result-btn--primary {
+      background: var(--jk-pink);
+      border-color: var(--jk-pink);
+      color: #fff;
+    }
+
+    .jk-result-btn--primary:hover {
+      background: var(--jk-pink-dark);
+      color: #fff;
+    }
+
+    /* 桜の4段階セクション */
+    .jk-stages-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    @media (min-width: 640px) {
+      .jk-stages-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+    }
+
+    .jk-stage-card {
+      background: #fff;
+      border-radius: var(--jk-radius);
+      overflow: hidden;
+      border: 1px solid var(--jk-border);
+      transition: all 0.18s ease;
+    }
+
+    .jk-stage-card:hover {
+      box-shadow: var(--jk-shadow-hover);
+      transform: translateY(-2px);
+    }
+
+    .jk-stage-card--highlight {
+      border-width: 2px;
+      border-color: var(--jk-pink);
+    }
+
+    .jk-stage-img {
+      position: relative;
+      aspect-ratio: 4 / 3;
+      overflow: hidden;
+    }
+
+    .jk-stage-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .jk-stage-num {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--jk-pink);
+      color: #fff;
+      font-size: 0.7rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+    }
+
+    .jk-stage-body {
+      padding: 10px 11px 11px;
+    }
+
+    .jk-stage-name {
+      margin: 0 0 2px;
+      font-size: 0.92rem;
+      font-weight: 700;
+    }
+
+    .jk-stage-name-jp {
+      font-size: 0.7rem;
+      color: var(--jk-text-muted);
+      margin-bottom: 4px;
+    }
+
+    .jk-stage-desc {
+      font-size: 0.8rem;
+      color: var(--jk-text-sub);
+      margin: 0 0 6px;
+    }
+
+    .jk-stage-timing {
+      font-size: 0.7rem;
+      padding: 3px 7px;
+      border-radius: 999px;
+      background: var(--jk-cream);
+      color: var(--jk-warm-gray);
+    }
+
+    .jk-stage-message {
+      margin-top: 20px;
+      padding: 12px 15px;
+      background: linear-gradient(
+        90deg,
+        var(--jk-pink-soft) 0%,
+        var(--jk-cream) 100%
+      );
+      border-left: 3px solid var(--jk-pink);
+      border-radius: 0 var(--jk-radius) var(--jk-radius) 0;
+      font-size: 0.86rem;
+    }
+
+    .jk-stage-message strong {
+      color: var(--jk-pink);
+    }
+
+    /* 地図セクション */
+    .jk-map-wrapper {
+      position: relative;
+      background: var(--jk-pink-bg);
+      border-radius: var(--jk-radius-lg);
+      overflow: hidden;
+      box-shadow: var(--jk-shadow);
+    }
+
+    .jk-map-container {
+      position: relative;
+      height: 620px;
+    }
+
+    @media (max-width: 768px) {
+      .jk-map-container {
+        height: 420px;
+      }
+    }
+
+    #jk-sakura-map {
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+
+    .jk-map-lines {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .jk-map-lines line {
+      stroke: var(--jk-pink);
+      stroke-width: 1.5;
+      stroke-dasharray: 4 3;
+      opacity: 0.85;
+    }
+
+    .jk-map-city-card {
+      position: absolute;
+      z-index: 3;
+      background: #fff;
+      border-radius: 10px;
+      padding: 8px 10px;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+      border: 1px solid #fff;
+      font-size: 0.74rem;
+      width: 140px;
+      transition: transform 0.18s ease, box-shadow 0.18s ease,
+        border-color 0.18s ease;
+      cursor: pointer;
+    }
+
+    .jk-map-city-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 22px rgba(0, 0, 0, 0.24);
+      border-color: var(--jk-pink);
+    }
+
+    .jk-map-city-card.is-active {
+      border-color: var(--jk-pink);
+      box-shadow: 0 10px 24px rgba(212, 96, 122, 0.35);
+    }
+
+    .jk-map-city-name {
+      font-weight: 700;
+      color: var(--jk-pink);
+      margin-bottom: 3px;
+    }
+
+    .jk-map-city-dates {
+      font-size: 0.7rem;
+      color: var(--jk-text-sub);
+      line-height: 1.4;
+    }
+
+    /* モバイル用リスト */
+    .jk-map-mobile-list {
+      display: none;
+      padding: 10px 12px 14px;
+      background: #fff;
+      border-top: 1px solid var(--jk-border);
+    }
+
+    .jk-map-mobile-card {
+      border-radius: 10px;
+      padding: 8px 10px;
+      margin-bottom: 8px;
+      background: var(--jk-cream);
+      font-size: 0.78rem;
+      cursor: pointer;
+      border: 1px solid var(--jk-border);
+    }
+
+    .jk-map-mobile-card:last-child {
+      margin-bottom: 0;
+    }
+
+    .jk-map-mobile-name {
+      font-weight: 700;
+      color: var(--jk-pink);
+      margin-bottom: 2px;
+    }
+
+    .jk-map-mobile-dates {
+      font-size: 0.7rem;
+      color: var(--jk-text-sub);
+      line-height: 1.5;
+    }
+
+    .jk-map-mobile-card.is-active {
+      border-color: var(--jk-pink);
+      background: var(--jk-pink-light);
+    }
+
+    @media (max-width: 768px) {
+      .jk-map-city-card,
+      .jk-map-lines {
+        display: none;
+      }
+      .jk-map-mobile-list {
+        display: block;
+      }
+    }
+
+    /* Leaflet スタイル微調整 */
+    .jk-sakura2026 .leaflet-container {
+      background: var(--jk-pink-bg);
+    }
+
+    .jk-sakura2026 .leaflet-tile-pane {
+      filter: saturate(0.4) brightness(1.03);
+      opacity: 0.75;
+    }
+
+    .jk-sakura2026 .leaflet-control-zoom a {
+      background: #fff;
+      color: var(--jk-pink);
+      border: none;
+    }
+
+    .jk-sakura2026 .leaflet-control-zoom a:hover {
+      background: var(--jk-pink-light);
+    }
+
+    .jk-map-marker-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--jk-pink);
+      border: 2px solid #fff;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+      transition: transform 0.18s, box-shadow 0.18s, background 0.18s;
+    }
+
+    .jk-map-marker-dot.is-active {
+      transform: scale(1.3);
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(212, 96, 122, 0.5);
+    }
+
+    /* アンケート */
+    .jk-spot-survey {
+      background: #fff;
+      border-radius: var(--jk-radius-lg);
+      border: 1px solid var(--jk-border);
+      box-shadow: var(--jk-shadow);
+      padding: 22px 18px 20px;
+      margin-bottom: 40px;
+    }
+
+    .jk-spot-survey-grid {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    @media (min-width: 640px) {
+      .jk-spot-survey-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    .jk-spot-choice {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 9px;
+      border-radius: 10px;
+      border: 1px solid var(--jk-border);
+      background: var(--jk-cream);
+      cursor: pointer;
+      transition: all 0.16s ease;
+    }
+
+    .jk-spot-choice:hover {
+      background: #fff;
+      border-color: var(--jk-pink);
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+    }
+
+    .jk-spot-choice.is-selected {
+      background: var(--jk-pink-light);
+      border-color: var(--jk-pink);
+    }
+
+    .jk-spot-thumb {
+      width: 52px;
+      height: 52px;
+      border-radius: 8px;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    .jk-spot-info-title {
+      font-size: 0.86rem;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    .jk-spot-info-desc {
+      font-size: 0.76rem;
+      color: var(--jk-text-sub);
+      margin-bottom: 4px;
+    }
+
+    .jk-spot-bar-track {
+      height: 7px;
+      border-radius: 999px;
+      background: #eee;
+      overflow: hidden;
+    }
+
+    .jk-spot-bar-fill {
+      height: 100%;
+      width: 0;
+      background: linear-gradient(
+        90deg,
+        var(--jk-pink-soft),
+        var(--jk-pink)
+      );
+      transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .jk-spot-survey-result {
+      margin-top: 14px;
+      border-top: 1px dashed var(--jk-border);
+      padding-top: 10px;
+      font-size: 0.78rem;
+    }
+
+    .jk-spot-bars {
+      margin-top: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .jk-spot-bar-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1.6fr) minmax(0, 2.2fr) auto;
+      gap: 6px;
+      align-items: center;
+      font-size: 0.76rem;
+    }
+
+    .jk-spot-bar-name {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .jk-spot-bar-value {
+      font-variant-numeric: tabular-nums;
+      color: var(--jk-text-muted);
+    }
+
+    .jk-spot-bar-row.is-mine .jk-spot-bar-name,
+    .jk-spot-bar-row.is-mine .jk-spot-bar-value {
+      color: var(--jk-pink-dark);
+      font-weight: 600;
+    }
+
+    /* 都市別おすすめスポットカード */
+    .jk-spots-grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    @media (min-width: 640px) {
+      .jk-spots-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (min-width: 960px) {
+      .jk-spots-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    .jk-spot-card {
+      background: #fff;
+      border-radius: var(--jk-radius);
+      overflow: hidden;
+      border: 1px solid var(--jk-border);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+      transition: all 0.18s ease;
+    }
+
+    .jk-spot-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--jk-shadow-hover);
+    }
+
+    .jk-spot-card-img-wrap {
+      position: relative;
+      aspect-ratio: 16 / 10;
+      overflow: hidden;
+    }
+
+    .jk-spot-card-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.35s ease;
+    }
+
+    .jk-spot-card:hover .jk-spot-card-img-wrap img {
+      transform: scale(1.04);
+    }
+
+    .jk-spot-card-tag {
+      position: absolute;
+      left: 10px;
+      top: 10px;
+      padding: 3px 9px;
+      font-size: 0.7rem;
+      border-radius: 999px;
+      background: rgba(0, 0, 0, 0.65);
+      color: #fff;
+    }
+
+    .jk-spot-card-body {
+      padding: 12px 13px 13px;
+    }
+
+    .jk-spot-card-title {
+      margin: 0 0 4px;
+      font-size: 0.96rem;
+      font-weight: 700;
+    }
+
+    .jk-spot-card-desc {
+      font-size: 0.8rem;
+      color: var(--jk-text-sub);
+      margin: 0 0 8px;
+    }
+
+    .jk-spot-card-spots {
+      font-size: 0.76rem;
+      color: var(--jk-text-muted);
+      margin: 0 0 8px;
+    }
+
+    .jk-spot-card-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--jk-pink);
+      text-decoration: none;
+    }
+
+    .jk-spot-card-link:hover {
+      text-decoration: underline;
+      color: var(--jk-pink-dark);
+    }
+
+    .jk-spot-card-link svg {
+      width: 12px;
+      height: 12px;
+    }
+
+    .jk-spot-card.is-highlighted {
+      box-shadow: 0 0 0 2px var(--jk-pink), 0 10px 28px rgba(212, 96, 122, 0.45);
+      transform: translateY(-2px);
+    }
+
+    /* FAQ + フッター */
+    .jk-faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-width: 660px;
+      margin: 0 auto;
+    }
+
+    .jk-faq-item {
+      background: #fff;
+      border-radius: var(--jk-radius);
+      border: 1px solid var(--jk-border);
+      overflow: hidden;
+    }
+
+    .jk-faq-q {
+      padding: 11px 13px;
+      font-size: 0.86rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .jk-faq-q::after {
+      content: "⌄";
+      font-size: 0.86rem;
+      color: var(--jk-pink);
+      transition: transform 0.2s ease;
+    }
+
+    .jk-faq-item.is-open .jk-faq-q::after {
+      transform: rotate(180deg);
+    }
+
+    .jk-faq-a {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+
+    .jk-faq-item.is-open .jk-faq-a {
+      max-height: 280px;
+    }
+
+    .jk-faq-a-inner {
+      padding: 0 13px 11px;
+      font-size: 0.8rem;
+      color: var(--jk-text-sub);
+    }
+
+    .jk-footer {
+      text-align: center;
+      padding: 32px 20px 26px;
+      background: var(--jk-text);
+      color: #fff;
+      font-size: 0.82rem;
+    }
+
+    .jk-footer-main {
+      margin-bottom: 12px;
+    }
+
+    .jk-footer-buttons {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .jk-footer-btn {
+      padding: 7px 13px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      background: transparent;
+      color: #fff;
+      font-size: 0.78rem;
+      cursor: pointer;
+    }
+
+    .jk-footer-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .jk-footer-tip {
+      font-size: 0.72rem;
+      color: rgba(255, 255, 255, 0.75);
+      display: none;
+      max-width: 520px;
+      margin: 0 auto 6px;
+    }
+
+    .jk-footer-tip.is-visible {
+      display: block;
+    }
+
+    .jk-footer-source {
+      font-size: 0.7rem;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .jk-footer-source a {
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: underline;
+    }
+
+    /* フェードイン */
+    .jk-fade-in {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.45s ease, transform 0.45s ease;
+    }
+
+    .jk-fade-in.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 600px) {
+      .jk-section {
+        padding: 46px 0;
+      }
+      .jk-result-dates {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .jk-fade-in {
+        opacity: 1;
+        transform: none;
+        transition: none;
+      }
+      .jk-hero-slide.is-active img {
+        animation: none;
+      }
+    }
+  </style>
+</head>
+<body>
 <div class="jk-sakura2026">
-  <div class="jk-sakura2026-inner">
-
-    <!-- HERO -->
-    <section class="jk-sakura2026-hero">
-      <div class="jk-sakura2026-hero-img-wrap">
-        <img src="https://images.unsplash.com/photo-1522383225653-ed111181a951?auto=format&fit=crop&w=1200&q=80" alt="日本の桜" loading="lazy" />
+  <!-- ヘッダー -->
+  <header class="jk-header">
+    <div class="jk-header-inner">
+      <div class="jk-header-left">
+        <a href="#top" class="jk-header-logo">
+          <img
+            src="https://www.japankuru.com/gld-kanri/data/themes/japankuru/assets/images/logo.svg"
+            alt="JAPANKURU"
+          />
+        </a>
+        <span class="jk-header-tagline">2026 日本の桜ガイド</span>
       </div>
-      <div class="jk-sakura2026-hero-text">
-        <div class="jk-sakura2026-kicker">JAPANKURU 桜スペシャル 2026</div>
-        <h1>2026年 日本の桜開花予想＆旅行ガイド</h1>
-        <p>開花日が過ぎたからといって諦めないでください！<strong>開花から桜吹雪まで約2週間</strong>桜を楽しめます。各段階の日程を確認して旅行計画を立てましょう！</p>
-        <div class="jk-sakura2026-hero-badges">
-          <span class="jk-sakura2026-badge">🌸 本格シーズン：3月下旬〜5月上旬</span>
-          <span class="jk-sakura2026-badge">📍 主要拠点：東京 / 京都 / 大阪</span>
-        </div>
-        <p class="jk-sakura2026-hero-note">※ 気象庁の平年値を基準にしています。実際の日程は気象条件により1〜2週間前後する場合があります。</p>
-        
-        <div class="jk-share-bar">
-          <span class="jk-share-bar-label">友達にシェア：</span>
-          <button type="button" class="jk-share-btn jk-share-btn-native jk-share-mobile-only" onclick="handleNativeShare()">
-            <svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg>
-            シェアする
+      <div class="jk-header-nav-wrap">
+        <nav class="jk-header-nav">
+          <button class="jk-header-link is-active" data-target="#jkDateSection">
+            日付から探す
           </button>
-          <button type="button" class="jk-share-btn jk-share-desktop-only" onclick="shareToX()">
-            <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-            X
+          <button class="jk-header-link" data-target="#jkStageSection">
+            桜の4ステージ
           </button>
-          <button type="button" class="jk-share-btn jk-share-desktop-only" onclick="shareToFacebook()">
-            <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-            Facebook
+          <button class="jk-header-link" data-target="#jkMapSection">
+            全国マップ
           </button>
-          <button type="button" class="jk-share-btn" onclick="copyLink()">
-            <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
-            リンクをコピー
+          <button class="jk-header-link" data-target="#jkSurveySection">
+            人気スポット
           </button>
-        </div>
-      </div>
-    </section>
-
-    <!-- MAP SECTION -->
-    <section class="jk-sakura2026-map-section">
-      <h2 class="jk-sakura2026-section-title">2026年 全国桜開花マップ</h2>
-      <p class="jk-sakura2026-section-sub">各都市の<strong>4段階の桜スケジュール</strong>をご確認ください。開花日が過ぎても桜吹雪まで約2週間楽しめます！</p>
-
-      <div class="jk-sakura-map-container">
-        <div class="jk-sakura-map-header">
-          <div class="jk-sakura-map-header-top">
-            <span>2026 JAPAN</span>
-            <span>CHERRY BLOSSOM</span>
-            <span>FULL TIMELINE</span>
-          </div>
-          <h3 class="jk-sakura-map-title">2026 日本の桜</h3>
-          <p class="jk-sakura-map-subtitle">4段階タイムライン（気象庁平年値）</p>
-        </div>
-
-        <div class="jk-view-toggle">
-          <button type="button" class="jk-view-toggle-btn is-active" data-view="list" onclick="toggleView('list')">
-            <svg viewBox="0 0 24 24"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg>
-            リスト
+          <button class="jk-header-link" data-target="#jkSpotSection">
+            都市別おすすめ
           </button>
-          <button type="button" class="jk-view-toggle-btn" data-view="map" onclick="toggleView('map')">
-            <svg viewBox="0 0 24 24"><path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/></svg>
-            地図
-          </button>
-        </div>
-
-        <!-- 地図ビュー -->
-        <div class="jk-map-view" id="mapView">
-          <div class="jk-sakura-map-wrapper">
-            <svg class="jk-japan-svg" viewBox="0 0 400 520" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="日本地図">
-              <defs><linearGradient id="sakura-grad" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#fff9fc;stop-opacity:1" /><stop offset="100%" style="stop-color:#fce4ec;stop-opacity:0.3" /></linearGradient></defs>
-              <rect width="400" height="520" fill="url(#sakura-grad)"/>
-              <path d="M280 45 Q315 35 335 55 Q355 75 345 105 Q335 125 305 135 Q275 140 255 125 Q245 105 255 75 Q265 55 280 45Z" fill="#fce4ec" stroke="#f48fb1" stroke-width="1.5"/>
-              <path d="M195 150 Q255 140 285 160 Q305 180 295 210 Q280 245 260 270 Q240 300 220 320 Q200 345 175 365 Q150 380 130 385 Q110 385 100 365 Q95 340 115 305 Q135 270 155 245 Q175 220 180 195 Q185 170 195 150Z" fill="#fce4ec" stroke="#f48fb1" stroke-width="1.5"/>
-              <path d="M115 395 Q150 388 168 400 Q180 415 172 432 Q158 445 130 445 Q105 438 98 420 Q100 402 115 395Z" fill="#fce4ec" stroke="#f48fb1" stroke-width="1.5"/>
-              <path d="M65 405 Q100 392 115 415 Q122 440 108 462 Q88 480 60 472 Q38 458 35 432 Q38 410 65 405Z" fill="#fce4ec" stroke="#f48fb1" stroke-width="1.5"/>
-              <path d="M50 455 Q95 430 135 405 Q175 380 200 345 Q225 310 255 275 Q285 240 300 200" stroke="#c73a7a" stroke-width="2.5" stroke-dasharray="8 4" fill="none" opacity="0.4"/>
-            </svg>
-
-            <!-- 都市ラベル -->
-            <div class="jk-map-dot" style="top: 17%; left: 72%;"></div>
-            <div class="jk-bloom-label" style="top: 4%; left: 73%;"><div class="jk-bloom-label-city">札幌</div><div class="jk-bloom-label-row"><span class="jk-bloom-label-icon">🌸</span><span class="jk-bloom-label-stage">開花</span><span class="jk-bloom-label-date">5/1</span></div><div class="jk-bloom-label-row"><span class="jk-bloom-label-icon">🌺</span><span class="jk-bloom-label-stage">満開</span><span class="jk-bloom-label-date">5/6</span></div><div class="jk-bloom-label-row is-late"><span class="jk-bloom-label-icon">🍃</span><span class="jk-bloom-label-stage">散り始め</span><span class="jk-bloom-label-date">5/10</span></div><div class="jk-bloom-label-row is-late"><span class="jk-bloom-label-icon">💨</span><span class="jk-bloom-label-stage">桜吹雪</span><span class="jk-bloom-label-date">~5/13</span></div></div>
-
-            <div class="jk-map-dot" style="top: 28%; left: 66%;"></div>
-            <div class="jk-bloom-label" style="top: 18%; left: 70%;"><div class="jk-bloom-label-city">青森</div><div class="jk-bloom-label-row"><span class="jk-bloom-label-icon">🌸</span><span class="jk-bloom-label-stage">開花</span><span class="jk-bloom-label-date">4/22</span></div><div class="jk-bloom-label-row"><span class="jk-bloom-label-icon">🌺</span><span class="jk-bloom-label-stage">満開</span><span class="jk-bloom-label-date">4/28</span></div><div class="jk-bloom-label-row is-late"><span class="jk-bloom-label-icon">🍃</span><span class="jk-bloom-label-stage">散り始め</span><span class="jk-bloom-label-date">5/2</span></div><div class="jk-bloom-label-row is-late"><span class="jk-bloom-label-icon">💨</span><span class="jk-bloom-label-stage">桜吹雪</span><span class="jk-bloom-label-date">~5/5</span></div></div>
-
-            <div class="jk-map-dot" style="top: 38%; left: 64%;"></div>
-            <div class="jk-bloom-label" style="top: 32%; left: 70%;"><div class="jk-bloom-label-city">仙台</div><div class="jk-bloom-label-row"><span class="jk-bloom-label-icon">🌸</span><span class="jk-bloom-label-stage">開花</span><span class="jk-bloom-label-date">4/8</span></div><div class="jk-bloom-label-row"><span class="jk-bloom-label-icon">🌺</span><span class="jk-bloom-label-stage">満開</span><span class="jk-bloom-label-date">4/14</span></div><div class="jk-bloom-label-row is-late"><span class="jk-bloom-label-icon">🍃</span><span class="jk-bloom-label-stage">散り始め</span><span class="jk-bloom-label-date">4/18</span></div><div class="jk-bloom-label-row is-late"><span class="jk-bloom-label-icon">💨</span><span class="jk-bloom-label-stage">桜吹雪</span><span class="jk-bloom-label-date">~4/21</span></div></div>
-
-            <div class="jk-map-dot" style="top: 50%; left: 62%;"></div>
-            <div class="jk-bloom-label" style="top: 44%; left: 68%;"><div class="jk-bloom-label-city">東京</div><div class="jk-bloom-label-row"><span class="jk-bloom-label-icon">🌸</span><span class="jk-bloom-label-stage">開花</span><span class="jk-bloom-label-date">3/24</span></div><div class="jk-bloom-label-row"><span class="jk-bloom-label-icon">🌺</span><span class="jk-bloom-label-stage">満開</span><span class="jk-bloom-label-date">3/31</span></div><div class="jk-bloom-label-row is-late"><span class="jk-bloom-label-icon">🍃</span><span class="jk-bloom-label-stage">散り始め</span><span class="jk-bloom-label-date">4/4</span></div><div class="jk-bloom-label-row is-late"><span class="jk-bloom-label-icon">💨</span><span class="jk-bloom-label-stage">桜吹雪</span><span class="jk-bloom-label-date">~4/7</span></div></div>
-
-            <div class="jk-map-dot" style="top: 44%; left: 46%;"></div>
-            <div class="jk-bloom-label" style="top: 34%; left: 22%;"><div class="jk-bloom-label-city">金沢</div><div class="jk-bloom-label-row"><span class="jk-bloom-label-icon">🌸</span><span class="jk-bloom-label-stage">開花</span><span class="jk-bloom-label-date">4/3</span></div><div class="jk-bloom-label-row"><span class="jk-bloom-label-icon">🌺</span><span class="jk-bloom-label-stage">満開</span><span class="jk-bloom-label-date">4/9</span></div><div class="jk-bloom-label-row is-late"><span class="jk-bloom-label-icon">🍃</span><span class="jk-bloom-label-stage">散り始め</span><span class="jk-bloom-label-date">4/13</span></div><div class="jk-bloom-label-row is-late"><span class="jk-bloom-label-icon">💨</span><span class="jk-bloom-label-stage">桜吹雪</span><span class="jk-bloom-label-date">~4/16</span></div></div>
-
-            <div class="jk-map-dot" style="top: 58%; left: 42%;"></div>
-            <div class="jk-bloom-label" style="top: 48%; left: 14%;"><div class="jk-bloom-label-city">京都</div><div class="jk-bloom-label-row"><span class="jk-bloom-label-icon">🌸</span><span class="jk-bloom-label-stage">開花</span><span class="jk-bloom-label-date">3/26</span></div><div class="jk-bloom-label-row"><span class="jk-bloom-label-icon">🌺</span><span class="jk-bloom-label-stage">満開</span><span class="jk-bloom-label-date">4/2</span></div><div class="jk-bloom-label-row is-late"><span class="jk-bloom-label-icon">🍃</span><span class="jk-bloom-label-stage">散り始め</span><span class="jk-bloom-label-date">4/6</span></div><div class="jk-bloom-label-row is-late"><span class="jk-bloom-label-icon">💨</span><span class="jk-bloom-label-stage">桜吹雪</span><span class="jk-bloom-label-date">~4/9</span></div></div>
-
-            <div class="jk-map-dot" style="top: 63%; left: 40%;"></div>
-            <div class="jk-bloom-label" style="top: 62%; left: 46%;"><div class="jk-bloom-label-city">大阪</div><div class="jk-bloom-label-row"><span class="jk-bloom-label-icon">🌸</span><span class="jk-bloom-label-stage">開花</span><span class="jk-bloom-label-date">3/27</span></div><div class="jk-bloom-label-row"><span class="jk-bloom-label-icon">🌺</span><span class="jk-bloom-label-stage">満開</span><span class="jk-bloom-label-date">4/3</span></div><div class="jk-bloom-label-row is-late"><span class="jk-bloom-label-icon">🍃</span><span class="jk-bloom-label-stage">散り始め</span><span class="jk-bloom-label-date">4/7</span></div><div class="jk-bloom-label-row is-late"><span class="jk-bloom-label-icon">💨</span><span class="jk-bloom-label-stage">桜吹雪</span><span class="jk-bloom-label-date">~4/10</span></div></div>
-
-            <div class="jk-map-dot" style="top: 66%; left: 30%;"></div>
-            <div class="jk-bloom-label" style="top: 56%; left: 1%;"><div class="jk-bloom-label-city">広島</div><div class="jk-bloom-label-row"><span class="jk-bloom-label-icon">🌸</span><span class="jk-bloom-label-stage">開花</span><span class="jk-bloom-label-date">3/25</span></div><div class="jk-bloom-label-row"><span class="jk-bloom-label-icon">🌺</span><span class="jk-bloom-label-stage">満開</span><span class="jk-bloom-label-date">4/1</span></div><div class="jk-bloom-label-row is-late"><span class="jk-bloom-label-icon">🍃</span><span class="jk-bloom-label-stage">散り始め</span><span class="jk-bloom-label-date">4/5</span></div><div class="jk-bloom-label-row is-late"><span class="jk-bloom-label-icon">💨</span><span class="jk-bloom-label-stage">桜吹雪</span><span class="jk-bloom-label-date">~4/8</span></div></div>
-
-            <div class="jk-map-dot" style="top: 78%; left: 20%;"></div>
-            <div class="jk-bloom-label" style="top: 70%; left: 1%;"><div class="jk-bloom-label-city">福岡</div><div class="jk-bloom-label-row"><span class="jk-bloom-label-icon">🌸</span><span class="jk-bloom-label-stage">開花</span><span class="jk-bloom-label-date">3/22</span></div><div class="jk-bloom-label-row"><span class="jk-bloom-label-icon">🌺</span><span class="jk-bloom-label-stage">満開</span><span class="jk-bloom-label-date">3/29</span></div><div class="jk-bloom-label-row is-late"><span class="jk-bloom-label-icon">🍃</span><span class="jk-bloom-label-stage">散り始め</span><span class="jk-bloom-label-date">4/2</span></div><div class="jk-bloom-label-row is-late"><span class="jk-bloom-label-icon">💨</span><span class="jk-bloom-label-stage">桜吹雪</span><span class="jk-bloom-label-date">~4/5</span></div></div>
-
-            <div class="jk-map-dot" style="top: 88%; left: 22%;"></div>
-            <div class="jk-bloom-label" style="top: 82%; left: 30%;"><div class="jk-bloom-label-city">鹿児島</div><div class="jk-bloom-label-row"><span class="jk-bloom-label-icon">🌸</span><span class="jk-bloom-label-stage">開花</span><span class="jk-bloom-label-date">3/26</span></div><div class="jk-bloom-label-row"><span class="jk-bloom-label-icon">🌺</span><span class="jk-bloom-label-stage">満開</span><span class="jk-bloom-label-date">4/2</span></div><div class="jk-bloom-label-row is-late"><span class="jk-bloom-label-icon">🍃</span><span class="jk-bloom-label-stage">散り始め</span><span class="jk-bloom-label-date">4/6</span></div><div class="jk-bloom-label-row is-late"><span class="jk-bloom-label-icon">💨</span><span class="jk-bloom-label-stage">桜吹雪</span><span class="jk-bloom-label-date">~4/9</span></div></div>
-          </div>
-        </div>
-
-        <!-- リストビュー -->
-        <div class="jk-list-view" id="listView">
-          <div class="jk-city-list">
-            <div class="jk-city-card"><div class="jk-city-card-num">1</div><div class="jk-city-card-info"><h4 class="jk-city-card-name">福岡</h4><div class="jk-city-card-stages"><div class="jk-city-card-stage"><span class="jk-city-card-stage-icon">🌸</span>開花 <span class="jk-city-card-stage-date">3/22</span></div><div class="jk-city-card-stage"><span class="jk-city-card-stage-icon">🌺</span>満開 <span class="jk-city-card-stage-date">3/29</span></div><div class="jk-city-card-stage is-late"><span class="jk-city-card-stage-icon">🍃</span>散り始め <span class="jk-city-card-stage-date">4/2</span></div><div class="jk-city-card-stage is-late"><span class="jk-city-card-stage-icon">💨</span>桜吹雪 <span class="jk-city-card-stage-date">~4/5</span></div></div></div></div>
-            <div class="jk-city-card"><div class="jk-city-card-num">2</div><div class="jk-city-card-info"><h4 class="jk-city-card-name">東京</h4><div class="jk-city-card-stages"><div class="jk-city-card-stage"><span class="jk-city-card-stage-icon">🌸</span>開花 <span class="jk-city-card-stage-date">3/24</span></div><div class="jk-city-card-stage"><span class="jk-city-card-stage-icon">🌺</span>満開 <span class="jk-city-card-stage-date">3/31</span></div><div class="jk-city-card-stage is-late"><span class="jk-city-card-stage-icon">🍃</span>散り始め <span class="jk-city-card-stage-date">4/4</span></div><div class="jk-city-card-stage is-late"><span class="jk-city-card-stage-icon">💨</span>桜吹雪 <span class="jk-city-card-stage-date">~4/7</span></div></div></div></div>
-            <div class="jk-city-card"><div class="jk-city-card-num">3</div><div class="jk-city-card-info"><h4 class="jk-city-card-name">広島</h4><div class="jk-city-card-stages"><div class="jk-city-card-stage"><span class="jk-city-card-stage-icon">🌸</span>開花 <span class="jk-city-card-stage-date">3/25</span></div><div class="jk-city-card-stage"><span class="jk-city-card-stage-icon">🌺</span>満開 <span class="jk-city-card-stage-date">4/1</span></div><div class="jk-city-card-stage is-late"><span class="jk-city-card-stage-icon">🍃</span>散り始め <span class="jk-city-card-stage-date">4/5</span></div><div class="jk-city-card-stage is-late"><span class="jk-city-card-stage-icon">💨</span>桜吹雪 <span class="jk-city-card-stage-date">~4/8</span></div></div></div></div>
-            <div class="jk-city-card"><div class="jk-city-card-num">4</div><div class="jk-city-card-info"><h4 class="jk-city-card-name">京都</h4><div class="jk-city-card-stages"><div class="jk-city-card-stage"><span class="jk-city-card-stage-icon">🌸</span>開花 <span class="jk-city-card-stage-date">3/26</span></div><div class="jk-city-card-stage"><span class="jk-city-card-stage-icon">🌺</span>満開 <span class="jk-city-card-stage-date">4/2</span></div><div class="jk-city-card-stage is-late"><span class="jk-city-card-stage-icon">🍃</span>散り始め <span class="jk-city-card-stage-date">4/6</span></div><div class="jk-city-card-stage is-late"><span class="jk-city-card-stage-icon">💨</span>桜吹雪 <span class="jk-city-card-stage-date">~4/9</span></div></div></div></div>
-            <div class="jk-city-card"><div class="jk-city-card-num">5</div><div class="jk-city-card-info"><h4 class="jk-city-card-name">鹿児島</h4><div class="jk-city-card-stages"><div class="jk-city-card-stage"><span class="jk-city-card-stage-icon">🌸</span>開花 <span class="jk-city-card-stage-date">3/26</span></div><div class="jk-city-card-stage"><span class="jk-city-card-stage-icon">🌺</span>満開 <span class="jk-city-card-stage-date">4/2</span></div><div class="jk-city-card-stage is-late"><span class="jk-city-card-stage-icon">🍃</span>散り始め <span class="jk-city-card-stage-date">4/6</span></div><div class="jk-city-card-stage is-late"><span class="jk-city-card-stage-icon">💨</span>桜吹雪 <span class="jk-city-card-stage-date">~4/9</span></div></div></div></div>
-            <div class="jk-city-card"><div class="jk-city-card-num">6</div><div class="jk-city-card-info"><h4 class="jk-city-card-name">大阪</h4><div class="jk-city-card-stages"><div class="jk-city-card-stage"><span class="jk-city-card-stage-icon">🌸</span>開花 <span class="jk-city-card-stage-date">3/27</span></div><div class="jk-city-card-stage"><span class="jk-city-card-stage-icon">🌺</span>満開 <span class="jk-city-card-stage-date">4/3</span></div><div class="jk-city-card-stage is-late"><span class="jk-city-card-stage-icon">🍃</span>散り始め <span class="jk-city-card-stage-date">4/7</span></div><div class="jk-city-card-stage is-late"><span class="jk-city-card-stage-icon">💨</span>桜吹雪 <span class="jk-city-card-stage-date">~4/10</span></div></div></div></div>
-            <div class="jk-city-card"><div class="jk-city-card-num">7</div><div class="jk-city-card-info"><h4 class="jk-city-card-name">金沢</h4><div class="jk-city-card-stages"><div class="jk-city-card-stage"><span class="jk-city-card-stage-icon">🌸</span>開花 <span class="jk-city-card-stage-date">4/3</span></div><div class="jk-city-card-stage"><span class="jk-city-card-stage-icon">🌺</span>満開 <span class="jk-city-card-stage-date">4/9</span></div><div class="jk-city-card-stage is-late"><span class="jk-city-card-stage-icon">🍃</span>散り始め <span class="jk-city-card-stage-date">4/13</span></div><div class="jk-city-card-stage is-late"><span class="jk-city-card-stage-icon">💨</span>桜吹雪 <span class="jk-city-card-stage-date">~4/16</span></div></div></div></div>
-            <div class="jk-city-card"><div class="jk-city-card-num">8</div><div class="jk-city-card-info"><h4 class="jk-city-card-name">仙台</h4><div class="jk-city-card-stages"><div class="jk-city-card-stage"><span class="jk-city-card-stage-icon">🌸</span>開花 <span class="jk-city-card-stage-date">4/8</span></div><div class="jk-city-card-stage"><span class="jk-city-card-stage-icon">🌺</span>満開 <span class="jk-city-card-stage-date">4/14</span></div><div class="jk-city-card-stage is-late"><span class="jk-city-card-stage-icon">🍃</span>散り始め <span class="jk-city-card-stage-date">4/18</span></div><div class="jk-city-card-stage is-late"><span class="jk-city-card-stage-icon">💨</span>桜吹雪 <span class="jk-city-card-stage-date">~4/21</span></div></div></div></div>
-            <div class="jk-city-card"><div class="jk-city-card-num">9</div><div class="jk-city-card-info"><h4 class="jk-city-card-name">青森</h4><div class="jk-city-card-stages"><div class="jk-city-card-stage"><span class="jk-city-card-stage-icon">🌸</span>開花 <span class="jk-city-card-stage-date">4/22</span></div><div class="jk-city-card-stage"><span class="jk-city-card-stage-icon">🌺</span>満開 <span class="jk-city-card-stage-date">4/28</span></div><div class="jk-city-card-stage is-late"><span class="jk-city-card-stage-icon">🍃</span>散り始め <span class="jk-city-card-stage-date">5/2</span></div><div class="jk-city-card-stage is-late"><span class="jk-city-card-stage-icon">💨</span>桜吹雪 <span class="jk-city-card-stage-date">~5/5</span></div></div></div></div>
-            <div class="jk-city-card"><div class="jk-city-card-num">10</div><div class="jk-city-card-info"><h4 class="jk-city-card-name">札幌</h4><div class="jk-city-card-stages"><div class="jk-city-card-stage"><span class="jk-city-card-stage-icon">🌸</span>開花 <span class="jk-city-card-stage-date">5/1</span></div><div class="jk-city-card-stage"><span class="jk-city-card-stage-icon">🌺</span>満開 <span class="jk-city-card-stage-date">5/6</span></div><div class="jk-city-card-stage is-late"><span class="jk-city-card-stage-icon">🍃</span>散り始め <span class="jk-city-card-stage-date">5/10</span></div><div class="jk-city-card-stage is-late"><span class="jk-city-card-stage-icon">💨</span>桜吹雪 <span class="jk-city-card-stage-date">~5/13</span></div></div></div></div>
-          </div>
-        </div>
-
-        <!-- 4段階凡例 -->
-        <div class="jk-stages-legend">
-          <h4 class="jk-stages-legend-title">🌸 桜の4段階、こう楽しもう！</h4>
-          <div class="jk-stages-legend-grid">
-            <div class="jk-stage-card"><img class="jk-stage-card-img" src="https://images.unsplash.com/photo-1551489186-cf8726f514f8?auto=format&fit=crop&w=400&q=80" alt="桜の開花" loading="lazy" /><div class="jk-stage-card-content"><div class="jk-stage-card-icon">🌸</div><div class="jk-stage-card-name">開花</div><div class="jk-stage-card-name-sub">かいか</div><div class="jk-stage-card-desc">5〜6輪の花が咲き始めた状態。まだつぼみが多いですが、ワクワクする始まりです。</div><div class="jk-stage-card-timing">基準日</div></div></div>
-            <div class="jk-stage-card"><img class="jk-stage-card-img" src="https://images.unsplash.com/photo-1522383225653-ed111181a951?auto=format&fit=crop&w=400&q=80" alt="桜の満開" loading="lazy" /><div class="jk-stage-card-content"><div class="jk-stage-card-icon">🌺</div><div class="jk-stage-card-name">満開</div><div class="jk-stage-card-name-sub">まんかい</div><div class="jk-stage-card-desc">80%以上が開花！木全体が花で覆われる<strong>ベストタイミング</strong>！</div><div class="jk-stage-card-timing">開花 +7日</div></div></div>
-            <div class="jk-stage-card"><img class="jk-stage-card-img" src="https://images.unsplash.com/photo-1493238792000-8113da705763?auto=format&fit=crop&w=400&q=80" alt="桜の散り始め" loading="lazy" /><div class="jk-stage-card-content"><div class="jk-stage-card-icon">🍃</div><div class="jk-stage-card-name">散り始め</div><div class="jk-stage-card-name-sub">ちりはじめ</div><div class="jk-stage-card-desc">花びらがひらひらと散り始める時期。<strong>まだまだ十分きれいです！</strong></div><div class="jk-stage-card-timing">満開 +4日</div></div></div>
-            <div class="jk-stage-card"><img class="jk-stage-card-img" src="https://images.unsplash.com/photo-1462275646964-a0e3571f4f95?auto=format&fit=crop&w=400&q=80" alt="桜吹雪" loading="lazy" /><div class="jk-stage-card-content"><div class="jk-stage-card-icon">💨</div><div class="jk-stage-card-name">桜吹雪</div><div class="jk-stage-card-name-sub">さくらふぶき</div><div class="jk-stage-card-desc">花びらが風に舞う幻想的な光景！写真撮影に最高のタイミング！</div><div class="jk-stage-card-timing">散り始め +3日</div></div></div>
-          </div>
-          <div class="jk-key-message"><p class="jk-key-message-text">💡 開花日が過ぎたからといって諦めないで！<br>開花から桜吹雪まで<strong>約2週間</strong>桜を楽しめます！</p></div>
-        </div>
-
-        <div class="jk-sakura-map-source">出典：<a href="https://www.data.jma.go.jp/sakura/data/sakura_kaika.html" target="_blank" rel="noopener">気象庁</a> 平年値基準（散り始め/桜吹雪：一般基準 +4/+7日で計算）</div>
-      </div>
-
-      <!-- 時期別ガイド -->
-      <div class="jk-timing-guide">
-        <h4 class="jk-timing-guide-title">📅 旅行日程に合った都市は？</h4>
-        <div class="jk-timing-grid">
-          <div class="jk-timing-card"><div class="jk-timing-card-period">3月下旬</div><div class="jk-timing-card-dates">3/20〜3/31</div><div class="jk-timing-card-cities"><span class="jk-timing-city">福岡</span><span class="jk-timing-city">東京</span><span class="jk-timing-city">広島</span></div><div class="jk-timing-card-note">🌸〜🌺 開花から満開まで。東京は3/29から見頃！</div></div>
-          <div class="jk-timing-card"><div class="jk-timing-card-period">4月上旬</div><div class="jk-timing-card-dates">4/1〜4/10</div><div class="jk-timing-card-cities"><span class="jk-timing-city">東京</span><span class="jk-timing-city">京都</span><span class="jk-timing-city">大阪</span><span class="jk-timing-city">金沢</span></div><div class="jk-timing-card-note">🔥 ゴールデンタイム！🌺満開〜🍃散り始めまで</div></div>
-          <div class="jk-timing-card"><div class="jk-timing-card-period">4月中旬</div><div class="jk-timing-card-dates">4/11〜4/20</div><div class="jk-timing-card-cities"><span class="jk-timing-city">仙台</span><span class="jk-timing-city">金沢</span></div><div class="jk-timing-card-note">東北地方🌺満開！東京は💨桜吹雪タイム</div></div>
-          <div class="jk-timing-card"><div class="jk-timing-card-period">4月下旬〜5月</div><div class="jk-timing-card-dates">4/21〜5/10</div><div class="jk-timing-card-cities"><span class="jk-timing-city">青森</span><span class="jk-timing-city">札幌</span></div><div class="jk-timing-card-note">北へ！弘前城🌺満開〜💨桜吹雪が圧巻</div></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 旅行スタイル -->
-    <section class="jk-sakura2026-trips">
-      <h2 class="jk-sakura2026-section-title">あなたに合った桜旅行スタイル</h2>
-      <p class="jk-sakura2026-section-sub">日程とスタイルに合わせて選んでください。</p>
-      <div class="jk-sakura2026-trip-grid">
-        <article class="jk-sakura2026-trip-card"><div class="jk-sakura2026-trip-label">初めての日本旅行</div><h3 class="jk-sakura2026-trip-title">東京+京都/大阪</h3><div class="jk-sakura2026-trip-days">5〜7日 / 3月末〜4月初旬おすすめ</div><ul><li>東京 上野・目黒川 → 新幹線 → 京都 哲学の道 → 大阪城</li><li>定番桜スポット完全制覇</li></ul><div class="jk-sakura2026-trip-cta"><button type="button" class="jk-sakura2026-trip-btn">モデルコースを見る →</button></div></article>
-        <article class="jk-sakura2026-trip-card"><div class="jk-sakura2026-trip-label">短期旅行</div><h3 class="jk-sakura2026-trip-title">東京集中3〜4日</h3><div class="jk-sakura2026-trip-days">3〜4日 / 3月29日〜4月5日</div><ul><li>1都市充実！上野+目黒川+新宿御苑</li><li>トランジットや週末旅行にぴったり</li></ul><div class="jk-sakura2026-trip-cta"><button type="button" class="jk-sakura2026-trip-btn">モデルコースを見る →</button></div></article>
-        <article class="jk-sakura2026-trip-card"><div class="jk-sakura2026-trip-label">リピーター向け</div><h3 class="jk-sakura2026-trip-title">東北&北海道</h3><div class="jk-sakura2026-trip-days">7日+ / 4月中旬〜5月上旬</div><ul><li>仙台 → 弘前城 → 札幌 北上ルート</li><li>人混みを避けてゆったり、違う雰囲気の桜</li></ul><div class="jk-sakura2026-trip-cta"><button type="button" class="jk-sakura2026-trip-btn">モデルコースを見る →</button></div></article>
-      </div>
-    </section>
-
-    <!-- 名所 -->
-    <section class="jk-sakura2026-spots">
-      <h2 class="jk-sakura2026-section-title">JAPANKURU おすすめ桜名所</h2>
-      <p class="jk-sakura2026-section-sub">必見の定番スポット6選</p>
-      <div class="jk-sakura2026-spot-grid">
-        <article class="jk-sakura2026-spot-card"><div class="jk-sakura2026-spot-img"><img src="https://images.unsplash.com/photo-1490806843957-31f4c9a91c65?auto=format&fit=crop&w=600&q=80" alt="上野公園" loading="lazy" /></div><div class="jk-sakura2026-spot-body"><h4>上野公園（東京）</h4><p>1,000本以上の桜。東京を代表する花見の聖地。博物館と一緒に1日コースで！</p></div></article>
-        <article class="jk-sakura2026-spot-card"><div class="jk-sakura2026-spot-img"><img src="https://images.unsplash.com/photo-1545569341-9eb8b30979d9?auto=format&fit=crop&w=600&q=80" alt="目黒川" loading="lazy" /></div><div class="jk-sakura2026-spot-body"><h4>目黒川（東京）</h4><p>川沿い800本の桜トンネル。夜のライトアップがロマンチック。カフェ街も一緒に！</p></div></article>
-        <article class="jk-sakura2026-spot-card"><div class="jk-sakura2026-spot-img"><img src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=600&q=80" alt="哲学の道" loading="lazy" /></div><div class="jk-sakura2026-spot-body"><h4>哲学の道（京都）</h4><p>銀閣寺〜南禅寺2kmの散策路。疏水沿いの桜が風情ある雰囲気。</p></div></article>
-        <article class="jk-sakura2026-spot-card"><div class="jk-sakura2026-spot-img"><img src="https://images.unsplash.com/photo-1589308078059-be1415eab4c3?auto=format&fit=crop&w=600&q=80" alt="大阪城公園" loading="lazy" /></div><div class="jk-sakura2026-spot-body"><h4>大阪城公園（大阪）</h4><p>天守閣を背景に3,000本の桜が圧巻。夜のライトアップも人気！</p></div></article>
-        <article class="jk-sakura2026-spot-card"><div class="jk-sakura2026-spot-img"><img src="https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?auto=format&fit=crop&w=600&q=80" alt="弘前城" loading="lazy" /></div><div class="jk-sakura2026-spot-body"><h4>弘前城（青森）</h4><p>2,600本の桜+お堀の「花筏」。4月下旬がピーク。リピーター必見！</p></div></article>
-        <article class="jk-sakura2026-spot-card"><div class="jk-sakura2026-spot-img"><img src="https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=600&q=80" alt="舞鶴公園" loading="lazy" /></div><div class="jk-sakura2026-spot-body"><h4>舞鶴公園（福岡）</h4><p>福岡城跡+1,000本の桜。ラーメンツアーと一緒に！</p></div></article>
-      </div>
-    </section>
-
-    <!-- FAQ -->
-    <section class="jk-sakura2026-faq">
-      <h2 class="jk-sakura2026-section-title">よくある質問</h2>
-      <div class="jk-sakura2026-faq-list">
-        <div class="jk-sakura2026-faq-item"><div class="jk-sakura2026-faq-q">開花日が過ぎたら、もう見れないの？</div><div class="jk-sakura2026-faq-a"><div class="jk-sakura2026-faq-a-inner"><strong>いいえ！</strong>開花から桜吹雪まで約2週間桜を楽しめます。むしろ満開直後や散り始めの頃がより美しいこともあります。特に桜吹雪は花びらが風に舞う幻想的な光景です！</div></div></div>
-        <div class="jk-sakura2026-faq-item"><div class="jk-sakura2026-faq-q">一番きれいな時期はいつですか？</div><div class="jk-sakura2026-faq-a"><div class="jk-sakura2026-faq-a-inner"><strong>満開前後1週間</strong>が最も美しい時期です。ただし、好みによって異なります。木いっぱいの桜を見たいなら満開時期、花びらが舞うロマンチックな雰囲気なら散り始め〜桜吹雪の時期がおすすめです！</div></div></div>
-        <div class="jk-sakura2026-faq-item"><div class="jk-sakura2026-faq-q">宿の予約はいつがいいですか？</div><div class="jk-sakura2026-faq-a"><div class="jk-sakura2026-faq-a-inner">東京・京都は<strong>3〜6ヶ月前</strong>の予約をおすすめします。3月末〜4月初旬の週末はすぐに埋まるので、キャンセル可能なプランでまず押さえておきましょう！</div></div></div>
-        <div class="jk-sakura2026-faq-item"><div class="jk-sakura2026-faq-q">避けた方がいい時期はありますか？</div><div class="jk-sakura2026-faq-a"><div class="jk-sakura2026-faq-a-inner">東京・京都の満開時期の週末（4月第1週）は本当に混みます。<strong>平日の朝</strong>の訪問を強くおすすめ！または4月中旬以降に東北地方へ行けばゆったり楽しめます。</div></div></div>
-        <div class="jk-sakura2026-faq-item"><div class="jk-sakura2026-faq-q">満開時期を完全に逃しました！</div><div class="jk-sakura2026-faq-a"><div class="jk-sakura2026-faq-a-inner">北へ行きましょう！仙台（4月中旬）、青森（4月下旬）、札幌（5月上旬）まで桜前線は続きます。また、八重桜は一般的な桜より1〜2週間遅く咲くので、そちらもチェック！</div></div></div>
-      </div>
-    </section>
-
-    <!-- 出典 -->
-    <section class="jk-sakura2026-source">
-      <div class="jk-sakura2026-source-inner">
-        <div class="jk-sakura2026-kicker">データ出典</div>
-        <p class="jk-sakura2026-source-main">このページの開花日情報は<strong>気象庁の平年値</strong>を基準に作成しました。散り始め/桜吹雪の日程は一般的な基準（満開+4日/+7日）で計算しています。</p>
-        <p class="jk-sakura2026-source-link">出典：<a href="https://www.data.jma.go.jp/sakura/data/sakura_kaika.html" target="_blank" rel="noopener noreferrer">気象庁 桜開花データ</a></p>
-        <p class="jk-sakura2026-source-note">※ 実際の日程は気象条件により変わる場合があります。旅行前に最新情報をご確認ください！</p>
-        <p class="jk-sakura2026-source-updated">最終更新：2025-12-05</p>
-      </div>
-    </section>
-
-    <!-- 下部CTA -->
-    <div class="jk-bottom-cta">
-      <p class="jk-bottom-cta-text">🌸 開花日が過ぎても大丈夫！このページを<strong>ブックマーク</strong>して友達にシェアしてください！</p>
-      <div class="jk-bottom-share-btns">
-        <button type="button" class="jk-share-btn jk-share-btn-native jk-share-mobile-only" onclick="handleNativeShare()"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg>友達にシェアする</button>
-        <button type="button" class="jk-share-btn jk-share-desktop-only" onclick="shareToX()"><svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>Xでシェア</button>
-        <button type="button" class="jk-share-btn jk-share-desktop-only" onclick="shareToFacebook()"><svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>Facebookでシェア</button>
-        <button type="button" class="jk-share-btn" onclick="copyLink()"><svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>リンクをコピー</button>
+        </nav>
       </div>
     </div>
+  </header>
 
-  </div>
+  <!-- ヒーロー -->
+  <section class="jk-hero" id="top">
+    <div class="jk-hero-slider" id="jkHeroSlider">
+      <div class="jk-hero-slide is-active" data-caption="東京・目黒川の夜桜">
+        <img src="https://img.japankuru.com/prg_img/img/img2022032216080462220500.jpg" alt="目黒川の桜" />
+      </div>
+      <div class="jk-hero-slide" data-caption="京都・哲学の道">
+        <img src="https://img.japankuru.com/prg_img/img/img2019030414083494430600.jpg" alt="京都の桜" />
+      </div>
+      <div class="jk-hero-slide" data-caption="大阪・大阪城公園">
+        <img src="https://img.japankuru.com/prg_img/img/img2022032216222456582000.jpg" alt="大阪の桜" />
+      </div>
+      <div class="jk-hero-slide" data-caption="青森・弘前城">
+        <img src="https://www.japankuru.com/gld-kanri/data/uploads/2025/01/D05_6288-1536x1024.jpg" alt="弘前の桜" />
+      </div>
+    </div>
+    <div class="jk-hero-overlay"></div>
+    <div class="jk-hero-content">
+      <div class="jk-section-label" style="color:#ffdfe9;">SAKURA 2026</div>
+      <h1 class="jk-title-jp">「開花日」だけが、桜旅のすべてじゃない。</h1>
+      <p class="jk-hero-lead">
+        一般的に<strong>「開花」から「桜吹雪」まで約2週間</strong>。<br>
+        あなたの旅行日程に合わせて、いちばんきれいな街を選んでみませんか？
+      </p>
+      <p class="jk-hero-lead" style="font-size:0.85rem; margin-top:-8px;">
+        JAPANKURUが毎年集めている現地データと取材記事をもとに、<br>
+        2026年の桜旅を<strong>「日付に合わせて選べるプランナー」</strong>のようにお手伝いします。
+      </p>
+      <a href="#jkDateSection" class="jk-hero-cta">📅 自分の旅行日から探す</a>
+    </div>
+    <div class="jk-hero-caption" id="jkHeroCaption">東京・目黒川の夜桜</div>
+    <div class="jk-hero-dots" id="jkHeroDots">
+      <div class="jk-hero-dot is-active" data-index="0"></div>
+      <div class="jk-hero-dot" data-index="1"></div>
+      <div class="jk-hero-dot" data-index="2"></div>
+      <div class="jk-hero-dot" data-index="3"></div>
+    </div>
+  </section>
+
+  <!-- 日付選択 -->
+  <section class="jk-date-section" id="jkDateSection">
+    <div class="jk-container">
+      <div class="jk-date-inner">
+        <h2 class="jk-title-jp">いつ日本へ行きますか？</h2>
+        <p style="font-size:0.9rem; margin:4px 0 0;">
+          旅行期間を入力すると、その期間と<strong>「満開・桜吹雪」のタイミング</strong>が一番よく重なる都市をおすすめします。
+        </p>
+        <div class="jk-date-form">
+          <div class="jk-date-input-wrap">
+            <input type="date" class="jk-date-input" id="jkTravelStart" value="2026-03-28" />
+            <span class="jk-date-label">から</span>
+          </div>
+          <div class="jk-date-input-wrap">
+            <input type="date" class="jk-date-input" id="jkTravelEnd" value="2026-04-02" />
+            <span class="jk-date-label">まで</span>
+          </div>
+          <button type="button" class="jk-date-submit" id="jkDateSubmit">結果を表示</button>
+        </div>
+        <p class="jk-date-hint">
+          ※ 基準：気象庁の平年の開花・満開日 + 「開花〜桜吹雪」約2週間の重なり具合
+        </p>
+
+        <div class="jk-result-card" id="jkResultCard">
+          <img class="jk-result-img" id="jkResultImg" src="" alt="" />
+          <div class="jk-result-body">
+            <div class="jk-result-header">
+              <div class="jk-result-icon" id="jkResultIcon">🌸</div>
+              <div>
+                <div class="jk-result-badge" id="jkResultBadge">BEST MATCH</div>
+                <h3 class="jk-result-city" id="jkResultCity">東京</h3>
+              </div>
+            </div>
+            <p class="jk-result-status" id="jkResultStatus">
+              ちょうど満開！もっとも華やかなタイミングです。
+            </p>
+            <div class="jk-result-dates" id="jkResultDates"></div>
+            <div class="jk-result-spot">
+              <div class="jk-result-spot-title">この時期に特におすすめのスポット</div>
+              <div class="jk-result-spot-name" id="jkResultSpotName">上野公園</div>
+              <div class="jk-result-spot-desc" id="jkResultSpotDesc">
+                東京お花見の定番。約1000本の桜と美術館・動物園で一日中楽しめます。
+              </div>
+            </div>
+            <p class="jk-result-explain">
+              ※ 旅行期間と各都市の<strong>「開花〜桜吹雪」（約2週間）</strong>の重なり方と、満開日にどれだけ近いかを一緒にスコア化しています。
+            </p>
+            <div class="jk-result-actions">
+              <a href="#" target="_blank" rel="noopener" class="jk-result-btn jk-result-btn--primary" id="jkResultArticle">
+                関連記事を見る
+              </a>
+              <button type="button" class="jk-result-btn" id="jkScrollToSpotsBtn">
+                📍 この都市の他のスポットも見る
+              </button>
+              <button type="button" class="jk-result-btn" id="jkCopyLinkBtn">
+                🔖 このページのリンクをコピー
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 桜4ステージ -->
+  <section class="jk-section jk-section--white" id="jkStageSection">
+    <div class="jk-container">
+      <div class="jk-section-header jk-section-header--center jk-fade-in">
+        <div class="jk-section-label">Timeline</div>
+        <h2 class="jk-section-title jk-title-jp">桜の4つのステージ、実際はこうやって続きます</h2>
+        <p class="jk-section-desc">
+          気象台で「開花宣言」が出てから、花びらが舞う桜吹雪まで。ふつうは<strong>だいたい2週間ほどのゆとり</strong>があります。
+        </p>
+      </div>
+      <div class="jk-stages-grid jk-fade-in">
+        <div class="jk-stage-card">
+          <div class="jk-stage-img">
+            <span class="jk-stage-num">1</span>
+            <img src="https://images.unsplash.com/photo-1551489186-cf8726f514f8?auto=format&fit=crop&w=700&q=80" alt="桜の開花" />
+          </div>
+          <div class="jk-stage-body">
+            <div class="jk-stage-name">開花</div>
+            <div class="jk-stage-name-jp">開花 · カイカ</div>
+            <p class="jk-stage-desc">
+              標本木（基準の木）に<strong>5〜6輪以上の花が咲いたとき</strong>、「開花」として発表されます。
+            </p>
+            <span class="jk-stage-timing">基準となる日</span>
+          </div>
+        </div>
+        <div class="jk-stage-card jk-stage-card--highlight">
+          <div class="jk-stage-img">
+            <span class="jk-stage-num">2</span>
+            <img src="https://images.unsplash.com/photo-1522383225653-ed111181a951?auto=format&fit=crop&w=700&q=80" alt="桜の満開" />
+          </div>
+          <div class="jk-stage-body">
+            <div class="jk-stage-name">満開</div>
+            <div class="jk-stage-name-jp">満開 · マンカイ</div>
+            <p class="jk-stage-desc">
+              全体の<strong>80％以上が咲きそろった状態</strong>。いちばん華やかなタイミングです。
+            </p>
+            <span class="jk-stage-timing">開花＋7日前後</span>
+          </div>
+        </div>
+        <div class="jk-stage-card">
+          <div class="jk-stage-img">
+            <span class="jk-stage-num">3</span>
+            <img src="https://images.unsplash.com/photo-1493238792000-8113da705763?auto=format&fit=crop&w=700&q=80" alt="桜が散り始める" />
+          </div>
+          <div class="jk-stage-body">
+            <div class="jk-stage-name">散り始め</div>
+            <div class="jk-stage-name-jp">散り始め · チリハジメ</div>
+            <p class="jk-stage-desc">
+              地面に花びらが少しずつ積もり始めるころ。ゆっくりお散歩や写真撮影にぴったりです。
+            </p>
+            <span class="jk-stage-timing">満開＋3〜4日</span>
+          </div>
+        </div>
+        <div class="jk-stage-card">
+          <div class="jk-stage-img">
+            <span class="jk-stage-num">4</span>
+            <img src="https://images.unsplash.com/photo-1462275646964-a0e3571f4f95?auto=format&fit=crop&w=700&q=80" alt="桜吹雪" />
+          </div>
+          <div class="jk-stage-body">
+            <div class="jk-stage-name">桜吹雪</div>
+            <div class="jk-stage-name-jp">桜吹雪 · サクラフブキ</div>
+            <p class="jk-stage-desc">
+              風が吹くたびに花びらが雪のように舞う時期。動画・リール撮影には最高の瞬間です。
+            </p>
+            <span class="jk-stage-timing">散り始め＋2〜3日</span>
+          </div>
+        </div>
+      </div>
+      <div class="jk-stage-message jk-fade-in">
+        開花日を逃しても大丈夫。<strong>街ごとに開花タイミングは違います</strong>し、同じ街でも
+        <strong>満開〜桜吹雪まで約2週間</strong>は、たっぷり桜を楽しめる余裕があります。
+      </div>
+    </div>
+  </section>
+
+  <!-- 地図 -->
+  <section class="jk-section jk-section--pink" id="jkMapSection">
+    <div class="jk-container">
+      <div class="jk-section-header jk-section-header--center jk-fade-in">
+        <div class="jk-section-label">2026 Forecast Map</div>
+        <h2 class="jk-section-title jk-title-jp">全国の桜予想スケジュールを一目でチェック</h2>
+        <p class="jk-section-desc">
+          南の福岡から、北の北海道まで駆け上がっていく<strong>「桜前線」</strong>を地図で確認できます。
+        </p>
+      </div>
+
+      <div class="jk-map-wrapper jk-fade-in">
+        <div class="jk-map-container">
+          <div id="jk-sakura-map"></div>
+          <svg class="jk-map-lines" id="jkMapLines"></svg>
+          <!-- PC用都市カードは JS で生成 -->
+        </div>
+        <!-- モバイル用都市リスト -->
+        <div class="jk-map-mobile-list" id="jkMapMobileList"></div>
+      </div>
+      <p style="font-size:0.72rem; color:var(--jk-text-muted); margin-top:8px;">
+        ※ データ：気象庁の平年の開花・満開日を基準に作成 / 実際の2026年予報が発表され次第、内容を更新予定です。
+      </p>
+    </div>
+  </section>
+
+  <!-- アンケート + 都市別おすすめ -->
+  <section class="jk-section jk-section--white" id="jkSurveySection">
+    <div class="jk-container">
+      <!-- アンケート -->
+      <div class="jk-spot-survey jk-fade-in">
+        <div class="jk-section-label">Survey</div>
+        <h3 class="jk-section-title jk-title-jp">今年、いちばん行ってみたい桜スポットは？</h3>
+        <p class="jk-section-desc" style="max-width:none;">
+          気になるスポットをひとつ選んでください。このページを見た人たちの<strong>リアルタイム人気ランキング</strong>もあわせて表示します。
+        </p>
+
+        <div class="jk-spot-survey-grid" id="jkSurveyGrid">
+          <!-- JSで9つ生成 -->
+        </div>
+        <div class="jk-spot-survey-result" id="jkSpotSurveyResult"></div>
+      </div>
+
+      <!-- 都市別おすすめ -->
+      <div class="jk-section-header jk-section-header--center jk-fade-in" id="jkSpotSection">
+        <div class="jk-section-label">City Guide</div>
+        <h2 class="jk-section-title jk-title-jp">都市ごとの桜おすすめコース</h2>
+        <p class="jk-section-desc">
+          一つの都市だけでも<strong>3〜7スポット以上</strong>を一気に回ることができます。下のカードでは、代表スポット1か所と
+          同じ都市のいくつかの名所をセットで紹介します。
+        </p>
+      </div>
+      <div class="jk-spots-grid jk-fade-in" id="jkSpotsGrid">
+        <!-- JSで12枚のカードを生成 -->
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ & フッター -->
+  <section class="jk-section jk-section--cream" id="jkFaqSection">
+    <div class="jk-container">
+      <div class="jk-section-header jk-section-header--center jk-fade-in">
+        <div class="jk-section-label">FAQ</div>
+        <h2 class="jk-section-title jk-title-jp">よくある質問</h2>
+      </div>
+      <div class="jk-faq-list jk-fade-in">
+        <div class="jk-faq-item">
+          <div class="jk-faq-q">開花宣言が出たあとに行くと、もう遅いですか？</div>
+          <div class="jk-faq-a">
+            <div class="jk-faq-a-inner">
+              一般的に<strong>「開花〜桜吹雪」までは10〜14日</strong>ほどの余裕があるため、開花日を過ぎても
+              しばらくは十分に桜を楽しむことができます。ただし週末・連休は人出が多くなるので、できれば平日の午前中がおすすめです。
+            </div>
+          </div>
+        </div>
+        <div class="jk-faq-item">
+          <div class="jk-faq-q">3日くらいの短い日程なら、どこがおすすめですか？</div>
+          <div class="jk-faq-a">
+            <div class="jk-faq-a-inner">
+              初めての日本の桜旅なら、<strong>東京（上野・目黒川・新宿御苑）</strong>や
+              <strong>大阪＋京都</strong>の組み合わせが人気です。上の日付検索の結果とあわせて、
+              <strong>都市別おすすめカード</strong>も見ながら、日程に合う街を選んでみてください。
+            </div>
+          </div>
+        </div>
+        <div class="jk-faq-item">
+          <div class="jk-faq-q">ホテルはどのくらい前に予約した方がいいですか？</div>
+          <div class="jk-faq-a">
+            <div class="jk-faq-a-inner">
+              東京・大阪・京都の桜シーズン週末は、<strong>3〜6か月前</strong>から埋まり始めます。
+              可能であればキャンセル可のプランで早めに押さえておき、開花予報が出てから細かい日程を調整するのが安心です。
+            </div>
+          </div>
+        </div>
+        <div class="jk-faq-item">
+          <div class="jk-faq-q">なるべく人混みを避けて桜を見たいのですが…</div>
+          <div class="jk-faq-a">
+            <div class="jk-faq-a-inner">
+              <strong>東北エリア（仙台・青森・弘前）</strong>や九州の一部エリアは、比較的ゆったり見られることが多いです。
+              同じ都市の中でも、超定番スポットは朝早めに訪れて、午後は<strong>地元の公園や川沿いの遊歩道</strong>を
+              ねらってみるのもおすすめです。
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="jk-footer">
+    <div class="jk-footer-main">JAPANKURU SAKURA 2026 GUIDE</div>
+    <div class="jk-footer-buttons">
+      <button type="button" class="jk-footer-btn" id="jkFooterBookmarkBtn">
+        🔖 このページをブックマーク／ホーム画面に保存する方法
+      </button>
+      <button type="button" class="jk-footer-btn" id="jkFooterTopBtn">
+        ↑ ページトップに戻る
+      </button>
+    </div>
+    <p class="jk-footer-tip" id="jkBookmarkTip">
+      iPhone（Safari）：共有ボタン →「ホーム画面に追加」 · Android（Chrome）：メニュー(⋮) →「ホーム画面に追加」 ·
+      PCブラウザ：Ctrl+D / ⌘+D でブックマークできます。
+    </p>
+    <div class="jk-footer-source">
+      データ：<a href="https://www.data.jma.go.jp/sakura/data/sakura_kaika.html" target="_blank" rel="noopener">気象庁</a> 平年値を基準に作成 ·
+      © JAPANKURU
+    </div>
+  </footer>
 </div>
 
 <script>
-(function() {
-  document.querySelectorAll(".jk-sakura2026-faq-item").forEach(function(item) {
-    var q = item.querySelector(".jk-sakura2026-faq-q");
-    if(q) q.addEventListener("click", function() {
-      var isOpen = item.classList.contains("is-open");
-      document.querySelectorAll(".jk-sakura2026-faq-item").forEach(function(i) { i.classList.remove("is-open"); });
-      if (!isOpen) item.classList.add("is-open");
-    });
-  });
-  function initViewToggle() {
-    var isMobile = window.innerWidth < 768;
-    var listBtn = document.querySelector('[data-view="list"]');
-    var mapBtn = document.querySelector('[data-view="map"]');
-    if (isMobile) { listBtn && listBtn.classList.add('is-active'); mapBtn && mapBtn.classList.remove('is-active'); }
+  // ---------- データ定義 ----------
+  // 地図・日付おすすめ用 都市データ（10都市）
+  const MAP_CITIES = [
+    {
+      id: "sapporo",
+      nameJp: "札幌",
+      nameKr: "Sapporo",
+      lat: 43.06,
+      lng: 141.35,
+      bloom: "5/1",
+      full: "5/6",
+      fall: "5/10",
+      snow: "5/13",
+      spot: "円山公園",
+      spotDesc:
+        "北海道を代表する桜スポット。エゾヤマザクラ約200本と神社の森が織りなす風景。",
+      heroImg:
+        "https://images.unsplash.com/photo-1513407030348-cf8726f514f8?auto=format&fit=crop&w=800&q=80",
+      article:
+        "https://www.japankuru.com/kr/search?q=%EC%82%BF%ED%8F%AC%EB%A1%9C+%EB%B2%9A%EA%BD%83",
+      cardPos: { top: 40, right: 60 },
+    },
+    {
+      id: "aomori",
+      nameJp: "青森",
+      nameKr: "Aomori",
+      lat: 40.82,
+      lng: 140.74,
+      bloom: "4/22",
+      full: "4/28",
+      fall: "5/2",
+      snow: "5/5",
+      spot: "弘前城",
+      spotDesc:
+        "お堀一面を覆う「花いかだ」で有名な青森の桜。約2600本が咲き誇ります。",
+      heroImg:
+        "https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?auto=format&fit=crop&w=800&q=80",
+      article:
+        "https://www.japankuru.com/kr/search?q=%ED%9E%88%EB%A1%9C%EC%82%AC%ED%82%A4+%EB%B2%9A%EA%BD%83",
+      cardPos: { top: 110, right: 50 },
+    },
+    {
+      id: "sendai",
+      nameJp: "仙台",
+      nameKr: "Sendai",
+      lat: 38.27,
+      lng: 140.87,
+      bloom: "4/8",
+      full: "4/14",
+      fall: "4/18",
+      snow: "4/21",
+      spot: "西公園",
+      spotDesc:
+        "伊達政宗公の像と一緒に楽しめる、仙台市内のお花見スポット。地元の人に愛される場所です。",
+      heroImg:
+        "https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?auto=format&fit=crop&w=800&q=80",
+      article:
+        "https://www.japankuru.com/kr/search?q=%EC%84%BC%EB%8B%A4%EC%9D%B4+%EB%B2%9A%EA%BD%83",
+      cardPos: { top: 180, right: 40 },
+    },
+    {
+      id: "tokyo",
+      nameJp: "東京",
+      nameKr: "Tokyo",
+      lat: 35.68,
+      lng: 139.77,
+      bloom: "3/24",
+      full: "3/31",
+      fall: "4/4",
+      snow: "4/7",
+      spot: "上野公園",
+      spotDesc:
+        "東京お花見の王道。1000本以上の桜と、博物館・動物園など見どころがぎっしり。",
+      heroImg:
+        "https://images.unsplash.com/photo-1490806843957-31f4c9a91c65?auto=format&fit=crop&w=800&q=80",
+      article:
+        "https://www.japankuru.com/kr/search?q=%EB%8F%84%EC%BF%84+%EB%B2%9A%EA%BD%83",
+      cardPos: { top: 270, right: 60 },
+    },
+    {
+      id: "kanazawa",
+      nameJp: "金沢",
+      nameKr: "Kanazawa",
+      lat: 36.56,
+      lng: 136.66,
+      bloom: "4/3",
+      full: "4/9",
+      fall: "4/13",
+      snow: "4/16",
+      spot: "兼六園",
+      spotDesc:
+        "日本三名園のひとつ。庭園と桜、そして夜のライトアップが幻想的な名所です。",
+      heroImg:
+        "https://images.unsplash.com/photo-1528360983277-13d401cdc186?auto=format&fit=crop&w=800&q=80",
+      article:
+        "https://www.japankuru.com/kr/search?q=%EA%B0%80%EB%82%98%EC%9E%90%EC%99%80+%EB%B2%9A%EA%BD%83",
+      cardPos: { top: 210, left: 50 },
+    },
+    {
+      id: "kyoto",
+      nameJp: "京都",
+      nameKr: "Kyoto",
+      lat: 35.01,
+      lng: 135.77,
+      bloom: "3/26",
+      full: "4/2",
+      fall: "4/6",
+      snow: "4/9",
+      spot: "哲学の道",
+      spotDesc:
+        "銀閣寺から南禅寺まで続く疎水沿いの散歩道。京都らしい静かな春の風景が楽しめます。",
+      heroImg:
+        "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=800&q=80",
+      article:
+        "https://www.japankuru.com/kr/search?q=%EA%B5%90%ED%86%A0+%EB%B2%9A%EA%BD%83",
+      cardPos: { top: 300, left: 50 },
+    },
+    {
+      id: "osaka",
+      nameJp: "大阪",
+      nameKr: "Osaka",
+      lat: 34.69,
+      lng: 135.5,
+      bloom: "3/27",
+      full: "4/3",
+      fall: "4/7",
+      snow: "4/10",
+      spot: "大阪城公園",
+      spotDesc:
+        "天守閣を囲む約3000本の桜。昼も夜も絵になる、大阪を代表するお花見スポットです。",
+      heroImg:
+        "https://images.unsplash.com/photo-1589308078059-be1415eab4c3?auto=format&fit=crop&w=800&q=80",
+      article:
+        "https://www.japankuru.com/kr/search?q=%EC%98%A4%EC%82%AC%EC%B9%B4%EC%84%B1+%EB%B2%9A%EA%BD%83",
+      cardPos: { top: 360, left: 130 },
+    },
+    {
+      id: "hiroshima",
+      nameJp: "広島",
+      nameKr: "Hiroshima",
+      lat: 34.39,
+      lng: 132.46,
+      bloom: "3/25",
+      full: "4/1",
+      fall: "4/5",
+      snow: "4/8",
+      spot: "平和記念公園",
+      spotDesc:
+        "川沿いに続く桜並木で、少し落ち着いた雰囲気の春時間を過ごせるスポット。",
+      heroImg:
+        "https://images.unsplash.com/photo-1576675784201-0e142b423952?auto=format&fit=crop&w=800&q=80",
+      article:
+        "https://www.japankuru.com/kr/search?q=%ED%9E%88%EB%A1%9C%EC%8B%9C%EB%A7%88+%EB%B2%9A%EA%BD%83",
+      cardPos: { top: 380, left: 40 },
+    },
+    {
+      id: "fukuoka",
+      nameJp: "福岡",
+      nameKr: "Fukuoka",
+      lat: 33.59,
+      lng: 130.4,
+      bloom: "3/22",
+      full: "3/29",
+      fall: "4/2",
+      snow: "4/5",
+      spot: "舞鶴公園",
+      spotDesc:
+        "福岡城跡を囲む桜と、博多ラーメン食べ歩きを一緒に楽しめる春コース。",
+      heroImg:
+        "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=800&q=80",
+      article:
+        "https://www.japankuru.com/kr/search?q=%ED%9B%84%EC%BF%A0%EC%98%A4%EC%B9%B4+%EB%B2%9A%EA%BD%83",
+      cardPos: { top: 460, left: 50 },
+    },
+    {
+      id: "kagoshima",
+      nameJp: "鹿児島",
+      nameKr: "Kagoshima",
+      lat: 31.6,
+      lng: 130.56,
+      bloom: "3/26",
+      full: "4/2",
+      fall: "4/6",
+      snow: "4/9",
+      spot: "城山公園",
+      spotDesc:
+        "桜の向こうに見える桜島のシルエットが印象的。鹿児島らしい風景を楽しめるスポットです。",
+      heroImg:
+        "https://images.unsplash.com/photo-1528164344705-47542687000d?auto=format&fit=crop&w=800&q=80",
+      article:
+        "https://www.japankuru.com/kr/search?q=%EA%B0%80%EA%B3%A0%EC%8B%9C%EB%A7%88+%EB%B2%9A%EA%BD%83",
+      cardPos: { top: 540, left: 110 },
+    },
+  ];
+
+  // アンケート用スポット9件
+  const SURVEY_SPOTS = [
+    {
+      id: "ueno",
+      label: "東京・上野公園",
+      desc: "1000本の桜並木＋美術館・動物園",
+      thumb:
+        "https://images.unsplash.com/photo-1490806843957-31f4c9a91c65?auto=format&fit=crop&w=300&q=80",
+    },
+    {
+      id: "meguro",
+      label: "東京・目黒川",
+      desc: "夜桜と写真映えスポットの定番",
+      thumb:
+        "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?auto=format&fit=crop&w=300&q=80",
+    },
+    {
+      id: "shinjuku",
+      label: "東京・新宿御苑",
+      desc: "芝生でのんびりピクニックお花見",
+      thumb:
+        "https://images.unsplash.com/photo-1488342994276-7c3bc074204b?auto=format&fit=crop&w=300&q=80",
+    },
+    {
+      id: "tetsugaku",
+      label: "京都・哲学の道",
+      desc: "水路沿いの静かな散歩コース",
+      thumb:
+        "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=300&q=80",
+    },
+    {
+      id: "maruyama",
+      label: "京都・円山公園",
+      desc: "夜に映えるシダレザクラの名木",
+      thumb:
+        "https://images.unsplash.com/photo-1497005367839-6e852de72767?auto=format&fit=crop&w=300&q=80",
+    },
+    {
+      id: "osakaCastle",
+      label: "大阪・大阪城公園",
+      desc: "天守閣と桜の王道コンビ",
+      thumb:
+        "https://images.unsplash.com/photo-1589308078059-be1415eab4c3?auto=format&fit=crop&w=300&q=80",
+    },
+    {
+      id: "maizuru",
+      label: "福岡・舞鶴公園",
+      desc: "福岡城跡とラーメン巡り",
+      thumb:
+        "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=300&q=80",
+    },
+    {
+      id: "hirosaki",
+      label: "青森・弘前城",
+      desc: "お堀を埋め尽くす「花筏」",
+      thumb:
+        "https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?auto=format&fit=crop&w=300&q=80",
+    },
+    {
+      id: "yokohama",
+      label: "横浜・みなとみらい",
+      desc: "海・観覧車・桜の夜景",
+      thumb:
+        "https://images.unsplash.com/photo-1570085578735-9a6722a4ab4d?auto=format&fit=crop&w=300&q=80",
+    },
+  ];
+
+  // 都市別おすすめカード12枚
+  const SPOT_CARDS = [
+    {
+      id: "tokyo",
+      cityLabel: "TOKYO",
+      title: "東京・上野＆目黒川 王道お花見コース",
+      heroImg:
+        "https://images.unsplash.com/photo-1490806843957-31f4c9a91c65?auto=format&fit=crop&w=900&q=80",
+      summary:
+        "初めての桜旅なら東京で「都会の桜」のいろいろな顔を一気に楽しめます。",
+      spots: ["上野公園", "目黒川", "新宿御苑", "千鳥ヶ淵", "隅田川テラス"],
+      article:
+        "https://www.japankuru.com/kr/search?q=%EB%8F%84%EC%BF%84+%EB%B2%9A%EA%BD%83",
+    },
+    {
+      id: "kyoto",
+      cityLabel: "KYOTO",
+      title: "京都・お寺と疎水をめぐる春の一日",
+      heroImg:
+        "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=900&q=80",
+      summary:
+        "お寺や疎水、石畳が続く京都は、「歩くこと」そのものが旅になる街です。",
+      spots: [
+        "哲学の道",
+        "円山公園",
+        "祇園白川",
+        "嵐山 渡月橋周辺",
+        "銀閣寺周辺",
+      ],
+      article:
+        "https://www.japankuru.com/kr/search?q=%EA%B5%90%ED%86%A0+%EB%B2%9A%EA%BD%83",
+    },
+    {
+      id: "osaka",
+      cityLabel: "OSAKA",
+      title: "大阪・お城と川、夜景まで欲張りに楽しむ",
+      heroImg:
+        "https://images.unsplash.com/photo-1589308078059-be1415eab4c3?auto=format&fit=crop&w=900&q=80",
+      summary:
+        "昼はお城と公園、夜は川沿いと道頓堀。グルメも写真スポットも勢ぞろい。",
+      spots: [
+        "大阪城公園",
+        "毛馬桜之宮公園",
+        "ジョウテラス大阪",
+        "大阪城西の丸庭園 夜桜",
+      ],
+      article:
+        "https://www.japankuru.com/kr/search?q=%EC%98%A4%EC%82%AC%EC%B9%B4+%EB%B2%9A%EA%BD%83",
+    },
+    {
+      id: "fukuoka",
+      cityLabel: "FUKUOKA",
+      title: "福岡・ラーメンと一緒に楽しむ桜さんぽ",
+      heroImg:
+        "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=900&q=80",
+      summary:
+        "短い日程でも楽しみやすい福岡。市内中心部からあまり移動せずに桜を満喫できます。",
+      spots: [
+        "舞鶴公園",
+        "西公園",
+        "大濠公園",
+        "百道浜・海沿いの散歩道（春の海散歩）",
+      ],
+      article:
+        "https://www.japankuru.com/kr/search?q=%ED%9B%84%EC%BF%A0%EC%98%A4%EC%B9%B4+%EB%B2%9A%EA%BD%83",
+    },
+    {
+      id: "hiroshima",
+      cityLabel: "HIROSHIMA",
+      title: "広島・川と島で、少しゆったり春時間",
+      heroImg:
+        "https://images.unsplash.com/photo-1576675784201-0e142b423952?auto=format&fit=crop&w=900&q=80",
+      summary:
+        "落ち着いた雰囲気で桜を楽しみたいなら広島。宮島とセットで訪れるのもおすすめです。",
+      spots: [
+        "平和記念公園",
+        "元安川沿い",
+        "広島城周辺",
+        "宮島 厳島神社周辺",
+      ],
+      article:
+        "https://www.japankuru.com/kr/search?q=%ED%9E%88%EB%A1%9C%EC%8B%9C%EB%A7%88+%EB%B2%9A%EA%BD%83",
+    },
+    {
+      id: "kanazawa",
+      cityLabel: "KANAZAWA",
+      title: "金沢・庭園と城下町、雨の日も絵になる桜旅",
+      heroImg:
+        "https://images.unsplash.com/photo-1528360983277-13d401cdc186?auto=format&fit=crop&w=900&q=80",
+      summary:
+        "雨の日でも絵になる金沢。庭園・城・茶屋街までコンパクトに回れるのが魅力です。",
+      spots: [
+        "兼六園",
+        "金沢城公園",
+        "犀川の桜並木",
+        "ひがし茶屋街の路地",
+      ],
+      article:
+        "https://www.japankuru.com/kr/search?q=%EA%B0%80%EB%82%98%EC%9E%90%EC%99%80+%EB%B2%9A%EA%BD%83",
+    },
+    {
+      id: "sendai",
+      cityLabel: "SENDAI",
+      title: "仙台・東北エリア入門の桜旅コース",
+      heroImg:
+        "https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?auto=format&fit=crop&w=900&q=80",
+      summary:
+        "東京より少し遅れて咲く東北の桜。人混みを少し避けて、ゆったり楽しみたい人に。",
+      spots: [
+        "西公園",
+        "榴岡公園",
+        "広瀬川沿い",
+        "青葉城址周辺",
+      ],
+      article:
+        "https://www.japankuru.com/kr/search?q=%EC%84%BC%EB%8B%A4%EC%9D%B4+%EB%B2%9A%EA%BD%83",
+    },
+    {
+      id: "nagoya",
+      cityLabel: "NAGOYA",
+      title: "名古屋・お城と川沿い、東京より少しゆるめの春",
+      heroImg:
+        "https://images.unsplash.com/photo-1462957794353-7d4f56eaf8fb?auto=format&fit=crop&w=900&q=80",
+      summary:
+        "東京と大阪のあいだを移動するなら、途中で立ち寄りやすい名古屋。動線に組み込みやすい街です。",
+      spots: [
+        "名古屋城",
+        "山崎川の桜並木",
+        "鶴舞公園",
+        "名城公園",
+      ],
+      article:
+        "https://www.japankuru.com/kr/search?q=%EB%82%98%EA%B3%A0%EC%95%BC+%EB%B2%9A%EA%BD%83",
+    },
+    {
+      id: "nara",
+      cityLabel: "NARA",
+      title: "奈良・鹿と桜が一緒に楽しめる公園へ",
+      heroImg:
+        "https://images.unsplash.com/photo-1502072243-7ea748ffb08e?auto=format&fit=crop&w=900&q=80",
+      summary:
+        "鹿が歩く公園とお寺のまわりに続く桜。1日だけでも、ゆっくり歩いてみたくなる街です。",
+      spots: [
+        "奈良公園",
+        "東大寺周辺",
+        "春日大社参道",
+        "浮見堂（池の周り）",
+      ],
+      article:
+        "https://www.japankuru.com/kr/search?q=%EB%82%98%EB%9D%BC+%EB%B2%9A%EA%BD%83",
+    },
+    {
+      id: "aomori",
+      cityLabel: "AOMORI",
+      title: "青森・弘前城の桜をとことん味わう旅",
+      heroImg:
+        "https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?auto=format&fit=crop&w=900&q=80",
+      summary:
+        "「桜のためだけに」北へ向かう人も多い、日本三大桜名所のひとつ。",
+      spots: [
+        "弘前公園（弘前城）",
+        "弘前公園のお堀",
+        "岩木山ビュースポット",
+      ],
+      article:
+        "https://www.japankuru.com/kr/search?q=%ED%9E%88%EB%A1%9C%EC%82%AC%ED%82%A4+%EB%B2%9A%EA%BD%83",
+    },
+    {
+      id: "sapporo",
+      cityLabel: "SAPPORO",
+      title: "札幌・少し遅れてやってくる北海道の春",
+      heroImg:
+        "https://images.unsplash.com/photo-1513407030348-cf8726f514f8?auto=format&fit=crop&w=900&q=80",
+      summary:
+        "4月末〜5月上旬、日本の他の都市より一歩遅れてやってくる春を感じられます。",
+      spots: [
+        "円山公園",
+        "北海道神宮",
+        "モエレ沼公園",
+        "真駒内公園",
+      ],
+      article:
+        "https://www.japankuru.com/kr/search?q=%EC%82%BF%ED%8F%AC%EB%A1%9C+%EB%B2%9A%EA%BD%83",
+    },
+    {
+      id: "kagoshima",
+      cityLabel: "KAGOSHIMA",
+      title: "鹿児島・桜島ビューと一緒に楽しむ桜",
+      heroImg:
+        "https://images.unsplash.com/photo-1528164344705-47542687000d?auto=format&fit=crop&w=900&q=80",
+      summary:
+        "桜の向こうに桜島の火山を望む、鹿児島ならではの景色。温泉旅とセットで訪れたい南の桜です。",
+      spots: [
+        "城山公園",
+        "出水麓武家屋敷群周辺",
+        "ドルフィンポート周辺遊歩道",
+      ],
+      article:
+        "https://www.japankuru.com/kr/search?q=%EA%B0%80%EA%B3%A0%EC%8B%9C%EB%A7%88+%EB%B2%9A%EA%BD%83",
+    },
+  ];
+
+  // ---------- ヘルパー ----------
+  function parseMonthDayToDate(monthDay, year) {
+    if (!monthDay) return null;
+    const parts = monthDay.split("/");
+    if (parts.length !== 2) return null;
+    const m = parseInt(parts[0], 10);
+    const d = parseInt(parts[1], 10);
+    if (isNaN(m) || isNaN(d)) return null;
+    return new Date(year, m - 1, d);
   }
-  initViewToggle();
-  window.addEventListener('resize', initViewToggle);
-})();
 
-function toggleView(view) {
-  var mapView = document.getElementById('mapView');
-  var listView = document.getElementById('listView');
-  var listBtn = document.querySelector('[data-view="list"]');
-  var mapBtn = document.querySelector('[data-view="map"]');
-  if (view === 'map') { mapView.classList.add('is-active'); mapView.classList.remove('is-hidden'); listView.classList.remove('is-active'); listView.classList.add('is-hidden'); mapBtn.classList.add('is-active'); listBtn.classList.remove('is-active'); }
-  else { listView.classList.add('is-active'); listView.classList.remove('is-hidden'); mapView.classList.remove('is-active'); mapView.classList.add('is-hidden'); listBtn.classList.add('is-active'); mapBtn.classList.remove('is-active'); }
-}
+  function clampDateRangeOverlap(startA, endA, startB, endB) {
+    const start = Math.max(startA.getTime(), startB.getTime());
+    const end = Math.min(endA.getTime(), endB.getTime());
+    const diff = end - start;
+    if (diff <= 0) return 0;
+    return diff / 86400000; // days
+  }
 
-function handleNativeShare() {
-  if (navigator.share) { navigator.share({ title: '2026年 日本の桜4段階タイムライン 🌸', text: '開花から桜吹雪まで！日程別の桜スケジュールが一目でわかる', url: window.location.href }).catch(function(err) { console.log('Share cancelled:', err); }); }
-  else { copyLink(); }
-}
-function shareToX() { var text = encodeURIComponent('2026年 日本の桜4段階タイムライン 🌸 開花から桜吹雪まで約2週間！'); var url = encodeURIComponent(window.location.href); window.open('https://twitter.com/intent/tweet?text=' + text + '&url=' + url, '_blank'); }
-function shareToFacebook() { var url = encodeURIComponent(window.location.href); window.open('https://www.facebook.com/sharer/sharer.php?u=' + url, '_blank'); }
-function copyLink() { navigator.clipboard.writeText(window.location.href).then(function() { alert('リンクをコピーしました！ 📋'); }).catch(function() { prompt('以下のリンクをコピーしてください：', window.location.href); }); }
+  document.addEventListener("DOMContentLoaded", function () {
+    // ---------- ヘッダーナビ ----------
+    const headerLinks = document.querySelectorAll(".jk-header-link");
+    headerLinks.forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        const target = btn.getAttribute("data-target");
+        if (target) {
+          const el = document.querySelector(target);
+          if (el) {
+            el.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        }
+      });
+    });
+
+    // スクロール時の現在セクション強調（簡易版）
+    const sectionsForNav = [
+      "#jkDateSection",
+      "#jkStageSection",
+      "#jkMapSection",
+      "#jkSurveySection",
+      "#jkSpotSection",
+    ];
+    const sectionEls = sectionsForNav
+      .map((id) => document.querySelector(id))
+      .filter(Boolean);
+
+    function updateNavOnScroll() {
+      const scrollY = window.scrollY;
+      let bestId = "#jkDateSection";
+      sectionEls.forEach((el) => {
+        const rect = el.getBoundingClientRect();
+        const top = rect.top + scrollY - 80;
+        if (scrollY >= top) {
+          bestId = "#" + el.id;
+        }
+      });
+      headerLinks.forEach((btn) => {
+        const target = btn.getAttribute("data-target") || "";
+        btn.classList.toggle("is-active", target === bestId);
+      });
+    }
+    window.addEventListener("scroll", updateNavOnScroll);
+    updateNavOnScroll();
+
+    // ---------- ヒーロースライダー ----------
+    const heroSlides = Array.from(
+      document.querySelectorAll("#jkHeroSlider .jk-hero-slide")
+    );
+    const heroDots = Array.from(
+      document.querySelectorAll("#jkHeroDots .jk-hero-dot")
+    );
+    const heroCaption = document.getElementById("jkHeroCaption");
+    let heroIndex = 0;
+    let heroTimer = null;
+
+    function setHero(index) {
+      heroSlides.forEach((s, i) =>
+        s.classList.toggle("is-active", i === index)
+      );
+      heroDots.forEach((d, i) =>
+        d.classList.toggle("is-active", i === index)
+      );
+      const slide = heroSlides[index];
+      const caption = slide ? slide.getAttribute("data-caption") : "";
+      if (heroCaption && caption) heroCaption.textContent = caption;
+      heroIndex = index;
+    }
+
+    function nextHero() {
+      setHero((heroIndex + 1) % heroSlides.length);
+    }
+
+    function startHeroTimer() {
+      if (heroTimer) clearInterval(heroTimer);
+      if (heroSlides.length > 1) {
+        heroTimer = setInterval(nextHero, 7000);
+      }
+    }
+
+    heroDots.forEach((dot) => {
+      dot.addEventListener("click", () => {
+        const idx = parseInt(dot.getAttribute("data-index") || "0", 10);
+        setHero(idx);
+        startHeroTimer();
+      });
+    });
+
+    setHero(0);
+    startHeroTimer();
+
+    // ---------- 日付 → 都市おすすめ ----------
+    const dateBtn = document.getElementById("jkDateSubmit");
+    const resultCard = document.getElementById("jkResultCard");
+    const resultImg = document.getElementById("jkResultImg");
+    const resultIcon = document.getElementById("jkResultIcon");
+    const resultBadge = document.getElementById("jkResultBadge");
+    const resultCity = document.getElementById("jkResultCity");
+    const resultStatus = document.getElementById("jkResultStatus");
+    const resultDates = document.getElementById("jkResultDates");
+    const resultSpotName = document.getElementById("jkResultSpotName");
+    const resultSpotDesc = document.getElementById("jkResultSpotDesc");
+    const resultArticle = document.getElementById("jkResultArticle");
+    const scrollToSpotsBtn = document.getElementById("jkScrollToSpotsBtn");
+    const copyLinkBtn = document.getElementById("jkCopyLinkBtn");
+
+    let lastRecommendedCityId = null;
+
+    function computeBestCity() {
+      const sv = document.getElementById("jkTravelStart").value;
+      const ev = document.getElementById("jkTravelEnd").value;
+      if (!sv || !ev) {
+        alert("旅行の開始日と終了日を両方選択してください。");
+        return;
+      }
+      const startDate = new Date(sv);
+      const endDate = new Date(ev);
+      if (startDate > endDate) {
+        alert("開始日が終了日より後になることはできません。");
+        return;
+      }
+      const midTime = (startDate.getTime() + endDate.getTime()) / 2;
+      const midDate = new Date(midTime);
+      const year = 2026;
+
+      let bestCity = null;
+      let bestScore = -Infinity;
+      let bestStageKey = "full";
+
+      MAP_CITIES.forEach((city) => {
+        const bloom = parseMonthDayToDate(city.bloom, year);
+        const full = parseMonthDayToDate(city.full, year);
+        const fall = parseMonthDayToDate(city.fall, year);
+        const snow = parseMonthDayToDate(city.snow, year);
+
+        if (!bloom || !full || !fall || !snow) return;
+
+        const overlapDays = clampDateRangeOverlap(
+          startDate,
+          endDate,
+          bloom,
+          snow
+        );
+        if (overlapDays <= 0) return;
+
+        const distToFull =
+          Math.abs(midDate.getTime() - full.getTime()) / 86400000;
+        const score = overlapDays * 12 - distToFull; // 重み付け
+
+        if (score > bestScore) {
+          bestScore = score;
+          bestCity = city;
+
+          if (midDate < bloom) bestStageKey = "before";
+          else if (midDate < full) bestStageKey = "bloom";
+          else if (midDate < fall) bestStageKey = "full";
+          else if (midDate < snow) bestStageKey = "fall";
+          else bestStageKey = "snow";
+        }
+      });
+
+      if (!bestCity) {
+        alert(
+          "入力された期間では、桜が見ごろの街が少ないかもしれません。\n旅行日程を少しずらしてみるのもおすすめです。"
+        );
+        return;
+      }
+
+      const stageInfoMap = {
+        before: {
+          icon: "🌱",
+          badge: "COMING SOON",
+          status:
+            "つぼみがふくらみ始める頃。人出は少なめで、のんびりお散歩気分で楽しめます。",
+        },
+        bloom: {
+          icon: "🌸",
+          badge: "BLOOMING",
+          status:
+            "開花が進んでいる時期。スポットによっては満開の木とつぼみが同時に見られます。",
+        },
+        full: {
+          icon: "🌺",
+          badge: "BEST MATCH",
+          status:
+            "満開のタイミングとよく重なる日程です！もっとも華やかな桜に出会える可能性が高いです。",
+        },
+        fall: {
+          icon: "🍃",
+          badge: "FALLING",
+          status:
+            "花びらが地面に少しずつ積もり始める頃。「桜のじゅうたん」を歩くような気分で楽しめます。",
+        },
+        snow: {
+          icon: "💨",
+          badge: "SAKURA SNOW",
+          status:
+            "風が吹くと桜吹雪が舞う時期。動画・写真撮影には最高のタイミングです。",
+        },
+      };
+
+      const stageInfo = stageInfoMap[bestStageKey] || stageInfoMap.full;
+
+      // 結果カードを埋める
+      resultImg.src = bestCity.heroImg;
+      resultIcon.textContent = stageInfo.icon;
+      resultBadge.textContent = stageInfo.badge;
+      resultCity.textContent = bestCity.nameJp;
+      resultStatus.textContent = stageInfo.status;
+
+      const bloomStr = "🌸 開花 " + bestCity.bloom;
+      const fullStr = "🌺 満開 " + bestCity.full;
+      const fallStr = "🍃 散り始め " + bestCity.fall;
+      const snowStr = "💨 桜吹雪 〜" + bestCity.snow;
+
+      resultDates.innerHTML = "";
+      [
+        { key: "bloom", label: bloomStr },
+        { key: "full", label: fullStr },
+        { key: "fall", label: fallStr },
+        { key: "snow", label: snowStr },
+      ].forEach((item) => {
+        const div = document.createElement("div");
+        div.className = "jk-result-date-item";
+        if (item.key === bestStageKey) {
+          div.classList.add("is-match");
+        }
+        div.textContent = item.label;
+        resultDates.appendChild(div);
+      });
+
+      resultSpotName.textContent = bestCity.spot;
+      resultSpotDesc.textContent = bestCity.spotDesc;
+      resultArticle.href = bestCity.article;
+
+      resultCard.classList.add("is-visible");
+      resultCard.scrollIntoView({ behavior: "smooth", block: "center" });
+
+      lastRecommendedCityId = bestCity.id;
+      // 地図・カードハイライト連動
+      setActiveCity(bestCity.id, { scrollMap: false, scrollSpotCard: false });
+    }
+
+    if (dateBtn) {
+      dateBtn.addEventListener("click", computeBestCity);
+    }
+
+    if (scrollToSpotsBtn) {
+      scrollToSpotsBtn.addEventListener("click", () => {
+        if (!lastRecommendedCityId) {
+          document
+            .getElementById("jkSpotSection")
+            .scrollIntoView({ behavior: "smooth" });
+          return;
+        }
+        const card = document.querySelector(
+          `.jk-spot-card[data-city="${lastRecommendedCityId}"]`
+        );
+        if (card) {
+          card.scrollIntoView({ behavior: "smooth", block: "center" });
+          highlightSpotCard(lastRecommendedCityId);
+        } else {
+          document
+            .getElementById("jkSpotSection")
+            .scrollIntoView({ behavior: "smooth" });
+        }
+      });
+    }
+
+    if (copyLinkBtn) {
+      copyLinkBtn.addEventListener("click", () => {
+        const url = location.href;
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard
+            .writeText(url)
+            .then(() => alert("このページのリンクをコピーしました。"));
+        } else {
+          prompt("リンクをコピーしてください：", url);
+        }
+      });
+    }
+
+    // ---------- 地図 + カード + 点線 ----------
+    let leafletMap = null;
+    const mapContainer = document.querySelector(".jk-map-container");
+    const mapDom = document.getElementById("jk-sakura-map");
+    const linesSvg = document.getElementById("jkMapLines");
+    const mobileList = document.getElementById("jkMapMobileList");
+    const cityMarkers = {};
+    const cityMarkerEls = {};
+    const cityCards = {};
+    const mobileCards = {};
+
+    if (mapDom && typeof L !== "undefined") {
+      leafletMap = L.map("jk-sakura-map", {
+        scrollWheelZoom: false,
+        zoomControl: true,
+        attributionControl: false,
+      });
+
+      L.tileLayer(
+        "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+        { maxZoom: 18 }
+      ).addTo(leafletMap);
+
+      leafletMap.fitBounds([
+        [30, 128],
+        [46, 146],
+      ]);
+
+      // マーカー + カード生成
+      MAP_CITIES.forEach((city) => {
+        const markerIcon = L.divIcon({
+          className: "",
+          html: '<div class="jk-map-marker-dot"></div>',
+          iconSize: [14, 14],
+          iconAnchor: [7, 7],
+        });
+
+        const marker = L.marker([city.lat, city.lng], {
+          icon: markerIcon,
+        }).addTo(leafletMap);
+
+        cityMarkers[city.id] = marker;
+
+        marker.on("click", () => {
+          setActiveCity(city.id, {
+            scrollMap: false,
+            scrollSpotCard: false,
+          });
+        });
+
+        marker.on("add", () => {
+          const el = marker.getElement();
+          if (el) {
+            const dot = el.querySelector(".jk-map-marker-dot");
+            if (dot) {
+              cityMarkerEls[city.id] = dot;
+            }
+          }
+        });
+
+        // PC用カード
+        if (mapContainer && city.cardPos) {
+          const card = document.createElement("div");
+          card.className = "jk-map-city-card";
+          card.dataset.city = city.id;
+          card.innerHTML =
+            '<div class="jk-map-city-name">' +
+            city.nameJp +
+            " · " +
+            city.nameKr +
+            '</div><div class="jk-map-city-dates">' +
+            "🌸 開花 " +
+            city.bloom +
+            "<br>🌺 満開 " +
+            city.full +
+            "<br>🍃 散り始め " +
+            city.fall +
+            "<br>💨 桜吹雪 〜" +
+            city.snow +
+            "</div>";
+          if (typeof city.cardPos.left === "number") {
+            card.style.left = city.cardPos.left + "px";
+          }
+          if (typeof city.cardPos.right === "number") {
+            card.style.right = city.cardPos.right + "px";
+          }
+          card.style.top = city.cardPos.top + "px";
+
+          card.addEventListener("click", () => {
+            leafletMap.panTo([city.lat, city.lng]);
+            setActiveCity(city.id, {
+              scrollMap: false,
+              scrollSpotCard: false,
+            });
+          });
+
+          mapContainer.appendChild(card);
+          cityCards[city.id] = card;
+        }
+
+        // モバイルカード
+        if (mobileList) {
+          const mCard = document.createElement("div");
+          mCard.className = "jk-map-mobile-card";
+          mCard.dataset.city = city.id;
+
+          mCard.innerHTML = `
+    <div class="jk-map-mobile-name">
+      ${city.nameJp} · ${city.nameKr}
+    </div>
+    <div class="jk-map-mobile-dates">
+      🌸 開花 ${city.bloom} · 🌺 満開 ${city.full}<br>
+      🍃 散り始め ${city.fall} · 💨 桜吹雪 〜${city.snow}
+    </div>
+  `;
+
+          mCard.addEventListener("click", () => {
+            leafletMap.panTo([city.lat, city.lng]);
+            setActiveCity(city.id, {
+              scrollMap: false,
+              scrollSpotCard: false,
+            });
+          });
+
+          mobileList.appendChild(mCard);
+          mobileCards[city.id] = mCard;
+        }
+
+      });
+
+      // 点線描画
+      function drawLines() {
+        if (!leafletMap || !linesSvg || !mapDom) return;
+
+        const mapRect = mapDom.getBoundingClientRect();
+        const w = mapRect.width;
+        const h = mapRect.height;
+
+        linesSvg.setAttribute("width", w);
+        linesSvg.setAttribute("height", h);
+        linesSvg.setAttribute("viewBox", "0 0 " + w + " " + h);
+        linesSvg.innerHTML = "";
+
+        // モバイルでは非表示
+        if (window.innerWidth <= 768) return;
+
+        MAP_CITIES.forEach((city) => {
+          const card = cityCards[city.id];
+          if (!card) return;
+
+          const pt = leafletMap.latLngToContainerPoint([
+            city.lat,
+            city.lng,
+          ]);
+          const markerX = pt.x;
+          const markerY = pt.y;
+
+          const cardRect = card.getBoundingClientRect();
+          const cardX =
+            cardRect.left + cardRect.width / 2 - mapRect.left;
+          const cardY =
+            cardRect.top + cardRect.height / 2 - mapRect.top;
+
+          const line = document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "line"
+          );
+          line.setAttribute("x1", markerX);
+          line.setAttribute("y1", markerY);
+          line.setAttribute("x2", cardX);
+          line.setAttribute("y2", cardY);
+          linesSvg.appendChild(line);
+        });
+      }
+
+      leafletMap.on("moveend zoomend", drawLines);
+      window.addEventListener("resize", drawLines);
+      setTimeout(drawLines, 600);
+    }
+
+    // 都市アクティブ状態（地図・カード・モバイル連動）
+    function setActiveCity(cityId, opts) {
+      opts = opts || {};
+      const scrollMap = !!opts.scrollMap;
+      const scrollSpotCard = !!opts.scrollSpotCard;
+
+      Object.keys(cityMarkerEls).forEach((id) => {
+        const el = cityMarkerEls[id];
+        if (el) {
+          el.classList.toggle("is-active", id === cityId);
+        }
+      });
+
+      Object.keys(cityCards).forEach((id) => {
+        const card = cityCards[id];
+        if (card) {
+          card.classList.toggle("is-active", id === cityId);
+        }
+      });
+
+      Object.keys(mobileCards).forEach((id) => {
+        const mCard = mobileCards[id];
+        if (mCard) {
+          mCard.classList.toggle("is-active", id === cityId);
+        }
+      });
+
+      if (leafletMap && scrollMap) {
+        const city = MAP_CITIES.find((c) => c.id === cityId);
+        if (city) {
+          leafletMap.panTo([city.lat, city.lng]);
+        }
+      }
+
+      if (scrollSpotCard) {
+        const card = document.querySelector(
+          '.jk-spot-card[data-city="' + cityId + '"]'
+        );
+        if (card) {
+          card.scrollIntoView({ behavior: "smooth", block: "center" });
+          highlightSpotCard(cityId);
+        }
+      }
+
+      drawLines(); // 位置が変わっているかもしれないので再描画
+    }
+
+    function drawLines() {
+      // leafletMap 初期化前に呼ばれる可能性があるのでガード
+      if (!leafletMap || !linesSvg || !mapDom) return;
+
+      const mapRect = mapDom.getBoundingClientRect();
+      const w = mapRect.width;
+      const h = mapRect.height;
+
+      linesSvg.setAttribute("width", w);
+      linesSvg.setAttribute("height", h);
+      linesSvg.setAttribute("viewBox", "0 0 " + w + " " + h);
+      linesSvg.innerHTML = "";
+
+      if (window.innerWidth <= 768) return;
+
+      MAP_CITIES.forEach((city) => {
+        const card = cityCards[city.id];
+        if (!card) return;
+
+        const pt = leafletMap.latLngToContainerPoint([
+          city.lat,
+          city.lng,
+        ]);
+        const markerX = pt.x;
+        const markerY = pt.y;
+
+        const cardRect = card.getBoundingClientRect();
+        const cardX =
+          cardRect.left + cardRect.width / 2 - mapRect.left;
+        const cardY =
+          cardRect.top + cardRect.height / 2 - mapRect.top;
+
+        const line = document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "line"
+        );
+        line.setAttribute("x1", markerX);
+        line.setAttribute("y1", markerY);
+        line.setAttribute("x2", cardX);
+        line.setAttribute("y2", cardY);
+        linesSvg.appendChild(line);
+      });
+    }
+
+    // ---------- アンケート9件生成 & ローカルストレージ ----------
+    const surveyGrid = document.getElementById("jkSurveyGrid");
+    const surveyResult = document.getElementById("jkSpotSurveyResult");
+    const SURVEY_STORAGE_KEY = "jkSakura2026SurveyV2";
+
+    function loadSurveyVotes() {
+      try {
+        const raw = localStorage.getItem(SURVEY_STORAGE_KEY);
+        if (!raw) return {};
+        return JSON.parse(raw) || {};
+      } catch (e) {
+        return {};
+      }
+    }
+
+    function saveSurveyVotes(v) {
+      try {
+        localStorage.setItem(SURVEY_STORAGE_KEY, JSON.stringify(v));
+      } catch (e) {}
+    }
+
+    function renderSurveyChoices() {
+      if (!surveyGrid) return;
+      surveyGrid.innerHTML = "";
+      SURVEY_SPOTS.forEach((spot) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "jk-spot-choice";
+        btn.dataset.spotId = spot.id;
+        btn.innerHTML =
+          '<img class="jk-spot-thumb" src="' +
+          spot.thumb +
+          '" alt="' +
+          spot.label +
+          '">' +
+          '<div class="jk-spot-info">' +
+          '<div class="jk-spot-info-title">' +
+          spot.label +
+          "</div>" +
+          '<div class="jk-spot-info-desc">' +
+          spot.desc +
+          "</div>" +
+          '<div class="jk-spot-bar-track"><div class="jk-spot-bar-fill" data-bar="' +
+          spot.id +
+          '"></div></div>' +
+          "</div>";
+        surveyGrid.appendChild(btn);
+      });
+    }
+
+    function renderSurveyResult(myChoiceId) {
+      const votes = loadSurveyVotes();
+      const total = Object.values(votes).reduce(
+        (sum, v) => sum + (v || 0),
+        0
+      );
+
+      if (!surveyResult) return;
+      if (total === 0) {
+        surveyResult.innerHTML =
+          '<p style="font-size:0.8rem; color:var(--jk-text-muted); margin:0;">まだ投票結果はありません。気になるスポットを、ぜひ最初の1票として選んでみてください 🌸</p>';
+        return;
+      }
+
+      const sorted = SURVEY_SPOTS.slice().sort((a, b) => {
+        const av = votes[a.id] || 0;
+        const bv = votes[b.id] || 0;
+        return bv - av;
+      });
+
+      let html =
+        '<p style="font-size:0.8rem; margin:0 0 4px;">これまでにこのページで一番多く選ばれたスポット</p>';
+      html += '<div class="jk-spot-bars">';
+
+      sorted.forEach((spot) => {
+        const v = votes[spot.id] || 0;
+        const pct = Math.round((v / total) * 100);
+        html +=
+          '<div class="jk-spot-bar-row' +
+          (spot.id === myChoiceId ? " is-mine" : "") +
+          '">' +
+          '<span class="jk-spot-bar-name">' +
+          spot.label +
+          "</span>" +
+          '<div class="jk-spot-bar-track"><div class="jk-spot-bar-fill" style="width:' +
+          pct +
+          '%;"></div></div>' +
+          '<span class="jk-spot-bar-value">' +
+          pct +
+          "%</span>" +
+          "</div>";
+      });
+
+      html += "</div>";
+      surveyResult.innerHTML = html;
+
+      // 上部カードの小さいバーも更新
+      const voteBars =
+        surveyGrid &&
+        surveyGrid.querySelectorAll(".jk-spot-bar-fill[data-bar]");
+      if (voteBars) {
+        voteBars.forEach((barEl) => {
+          const id = barEl.getAttribute("data-bar");
+          const v = votes[id] || 0;
+          const pct = total ? Math.round((v / total) * 100) : 0;
+          barEl.style.width = pct + "%";
+        });
+      }
+    }
+
+    renderSurveyChoices();
+    const surveyButtons =
+      surveyGrid &&
+      surveyGrid.querySelectorAll(".jk-spot-choice[data-spot-id]");
+
+    let myChoiceId = null;
+
+    if (surveyButtons) {
+      const votes = loadSurveyVotes();
+      renderSurveyResult(null);
+
+      surveyButtons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const spotId = btn.getAttribute("data-spot-id");
+          if (!spotId) return;
+
+          surveyButtons.forEach((b) =>
+            b.classList.remove("is-selected")
+          );
+          btn.classList.add("is-selected");
+
+          const v = loadSurveyVotes();
+          v[spotId] = (v[spotId] || 0) + 1;
+          saveSurveyVotes(v);
+          myChoiceId = spotId;
+          renderSurveyResult(spotId);
+        });
+      });
+    }
+
+    // ---------- 都市別おすすめカード ----------
+    const spotsGrid = document.getElementById("jkSpotsGrid");
+    const spotCardMap = {};
+
+    function highlightSpotCard(cityId) {
+      Object.keys(spotCardMap).forEach((id) => {
+        spotCardMap[id].classList.toggle(
+          "is-highlighted",
+          id === cityId
+        );
+      });
+    }
+
+    if (spotsGrid) {
+      SPOT_CARDS.forEach((cardData) => {
+        const card = document.createElement("div");
+        card.className = "jk-spot-card";
+        card.dataset.city = cardData.id;
+
+        const spotsStr = cardData.spots.join(" · ");
+
+        card.innerHTML =
+          '<div class="jk-spot-card-img-wrap">' +
+          '<img src="' +
+          cardData.heroImg +
+          '" alt="' +
+          cardData.title +
+          '">' +
+          '<span class="jk-spot-card-tag">' +
+          cardData.cityLabel +
+          "</span>" +
+          "</div>" +
+          '<div class="jk-spot-card-body">' +
+          '<h4 class="jk-spot-card-title">' +
+          cardData.title +
+          "</h4>" +
+          '<p class="jk-spot-card-desc">' +
+          cardData.summary +
+          "</p>" +
+          '<p class="jk-spot-card-spots">代表スポット：' +
+          spotsStr +
+          "</p>" +
+          '<a class="jk-spot-card-link" target="_blank" rel="noopener" href="' +
+          cardData.article +
+          '">都市別の桜ガイド記事を見る' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">' +
+          '<path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"></path>' +
+          '<polyline points="15 3 21 3 21 9"></polyline>' +
+          '<line x1="10" y1="14" x2="21" y2="3"></line>' +
+          "</svg></a>" +
+          "</div>";
+
+        spotsGrid.appendChild(card);
+        spotCardMap[cardData.id] = card;
+
+        card.addEventListener("click", () => {
+          highlightSpotCard(cardData.id);
+        });
+      });
+    }
+
+    // ---------- FAQ ----------
+    const faqItems = document.querySelectorAll(".jk-faq-item");
+    faqItems.forEach((item) => {
+      const q = item.querySelector(".jk-faq-q");
+      q.addEventListener("click", () => {
+        const open = item.classList.contains("is-open");
+        faqItems.forEach((i) => i.classList.remove("is-open"));
+        if (!open) item.classList.add("is-open");
+      });
+    });
+
+    // ---------- フッターブックマーク案内 ----------
+    const footerBookmarkBtn = document.getElementById(
+      "jkFooterBookmarkBtn"
+    );
+    const footerTopBtn = document.getElementById("jkFooterTopBtn");
+    const bookmarkTip = document.getElementById("jkBookmarkTip");
+
+    if (footerBookmarkBtn && bookmarkTip) {
+      footerBookmarkBtn.addEventListener("click", () => {
+        bookmarkTip.classList.toggle("is-visible");
+      });
+    }
+
+    if (footerTopBtn) {
+      footerTopBtn.addEventListener("click", () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    }
+
+    // ---------- フェードイン ----------
+    const fadeEls = document.querySelectorAll(".jk-fade-in");
+    if ("IntersectionObserver" in window) {
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("is-visible");
+              io.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.15 }
+      );
+      fadeEls.forEach((el) => io.observe(el));
+    } else {
+      fadeEls.forEach((el) => el.classList.add("is-visible"));
+    }
+  });
 </script>
+</body>
+</html>
