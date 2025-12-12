@@ -1,976 +1,2416 @@
 <!-- ==============================
      JAPANKURU SAKURA 2026 LANDING
-     한국어 완전판 (Full Version)
-     - 4단계 벚꽃 라이프사이클
-     - 이미지 포함 범례
-     - 여행 스타일/명소/FAQ 등 전체
-     - Web Share API / 모바일 최적화
-     JMA 平年値 기준
+     v10 - 모바일 슬라이더 연동 + 서베이 섬네일
      ============================== -->
-     <style>
-      .jk-sakura2026 {
-        --jk-pink: #c73a7a;
-        --jk-pink-dark: #a9316a;
-        --jk-pink-light: #ffe3ef;
-        --jk-pink-bg: #fff9fc;
-        --jk-pink-border: #f3bcd5;
-        --jk-text: #333;
-        --jk-text-sub: #555;
-        --jk-text-muted: #888;
-        --jk-radius: 16px;
-        --jk-shadow: 0 6px 16px rgba(0,0,0,0.06);
-      }
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026 벚꽃 개화 예상 | JAPANKURU</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@500;700&display=swap');
+
+  .jk-sakura2026 {
+    --jk-pink: #d4607a;
+    --jk-pink-dark: #b84d65;
+    --jk-pink-soft: #f2d4dc;
+    --jk-pink-light: #fff0f5;
+    --jk-pink-bg: #fdf5f8;
+    --jk-cream: #faf8f5;
+    --jk-warm-gray: #6b635d;
+    --jk-text: #2d2926;
+    --jk-text-sub: #5c5652;
+    --jk-text-muted: #9a918a;
+    --jk-border: #e8e4e0;
+    --jk-radius: 12px;
+    --jk-radius-lg: 20px;
+    --jk-shadow: 0 4px 20px rgba(45, 41, 38, 0.08);
+    --jk-shadow-hover: 0 8px 30px rgba(45, 41, 38, 0.12);
+  }
+
+  .jk-sakura2026 {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    background: var(--jk-cream);
+    color: var(--jk-text);
+    line-height: 1.7;
+    padding-bottom: 70px; /* 모바일 내비 공간 */
+  }
+  .jk-sakura2026 *, .jk-sakura2026 *::before, .jk-sakura2026 *::after { box-sizing: border-box; }
+  .jk-title-jp { font-family: 'Noto Serif JP', serif; font-weight: 700; }
+
+  /* ===== 헤더 ===== */
+  .jk-header {
+    position: sticky;
+    top: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 24px;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--jk-border);
+  }
+  .jk-header-logo img {
+    height: 28px;
+  }
+  .jk-header-nav {
+    display: flex;
+    gap: 24px;
+  }
+  .jk-header-nav a {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--jk-text-sub);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .jk-header-nav a:hover {
+    color: var(--jk-pink);
+  }
+  @media (max-width: 767px) {
+    .jk-header {
+      padding: 10px 16px;
+    }
+    .jk-header-nav {
+      display: none;
+    }
+    .jk-header-logo img {
+      height: 24px;
+    }
+  }
+
+  /* ===== 모바일 스티키 내비 ===== */
+  .jk-mobile-nav {
+    display: none;
+  }
+  @media (max-width: 767px) {
+    .jk-mobile-nav {
+      display: flex;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 9999;
+      background: #fff;
+      border-top: 1px solid var(--jk-border);
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+      padding: 8px 0;
+      padding-bottom: calc(8px + env(safe-area-inset-bottom));
+    }
+    .jk-mobile-nav-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      text-decoration: none;
+      font-size: 0.65rem;
+      color: var(--jk-text-sub);
+      transition: color 0.2s;
+    }
+    .jk-mobile-nav-item.is-active {
+      color: var(--jk-pink);
+    }
+    .jk-mobile-nav-icon {
+      font-size: 1.2rem;
+    }
+  }
+  @media (min-width: 768px) {
+    .jk-sakura2026 {
+      padding-bottom: 0;
+    }
+  }
+
+  /* ===== HERO ===== */
+  .jk-hero {
+    position: relative; height: 75vh; min-height: 450px; max-height: 680px;
+    display: flex; align-items: flex-end; justify-content: center; overflow: hidden;
+  }
+  .jk-hero-slider { position: absolute; inset: 0; }
+  .jk-hero-slide { position: absolute; inset: 0; opacity: 0; transition: opacity 1.5s ease-in-out; }
+  .jk-hero-slide.is-active { opacity: 1; }
+  .jk-hero-slide img { width: 100%; height: 100%; object-fit: cover; }
+  .jk-hero-slide.is-active img { animation: jkKenBurns 8s ease-out forwards; }
+  @keyframes jkKenBurns { from { transform: scale(1); } to { transform: scale(1.05); } }
+  .jk-hero-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(45,41,38,0.85) 0%, rgba(45,41,38,0.2) 60%, rgba(45,41,38,0.1) 100%);
+    z-index: 1;
+  }
+  .jk-hero-content { position: relative; z-index: 2; max-width: 620px; padding: 0 24px 36px; text-align: center; color: #fff; }
+  .jk-hero-kicker { font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.8); margin-bottom: 8px; }
+  .jk-hero h1 { font-size: clamp(1.6rem, 5vw, 2.4rem); margin: 0 0 12px; line-height: 1.35; }
+  .jk-hero-lead { font-size: 0.92rem; color: rgba(255,255,255,0.9); margin: 0 0 18px; line-height: 1.8; }
+  .jk-hero-lead strong { color: #fff; background: linear-gradient(transparent 60%, var(--jk-pink) 60%); }
+  .jk-hero-cta {
+    display: inline-flex; align-items: center; gap: 6px; padding: 11px 22px;
+    font-size: 0.85rem; font-weight: 600; border-radius: 999px; background: var(--jk-pink);
+    color: #fff; text-decoration: none; transition: background 0.2s;
+  }
+  .jk-hero-cta:hover { background: var(--jk-pink-dark); }
+  .jk-hero-cta svg { width: 15px; height: 15px; }
+  .jk-hero-indicators { position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%); display: flex; gap: 6px; z-index: 3; }
+  .jk-hero-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.4); cursor: pointer; transition: all 0.3s; }
+  .jk-hero-dot.is-active { background: #fff; transform: scale(1.3); }
+
+  /* ===== 공통 ===== */
+  .jk-container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+  .jk-section { padding: 56px 0; }
+  .jk-section--white { background: #fff; }
+  .jk-section--cream { background: var(--jk-cream); }
+  .jk-section--pink { background: var(--jk-pink-bg); }
+
+  .jk-section-header { margin-bottom: 28px; }
+  .jk-section-header--center { text-align: center; }
+  .jk-section-label { font-size: 0.65rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--jk-pink); margin-bottom: 5px; }
+  .jk-section-title { font-size: clamp(1.25rem, 3.5vw, 1.7rem); margin: 0 0 6px; }
+  .jk-section-desc { font-size: 0.88rem; color: var(--jk-text-sub); margin: 0; max-width: 480px; }
+  .jk-section-header--center .jk-section-desc { margin: 0 auto; }
+
+  /* ===== 날짜 선택 ===== */
+  .jk-date-section { background: linear-gradient(135deg, var(--jk-pink) 0%, var(--jk-pink-dark) 100%); padding: 36px 0; color: #fff; }
+  .jk-date-inner { max-width: 520px; margin: 0 auto; text-align: center; }
+  .jk-date-title { font-size: 1.2rem; margin: 0 0 4px; }
+  .jk-date-sub { font-size: 0.82rem; opacity: 0.9; margin: 0 0 18px; }
+  .jk-date-form { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 10px; }
+  .jk-date-input-wrap { display: flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.15); border-radius: 999px; padding: 3px 10px 3px 3px; }
+  .jk-date-input { width: 120px; padding: 8px 10px; border: none; border-radius: 999px; font-size: 0.85rem; background: #fff; color: var(--jk-text); }
+  .jk-date-input:focus { outline: 2px solid var(--jk-pink-soft); }
+  .jk-date-label { font-size: 0.72rem; color: rgba(255,255,255,0.8); }
+  .jk-date-submit { padding: 10px 22px; font-size: 0.85rem; font-weight: 600; border: 2px solid #fff; border-radius: 999px; background: transparent; color: #fff; cursor: pointer; transition: all 0.2s; }
+  .jk-date-submit:hover { background: #fff; color: var(--jk-pink); }
+
+  /* 결과 카드 */
+  .jk-result-card { display: none; background: #fff; border-radius: var(--jk-radius-lg); overflow: hidden; color: var(--jk-text); box-shadow: var(--jk-shadow); margin-top: 14px; text-align: left; }
+  .jk-result-card.is-visible { display: block; animation: jkFadeUp 0.4s ease-out; }
+  @keyframes jkFadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+  .jk-result-img { width: 100%; height: 140px; object-fit: cover; }
+  .jk-result-body { padding: 18px; }
+  .jk-result-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .jk-result-icon { width: 44px; height: 44px; border-radius: 50%; background: var(--jk-pink-soft); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; flex-shrink: 0; }
+  .jk-result-badge { font-size: 0.62rem; letter-spacing: 0.08em; color: var(--jk-pink); text-transform: uppercase; }
+  .jk-result-city { font-size: 1.1rem; font-weight: 700; margin: 0; }
+  .jk-result-status { font-size: 0.88rem; margin: 0 0 10px; padding: 8px 10px; background: linear-gradient(90deg, var(--jk-pink-soft) 0%, transparent 100%); border-left: 3px solid var(--jk-pink); border-radius: 0 6px 6px 0; }
+  .jk-result-dates { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px; font-size: 0.75rem; margin-bottom: 10px; }
+  .jk-result-date-item { padding: 5px 7px; background: var(--jk-cream); border-radius: 4px; }
+  .jk-result-date-item.is-match { background: var(--jk-pink); color: #fff; }
+  .jk-result-spot { padding: 10px; background: var(--jk-cream); border-radius: var(--jk-radius); margin-bottom: 10px; }
+  .jk-result-spot-title { font-size: 0.72rem; color: var(--jk-text-muted); margin-bottom: 3px; }
+  .jk-result-spot-name { font-size: 0.9rem; font-weight: 600; margin-bottom: 3px; }
+  .jk-result-spot-desc { font-size: 0.78rem; color: var(--jk-text-sub); line-height: 1.45; }
+  .jk-result-actions { display: flex; gap: 5px; flex-wrap: wrap; }
+  .jk-result-btn { flex: 1; min-width: 90px; padding: 8px 12px; font-size: 0.75rem; font-weight: 600; border-radius: 999px; border: 1px solid var(--jk-border); background: #fff; color: var(--jk-text); cursor: pointer; transition: all 0.15s; display: flex; align-items: center; justify-content: center; gap: 4px; text-decoration: none; }
+  .jk-result-btn:hover { border-color: var(--jk-pink); color: var(--jk-pink); }
+  .jk-result-btn--primary { background: var(--jk-pink); border-color: var(--jk-pink); color: #fff; }
+  .jk-result-btn--primary:hover { background: var(--jk-pink-dark); color: #fff; }
+  .jk-result-btn svg { width: 12px; height: 12px; }
+
+  /* ===== 4단계 ===== */
+  .jk-stages-grid { display: grid; gap: 12px; }
+  @media (min-width: 600px) { .jk-stages-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 900px) { .jk-stages-grid { grid-template-columns: repeat(4, 1fr); } }
+  .jk-stage-card { background: #fff; border-radius: var(--jk-radius); overflow: hidden; border: 1px solid var(--jk-border); transition: all 0.2s; }
+  .jk-stage-card:hover { box-shadow: var(--jk-shadow-hover); transform: translateY(-2px); }
+  .jk-stage-card--highlight { border: 2px solid var(--jk-pink); }
+  .jk-stage-img { position: relative; aspect-ratio: 4/3; overflow: hidden; }
+  .jk-stage-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
+  .jk-stage-card:hover .jk-stage-img img { transform: scale(1.05); }
+  .jk-stage-num { position: absolute; top: 8px; left: 8px; width: 24px; height: 24px; border-radius: 50%; background: var(--jk-pink); color: #fff; font-size: 0.7rem; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+  .jk-stage-body { padding: 12px; }
+  .jk-stage-name { font-size: 0.9rem; font-weight: 700; margin: 0 0 2px; }
+  .jk-stage-name-jp { font-size: 0.68rem; color: var(--jk-text-muted); margin-bottom: 5px; }
+  .jk-stage-desc { font-size: 0.78rem; color: var(--jk-text-sub); line-height: 1.5; margin: 0 0 6px; }
+  .jk-stage-timing { font-size: 0.65rem; padding: 3px 7px; background: var(--jk-cream); border-radius: 999px; color: var(--jk-warm-gray); }
+  .jk-stage-message { margin-top: 18px; padding: 12px 16px; background: linear-gradient(90deg, var(--jk-pink-soft) 0%, var(--jk-cream) 100%); border-left: 3px solid var(--jk-pink); border-radius: 0 var(--jk-radius) var(--jk-radius) 0; }
+  .jk-stage-message p { margin: 0; font-size: 0.88rem; }
+  .jk-stage-message strong { color: var(--jk-pink); }
+
+  /* ===== Leaflet 지도 + 카드 오버레이 ===== */
+  .jk-map-source-bar {
+    display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px;
+    margin-bottom: 14px; padding: 9px 12px; background: #fff;
+    border-radius: var(--jk-radius); border: 1px solid var(--jk-border); font-size: 0.72rem;
+  }
+  .jk-map-source-text { color: var(--jk-text-sub); }
+  .jk-map-source-text a { color: var(--jk-pink); text-decoration: underline; }
+  .jk-map-source-updated { color: var(--jk-text-muted); font-size: 0.68rem; }
+
+  .jk-map-wrapper {
+    position: relative;
+    background: var(--jk-pink-bg);
+    border-radius: var(--jk-radius-lg);
+    overflow: hidden;
+  }
+
+  /* PC: 사이드바 + 지도 레이아웃 */
+  @media (min-width: 768px) {
+    .jk-map-wrapper {
+      display: flex;
+    }
+  }
+
+  /* 사이드바 (PC만) */
+  .jk-map-sidebar {
+    display: none;
+  }
+  @media (min-width: 768px) {
+    .jk-map-sidebar {
+      display: flex;
+      flex-direction: column;
+      width: 240px;
+      flex-shrink: 0;
+      background: #fff;
+      border-right: 1px solid var(--jk-border);
+    }
+  }
+  .jk-map-sidebar-header {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--jk-border);
+    background: linear-gradient(135deg, var(--jk-pink-bg), #fff);
+  }
+  .jk-map-sidebar-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--jk-pink);
+  }
+  .jk-map-sidebar-sub {
+    font-size: 0.68rem;
+    color: var(--jk-text-muted);
+    margin-top: 2px;
+  }
+  .jk-map-sidebar-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px;
+  }
+  .jk-map-sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-bottom: 2px;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+  }
+  .jk-map-sidebar-item:hover {
+    background: var(--jk-pink-bg);
+  }
+  .jk-map-sidebar-item.is-active {
+    background: var(--jk-pink);
+    color: #fff;
+  }
+  .jk-map-sidebar-num {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--jk-pink-soft);
+    color: var(--jk-pink);
+    font-size: 0.65rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .jk-map-sidebar-item.is-active .jk-map-sidebar-num {
+    background: rgba(255,255,255,0.25);
+    color: #fff;
+  }
+  .jk-map-sidebar-info {
+    flex: 1;
+    min-width: 0;
+  }
+  .jk-map-sidebar-name {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--jk-text);
+  }
+  .jk-map-sidebar-item.is-active .jk-map-sidebar-name {
+    color: #fff;
+  }
+  .jk-map-sidebar-date {
+    font-size: 0.68rem;
+    color: var(--jk-text-muted);
+  }
+  .jk-map-sidebar-item.is-active .jk-map-sidebar-date {
+    color: rgba(255,255,255,0.85);
+  }
+  .jk-map-sidebar-status {
+    font-size: 0.6rem;
+    color: var(--jk-text-muted);
+    padding: 2px 6px;
+    background: var(--jk-cream);
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+  .jk-map-sidebar-item.is-active .jk-map-sidebar-status {
+    background: rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.9);
+  }
+
+  /* 지도 영역 */
+  .jk-map-area {
+    flex: 1;
+    position: relative;
+    min-width: 0;
+  }
+
+  .jk-map-container {
+    position: relative;
+    height: 600px;
+  }
+  @media (max-width: 900px) { .jk-map-container { height: 500px; } }
+  @media (max-width: 767px) { .jk-map-container { height: 350px; } }
+
+  #jk-sakura-map {
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
+
+  /* PC 상세 카드 (지도 하단) */
+  .jk-map-detail-card {
+    display: none;
+  }
+  @media (min-width: 768px) {
+    .jk-map-detail-card {
+      display: none;
+      position: absolute;
+      bottom: 16px;
+      left: 16px;
+      right: 16px;
+      background: #fff;
+      border-radius: var(--jk-radius);
+      padding: 14px 16px;
+      box-shadow: var(--jk-shadow-hover);
+      z-index: 1000;
+    }
+    .jk-map-detail-card.is-visible {
+      display: block;
+    }
+  }
+  .jk-map-detail-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+  .jk-map-detail-name {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--jk-pink);
+  }
+  .jk-map-detail-name-kr {
+    font-size: 0.8rem;
+    color: var(--jk-text-sub);
+    margin-left: 6px;
+    font-weight: 400;
+  }
+  .jk-map-detail-status {
+    margin-left: auto;
+    font-size: 0.7rem;
+    background: var(--jk-cream);
+    color: var(--jk-text-sub);
+    padding: 3px 8px;
+    border-radius: 4px;
+  }
+  .jk-map-detail-dates {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .jk-map-detail-date {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    background: var(--jk-cream);
+    border-radius: 6px;
+    font-size: 0.75rem;
+  }
+  .jk-map-detail-date.is-current {
+    background: var(--jk-pink);
+    color: #fff;
+  }
+  .jk-map-detail-date-label {
+    color: var(--jk-text-muted);
+    font-size: 0.65rem;
+  }
+  .jk-map-detail-date.is-current .jk-map-detail-date-label {
+    color: rgba(255,255,255,0.8);
+  }
+  .jk-map-detail-date-value {
+    font-weight: 600;
+  }
+  .jk-map-detail-highlight {
+    margin-top: 10px;
+    padding: 8px 12px;
+    background: linear-gradient(90deg, var(--jk-pink-bg), #fff);
+    border-left: 3px solid var(--jk-pink);
+    border-radius: 0 6px 6px 0;
+    font-size: 0.78rem;
+    color: var(--jk-text-sub);
+  }
+
+  /* Leaflet 커스텀 스타일 */
+  .jk-sakura2026 .leaflet-container { background: var(--jk-pink-bg); }
+  .jk-sakura2026 .leaflet-tile-pane { filter: saturate(0.3) brightness(1.05); opacity: 0.5; }
+  .jk-sakura2026 .leaflet-control-zoom { border: none; box-shadow: var(--jk-shadow); }
+  .jk-sakura2026 .leaflet-control-zoom a { background: #fff; color: var(--jk-pink); border: none; }
+  .jk-sakura2026 .leaflet-control-zoom a:hover { background: var(--jk-pink-light); }
+
+  /* PC 도시 카드 - 숨김 (사이드바로 대체) */
+  .jk-map-city-card {
+    display: none;
+  }
+  /* PC 점선도 숨김 */
+  .jk-map-lines {
+    display: none;
+  }
+
+  /* 모바일: 지도 + 아래 카드 그리드 */
+  @media (max-width: 767px) {
+    .jk-map-container { height: 350px; }
+    .jk-map-city-card { display: none; }
+    .jk-map-lines { display: none; }
     
-      .jk-sakura2026 {
-        font-family: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-        padding: 32px 16px 60px;
-        box-sizing: border-box;
-        background: #fffdfd;
-        color: #222;
-      }
-      .jk-sakura2026 *, .jk-sakura2026 *::before, .jk-sakura2026 *::after { box-sizing: border-box; }
-      .jk-sakura2026-inner { max-width: 1080px; margin: 0 auto; }
-      .jk-sakura2026 h1, .jk-sakura2026 h2, .jk-sakura2026 h3 { font-weight: 700; letter-spacing: -0.01em; }
+    /* 모바일 슬라이더 */
+    .jk-map-mobile-slider {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      gap: 12px;
+      padding: 16px;
+      scroll-padding-left: 16px;
+    }
+    .jk-map-mobile-slider::-webkit-scrollbar { display: none; }
+    .jk-map-mobile-slider { -ms-overflow-style: none; scrollbar-width: none; }
     
-      .jk-sakura2026-section-title { font-size: 1.4rem; margin: 0 0 6px; color: var(--jk-pink); }
-      .jk-sakura2026-section-sub { margin: 0 0 18px; color: #666; font-size: 0.95rem; }
-      .jk-sakura2026-kicker { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--jk-pink); margin-bottom: 6px; font-weight: 600; }
+    .jk-map-mobile-card {
+      flex: 0 0 280px;
+      scroll-snap-align: start;
+      background: #fff;
+      border-radius: 12px;
+      padding: 14px;
+      box-shadow: var(--jk-shadow);
+      border: 2px solid transparent;
+      transition: all 0.2s;
+    }
+    .jk-map-mobile-card.is-active {
+      border-color: var(--jk-pink);
+      box-shadow: 0 4px 20px rgba(212, 96, 122, 0.2);
+    }
+    .jk-map-mobile-card-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .jk-map-mobile-card-name { 
+      font-size: 1rem; 
+      font-weight: 700; 
+      color: var(--jk-pink);
+    }
+    .jk-map-mobile-card-name-kr {
+      font-size: 0.75rem;
+      color: var(--jk-text-sub);
+    }
+    .jk-map-mobile-card-status {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 6px;
+      margin-bottom: 10px;
+    }
+    .jk-map-mobile-card-status.waiting {
+      background: linear-gradient(135deg, #e8e4e0, #f5f3f0);
+      color: #666;
+    }
+    .jk-map-mobile-card-status.active {
+      background: linear-gradient(135deg, #d4607a, #e87a94);
+      color: #fff;
+      animation: jkStatusPulse 2s infinite;
+    }
+    .jk-map-mobile-card-status.ending {
+      background: linear-gradient(135deg, #a0c4ff, #bfd7ff);
+      color: #3d5a80;
+    }
+    .jk-map-mobile-card-status small {
+      opacity: 0.85;
+      font-weight: 500;
+    }
+    .jk-map-mobile-card-dates {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 4px;
+      margin-bottom: 10px;
+    }
+    .jk-map-mobile-card-row { 
+      display: flex; 
+      align-items: center; 
+      gap: 3px; 
+      font-size: 0.72rem; 
+      color: var(--jk-text-sub);
+      padding: 4px 6px;
+      background: var(--jk-cream);
+      border-radius: 4px;
+    }
+    .jk-map-mobile-card-row span { 
+      margin-left: auto; 
+      font-weight: 600; 
+      color: var(--jk-text); 
+    }
+    .jk-map-mobile-card-row.is-nearest {
+      background: var(--jk-pink);
+      color: #fff;
+    }
+    .jk-map-mobile-card-row.is-nearest span {
+      color: #fff;
+    }
+    .jk-map-mobile-card-highlight {
+      font-size: 0.72rem;
+      color: var(--jk-pink);
+      padding: 8px;
+      background: var(--jk-pink-light);
+      border-radius: 6px;
+      line-height: 1.4;
+    }
+    .jk-map-mobile-card-btn {
+      display: block;
+      width: 100%;
+      margin-top: 10px;
+      padding: 8px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-align: center;
+      background: var(--jk-pink);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
     
-      /* HERO */
-      .jk-sakura2026-hero { display: grid; gap: 20px; margin-bottom: 48px; }
-      @media (min-width: 900px) { .jk-sakura2026-hero { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); align-items: center; } }
-      .jk-sakura2026-hero-img-wrap { border-radius: var(--jk-radius); overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.12); border: 1px solid var(--jk-pink-border); position: relative; aspect-ratio: 3 / 2; }
-      
-      /* Ken Burns + Crossfade Slider */
-      .jk-hero-slider { position: relative; width: 100%; height: 100%; background: #1a1a1a; }
-      .jk-hero-slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; animation: jkSmoothFade 20s infinite; }
-      .jk-hero-slide img { display: block; width: 100%; height: 100%; object-fit: cover; }
-      
-      /* 각 슬라이드 시간차 + Ken Burns 효과 */
-      .jk-hero-slide:nth-child(1) { animation-delay: 0s; }
-      .jk-hero-slide:nth-child(1) img { animation: jkKB1 20s infinite 0s; }
-      .jk-hero-slide:nth-child(2) { animation-delay: 5s; }
-      .jk-hero-slide:nth-child(2) img { animation: jkKB2 20s infinite 5s; }
-      .jk-hero-slide:nth-child(3) { animation-delay: 10s; }
-      .jk-hero-slide:nth-child(3) img { animation: jkKB3 20s infinite 10s; }
-      .jk-hero-slide:nth-child(4) { animation-delay: 15s; }
-      .jk-hero-slide:nth-child(4) img { animation: jkKB4 20s infinite 15s; }
-      
-      @keyframes jkSmoothFade {
-        0%, 5% { opacity: 0; }
-        10%, 25% { opacity: 1; }
-        30%, 100% { opacity: 0; }
-      }
-      
-      /* 각각 다른 방향으로 부드럽게 움직임 */
-      @keyframes jkKB1 {
-        0% { transform: scale(1) translate(0, 0); }
-        25% { transform: scale(1.08) translate(-1%, -1%); }
-        100% { transform: scale(1.08) translate(-1%, -1%); }
-      }
-      @keyframes jkKB2 {
-        0% { transform: scale(1.08) translate(-2%, 0); }
-        25% { transform: scale(1) translate(0, 0); }
-        100% { transform: scale(1) translate(0, 0); }
-      }
-      @keyframes jkKB3 {
-        0% { transform: scale(1) translate(0, 0); }
-        25% { transform: scale(1.1) translate(1%, -1%); }
-        100% { transform: scale(1.1) translate(1%, -1%); }
-      }
-      @keyframes jkKB4 {
-        0% { transform: scale(1.1) translate(0, -2%); }
-        25% { transform: scale(1.02) translate(0, 0); }
-        100% { transform: scale(1.02) translate(0, 0); }
-      }
-      
-      /* 슬라이드 인디케이터 */
-      .jk-hero-indicators { position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 5; }
-      .jk-hero-indicator { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.4); border: 1px solid rgba(255,255,255,0.6); transition: all 0.3s ease; }
-      .jk-hero-indicator:nth-child(1) { animation: jkIndicator 20s infinite 0s; }
-      .jk-hero-indicator:nth-child(2) { animation: jkIndicator 20s infinite 5s; }
-      .jk-hero-indicator:nth-child(3) { animation: jkIndicator 20s infinite 10s; }
-      .jk-hero-indicator:nth-child(4) { animation: jkIndicator 20s infinite 15s; }
-      @keyframes jkIndicator {
-        0%, 5% { background: rgba(255,255,255,0.4); transform: scale(1); }
-        10%, 25% { background: var(--jk-pink); transform: scale(1.2); }
-        30%, 100% { background: rgba(255,255,255,0.4); transform: scale(1); }
-      }
-      @media (prefers-reduced-motion: reduce) {
-        .jk-hero-slide { animation: none; opacity: 1; }
-        .jk-hero-slide img { animation: none; }
-        .jk-hero-slide:not(:first-child) { display: none; }
-        .jk-hero-indicators { display: none; }
-      }
-      .jk-sakura2026-hero-text h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); margin: 0 0 10px; color: var(--jk-pink); }
-      .jk-sakura2026-hero-text p { margin: 0 0 12px; line-height: 1.7; color: #444; font-size: 0.95rem; }
-      .jk-sakura2026-hero-badges { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
-      .jk-sakura2026-badge { font-size: 0.8rem; padding: 6px 12px; border-radius: 999px; background: var(--jk-pink-light); color: var(--jk-pink-dark); border: 1px solid var(--jk-pink-border); }
-      .jk-sakura2026-hero-note { font-size: 0.8rem; color: var(--jk-text-muted); }
+    /* 슬라이더 래퍼 */
+    .jk-map-mobile-slider-wrapper {
+      position: relative;
+    }
+    .jk-map-mobile-slider-hint {
+      text-align: center;
+      font-size: 0.7rem;
+      color: var(--jk-text-sub);
+      padding: 8px 0 4px;
+      animation: jkHintFade 3s ease-out forwards;
+    }
+    @keyframes jkHintFade {
+      0%, 70% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+    .jk-map-mobile-slider-dots {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      padding: 12px 0;
+    }
+    .jk-map-mobile-slider-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--jk-border);
+      transition: all 0.2s;
+    }
+    .jk-map-mobile-slider-dot.is-active {
+      background: var(--jk-pink);
+      transform: scale(1.2);
+    }
     
-      /* 공유 버튼 */
-      .jk-share-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 16px; padding-top: 16px; border-top: 1px dashed var(--jk-pink-border); }
-      .jk-share-bar-label { font-size: 0.8rem; color: var(--jk-text-muted); }
-      .jk-share-btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; font-size: 0.78rem; font-weight: 600; border-radius: 999px; border: 1px solid var(--jk-pink-border); background: #fff; color: var(--jk-pink); cursor: pointer; transition: all 0.15s ease; }
-      .jk-share-btn:hover { background: var(--jk-pink); color: #fff; border-color: var(--jk-pink); }
-      .jk-share-btn svg { width: 14px; height: 14px; fill: currentColor; }
-      .jk-share-btn-native { background: var(--jk-pink); color: #fff; border-color: var(--jk-pink); }
-      .jk-share-btn-native:hover { background: var(--jk-pink-dark); }
-      .jk-share-desktop-only { display: none; }
-      @media (min-width: 768px) { .jk-share-desktop-only { display: inline-flex; } .jk-share-mobile-only { display: none; } }
-    
-      /* MAP SECTION */
-      .jk-sakura2026-map-section { margin-bottom: 48px; }
-      .jk-sakura-map-container { position: relative; max-width: 900px; margin: 0 auto; padding: 24px 20px; background: linear-gradient(180deg, #fff9fc 0%, #fff 100%); border-radius: 20px; border: 1px solid var(--jk-pink-border); box-shadow: var(--jk-shadow); }
-      .jk-sakura-map-header { text-align: center; margin-bottom: 16px; }
-      .jk-sakura-map-header-top { display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--jk-pink); text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 8px; max-width: 400px; margin-left: auto; margin-right: auto; }
-      .jk-sakura-map-title { font-size: 1.8rem; font-weight: 700; color: var(--jk-pink); margin: 0 0 4px; }
-      .jk-sakura-map-subtitle { font-size: 1.1rem; color: var(--jk-pink-dark); margin: 0; }
-    
-      /* 뷰 토글 */
-      .jk-view-toggle { display: flex; justify-content: center; gap: 8px; margin: 16px 0; }
-      .jk-view-toggle-btn { padding: 8px 16px; font-size: 0.8rem; font-weight: 600; border-radius: 999px; border: 1px solid var(--jk-pink-border); background: #fff; color: var(--jk-pink); cursor: pointer; transition: all 0.15s ease; }
-      .jk-view-toggle-btn.is-active { background: var(--jk-pink); color: #fff; border-color: var(--jk-pink); }
-      .jk-view-toggle-btn svg { width: 14px; height: 14px; vertical-align: -2px; margin-right: 4px; fill: currentColor; }
-      @media (min-width: 768px) { .jk-view-toggle { display: none; } }
-    
-      /* 지도 뷰 */
-      .jk-sakura-map-wrapper { position: relative; width: 100%; aspect-ratio: 4 / 5; max-height: 620px; }
-      .jk-map-view { display: block; }
-      .jk-map-view.is-hidden { display: none; }
-      .jk-japan-svg { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 80%; height: 100%; }
-    
-      /* 라벨 (4단계) */
-      .jk-bloom-label { position: absolute; background: #fff; border: 1px solid var(--jk-pink-border); border-radius: 10px; padding: 8px 10px; font-size: 0.72rem; box-shadow: 0 2px 10px rgba(0,0,0,0.1); white-space: nowrap; z-index: 10; transition: transform 0.15s ease, box-shadow 0.15s ease; }
-      .jk-bloom-label:hover { transform: scale(1.05); box-shadow: 0 4px 14px rgba(199,58,122,0.25); z-index: 20; }
-      .jk-bloom-label-city { font-weight: 700; color: var(--jk-pink); font-size: 0.8rem; border-bottom: 1px solid var(--jk-pink-light); padding-bottom: 4px; margin-bottom: 5px; }
-      .jk-bloom-label-row { display: flex; align-items: center; gap: 4px; color: #555; font-size: 0.65rem; margin: 2px 0; }
-      .jk-bloom-label-icon { font-size: 0.7rem; width: 16px; text-align: center; }
-      .jk-bloom-label-stage { color: #777; min-width: 52px; }
-      .jk-bloom-label-date { font-weight: 600; color: #333; }
-      .jk-bloom-label-row.is-late { color: #999; }
-      .jk-bloom-label-row.is-late .jk-bloom-label-date { color: #777; }
-      .jk-map-dot { position: absolute; width: 12px; height: 12px; background: var(--jk-pink); border: 2px solid #fff; border-radius: 50%; box-shadow: 0 2px 6px rgba(0,0,0,0.25); z-index: 5; transform: translate(-50%, -50%); }
-    
-      /* 리스트 뷰 */
-      .jk-list-view { display: none; }
-      .jk-list-view.is-active { display: block; }
-      .jk-city-list { display: flex; flex-direction: column; gap: 12px; max-height: 600px; overflow-y: auto; padding: 4px; }
-      .jk-city-card { display: flex; gap: 14px; padding: 14px; background: #fff; border: 1px solid var(--jk-pink-border); border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-      .jk-city-card-num { width: 36px; height: 36px; background: var(--jk-pink); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 700; flex-shrink: 0; }
-      .jk-city-card-info { flex: 1; min-width: 0; }
-      .jk-city-card-name { font-size: 1rem; font-weight: 700; color: var(--jk-pink); margin: 0 0 6px; }
-      .jk-city-card-stages { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px 12px; font-size: 0.78rem; }
-      .jk-city-card-stage { display: flex; align-items: center; gap: 4px; color: #555; }
-      .jk-city-card-stage.is-late { color: #999; }
-      .jk-city-card-stage-icon { font-size: 0.85rem; }
-      .jk-city-card-stage-date { font-weight: 600; color: #333; }
-      .jk-city-card-stage.is-late .jk-city-card-stage-date { color: #777; }
-    
-      /* 4단계 범례 */
-      .jk-stages-legend { margin-top: 24px; padding: 20px; background: var(--jk-pink-bg); border-radius: var(--jk-radius); border: 1px solid var(--jk-pink-border); }
-      .jk-stages-legend-title { font-size: 1rem; font-weight: 700; color: var(--jk-pink); margin: 0 0 14px; text-align: center; }
-      .jk-stages-legend-grid { display: grid; gap: 12px; }
-      @media (min-width: 600px) { .jk-stages-legend-grid { grid-template-columns: repeat(2, 1fr); } }
-      @media (min-width: 900px) { .jk-stages-legend-grid { grid-template-columns: repeat(4, 1fr); } }
-      .jk-stage-card { background: #fff; border-radius: 12px; padding: 0; border: 1px solid var(--jk-pink-border); text-align: center; overflow: hidden; }
-      .jk-stage-card-img { width: 100%; height: 100px; object-fit: cover; }
-      .jk-stage-card-content { padding: 12px 14px 14px; }
-      .jk-stage-card-icon { font-size: 1.4rem; margin-bottom: 4px; }
-      .jk-stage-card-name { font-size: 0.95rem; font-weight: 700; color: var(--jk-pink); margin-bottom: 2px; }
-      .jk-stage-card-name-sub { font-size: 0.75rem; color: #999; margin-bottom: 8px; }
-      .jk-stage-card-desc { font-size: 0.8rem; color: var(--jk-text-sub); line-height: 1.5; }
-      .jk-stage-card-timing { margin-top: 8px; font-size: 0.72rem; color: var(--jk-pink-dark); font-weight: 600; background: var(--jk-pink-light); padding: 4px 8px; border-radius: 6px; display: inline-block; }
-    
-      .jk-key-message { margin-top: 16px; padding: 14px 18px; background: linear-gradient(135deg, #fff9fc 0%, #ffe3ef 100%); border-radius: 12px; border: 2px solid var(--jk-pink); text-align: center; }
-      .jk-key-message-text { font-size: 0.95rem; color: var(--jk-pink-dark); font-weight: 600; margin: 0; }
-      .jk-key-message-text strong { color: var(--jk-pink); font-size: 1.1rem; }
-    
-      .jk-sakura-map-source { text-align: center; margin-top: 16px; font-size: 0.7rem; color: #999; }
-      .jk-sakura-map-source a { color: var(--jk-pink-dark); text-decoration: underline; }
-    
-      /* 시기별 가이드 */
-      .jk-timing-guide { margin-top: 32px; padding: 20px; background: var(--jk-pink-bg); border-radius: var(--jk-radius); border: 1px solid var(--jk-pink-border); }
-      .jk-timing-guide-title { font-size: 1.1rem; font-weight: 700; color: var(--jk-pink); margin: 0 0 16px; text-align: center; }
-      .jk-timing-grid { display: grid; gap: 12px; }
-      @media (min-width: 700px) { .jk-timing-grid { grid-template-columns: repeat(2, 1fr); } }
-      @media (min-width: 900px) { .jk-timing-grid { grid-template-columns: repeat(4, 1fr); } }
-      .jk-timing-card { background: #fff; border-radius: 12px; padding: 14px; border: 1px solid var(--jk-pink-border); }
-      .jk-timing-card-period { font-size: 0.9rem; font-weight: 700; color: var(--jk-pink); margin-bottom: 4px; }
-      .jk-timing-card-dates { font-size: 0.72rem; color: var(--jk-text-muted); margin-bottom: 8px; }
-      .jk-timing-card-cities { display: flex; flex-wrap: wrap; gap: 5px; }
-      .jk-timing-city { font-size: 0.72rem; padding: 4px 8px; background: var(--jk-pink-light); color: var(--jk-pink-dark); border-radius: 6px; }
-      .jk-timing-card-note { margin-top: 8px; font-size: 0.7rem; color: var(--jk-text-muted); line-height: 1.4; }
-    
-      /* 여행 스타일 */
-      .jk-sakura2026-trips { margin-bottom: 48px; }
-      .jk-sakura2026-trip-grid { display: grid; gap: 16px; }
-      @media (min-width: 800px) { .jk-sakura2026-trip-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-      .jk-sakura2026-trip-card { border-radius: var(--jk-radius); border: 1px solid var(--jk-pink-border); background: var(--jk-pink-bg); padding: 16px; box-shadow: 0 6px 14px rgba(0,0,0,0.04); display: flex; flex-direction: column; height: 100%; }
-      .jk-sakura2026-trip-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--jk-pink); margin-bottom: 4px; font-weight: 600; }
-      .jk-sakura2026-trip-title { font-size: 1rem; margin: 0 0 6px; color: var(--jk-text); }
-      .jk-sakura2026-trip-days { font-size: 0.82rem; color: #666; margin-bottom: 10px; }
-      .jk-sakura2026-trip-card ul { padding-left: 1.1rem; margin: 0 0 12px; font-size: 0.85rem; color: var(--jk-text-sub); }
-      .jk-sakura2026-trip-card li { margin-bottom: 5px; }
-      .jk-sakura2026-trip-cta { margin-top: auto; }
-      .jk-sakura2026-trip-btn { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 10px 18px; font-size: 0.85rem; font-weight: 600; border-radius: 999px; border: none; background: var(--jk-pink); color: #fff; cursor: pointer; transition: background 0.15s ease; }
-      .jk-sakura2026-trip-btn:hover { background: var(--jk-pink-dark); }
-    
-      /* 명소 */
-      .jk-sakura2026-spots { margin-bottom: 48px; }
-      .jk-sakura2026-spot-grid { display: grid; gap: 16px; }
-      @media (min-width: 600px) { .jk-sakura2026-spot-grid { grid-template-columns: repeat(2, 1fr); } }
-      @media (min-width: 900px) { .jk-sakura2026-spot-grid { grid-template-columns: repeat(3, 1fr); } }
-      .jk-sakura2026-spot-card { border-radius: var(--jk-radius); overflow: hidden; background: #fff; border: 1px solid var(--jk-pink-border); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-      .jk-sakura2026-spot-img img { display: block; width: 100%; height: 160px; object-fit: cover; }
-      .jk-sakura2026-spot-body { padding: 14px; }
-      .jk-sakura2026-spot-body h4 { font-size: 0.95rem; margin: 0 0 6px; color: var(--jk-pink); }
-      .jk-sakura2026-spot-body p { margin: 0; font-size: 0.82rem; color: var(--jk-text-sub); line-height: 1.55; }
-    
-      /* FAQ */
-      .jk-sakura2026-faq { margin-bottom: 48px; }
-      .jk-sakura2026-faq-list { display: flex; flex-direction: column; gap: 10px; }
-      .jk-sakura2026-faq-item { border: 1px solid var(--jk-pink-border); border-radius: var(--jk-radius); background: #fff; overflow: hidden; }
-      .jk-sakura2026-faq-q { padding: 14px 16px; font-weight: 600; color: var(--jk-text); cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: background 0.15s ease; }
-      .jk-sakura2026-faq-q:hover { background: var(--jk-pink-bg); }
-      .jk-sakura2026-faq-q::after { content: "+"; font-size: 1.2rem; color: var(--jk-pink); transition: transform 0.2s ease; }
-      .jk-sakura2026-faq-item.is-open .jk-sakura2026-faq-q::after { transform: rotate(45deg); }
-      .jk-sakura2026-faq-a { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
-      .jk-sakura2026-faq-item.is-open .jk-sakura2026-faq-a { max-height: 300px; }
-      .jk-sakura2026-faq-a-inner { padding: 0 16px 14px; font-size: 0.9rem; color: var(--jk-text-sub); line-height: 1.65; }
-    
-      /* 출처 */
-      .jk-sakura2026-source { padding: 20px; border-radius: var(--jk-radius); background: var(--jk-pink-bg); border: 1px solid var(--jk-pink-border); }
-      .jk-sakura2026-source-inner { max-width: 700px; margin: 0 auto; }
-      .jk-sakura2026-source-main { margin: 0 0 6px; color: #444; line-height: 1.6; }
-      .jk-sakura2026-source-link { margin: 0 0 4px; font-size: 0.85rem; }
-      .jk-sakura2026-source-link a { color: var(--jk-pink-dark); text-decoration: underline; }
-      .jk-sakura2026-source-note { margin: 4px 0 0; color: #777; font-size: 0.8rem; line-height: 1.5; }
-      .jk-sakura2026-source-updated { margin: 8px 0 0; color: #999; font-size: 0.78rem; }
-    
-      /* 하단 CTA */
-      .jk-bottom-cta { margin-top: 32px; padding: 24px; background: linear-gradient(135deg, var(--jk-pink-light) 0%, #fff 100%); border-radius: var(--jk-radius); border: 1px solid var(--jk-pink-border); text-align: center; }
-      .jk-bottom-cta-text { font-size: 0.95rem; color: var(--jk-text); margin: 0 0 12px; }
-      .jk-bottom-cta-text strong { color: var(--jk-pink); }
-      .jk-bottom-share-btns { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; }
-    
-      /* 모바일 */
-      @media (max-width: 767px) {
-        .jk-sakura-map-wrapper { aspect-ratio: 3 / 5; }
-        .jk-bloom-label { font-size: 0.55rem; padding: 5px 6px; }
-        .jk-bloom-label-city { font-size: 0.62rem; }
-        .jk-bloom-label-row { font-size: 0.5rem; }
-        .jk-bloom-label-icon { font-size: 0.55rem; width: 12px; }
-        .jk-bloom-label-stage { min-width: 40px; }
-        .jk-sakura-map-title { font-size: 1.4rem; }
-        .jk-japan-svg { width: 90%; }
-        .jk-map-view { display: none; }
-        .jk-map-view.is-active { display: block; }
-        .jk-list-view { display: block; }
-        .jk-list-view.is-hidden { display: none; }
-      }
-    
-      @media (prefers-reduced-motion: reduce) { .jk-sakura2026 * { transition: none !important; } }
-    </style>
-    
-    <div class="jk-sakura2026">
-      <div class="jk-sakura2026-inner">
-    
-        <!-- ========== HERO ========== -->
-        <section class="jk-sakura2026-hero">
-          <div class="jk-sakura2026-hero-img-wrap">
-            <div class="jk-hero-slider">
-              <div class="jk-hero-slide"><img src="https://img.japankuru.com/prg_img/img/img2022032216222456582000.jpg" alt="일본 벚꽃 - 만개" /></div>
-              <div class="jk-hero-slide"><img src="https://img.japankuru.com/prg_img/img/img2022032216080462220500.jpg" alt="일본 벚꽃 - 후지산" loading="lazy" /></div>
-              <div class="jk-hero-slide"><img src="https://img.japankuru.com/prg_img/img/img2019030414083494430600.jpg" alt="일본 벚꽃 - 강변" loading="lazy" /></div>
-              <div class="jk-hero-slide"><img src="https://www.japankuru.com/gld-kanri/data/uploads/2025/01/D05_6288-1536x1024.jpg" alt="일본 벚꽃 - 교토" loading="lazy" /></div>
+    /* 레거시 그리드 숨김 */
+    .jk-map-mobile-cards { display: none; }
+  }
+  @media (min-width: 768px) {
+    .jk-map-mobile-slider-wrapper { display: none; }
+    .jk-map-mobile-slider { display: none; }
+    .jk-map-mobile-cards { display: none; }
+  }
+
+  /* ===== Q1 스팟 앙케이트 ===== */
+  .jk-spot-survey {
+    margin-bottom: 32px; padding: 20px 18px;
+    background: #fff; border-radius: var(--jk-radius-lg);
+    border: 1px solid var(--jk-border); box-shadow: var(--jk-shadow);
+  }
+  .jk-spot-survey-header { margin-bottom: 18px; }
+  .jk-spot-survey-grid { display: grid; gap: 10px; }
+  @media (min-width: 720px) { .jk-spot-survey-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (min-width: 1000px) { .jk-spot-survey-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
+  .jk-spot-choice {
+    width: 100%; text-align: left; border-radius: var(--jk-radius);
+    border: 1px solid var(--jk-border); background: var(--jk-cream);
+    padding: 0; cursor: pointer;
+    display: flex; flex-direction: column; transition: all 0.15s;
+    overflow: hidden;
+  }
+  .jk-spot-choice:hover {
+    border-color: var(--jk-pink); background: #fff;
+    box-shadow: var(--jk-shadow); transform: translateY(-1px);
+  }
+  .jk-spot-choice.is-selected { border-color: var(--jk-pink); background: var(--jk-pink-light); }
+  .jk-spot-choice-img {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+  }
+  .jk-spot-choice-body {
+    padding: 10px 12px;
+  }
+  .jk-spot-choice-main { display: flex; flex-direction: column; gap: 4px; }
+  .jk-spot-choice-tag {
+    display: inline-flex; align-items: center; padding: 2px 8px;
+    font-size: 0.7rem; border-radius: 999px;
+    background: var(--jk-pink-soft); color: var(--jk-pink-dark); align-self: flex-start;
+  }
+  .jk-spot-choice-name { font-size: 0.95rem; font-weight: 700; color: var(--jk-text); }
+  .jk-spot-choice-desc { font-size: 0.8rem; color: var(--jk-text-sub); margin: 0; }
+  .jk-spot-choice-article { font-size: 0.78rem; color: var(--jk-pink-dark); text-decoration: none; }
+  .jk-spot-choice-article:hover { text-decoration: underline; }
+
+  .jk-spot-survey-result { margin-top: 18px; padding-top: 14px; border-top: 1px dashed var(--jk-border); }
+  .jk-spot-survey-result-title { font-size: 0.85rem; color: var(--jk-text-sub); margin: 0 0 8px; }
+  .jk-spot-bars { display: flex; flex-direction: column; gap: 6px; }
+  .jk-spot-bar { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 3fr) auto; gap: 6px; align-items: center; font-size: 0.78rem; }
+  .jk-spot-bar-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .jk-spot-bar-track { position: relative; height: 7px; border-radius: 999px; background: var(--jk-cream); overflow: hidden; }
+  .jk-spot-bar-fill { position: absolute; inset: 0; width: 0; background: linear-gradient(90deg, var(--jk-pink-soft), var(--jk-pink)); border-radius: 999px; transition: width 0.3s ease; }
+  .jk-spot-bar-value { font-variant-numeric: tabular-nums; color: var(--jk-text-muted); }
+  .jk-spot-bar.is-mine .jk-spot-bar-name { font-weight: 700; color: var(--jk-pink-dark); }
+  .jk-spot-bar.is-mine .jk-spot-bar-value { color: var(--jk-pink-dark); }
+
+  /* ===== 추천 명소 카드 그리드 ===== */
+  .jk-spots-grid {
+    display: grid;
+    gap: 16px;
+    margin-top: 32px;
+  }
+  @media (min-width: 600px) { .jk-spots-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 900px) { .jk-spots-grid { grid-template-columns: repeat(3, 1fr); } }
+
+  .jk-spot-card {
+    background: #fff;
+    border-radius: var(--jk-radius);
+    overflow: hidden;
+    border: 1px solid var(--jk-border);
+    transition: all 0.2s;
+  }
+  .jk-spot-card:hover {
+    box-shadow: var(--jk-shadow-hover);
+    transform: translateY(-3px);
+  }
+  .jk-spot-card-img {
+    position: relative;
+    aspect-ratio: 16/10;
+    overflow: hidden;
+  }
+  .jk-spot-card-img img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s;
+  }
+  .jk-spot-card:hover .jk-spot-card-img img { transform: scale(1.05); }
+  .jk-spot-card-tag {
+    position: absolute;
+    top: 10px; left: 10px;
+    padding: 3px 10px;
+    font-size: 0.68rem;
+    font-weight: 600;
+    border-radius: 999px;
+    background: var(--jk-pink);
+    color: #fff;
+  }
+  .jk-spot-card-body { padding: 14px; }
+  .jk-spot-card-name { font-size: 1rem; font-weight: 700; margin: 0 0 4px; }
+  .jk-spot-card-desc { font-size: 0.82rem; color: var(--jk-text-sub); line-height: 1.5; margin: 0 0 10px; }
+  .jk-spot-card-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--jk-pink);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+  .jk-spot-card-link:hover { color: var(--jk-pink-dark); text-decoration: underline; }
+  .jk-spot-card-link svg { width: 12px; height: 12px; }
+
+  /* ===== FAQ ===== */
+  .jk-faq-list { display: flex; flex-direction: column; gap: 8px; max-width: 660px; margin: 0 auto; }
+  .jk-faq-item { background: #fff; border-radius: var(--jk-radius); border: 1px solid var(--jk-border); overflow: hidden; }
+  .jk-faq-q { padding: 12px 14px; font-size: 0.88rem; font-weight: 600; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+  .jk-faq-q::after { content: ''; width: 16px; height: 16px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23d4607a'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E") center/contain no-repeat; transition: transform 0.2s; flex-shrink: 0; }
+  .jk-faq-item.is-open .jk-faq-q::after { transform: rotate(180deg); }
+  .jk-faq-a { max-height: 0; overflow: hidden; transition: max-height 0.3s; }
+  .jk-faq-item.is-open .jk-faq-a { max-height: 280px; }
+  .jk-faq-a-inner { padding: 0 14px 12px; font-size: 0.82rem; color: var(--jk-text-sub); line-height: 1.7; }
+
+  /* ===== 푸터 ===== */
+  .jk-footer { text-align: center; padding: 36px 20px; background: var(--jk-text); color: #fff; }
+  .jk-footer-text { font-size: 0.9rem; margin: 0 0 14px; opacity: 0.9; }
+  .jk-footer-btns { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+  .jk-footer-btn { display: inline-flex; align-items: center; gap: 5px; padding: 9px 16px; font-size: 0.78rem; font-weight: 600; border-radius: 999px; border: 1px solid rgba(255,255,255,0.3); background: transparent; color: #fff; cursor: pointer; transition: all 0.15s; }
+  .jk-footer-btn:hover { background: rgba(255,255,255,0.1); }
+  .jk-footer-btn svg { width: 13px; height: 13px; }
+  .jk-footer-source { font-size: 0.68rem; color: rgba(255,255,255,0.5); line-height: 1.6; }
+  .jk-footer-source a { color: rgba(255,255,255,0.7); text-decoration: underline; }
+
+  /* Fade */
+  .jk-fade-in { opacity: 0; transform: translateY(18px); transition: opacity 0.5s, transform 0.5s; }
+  .jk-fade-in.is-visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 600px) {
+    .jk-section { padding: 44px 0; }
+    .jk-result-dates { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .jk-fade-in { opacity: 1; transform: none; transition: none; }
+    .jk-hero-slide.is-active img { animation: none; }
+  }
+
+  /* ===== 체크리스트 섹션 ===== */
+  .jk-checklist-section {
+    background: linear-gradient(180deg, var(--jk-pink-bg) 0%, #fff 100%);
+  }
+  .jk-checklist-box {
+    max-width: 560px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: var(--jk-radius-lg);
+    padding: 24px 20px;
+    box-shadow: var(--jk-shadow);
+    border: 1px solid var(--jk-border);
+  }
+  .jk-checklist-header {
+    text-align: center;
+    margin-bottom: 18px;
+    padding-bottom: 14px;
+    border-bottom: 1px dashed var(--jk-border);
+  }
+  .jk-checklist-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 0 0 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+  .jk-checklist-sub {
+    font-size: 0.78rem;
+    color: var(--jk-text-sub);
+    margin: 0;
+  }
+  .jk-checklist-group {
+    margin-bottom: 16px;
+  }
+  .jk-checklist-group:last-child {
+    margin-bottom: 0;
+  }
+  .jk-checklist-group-title {
+    font-size: 0.72rem;
+    color: var(--jk-text-muted);
+    letter-spacing: 0.05em;
+    margin: 0 0 8px;
+    padding-left: 2px;
+  }
+  .jk-checklist-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 12px;
+    background: var(--jk-cream);
+    border-radius: var(--jk-radius);
+    margin-bottom: 6px;
+    transition: all 0.15s;
+  }
+  .jk-checklist-item:hover {
+    background: var(--jk-pink-light);
+  }
+  .jk-checklist-item--highlight {
+    background: linear-gradient(90deg, var(--jk-pink-soft) 0%, var(--jk-cream) 100%);
+    border-left: 3px solid var(--jk-pink);
+  }
+  .jk-checklist-check {
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--jk-border);
+    border-radius: 4px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .jk-checklist-item:hover .jk-checklist-check {
+    border-color: var(--jk-pink);
+  }
+  .jk-checklist-check.is-checked {
+    background: var(--jk-pink);
+    border-color: var(--jk-pink);
+    position: relative;
+  }
+  .jk-checklist-check.is-checked::after {
+    content: '✓';
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 700;
+  }
+  .jk-checklist-content {
+    flex: 1;
+    min-width: 0;
+  }
+  .jk-checklist-label {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--jk-text);
+    margin-bottom: 2px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .jk-checklist-desc {
+    font-size: 0.75rem;
+    color: var(--jk-text-sub);
+    line-height: 1.5;
+    margin: 0;
+  }
+  .jk-checklist-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 0.72rem;
+    color: var(--jk-pink);
+    text-decoration: none;
+    margin-top: 4px;
+    font-weight: 500;
+  }
+  .jk-checklist-link:hover {
+    text-decoration: underline;
+  }
+  .jk-checklist-link svg {
+    width: 10px;
+    height: 10px;
+  }
+  .jk-checklist-divider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 16px 0;
+    font-size: 0.7rem;
+    color: var(--jk-pink);
+    font-weight: 600;
+  }
+  .jk-checklist-divider::before,
+  .jk-checklist-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--jk-pink-soft), transparent);
+  }
+
+  /* ===== 에디터 픽 (도시 카드 내) ===== */
+  .jk-spot-card-editor {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--jk-border);
+  }
+  .jk-spot-card-editor-label {
+    font-size: 0.65rem;
+    color: var(--jk-pink);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+  }
+  .jk-spot-card-editor-name {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--jk-text);
+    margin-bottom: 2px;
+  }
+  .jk-spot-card-editor-desc {
+    font-size: 0.72rem;
+    color: var(--jk-text-sub);
+    line-height: 1.45;
+    margin-bottom: 4px;
+  }
+  .jk-spot-card-editor-link {
+    font-size: 0.7rem;
+    color: var(--jk-pink);
+    text-decoration: none;
+  }
+  .jk-spot-card-editor-link:hover {
+    text-decoration: underline;
+  }
+
+  /* ===== 결과 카드 꿀팁 ===== */
+  .jk-result-tip {
+    margin-top: 12px;
+    padding: 12px;
+    background: linear-gradient(135deg, var(--jk-pink-light) 0%, var(--jk-cream) 100%);
+    border-radius: var(--jk-radius);
+    border-left: 3px solid var(--jk-pink);
+  }
+  .jk-result-tip-label {
+    font-size: 0.68rem;
+    color: var(--jk-pink);
+    font-weight: 600;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .jk-result-tip-text {
+    font-size: 0.8rem;
+    color: var(--jk-text);
+    line-height: 1.55;
+    margin: 0;
+  }
+  .jk-result-tip-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 0.72rem;
+    color: var(--jk-pink);
+    text-decoration: none;
+    margin-top: 6px;
+    font-weight: 500;
+  }
+  .jk-result-tip-link:hover {
+    text-decoration: underline;
+  }
+
+  /* ===== 서베이 결과 팁 ===== */
+  .jk-survey-top-tip {
+    margin-top: 14px;
+    padding: 10px 12px;
+    background: var(--jk-pink-light);
+    border-radius: var(--jk-radius);
+    font-size: 0.78rem;
+    color: var(--jk-text);
+  }
+  .jk-survey-top-tip-label {
+    font-size: 0.68rem;
+    color: var(--jk-pink);
+    font-weight: 600;
+    margin-bottom: 3px;
+  }
+
+  /* ===== FAQ 팁 ===== */
+  .jk-faq-tip {
+    margin-top: 10px;
+    padding: 8px 10px;
+    background: var(--jk-pink-light);
+    border-radius: 6px;
+    font-size: 0.75rem;
+  }
+  .jk-faq-tip-label {
+    color: var(--jk-pink);
+    font-weight: 600;
+    margin-right: 4px;
+  }
+  .jk-faq-tip a {
+    color: var(--jk-pink);
+    text-decoration: underline;
+  }
+
+  /* ===== 결과 카드 닫기 버튼 ===== */
+  .jk-result-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.5);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: background 0.2s;
+  }
+  .jk-result-close:hover {
+    background: rgba(0,0,0,0.7);
+  }
+  .jk-result-close svg {
+    width: 16px;
+    height: 16px;
+    stroke: #fff;
+  }
+  .jk-result-card {
+    position: relative;
+  }
+
+  /* ===== 벚꽃 4단계 모바일 가로 슬라이더 ===== */
+  @media (max-width: 600px) {
+    .jk-stages-grid {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      gap: 12px;
+      padding-bottom: 12px;
+      margin: 0 -20px;
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+    .jk-stages-grid::-webkit-scrollbar {
+      height: 4px;
+    }
+    .jk-stages-grid::-webkit-scrollbar-track {
+      background: var(--jk-cream);
+      border-radius: 2px;
+    }
+    .jk-stages-grid::-webkit-scrollbar-thumb {
+      background: var(--jk-pink-soft);
+      border-radius: 2px;
+    }
+    .jk-stage-card {
+      flex: 0 0 75%;
+      min-width: 240px;
+      scroll-snap-align: start;
+    }
+  }
+
+  /* ===== 지도 카드 인터랙션 ===== */
+  .jk-map-city-card {
+    cursor: pointer;
+    transition: all 0.2s ease;
+    opacity: 0.85;
+  }
+  .jk-map-city-card:hover,
+  .jk-map-city-card.is-active {
+    opacity: 1;
+    transform: scale(1.05);
+    box-shadow: 0 6px 24px rgba(212, 96, 122, 0.25);
+    z-index: 100;
+  }
+  .jk-map-city-card.is-active {
+    border: 2px solid var(--jk-pink);
+  }
+  .jk-map-city-card-highlight {
+    font-size: 0.62rem;
+    color: var(--jk-pink);
+    margin-top: 6px;
+    padding-top: 6px;
+    border-top: 1px dashed var(--jk-border);
+    line-height: 1.4;
+  }
+  .jk-map-city-card-row.is-nearest {
+    background: var(--jk-pink);
+    color: #fff;
+    border-radius: 3px;
+    padding: 1px 4px;
+    margin: -1px -4px;
+  }
+  .jk-map-city-card-row.is-nearest span {
+    color: #fff;
+    font-weight: 700;
+  }
+
+  /* 모바일 카드 날짜 강조 */
+  .jk-map-mobile-card-row.is-nearest {
+    background: var(--jk-pink);
+    color: #fff;
+    border-radius: 3px;
+    padding: 2px 6px;
+    margin: 2px -6px;
+  }
+  .jk-map-mobile-card-row.is-nearest span {
+    color: #fff;
+  }
+
+  /* ===== 서베이 모달 ===== */
+  .jk-survey-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 9999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .jk-survey-modal-overlay.is-visible {
+    display: flex;
+    opacity: 1;
+  }
+  .jk-survey-modal {
+    background: #fff;
+    border-radius: var(--jk-radius-lg);
+    max-width: 420px;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    animation: jkModalSlideUp 0.3s ease-out;
+  }
+  @keyframes jkModalSlideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .jk-survey-modal-header {
+    position: relative;
+    padding: 0;
+  }
+  .jk-survey-modal-img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    border-radius: var(--jk-radius-lg) var(--jk-radius-lg) 0 0;
+  }
+  .jk-survey-modal-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.5);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .jk-survey-modal-close:hover {
+    background: rgba(0,0,0,0.7);
+  }
+  .jk-survey-modal-close svg {
+    width: 16px;
+    height: 16px;
+    stroke: #fff;
+  }
+  .jk-survey-modal-badge {
+    position: absolute;
+    bottom: -14px;
+    left: 20px;
+    padding: 6px 14px;
+    background: var(--jk-pink);
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    border-radius: 999px;
+    letter-spacing: 0.05em;
+  }
+  .jk-survey-modal-body {
+    padding: 28px 20px 20px;
+  }
+  .jk-survey-modal-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin: 0 0 4px;
+  }
+  .jk-survey-modal-spot {
+    font-size: 0.85rem;
+    color: var(--jk-text-sub);
+    margin: 0 0 12px;
+  }
+  .jk-survey-modal-dates {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+  .jk-survey-modal-date {
+    font-size: 0.72rem;
+    padding: 4px 10px;
+    background: var(--jk-cream);
+    border-radius: 999px;
+  }
+  .jk-survey-modal-section {
+    margin-bottom: 16px;
+  }
+  .jk-survey-modal-section-title {
+    font-size: 0.72rem;
+    color: var(--jk-pink);
+    font-weight: 600;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .jk-survey-modal-course {
+    background: var(--jk-cream);
+    border-radius: var(--jk-radius);
+    padding: 12px;
+  }
+  .jk-survey-modal-course-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 8px 0;
+    border-bottom: 1px dashed var(--jk-border);
+  }
+  .jk-survey-modal-course-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+  .jk-survey-modal-course-item:first-child {
+    padding-top: 0;
+  }
+  .jk-survey-modal-course-num {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--jk-pink);
+    color: #fff;
+    font-size: 0.65rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .jk-survey-modal-course-text {
+    font-size: 0.82rem;
+    line-height: 1.5;
+  }
+  .jk-survey-modal-highlight {
+    background: linear-gradient(90deg, var(--jk-pink-soft) 0%, var(--jk-cream) 100%);
+    border-left: 3px solid var(--jk-pink);
+    padding: 10px 12px;
+    border-radius: 0 var(--jk-radius) var(--jk-radius) 0;
+    font-size: 0.8rem;
+    line-height: 1.55;
+  }
+  .jk-survey-modal-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+  }
+  .jk-survey-modal-btn {
+    flex: 1;
+    padding: 11px 16px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    border-radius: 999px;
+    border: 1px solid var(--jk-border);
+    background: #fff;
+    color: var(--jk-text);
+    cursor: pointer;
+    transition: all 0.15s;
+    text-decoration: none;
+    text-align: center;
+  }
+  .jk-survey-modal-btn:hover {
+    border-color: var(--jk-pink);
+    color: var(--jk-pink);
+  }
+  .jk-survey-modal-btn--primary {
+    background: var(--jk-pink);
+    border-color: var(--jk-pink);
+    color: #fff;
+  }
+  .jk-survey-modal-btn--primary:hover {
+    background: var(--jk-pink-dark);
+    border-color: var(--jk-pink-dark);
+    color: #fff;
+  }
+
+  /* ===== 펄스 애니메이션 ===== */
+  @keyframes jkPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(212, 96, 122, 0.4); }
+    50% { box-shadow: 0 0 0 10px rgba(212, 96, 122, 0); }
+  }
+</style>
+
+<div class="jk-sakura2026">
+  <!-- ===== 헤더 ===== -->
+  <header class="jk-header">
+    <a href="https://www.japankuru.com/kr/" class="jk-header-logo">
+      <img src="https://www.japankuru.com/gld-kanri/data/uploads/2022/01/japankuru_logo.png" alt="JAPANKURU">
+    </a>
+    <nav class="jk-header-nav">
+      <a href="#date-picker">날짜 선택</a>
+      <a href="#forecast-map">개화 지도</a>
+      <a href="#survey">투표</a>
+      <a href="#spots">추천 명소</a>
+    </nav>
+  </header>
+  
+  <!-- ===== 모바일 스티키 내비 ===== -->
+  <nav class="jk-mobile-nav" id="jkMobileNav">
+    <a href="#date-picker" class="jk-mobile-nav-item is-active" data-section="date-picker">
+      <span class="jk-mobile-nav-icon">📅</span>
+      <span>날짜</span>
+    </a>
+    <a href="#forecast-map" class="jk-mobile-nav-item" data-section="forecast-map">
+      <span class="jk-mobile-nav-icon">🗾</span>
+      <span>지도</span>
+    </a>
+    <a href="#survey" class="jk-mobile-nav-item" data-section="survey">
+      <span class="jk-mobile-nav-icon">🗳️</span>
+      <span>투표</span>
+    </a>
+    <a href="#spots" class="jk-mobile-nav-item" data-section="spots">
+      <span class="jk-mobile-nav-icon">📍</span>
+      <span>명소</span>
+    </a>
+    <a href="#checklist" class="jk-mobile-nav-item" data-section="checklist">
+      <span class="jk-mobile-nav-icon">✅</span>
+      <span>준비</span>
+    </a>
+  </nav>
+
+  <!-- ===== HERO ===== -->
+  <section class="jk-hero">
+    <div class="jk-hero-slider" id="jkHeroSlider">
+      <div class="jk-hero-slide is-active"><img src="https://img.japankuru.com/prg_img/img/img2022032216222456582000.jpg" alt="일본 벚꽃"></div>
+      <div class="jk-hero-slide"><img src="https://img.japankuru.com/prg_img/img/img2022032216080462220500.jpg" alt="후지산 벚꽃" loading="lazy"></div>
+      <div class="jk-hero-slide"><img src="https://img.japankuru.com/prg_img/img/img2019030414083494430600.jpg" alt="강변 벚꽃" loading="lazy"></div>
+      <div class="jk-hero-slide"><img src="https://www.japankuru.com/gld-kanri/data/uploads/2025/01/D05_6288-1536x1024.jpg" alt="교토 벚꽃" loading="lazy"></div>
+    </div>
+    <div class="jk-hero-overlay"></div>
+    <div class="jk-hero-content">
+      <div class="jk-hero-kicker">JAPANKURU · 벚꽃 2026</div>
+      <h1 class="jk-title-jp">벚꽃, 개화일이 전부가 아니에요</h1>
+      <p class="jk-hero-lead">놓쳤다고 생각했나요?<br><strong>개화부터 벚꽃눈까지 약 2주</strong>가 있어요.</p>
+      <a href="#date-picker" class="jk-hero-cta">내 여행 날짜로 확인 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 13l5 5 5-5M7 7l5 5 5-5"/></svg></a>
+    </div>
+    <div class="jk-hero-indicators">
+      <span class="jk-hero-dot is-active" data-index="0"></span>
+      <span class="jk-hero-dot" data-index="1"></span>
+      <span class="jk-hero-dot" data-index="2"></span>
+      <span class="jk-hero-dot" data-index="3"></span>
+    </div>
+  </section>
+
+  <!-- ===== 날짜 입력 ===== -->
+  <section class="jk-date-section" id="date-picker">
+    <div class="jk-container">
+      <div class="jk-date-inner">
+        <h2 class="jk-date-title jk-title-jp">내 여행 날짜는?</h2>
+        <p class="jk-date-sub">날짜를 선택하면 맞춤 도시와 추천 명소를 알려드려요</p>
+        <div class="jk-date-form">
+          <div class="jk-date-input-wrap"><input type="date" class="jk-date-input" id="jkTravelStart" value="2026-03-28"><span class="jk-date-label">부터</span></div>
+          <div class="jk-date-input-wrap"><input type="date" class="jk-date-input" id="jkTravelEnd" value="2026-04-03"><span class="jk-date-label">까지</span></div>
+          <button type="button" class="jk-date-submit" id="jkDateSubmit">확인</button>
+        </div>
+        <div class="jk-result-card" id="jkResultCard">
+          <button type="button" class="jk-result-close" id="jkResultClose">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+          </button>
+          <img class="jk-result-img" id="jkResultImg" src="" alt="">
+          <div class="jk-result-body">
+            <div class="jk-result-header">
+              <div class="jk-result-icon" id="jkResultIcon">🌺</div>
+              <div><div class="jk-result-badge" id="jkResultBadge">BEST MATCH</div><h3 class="jk-result-city" id="jkResultCity">도쿄</h3></div>
             </div>
-            <div class="jk-hero-indicators">
-              <span class="jk-hero-indicator"></span>
-              <span class="jk-hero-indicator"></span>
-              <span class="jk-hero-indicator"></span>
-              <span class="jk-hero-indicator"></span>
+            <p class="jk-result-status" id="jkResultStatus">만개! 가장 화려한 타이밍</p>
+            <div class="jk-result-dates" id="jkResultDates"></div>
+            <div class="jk-result-spot"><div class="jk-result-spot-title">추천 명소</div><div class="jk-result-spot-name" id="jkResultSpotName">우에노 공원</div><div class="jk-result-spot-desc" id="jkResultSpotDesc">1,000그루+ 벚나무</div></div>
+            <div class="jk-result-actions">
+              <a href="#" class="jk-result-btn jk-result-btn--primary" id="jkResultArticle" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>관련 기사</a>
+              <button type="button" class="jk-result-btn" id="jkSaveImage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>저장</button>
+              <button type="button" class="jk-result-btn" id="jkShareResult"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.59 13.51l6.83 3.98M15.41 6.51l-6.82 3.98"/></svg>공유</button>
             </div>
-          </div>
-          <div class="jk-sakura2026-hero-text">
-            <div class="jk-sakura2026-kicker">JAPANKURU 벚꽃 스페셜 2026</div>
-            <h1>2026년 일본 벚꽃 개화 예상 & 여행 가이드</h1>
-            <p>개화일이 지났다고 포기하지 마세요! <strong>개화부터 벚꽃눈까지 약 2주간</strong> 벚꽃을 즐길 수 있어요. 각 단계별 날짜를 확인하고 여행 계획을 세워보세요!</p>
-            <div class="jk-sakura2026-hero-badges">
-              <span class="jk-sakura2026-badge">🌸 본격 시즌: 3월 하순~5월 초</span>
-              <span class="jk-sakura2026-badge">📍 주요 거점: 도쿄 / 교토 / 오사카</span>
+            <!-- 꿀팁 -->
+            <div class="jk-result-tip" id="jkResultTip" style="display:none;">
+              <div class="jk-result-tip-label">💡 <span id="jkResultCityName2"></span> 꿀팁</div>
+              <p class="jk-result-tip-text" id="jkResultTipText"></p>
             </div>
-            <p class="jk-sakura2026-hero-note">※ 기상청 평년값 기준입니다. 실제 날짜는 기상 조건에 따라 1~2주 전후할 수 있어요.</p>
-            
-            <div class="jk-share-bar">
-              <span class="jk-share-bar-label">친구에게 공유:</span>
-              <button type="button" class="jk-share-btn jk-share-btn-native jk-share-mobile-only" onclick="handleNativeShare()">
-                <svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg>
-                공유하기
-              </button>
-              <button type="button" class="jk-share-btn jk-share-desktop-only" onclick="shareToX()">
-                <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-                X
-              </button>
-              <button type="button" class="jk-share-btn jk-share-desktop-only" onclick="shareToFacebook()">
-                <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-                Facebook
-              </button>
-              <button type="button" class="jk-share-btn" onclick="copyLink()">
-                <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
-                링크 복사
-              </button>
-            </div>
-          </div>
-        </section>
-    
-        <!-- ========== SVG MAP ========== -->
-        <section class="jk-sakura2026-map-section">
-          <h2 class="jk-sakura2026-section-title">2026년 전국 벚꽃 개화 지도</h2>
-          <p class="jk-sakura2026-section-sub">각 도시의 <strong>4단계 벚꽃 일정</strong>을 확인하세요. 개화일이 지나도 벚꽃눈까지 약 2주간 즐길 수 있어요!</p>
-    
-          <div class="jk-sakura-map-container">
-            <div class="jk-sakura-map-header">
-              <div class="jk-sakura-map-header-top">
-                <span>2026 JAPAN</span>
-                <span>CHERRY BLOSSOM</span>
-                <span>FULL TIMELINE</span>
-              </div>
-              <h3 class="jk-sakura-map-title">2026 일본 벚꽃</h3>
-              <p class="jk-sakura-map-subtitle">4단계 타임라인 (기상청 평년값)</p>
-            </div>
-    
-            <!-- 뷰 토글 (모바일) -->
-            <div class="jk-view-toggle">
-              <button type="button" class="jk-view-toggle-btn is-active" data-view="list" onclick="toggleView('list')">
-                <svg viewBox="0 0 24 24"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg>
-                리스트
-              </button>
-              <button type="button" class="jk-view-toggle-btn" data-view="map" onclick="toggleView('map')">
-                <svg viewBox="0 0 24 24"><path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/></svg>
-                지도
-              </button>
-            </div>
-    
-            <!-- 지도 뷰 -->
-            <div class="jk-map-view" id="mapView">
-              <div class="jk-sakura-map-wrapper">
-                <svg class="jk-japan-svg" viewBox="0 0 400 520" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="일본 지도">
-                  <defs><linearGradient id="sakura-grad" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#fff9fc;stop-opacity:1" /><stop offset="100%" style="stop-color:#fce4ec;stop-opacity:0.3" /></linearGradient></defs>
-                  <rect width="400" height="520" fill="url(#sakura-grad)"/>
-                  <path d="M280 45 Q315 35 335 55 Q355 75 345 105 Q335 125 305 135 Q275 140 255 125 Q245 105 255 75 Q265 55 280 45Z" fill="#fce4ec" stroke="#f48fb1" stroke-width="1.5"/>
-                  <path d="M195 150 Q255 140 285 160 Q305 180 295 210 Q280 245 260 270 Q240 300 220 320 Q200 345 175 365 Q150 380 130 385 Q110 385 100 365 Q95 340 115 305 Q135 270 155 245 Q175 220 180 195 Q185 170 195 150Z" fill="#fce4ec" stroke="#f48fb1" stroke-width="1.5"/>
-                  <path d="M115 395 Q150 388 168 400 Q180 415 172 432 Q158 445 130 445 Q105 438 98 420 Q100 402 115 395Z" fill="#fce4ec" stroke="#f48fb1" stroke-width="1.5"/>
-                  <path d="M65 405 Q100 392 115 415 Q122 440 108 462 Q88 480 60 472 Q38 458 35 432 Q38 410 65 405Z" fill="#fce4ec" stroke="#f48fb1" stroke-width="1.5"/>
-                  <path d="M50 455 Q95 430 135 405 Q175 380 200 345 Q225 310 255 275 Q285 240 300 200" stroke="#c73a7a" stroke-width="2.5" stroke-dasharray="8 4" fill="none" opacity="0.4"/>
-                </svg>
-    
-                <!-- 도시 라벨 (4단계) -->
-                <div class="jk-map-dot" style="top: 17%; left: 72%;"></div>
-                <div class="jk-bloom-label" style="top: 4%; left: 73%;">
-                  <div class="jk-bloom-label-city">삿포로</div>
-                  <div class="jk-bloom-label-row"><span class="jk-bloom-label-icon">🌸</span><span class="jk-bloom-label-stage">개화</span><span class="jk-bloom-label-date">5/1</span></div>
-                  <div class="jk-bloom-label-row"><span class="jk-bloom-label-icon">🌺</span><span class="jk-bloom-label-stage">만개</span><span class="jk-bloom-label-date">5/6</span></div>
-                  <div class="jk-bloom-label-row is-late"><span class="jk-bloom-label-icon">🍃</span><span class="jk-bloom-label-stage">지기 시작</span><span class="jk-bloom-label-date">5/10</span></div>
-                  <div class="jk-bloom-label-row is-late"><span class="jk-bloom-label-icon">💨</span><span class="jk-bloom-label-stage">벚꽃눈</span><span class="jk-bloom-label-date">~5/13</span></div>
-                </div>
-    
-                <div class="jk-map-dot" style="top: 28%; left: 66%;"></div>
-                <div class="jk-bloom-label" style="top: 18%; left: 70%;">
-                  <div class="jk-bloom-label-city">아오모리</div>
-                  <div class="jk-bloom-label-row"><span class="jk-bloom-label-icon">🌸</span><span class="jk-bloom-label-stage">개화</span><span class="jk-bloom-label-date">4/22</span></div>
-                  <div class="jk-bloom-label-row"><span class="jk-bloom-label-icon">🌺</span><span class="jk-bloom-label-stage">만개</span><span class="jk-bloom-label-date">4/28</span></div>
-                  <div class="jk-bloom-label-row is-late"><span class="jk-bloom-label-icon">🍃</span><span class="jk-bloom-label-stage">지기 시작</span><span class="jk-bloom-label-date">5/2</span></div>
-                  <div class="jk-bloom-label-row is-late"><span class="jk-bloom-label-icon">💨</span><span class="jk-bloom-label-stage">벚꽃눈</span><span class="jk-bloom-label-date">~5/5</span></div>
-                </div>
-    
-                <div class="jk-map-dot" style="top: 38%; left: 64%;"></div>
-                <div class="jk-bloom-label" style="top: 32%; left: 70%;">
-                  <div class="jk-bloom-label-city">센다이</div>
-                  <div class="jk-bloom-label-row"><span class="jk-bloom-label-icon">🌸</span><span class="jk-bloom-label-stage">개화</span><span class="jk-bloom-label-date">4/8</span></div>
-                  <div class="jk-bloom-label-row"><span class="jk-bloom-label-icon">🌺</span><span class="jk-bloom-label-stage">만개</span><span class="jk-bloom-label-date">4/14</span></div>
-                  <div class="jk-bloom-label-row is-late"><span class="jk-bloom-label-icon">🍃</span><span class="jk-bloom-label-stage">지기 시작</span><span class="jk-bloom-label-date">4/18</span></div>
-                  <div class="jk-bloom-label-row is-late"><span class="jk-bloom-label-icon">💨</span><span class="jk-bloom-label-stage">벚꽃눈</span><span class="jk-bloom-label-date">~4/21</span></div>
-                </div>
-    
-                <div class="jk-map-dot" style="top: 50%; left: 62%;"></div>
-                <div class="jk-bloom-label" style="top: 44%; left: 68%;">
-                  <div class="jk-bloom-label-city">도쿄</div>
-                  <div class="jk-bloom-label-row"><span class="jk-bloom-label-icon">🌸</span><span class="jk-bloom-label-stage">개화</span><span class="jk-bloom-label-date">3/24</span></div>
-                  <div class="jk-bloom-label-row"><span class="jk-bloom-label-icon">🌺</span><span class="jk-bloom-label-stage">만개</span><span class="jk-bloom-label-date">3/31</span></div>
-                  <div class="jk-bloom-label-row is-late"><span class="jk-bloom-label-icon">🍃</span><span class="jk-bloom-label-stage">지기 시작</span><span class="jk-bloom-label-date">4/4</span></div>
-                  <div class="jk-bloom-label-row is-late"><span class="jk-bloom-label-icon">💨</span><span class="jk-bloom-label-stage">벚꽃눈</span><span class="jk-bloom-label-date">~4/7</span></div>
-                </div>
-    
-                <div class="jk-map-dot" style="top: 44%; left: 46%;"></div>
-                <div class="jk-bloom-label" style="top: 34%; left: 22%;">
-                  <div class="jk-bloom-label-city">가나자와</div>
-                  <div class="jk-bloom-label-row"><span class="jk-bloom-label-icon">🌸</span><span class="jk-bloom-label-stage">개화</span><span class="jk-bloom-label-date">4/3</span></div>
-                  <div class="jk-bloom-label-row"><span class="jk-bloom-label-icon">🌺</span><span class="jk-bloom-label-stage">만개</span><span class="jk-bloom-label-date">4/9</span></div>
-                  <div class="jk-bloom-label-row is-late"><span class="jk-bloom-label-icon">🍃</span><span class="jk-bloom-label-stage">지기 시작</span><span class="jk-bloom-label-date">4/13</span></div>
-                  <div class="jk-bloom-label-row is-late"><span class="jk-bloom-label-icon">💨</span><span class="jk-bloom-label-stage">벚꽃눈</span><span class="jk-bloom-label-date">~4/16</span></div>
-                </div>
-    
-                <div class="jk-map-dot" style="top: 58%; left: 42%;"></div>
-                <div class="jk-bloom-label" style="top: 48%; left: 14%;">
-                  <div class="jk-bloom-label-city">교토</div>
-                  <div class="jk-bloom-label-row"><span class="jk-bloom-label-icon">🌸</span><span class="jk-bloom-label-stage">개화</span><span class="jk-bloom-label-date">3/26</span></div>
-                  <div class="jk-bloom-label-row"><span class="jk-bloom-label-icon">🌺</span><span class="jk-bloom-label-stage">만개</span><span class="jk-bloom-label-date">4/2</span></div>
-                  <div class="jk-bloom-label-row is-late"><span class="jk-bloom-label-icon">🍃</span><span class="jk-bloom-label-stage">지기 시작</span><span class="jk-bloom-label-date">4/6</span></div>
-                  <div class="jk-bloom-label-row is-late"><span class="jk-bloom-label-icon">💨</span><span class="jk-bloom-label-stage">벚꽃눈</span><span class="jk-bloom-label-date">~4/9</span></div>
-                </div>
-    
-                <div class="jk-map-dot" style="top: 63%; left: 40%;"></div>
-                <div class="jk-bloom-label" style="top: 62%; left: 46%;">
-                  <div class="jk-bloom-label-city">오사카</div>
-                  <div class="jk-bloom-label-row"><span class="jk-bloom-label-icon">🌸</span><span class="jk-bloom-label-stage">개화</span><span class="jk-bloom-label-date">3/27</span></div>
-                  <div class="jk-bloom-label-row"><span class="jk-bloom-label-icon">🌺</span><span class="jk-bloom-label-stage">만개</span><span class="jk-bloom-label-date">4/3</span></div>
-                  <div class="jk-bloom-label-row is-late"><span class="jk-bloom-label-icon">🍃</span><span class="jk-bloom-label-stage">지기 시작</span><span class="jk-bloom-label-date">4/7</span></div>
-                  <div class="jk-bloom-label-row is-late"><span class="jk-bloom-label-icon">💨</span><span class="jk-bloom-label-stage">벚꽃눈</span><span class="jk-bloom-label-date">~4/10</span></div>
-                </div>
-    
-                <div class="jk-map-dot" style="top: 66%; left: 30%;"></div>
-                <div class="jk-bloom-label" style="top: 56%; left: 1%;">
-                  <div class="jk-bloom-label-city">히로시마</div>
-                  <div class="jk-bloom-label-row"><span class="jk-bloom-label-icon">🌸</span><span class="jk-bloom-label-stage">개화</span><span class="jk-bloom-label-date">3/25</span></div>
-                  <div class="jk-bloom-label-row"><span class="jk-bloom-label-icon">🌺</span><span class="jk-bloom-label-stage">만개</span><span class="jk-bloom-label-date">4/1</span></div>
-                  <div class="jk-bloom-label-row is-late"><span class="jk-bloom-label-icon">🍃</span><span class="jk-bloom-label-stage">지기 시작</span><span class="jk-bloom-label-date">4/5</span></div>
-                  <div class="jk-bloom-label-row is-late"><span class="jk-bloom-label-icon">💨</span><span class="jk-bloom-label-stage">벚꽃눈</span><span class="jk-bloom-label-date">~4/8</span></div>
-                </div>
-    
-                <div class="jk-map-dot" style="top: 78%; left: 20%;"></div>
-                <div class="jk-bloom-label" style="top: 70%; left: 1%;">
-                  <div class="jk-bloom-label-city">후쿠오카</div>
-                  <div class="jk-bloom-label-row"><span class="jk-bloom-label-icon">🌸</span><span class="jk-bloom-label-stage">개화</span><span class="jk-bloom-label-date">3/22</span></div>
-                  <div class="jk-bloom-label-row"><span class="jk-bloom-label-icon">🌺</span><span class="jk-bloom-label-stage">만개</span><span class="jk-bloom-label-date">3/29</span></div>
-                  <div class="jk-bloom-label-row is-late"><span class="jk-bloom-label-icon">🍃</span><span class="jk-bloom-label-stage">지기 시작</span><span class="jk-bloom-label-date">4/2</span></div>
-                  <div class="jk-bloom-label-row is-late"><span class="jk-bloom-label-icon">💨</span><span class="jk-bloom-label-stage">벚꽃눈</span><span class="jk-bloom-label-date">~4/5</span></div>
-                </div>
-    
-                <div class="jk-map-dot" style="top: 88%; left: 22%;"></div>
-                <div class="jk-bloom-label" style="top: 82%; left: 30%;">
-                  <div class="jk-bloom-label-city">가고시마</div>
-                  <div class="jk-bloom-label-row"><span class="jk-bloom-label-icon">🌸</span><span class="jk-bloom-label-stage">개화</span><span class="jk-bloom-label-date">3/26</span></div>
-                  <div class="jk-bloom-label-row"><span class="jk-bloom-label-icon">🌺</span><span class="jk-bloom-label-stage">만개</span><span class="jk-bloom-label-date">4/2</span></div>
-                  <div class="jk-bloom-label-row is-late"><span class="jk-bloom-label-icon">🍃</span><span class="jk-bloom-label-stage">지기 시작</span><span class="jk-bloom-label-date">4/6</span></div>
-                  <div class="jk-bloom-label-row is-late"><span class="jk-bloom-label-icon">💨</span><span class="jk-bloom-label-stage">벚꽃눈</span><span class="jk-bloom-label-date">~4/9</span></div>
-                </div>
-              </div>
-            </div>
-    
-            <!-- 리스트 뷰 -->
-            <div class="jk-list-view" id="listView">
-              <div class="jk-city-list">
-                <div class="jk-city-card">
-                  <div class="jk-city-card-num">1</div>
-                  <div class="jk-city-card-info">
-                    <h4 class="jk-city-card-name">후쿠오카</h4>
-                    <div class="jk-city-card-stages">
-                      <div class="jk-city-card-stage"><span class="jk-city-card-stage-icon">🌸</span>개화 <span class="jk-city-card-stage-date">3/22</span></div>
-                      <div class="jk-city-card-stage"><span class="jk-city-card-stage-icon">🌺</span>만개 <span class="jk-city-card-stage-date">3/29</span></div>
-                      <div class="jk-city-card-stage is-late"><span class="jk-city-card-stage-icon">🍃</span>지기 시작 <span class="jk-city-card-stage-date">4/2</span></div>
-                      <div class="jk-city-card-stage is-late"><span class="jk-city-card-stage-icon">💨</span>벚꽃눈 <span class="jk-city-card-stage-date">~4/5</span></div>
-                    </div>
-                  </div>
-                </div>
-                <div class="jk-city-card">
-                  <div class="jk-city-card-num">2</div>
-                  <div class="jk-city-card-info">
-                    <h4 class="jk-city-card-name">도쿄</h4>
-                    <div class="jk-city-card-stages">
-                      <div class="jk-city-card-stage"><span class="jk-city-card-stage-icon">🌸</span>개화 <span class="jk-city-card-stage-date">3/24</span></div>
-                      <div class="jk-city-card-stage"><span class="jk-city-card-stage-icon">🌺</span>만개 <span class="jk-city-card-stage-date">3/31</span></div>
-                      <div class="jk-city-card-stage is-late"><span class="jk-city-card-stage-icon">🍃</span>지기 시작 <span class="jk-city-card-stage-date">4/4</span></div>
-                      <div class="jk-city-card-stage is-late"><span class="jk-city-card-stage-icon">💨</span>벚꽃눈 <span class="jk-city-card-stage-date">~4/7</span></div>
-                    </div>
-                  </div>
-                </div>
-                <div class="jk-city-card">
-                  <div class="jk-city-card-num">3</div>
-                  <div class="jk-city-card-info">
-                    <h4 class="jk-city-card-name">히로시마</h4>
-                    <div class="jk-city-card-stages">
-                      <div class="jk-city-card-stage"><span class="jk-city-card-stage-icon">🌸</span>개화 <span class="jk-city-card-stage-date">3/25</span></div>
-                      <div class="jk-city-card-stage"><span class="jk-city-card-stage-icon">🌺</span>만개 <span class="jk-city-card-stage-date">4/1</span></div>
-                      <div class="jk-city-card-stage is-late"><span class="jk-city-card-stage-icon">🍃</span>지기 시작 <span class="jk-city-card-stage-date">4/5</span></div>
-                      <div class="jk-city-card-stage is-late"><span class="jk-city-card-stage-icon">💨</span>벚꽃눈 <span class="jk-city-card-stage-date">~4/8</span></div>
-                    </div>
-                  </div>
-                </div>
-                <div class="jk-city-card">
-                  <div class="jk-city-card-num">4</div>
-                  <div class="jk-city-card-info">
-                    <h4 class="jk-city-card-name">교토</h4>
-                    <div class="jk-city-card-stages">
-                      <div class="jk-city-card-stage"><span class="jk-city-card-stage-icon">🌸</span>개화 <span class="jk-city-card-stage-date">3/26</span></div>
-                      <div class="jk-city-card-stage"><span class="jk-city-card-stage-icon">🌺</span>만개 <span class="jk-city-card-stage-date">4/2</span></div>
-                      <div class="jk-city-card-stage is-late"><span class="jk-city-card-stage-icon">🍃</span>지기 시작 <span class="jk-city-card-stage-date">4/6</span></div>
-                      <div class="jk-city-card-stage is-late"><span class="jk-city-card-stage-icon">💨</span>벚꽃눈 <span class="jk-city-card-stage-date">~4/9</span></div>
-                    </div>
-                  </div>
-                </div>
-                <div class="jk-city-card">
-                  <div class="jk-city-card-num">5</div>
-                  <div class="jk-city-card-info">
-                    <h4 class="jk-city-card-name">가고시마</h4>
-                    <div class="jk-city-card-stages">
-                      <div class="jk-city-card-stage"><span class="jk-city-card-stage-icon">🌸</span>개화 <span class="jk-city-card-stage-date">3/26</span></div>
-                      <div class="jk-city-card-stage"><span class="jk-city-card-stage-icon">🌺</span>만개 <span class="jk-city-card-stage-date">4/2</span></div>
-                      <div class="jk-city-card-stage is-late"><span class="jk-city-card-stage-icon">🍃</span>지기 시작 <span class="jk-city-card-stage-date">4/6</span></div>
-                      <div class="jk-city-card-stage is-late"><span class="jk-city-card-stage-icon">💨</span>벚꽃눈 <span class="jk-city-card-stage-date">~4/9</span></div>
-                    </div>
-                  </div>
-                </div>
-                <div class="jk-city-card">
-                  <div class="jk-city-card-num">6</div>
-                  <div class="jk-city-card-info">
-                    <h4 class="jk-city-card-name">오사카</h4>
-                    <div class="jk-city-card-stages">
-                      <div class="jk-city-card-stage"><span class="jk-city-card-stage-icon">🌸</span>개화 <span class="jk-city-card-stage-date">3/27</span></div>
-                      <div class="jk-city-card-stage"><span class="jk-city-card-stage-icon">🌺</span>만개 <span class="jk-city-card-stage-date">4/3</span></div>
-                      <div class="jk-city-card-stage is-late"><span class="jk-city-card-stage-icon">🍃</span>지기 시작 <span class="jk-city-card-stage-date">4/7</span></div>
-                      <div class="jk-city-card-stage is-late"><span class="jk-city-card-stage-icon">💨</span>벚꽃눈 <span class="jk-city-card-stage-date">~4/10</span></div>
-                    </div>
-                  </div>
-                </div>
-                <div class="jk-city-card">
-                  <div class="jk-city-card-num">7</div>
-                  <div class="jk-city-card-info">
-                    <h4 class="jk-city-card-name">가나자와</h4>
-                    <div class="jk-city-card-stages">
-                      <div class="jk-city-card-stage"><span class="jk-city-card-stage-icon">🌸</span>개화 <span class="jk-city-card-stage-date">4/3</span></div>
-                      <div class="jk-city-card-stage"><span class="jk-city-card-stage-icon">🌺</span>만개 <span class="jk-city-card-stage-date">4/9</span></div>
-                      <div class="jk-city-card-stage is-late"><span class="jk-city-card-stage-icon">🍃</span>지기 시작 <span class="jk-city-card-stage-date">4/13</span></div>
-                      <div class="jk-city-card-stage is-late"><span class="jk-city-card-stage-icon">💨</span>벚꽃눈 <span class="jk-city-card-stage-date">~4/16</span></div>
-                    </div>
-                  </div>
-                </div>
-                <div class="jk-city-card">
-                  <div class="jk-city-card-num">8</div>
-                  <div class="jk-city-card-info">
-                    <h4 class="jk-city-card-name">센다이</h4>
-                    <div class="jk-city-card-stages">
-                      <div class="jk-city-card-stage"><span class="jk-city-card-stage-icon">🌸</span>개화 <span class="jk-city-card-stage-date">4/8</span></div>
-                      <div class="jk-city-card-stage"><span class="jk-city-card-stage-icon">🌺</span>만개 <span class="jk-city-card-stage-date">4/14</span></div>
-                      <div class="jk-city-card-stage is-late"><span class="jk-city-card-stage-icon">🍃</span>지기 시작 <span class="jk-city-card-stage-date">4/18</span></div>
-                      <div class="jk-city-card-stage is-late"><span class="jk-city-card-stage-icon">💨</span>벚꽃눈 <span class="jk-city-card-stage-date">~4/21</span></div>
-                    </div>
-                  </div>
-                </div>
-                <div class="jk-city-card">
-                  <div class="jk-city-card-num">9</div>
-                  <div class="jk-city-card-info">
-                    <h4 class="jk-city-card-name">아오모리</h4>
-                    <div class="jk-city-card-stages">
-                      <div class="jk-city-card-stage"><span class="jk-city-card-stage-icon">🌸</span>개화 <span class="jk-city-card-stage-date">4/22</span></div>
-                      <div class="jk-city-card-stage"><span class="jk-city-card-stage-icon">🌺</span>만개 <span class="jk-city-card-stage-date">4/28</span></div>
-                      <div class="jk-city-card-stage is-late"><span class="jk-city-card-stage-icon">🍃</span>지기 시작 <span class="jk-city-card-stage-date">5/2</span></div>
-                      <div class="jk-city-card-stage is-late"><span class="jk-city-card-stage-icon">💨</span>벚꽃눈 <span class="jk-city-card-stage-date">~5/5</span></div>
-                    </div>
-                  </div>
-                </div>
-                <div class="jk-city-card">
-                  <div class="jk-city-card-num">10</div>
-                  <div class="jk-city-card-info">
-                    <h4 class="jk-city-card-name">삿포로</h4>
-                    <div class="jk-city-card-stages">
-                      <div class="jk-city-card-stage"><span class="jk-city-card-stage-icon">🌸</span>개화 <span class="jk-city-card-stage-date">5/1</span></div>
-                      <div class="jk-city-card-stage"><span class="jk-city-card-stage-icon">🌺</span>만개 <span class="jk-city-card-stage-date">5/6</span></div>
-                      <div class="jk-city-card-stage is-late"><span class="jk-city-card-stage-icon">🍃</span>지기 시작 <span class="jk-city-card-stage-date">5/10</span></div>
-                      <div class="jk-city-card-stage is-late"><span class="jk-city-card-stage-icon">💨</span>벚꽃눈 <span class="jk-city-card-stage-date">~5/13</span></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-    
-            <!-- 4단계 범례 (이미지 포함) -->
-            <div class="jk-stages-legend">
-              <h4 class="jk-stages-legend-title">🌸 벚꽃 4단계, 이렇게 즐기세요!</h4>
-              <div class="jk-stages-legend-grid">
-                <div class="jk-stage-card">
-                  <img class="jk-stage-card-img" src="https://images.unsplash.com/photo-1551489186-cf8726f514f8?auto=format&fit=crop&w=400&q=80" alt="벚꽃 개화" loading="lazy" />
-                  <div class="jk-stage-card-content">
-                    <div class="jk-stage-card-icon">🌸</div>
-                    <div class="jk-stage-card-name">개화 (開花)</div>
-                    <div class="jk-stage-card-name-sub">카이카</div>
-                    <div class="jk-stage-card-desc">5~6송이 꽃이 피기 시작! 아직 봉오리가 많지만 설레는 시작 단계예요.</div>
-                    <div class="jk-stage-card-timing">기준일</div>
-                  </div>
-                </div>
-                <div class="jk-stage-card">
-                  <img class="jk-stage-card-img" src="https://images.unsplash.com/photo-1522383225653-ed111181a951?auto=format&fit=crop&w=400&q=80" alt="벚꽃 만개" loading="lazy" />
-                  <div class="jk-stage-card-content">
-                    <div class="jk-stage-card-icon">🌺</div>
-                    <div class="jk-stage-card-name">만개 (満開)</div>
-                    <div class="jk-stage-card-name-sub">만카이</div>
-                    <div class="jk-stage-card-desc">80% 이상 활짝! 나무 전체가 꽃으로 덮이는 <strong>베스트 타이밍</strong>!</div>
-                    <div class="jk-stage-card-timing">개화 +7일</div>
-                  </div>
-                </div>
-                <div class="jk-stage-card">
-                  <img class="jk-stage-card-img" src="https://images.unsplash.com/photo-1493238792000-8113da705763?auto=format&fit=crop&w=400&q=80" alt="벚꽃 지기 시작" loading="lazy" />
-                  <div class="jk-stage-card-content">
-                    <div class="jk-stage-card-icon">🍃</div>
-                    <div class="jk-stage-card-name">지기 시작 (散り始め)</div>
-                    <div class="jk-stage-card-name-sub">치리하지메</div>
-                    <div class="jk-stage-card-desc">꽃잎이 살랑살랑 떨어지기 시작. <strong>아직 충분히 예뻐요!</strong></div>
-                    <div class="jk-stage-card-timing">만개 +4일</div>
-                  </div>
-                </div>
-                <div class="jk-stage-card">
-                  <img class="jk-stage-card-img" src="https://images.unsplash.com/photo-1462275646964-a0e3571f4f95?auto=format&fit=crop&w=400&q=80" alt="벚꽃눈" loading="lazy" />
-                  <div class="jk-stage-card-content">
-                    <div class="jk-stage-card-icon">💨</div>
-                    <div class="jk-stage-card-name">벚꽃눈 (桜吹雪)</div>
-                    <div class="jk-stage-card-name-sub">사쿠라후부키</div>
-                    <div class="jk-stage-card-desc">꽃잎이 바람에 흩날리는 환상적인 광경! 사진 찍기 최고!</div>
-                    <div class="jk-stage-card-timing">지기 시작 +3일</div>
-                  </div>
-                </div>
-              </div>
-              <div class="jk-key-message">
-                <p class="jk-key-message-text">
-                  💡 개화일이 지났다고 포기하지 마세요!<br>
-                  개화부터 벚꽃눈까지 <strong>약 2주간</strong> 벚꽃을 즐길 수 있어요!
-                </p>
-              </div>
-            </div>
-    
-            <div class="jk-sakura-map-source">
-              출처: <a href="https://www.data.jma.go.jp/sakura/data/sakura_kaika.html" target="_blank" rel="noopener">일본 기상청</a> 평년값 기준 (지기 시작/벚꽃눈: 일반 기준 +4/+7일 계산)
-            </div>
-          </div>
-    
-          <!-- 여행 시기별 가이드 -->
-          <div class="jk-timing-guide">
-            <h4 class="jk-timing-guide-title">📅 내 여행 날짜에 맞는 도시는?</h4>
-            <div class="jk-timing-grid">
-              <div class="jk-timing-card">
-                <div class="jk-timing-card-period">3월 하순</div>
-                <div class="jk-timing-card-dates">3/20~3/31</div>
-                <div class="jk-timing-card-cities">
-                  <span class="jk-timing-city">후쿠오카</span>
-                  <span class="jk-timing-city">도쿄</span>
-                  <span class="jk-timing-city">히로시마</span>
-                </div>
-                <div class="jk-timing-card-note">🌸~🌺 개화부터 만개까지. 도쿄 3/29부터 만개!</div>
-              </div>
-              <div class="jk-timing-card">
-                <div class="jk-timing-card-period">4월 초</div>
-                <div class="jk-timing-card-dates">4/1~4/10</div>
-                <div class="jk-timing-card-cities">
-                  <span class="jk-timing-city">도쿄</span>
-                  <span class="jk-timing-city">교토</span>
-                  <span class="jk-timing-city">오사카</span>
-                  <span class="jk-timing-city">가나자와</span>
-                </div>
-                <div class="jk-timing-card-note">🔥 골든타임! 🌺만개~🍃지기 시작까지</div>
-              </div>
-              <div class="jk-timing-card">
-                <div class="jk-timing-card-period">4월 중순</div>
-                <div class="jk-timing-card-dates">4/11~4/20</div>
-                <div class="jk-timing-card-cities">
-                  <span class="jk-timing-city">센다이</span>
-                  <span class="jk-timing-city">가나자와</span>
-                </div>
-                <div class="jk-timing-card-note">동북 지방 🌺만개! 도쿄는 💨벚꽃눈 타임</div>
-              </div>
-              <div class="jk-timing-card">
-                <div class="jk-timing-card-period">4월 하순~5월</div>
-                <div class="jk-timing-card-dates">4/21~5/10</div>
-                <div class="jk-timing-card-cities">
-                  <span class="jk-timing-city">아오모리</span>
-                  <span class="jk-timing-city">삿포로</span>
-                </div>
-                <div class="jk-timing-card-note">북쪽으로! 히로사키성 🌺만개~💨벚꽃눈 장관</div>
-              </div>
-            </div>
-          </div>
-        </section>
-    
-        <!-- ========== 여행 스타일 ========== -->
-        <section class="jk-sakura2026-trips">
-          <h2 class="jk-sakura2026-section-title">나에게 맞는 벚꽃 여행 스타일</h2>
-          <p class="jk-sakura2026-section-sub">일정과 스타일에 맞게 골라보세요.</p>
-    
-          <div class="jk-sakura2026-trip-grid">
-            <article class="jk-sakura2026-trip-card">
-              <div class="jk-sakura2026-trip-label">첫 일본 여행</div>
-              <h3 class="jk-sakura2026-trip-title">도쿄+교토/오사카</h3>
-              <div class="jk-sakura2026-trip-days">5~7일 / 3월 말~4월 초 추천</div>
-              <ul>
-                <li>도쿄 우에노·메구로강 → 신칸센 → 교토 철학의 길 → 오사카성</li>
-                <li>정석 벚꽃 스팟 완전 정복</li>
-              </ul>
-              <div class="jk-sakura2026-trip-cta">
-                <button type="button" class="jk-sakura2026-trip-btn">모델 코스 보기 →</button>
-              </div>
-            </article>
-    
-            <article class="jk-sakura2026-trip-card">
-              <div class="jk-sakura2026-trip-label">짧은 여행</div>
-              <h3 class="jk-sakura2026-trip-title">도쿄 집중 3~4일</h3>
-              <div class="jk-sakura2026-trip-days">3~4일 / 3월 29일~4월 5일</div>
-              <ul>
-                <li>1도시 알차게! 우에노+메구로강+신주쿠교엔</li>
-                <li>경유 여행이나 주말 여행에 딱</li>
-              </ul>
-              <div class="jk-sakura2026-trip-cta">
-                <button type="button" class="jk-sakura2026-trip-btn">모델 코스 보기 →</button>
-              </div>
-            </article>
-    
-            <article class="jk-sakura2026-trip-card">
-              <div class="jk-sakura2026-trip-label">재방문자</div>
-              <h3 class="jk-sakura2026-trip-title">동북&홋카이도</h3>
-              <div class="jk-sakura2026-trip-days">7일+ / 4월 중순~5월 초</div>
-              <ul>
-                <li>센다이 → 히로사키성 → 삿포로 북상 루트</li>
-                <li>인파 피해 여유롭게, 다른 분위기의 벚꽃</li>
-              </ul>
-              <div class="jk-sakura2026-trip-cta">
-                <button type="button" class="jk-sakura2026-trip-btn">모델 코스 보기 →</button>
-              </div>
-            </article>
-          </div>
-        </section>
-    
-        <!-- ========== 명소 ========== -->
-        <section class="jk-sakura2026-spots">
-          <h2 class="jk-sakura2026-section-title">JAPANKURU 추천 벚꽃 명소</h2>
-          <p class="jk-sakura2026-section-sub">꼭 가봐야 할 정석 스팟 6곳</p>
-    
-          <div class="jk-sakura2026-spot-grid">
-            <article class="jk-sakura2026-spot-card">
-              <div class="jk-sakura2026-spot-img">
-                <img src="https://images.unsplash.com/photo-1490806843957-31f4c9a91c65?auto=format&fit=crop&w=600&q=80" alt="우에노 공원" loading="lazy" />
-              </div>
-              <div class="jk-sakura2026-spot-body">
-                <h4>우에노 공원 (도쿄)</h4>
-                <p>1,000그루 이상의 벚나무. 도쿄 대표 꽃놀이 성지. 박물관과 함께 하루 코스로!</p>
-              </div>
-            </article>
-    
-            <article class="jk-sakura2026-spot-card">
-              <div class="jk-sakura2026-spot-img">
-                <img src="https://images.unsplash.com/photo-1545569341-9eb8b30979d9?auto=format&fit=crop&w=600&q=80" alt="메구로강" loading="lazy" />
-              </div>
-              <div class="jk-sakura2026-spot-body">
-                <h4>메구로강 (도쿄)</h4>
-                <p>강변 800그루 벚꽃 터널. 밤 라이트업이 로맨틱. 카페 거리도 함께!</p>
-              </div>
-            </article>
-    
-            <article class="jk-sakura2026-spot-card">
-              <div class="jk-sakura2026-spot-img">
-                <img src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=600&q=80" alt="철학의 길" loading="lazy" />
-              </div>
-              <div class="jk-sakura2026-spot-body">
-                <h4>철학의 길 (교토)</h4>
-                <p>긴카쿠지~난젠지 2km 산책로. 수로 옆 벚꽃이 운치 있는 분위기.</p>
-              </div>
-            </article>
-    
-            <article class="jk-sakura2026-spot-card">
-              <div class="jk-sakura2026-spot-img">
-                <img src="https://images.unsplash.com/photo-1589308078059-be1415eab4c3?auto=format&fit=crop&w=600&q=80" alt="오사카성 공원" loading="lazy" />
-              </div>
-              <div class="jk-sakura2026-spot-body">
-                <h4>오사카성 공원 (오사카)</h4>
-                <p>천수각 배경 3,000그루 벚꽃 장관. 야간 라이트업도 인기!</p>
-              </div>
-            </article>
-    
-            <article class="jk-sakura2026-spot-card">
-              <div class="jk-sakura2026-spot-img">
-                <img src="https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?auto=format&fit=crop&w=600&q=80" alt="히로사키성" loading="lazy" />
-              </div>
-              <div class="jk-sakura2026-spot-body">
-                <h4>히로사키성 (아오모리)</h4>
-                <p>2,600그루 벚꽃+해자의 '꽃뗏목'. 4월 하순 피크. 재방문자 필수!</p>
-              </div>
-            </article>
-    
-            <article class="jk-sakura2026-spot-card">
-              <div class="jk-sakura2026-spot-img">
-                <img src="https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=600&q=80" alt="마이즈루 공원" loading="lazy" />
-              </div>
-              <div class="jk-sakura2026-spot-body">
-                <h4>마이즈루 공원 (후쿠오카)</h4>
-                <p>후쿠오카성터+1,000그루 벚꽃. 라멘 투어와 함께!</p>
-              </div>
-            </article>
-          </div>
-        </section>
-    
-        <!-- ========== FAQ ========== -->
-        <section class="jk-sakura2026-faq">
-          <h2 class="jk-sakura2026-section-title">자주 묻는 질문</h2>
-          <div class="jk-sakura2026-faq-list">
-            <div class="jk-sakura2026-faq-item">
-              <div class="jk-sakura2026-faq-q">개화일이 지났는데, 이제 못 보나요?</div>
-              <div class="jk-sakura2026-faq-a">
-                <div class="jk-sakura2026-faq-a-inner">
-                  <strong>아니요!</strong> 개화부터 벚꽃눈(桜吹雪)까지 약 2주간 벚꽃을 즐길 수 있어요. 오히려 만개 직후나 지기 시작할 때가 더 아름다운 경우도 많아요. 특히 벚꽃눈은 꽃잎이 바람에 흩날리는 환상적인 광경이에요!
-                </div>
-              </div>
-            </div>
-    
-            <div class="jk-sakura2026-faq-item">
-              <div class="jk-sakura2026-faq-q">언제가 가장 예쁜 시기인가요?</div>
-              <div class="jk-sakura2026-faq-a">
-                <div class="jk-sakura2026-faq-a-inner">
-                  <strong>만개 전후 1주일</strong>이 가장 예뻐요. 하지만 취향에 따라 다를 수 있어요. 나무 가득 핀 벚꽃을 원하면 만개 시기, 꽃잎이 흩날리는 로맨틱한 분위기를 원하면 지기 시작~벚꽃눈 시기가 좋아요!
-                </div>
-              </div>
-            </div>
-    
-            <div class="jk-sakura2026-faq-item">
-              <div class="jk-sakura2026-faq-q">숙소 예약은 언제 해야 하나요?</div>
-              <div class="jk-sakura2026-faq-a">
-                <div class="jk-sakura2026-faq-a-inner">
-                  도쿄·교토는 <strong>3~6개월 전</strong> 예약을 추천해요. 3월 말~4월 초 주말은 금방 마감되니, 취소 가능한 플랜으로 일단 잡아두세요!
-                </div>
-              </div>
-            </div>
-    
-            <div class="jk-sakura2026-faq-item">
-              <div class="jk-sakura2026-faq-q">피해야 할 시기가 있나요?</div>
-              <div class="jk-sakura2026-faq-a">
-                <div class="jk-sakura2026-faq-a-inner">
-                  도쿄·교토 만개 시기 주말(4월 첫째 주)은 정말 붐벼요. <strong>평일 아침</strong> 방문을 강력 추천! 또는 4월 중순 이후 동북 지방으로 가면 여유롭게 즐길 수 있어요.
-                </div>
-              </div>
-            </div>
-    
-            <div class="jk-sakura2026-faq-item">
-              <div class="jk-sakura2026-faq-q">만개 시기를 완전히 놓쳤어요!</div>
-              <div class="jk-sakura2026-faq-a">
-                <div class="jk-sakura2026-faq-a-inner">
-                  북쪽으로 가세요! 센다이(4월 중순), 아오모리(4월 하순), 삿포로(5월 초)까지 벚꽃이 이어져요. 또한 겹벚꽃(八重桜)은 일반 벚꽃보다 1~2주 늦게 피니 그것도 체크!
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-    
-        <!-- ========== 출처 ========== -->
-        <section class="jk-sakura2026-source">
-          <div class="jk-sakura2026-source-inner">
-            <div class="jk-sakura2026-kicker">데이터 출처</div>
-            <p class="jk-sakura2026-source-main">이 페이지의 개화일 정보는 <strong>일본 기상청 평년값</strong>을 기준으로 작성했어요. 지기 시작/벚꽃눈 날짜는 일반적인 기준(만개+4일/+7일)으로 계산했습니다.</p>
-            <p class="jk-sakura2026-source-link">
-              출처: <a href="https://www.data.jma.go.jp/sakura/data/sakura_kaika.html" target="_blank" rel="noopener noreferrer">일본 기상청 벚꽃 개화 데이터</a>
-            </p>
-            <p class="jk-sakura2026-source-note">※ 실제 날짜는 기상 조건에 따라 달라질 수 있어요. 여행 전 최신 정보를 확인하세요!</p>
-            <p class="jk-sakura2026-source-updated">마지막 업데이트: 2025-12-05</p>
-          </div>
-        </section>
-    
-        <!-- ========== 하단 CTA ========== -->
-        <div class="jk-bottom-cta">
-          <p class="jk-bottom-cta-text">🌸 개화일이 지나도 괜찮아요! 이 페이지를 <strong>북마크</strong>하고 친구에게도 공유해주세요!</p>
-          <div class="jk-bottom-share-btns">
-            <button type="button" class="jk-share-btn jk-share-btn-native jk-share-mobile-only" onclick="handleNativeShare()">
-              <svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg>
-              친구에게 공유하기
-            </button>
-            <button type="button" class="jk-share-btn jk-share-desktop-only" onclick="shareToX()">
-              <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-              X에 공유
-            </button>
-            <button type="button" class="jk-share-btn jk-share-desktop-only" onclick="shareToFacebook()">
-              <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-              Facebook에 공유
-            </button>
-            <button type="button" class="jk-share-btn" onclick="copyLink()">
-              <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
-              링크 복사
-            </button>
           </div>
         </div>
-    
       </div>
     </div>
+  </section>
+
+  <!-- ===== 4단계 ===== -->
+  <section class="jk-section jk-section--white">
+    <div class="jk-container">
+      <div class="jk-section-header jk-section-header--center jk-fade-in">
+        <div class="jk-section-label">Timeline</div>
+        <h2 class="jk-section-title jk-title-jp">벚꽃의 4단계</h2>
+        <p class="jk-section-desc">개화일이 지나도 약 2주간 벚꽃을 즐길 수 있어요</p>
+      </div>
+      <div class="jk-stages-grid jk-fade-in">
+        <div class="jk-stage-card"><div class="jk-stage-img"><span class="jk-stage-num">1</span><img src="https://images.unsplash.com/photo-1551489186-cf8726f514f8?auto=format&fit=crop&w=600&q=80" alt="개화" loading="lazy"></div><div class="jk-stage-body"><div class="jk-stage-name">개화</div><div class="jk-stage-name-jp">開花 · 카이카</div><p class="jk-stage-desc">5~6송이 꽃이 피면 개화 선언</p><span class="jk-stage-timing">기준일</span></div></div>
+        <div class="jk-stage-card jk-stage-card--highlight"><div class="jk-stage-img"><span class="jk-stage-num">2</span><img src="https://images.unsplash.com/photo-1522383225653-ed111181a951?auto=format&fit=crop&w=600&q=80" alt="만개" loading="lazy"></div><div class="jk-stage-body"><div class="jk-stage-name">만개</div><div class="jk-stage-name-jp">満開 · 만카이</div><p class="jk-stage-desc">80% 이상 활짝! 베스트 타이밍</p><span class="jk-stage-timing">개화 +7일</span></div></div>
+        <div class="jk-stage-card"><div class="jk-stage-img"><span class="jk-stage-num">3</span><img src="https://images.unsplash.com/photo-1493238792000-8113da705763?auto=format&fit=crop&w=600&q=80" alt="지기 시작" loading="lazy"></div><div class="jk-stage-body"><div class="jk-stage-name">지기 시작</div><div class="jk-stage-name-jp">散り始め · 치리하지메</div><p class="jk-stage-desc">꽃잎이 떨어지기 시작</p><span class="jk-stage-timing">만개 +4일</span></div></div>
+        <div class="jk-stage-card"><div class="jk-stage-img"><span class="jk-stage-num">4</span><img src="https://images.unsplash.com/photo-1462275646964-a0e3571f4f95?auto=format&fit=crop&w=600&q=80" alt="벚꽃눈" loading="lazy"></div><div class="jk-stage-body"><div class="jk-stage-name">벚꽃눈</div><div class="jk-stage-name-jp">桜吹雪 · 사쿠라후부키</div><p class="jk-stage-desc">바람에 흩날리는 꽃잎</p><span class="jk-stage-timing">지기 시작 +3일</span></div></div>
+      </div>
+      <div class="jk-stage-message jk-fade-in"><p>개화부터 벚꽃눈까지 <strong>약 2주간</strong> 벚꽃을 즐길 수 있어요!</p></div>
+    </div>
+  </section>
+
+  <!-- ===== Leaflet 지도 + 카드 오버레이 ===== -->
+  <section class="jk-section jk-section--pink" id="forecast-map">
+    <div class="jk-container">
+      <div class="jk-section-header jk-section-header--center jk-fade-in">
+        <div class="jk-section-label">2026 Forecast Map</div>
+        <h2 class="jk-section-title jk-title-jp">전국 벚꽃 예상 일정</h2>
+      </div>
+      <div class="jk-map-source-bar jk-fade-in">
+        <div class="jk-map-source-text">데이터: <a href="https://www.data.jma.go.jp/sakura/data/sakura_kaika.html" target="_blank" rel="noopener">일본 기상청</a> 평년값 기반 · 매주 업데이트</div>
+        <div class="jk-map-source-updated">업데이트: <strong>2025-12-11</strong></div>
+      </div>
+
+      <div class="jk-map-wrapper jk-fade-in">
+        <!-- PC 사이드바 -->
+        <div class="jk-map-sidebar">
+          <div class="jk-map-sidebar-header">
+            <div class="jk-map-sidebar-title">🌸 2026 벚꽃 개화 순서</div>
+            <div class="jk-map-sidebar-sub">개화가 빠른 순으로 정렬</div>
+          </div>
+          <div class="jk-map-sidebar-list" id="jkMapSidebarList">
+            <!-- JS에서 생성 -->
+          </div>
+        </div>
+        
+        <!-- 지도 영역 -->
+        <div class="jk-map-area">
+          <div class="jk-map-container">
+            <div id="jk-sakura-map"></div>
+            <!-- PC 상세 카드 -->
+            <div class="jk-map-detail-card" id="jkMapDetailCard">
+              <div class="jk-map-detail-header">
+                <div>
+                  <span class="jk-map-detail-name" id="jkDetailName">東京</span>
+                  <span class="jk-map-detail-name-kr" id="jkDetailNameKr">도쿄</span>
+                </div>
+                <div class="jk-map-detail-status" id="jkDetailStatus">D-102</div>
+              </div>
+              <div class="jk-map-detail-dates" id="jkDetailDates">
+                <!-- JS에서 생성 -->
+              </div>
+              <div class="jk-map-detail-highlight" id="jkDetailHighlight">
+                벚꽃 + 박물관 + 동물원 한번에!
+              </div>
+            </div>
+          </div>
+
+          <!-- 모바일용 슬라이더 -->
+          <div class="jk-map-mobile-slider-wrapper">
+            <div class="jk-map-mobile-slider-hint">← 스와이프하여 도시 선택 →</div>
+            <div class="jk-map-mobile-slider" id="jkMapMobileSlider">
+              <!-- JS에서 생성 -->
+            </div>
+            <div class="jk-map-mobile-slider-dots" id="jkMapMobileSliderDots">
+              <!-- JS에서 생성 -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Q1 앙케이트 + 추천명소 ===== -->
+  <section class="jk-section jk-section--white">
+    <div class="jk-container">
+      <!-- Q1 앙케이트 -->
+      <div class="jk-spot-survey jk-fade-in" id="survey">
+        <div class="jk-spot-survey-header">
+          <div class="jk-section-label">Survey</div>
+          <h3 class="jk-section-title jk-title-jp">Q1. 올해 가장 가고 싶은 벚꽃 스팟은?</h3>
+          <p class="jk-section-desc">한 곳만 골라주세요. 선택하면 <strong>다른 사람들이 많이 고른 스팟 순위</strong>가 바로 보여요.</p>
+        </div>
+        <div class="jk-spot-survey-grid">
+          <button class="jk-spot-choice" data-spot="ueno">
+            <img class="jk-spot-choice-img" src="https://images.unsplash.com/photo-1490806843957-31f4c9a91c65?auto=format&fit=crop&w=400&q=80" alt="우에노 공원">
+            <div class="jk-spot-choice-body">
+              <div class="jk-spot-choice-main">
+                <span class="jk-spot-choice-tag">TOKYO</span>
+                <span class="jk-spot-choice-name">우에노 공원</span>
+                <p class="jk-spot-choice-desc">도쿄 꽃놀이 정석, 1,000그루 벚꽃</p>
+              </div>
+            </div>
+          </button>
+          <button class="jk-spot-choice" data-spot="meguro">
+            <img class="jk-spot-choice-img" src="https://images.unsplash.com/photo-1522383225653-ed111181a951?auto=format&fit=crop&w=400&q=80" alt="메구로강">
+            <div class="jk-spot-choice-body">
+              <div class="jk-spot-choice-main">
+                <span class="jk-spot-choice-tag">TOKYO</span>
+                <span class="jk-spot-choice-name">메구로강</span>
+                <p class="jk-spot-choice-desc">밤 라이트업이 예쁜 강변 벚꽃 터널</p>
+              </div>
+            </div>
+          </button>
+          <button class="jk-spot-choice" data-spot="tetsugaku">
+            <img class="jk-spot-choice-img" src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=400&q=80" alt="철학의 길">
+            <div class="jk-spot-choice-body">
+              <div class="jk-spot-choice-main">
+                <span class="jk-spot-choice-tag">KYOTO</span>
+                <span class="jk-spot-choice-name">철학의 길</span>
+                <p class="jk-spot-choice-desc">긴카쿠지~난젠지, 수로 옆 산책 벚꽃</p>
+              </div>
+            </div>
+          </button>
+          <button class="jk-spot-choice" data-spot="osaka">
+            <img class="jk-spot-choice-img" src="https://images.unsplash.com/photo-1589308078059-be1415eab4c3?auto=format&fit=crop&w=400&q=80" alt="오사카성">
+            <div class="jk-spot-choice-body">
+              <div class="jk-spot-choice-main">
+                <span class="jk-spot-choice-tag">OSAKA</span>
+                <span class="jk-spot-choice-name">오사카성 공원</span>
+                <p class="jk-spot-choice-desc">천수각 배경 3,000그루 벚꽃 장관</p>
+              </div>
+            </div>
+          </button>
+          <button class="jk-spot-choice" data-spot="hirosaki">
+            <img class="jk-spot-choice-img" src="https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?auto=format&fit=crop&w=400&q=80" alt="히로사키성">
+            <div class="jk-spot-choice-body">
+              <div class="jk-spot-choice-main">
+                <span class="jk-spot-choice-tag">AOMORI</span>
+                <span class="jk-spot-choice-name">히로사키성</span>
+                <p class="jk-spot-choice-desc">해자 위 '꽃뗏목'으로 유명한 명소</p>
+              </div>
+            </div>
+          </button>
+          <button class="jk-spot-choice" data-spot="maizuru">
+            <img class="jk-spot-choice-img" src="https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=400&q=80" alt="마이즈루 공원">
+            <div class="jk-spot-choice-body">
+              <div class="jk-spot-choice-main">
+                <span class="jk-spot-choice-tag">FUKUOKA</span>
+                <span class="jk-spot-choice-name">마이즈루 공원</span>
+                <p class="jk-spot-choice-desc">후쿠오카성터, 라멘 투어랑 함께 즐기기</p>
+              </div>
+            </div>
+          </button>
+        </div>
+        <div class="jk-spot-survey-result" id="jkSpotSurveyResult"></div>
+      </div>
+
+      <!-- 도시별 추천명소 카드 그리드 -->
+      <div class="jk-section-header jk-section-header--center jk-fade-in" style="margin-top: 48px;" id="spots">
+        <div class="jk-section-label">Recommended Spots</div>
+        <h2 class="jk-section-title jk-title-jp">도시별 추천 벚꽃 명소</h2>
+        <p class="jk-section-desc">각 도시의 대표 벚꽃 스팟과 JAPANKURU 기사를 확인하세요</p>
+      </div>
+      <div class="jk-spots-grid jk-fade-in" id="jkSpotsGrid">
+        <!-- JS에서 생성 -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 체크리스트 섹션 ===== -->
+  <section class="jk-section jk-checklist-section" id="checklist">
+    <div class="jk-container">
+      <div class="jk-section-header jk-section-header--center jk-fade-in">
+        <div class="jk-section-label">Checklist</div>
+        <h2 class="jk-section-title jk-title-jp">벚꽃 여행 준비 체크리스트</h2>
+        <p class="jk-section-desc">3~4월 일본 여행, 이것만은 꼭 챙기세요!</p>
+      </div>
+      
+      <div class="jk-checklist-box jk-fade-in">
+        <div class="jk-checklist-header">
+          <h3 class="jk-checklist-title">✅ 출발 전 체크</h3>
+          <p class="jk-checklist-sub">체크박스를 눌러 확인하세요</p>
+        </div>
+        
+        <div class="jk-checklist-group">
+          <div class="jk-checklist-item">
+            <div class="jk-checklist-check" onclick="this.classList.toggle('is-checked')"></div>
+            <div class="jk-checklist-content">
+              <div class="jk-checklist-label">✈️ 항공권·숙소 예약</div>
+              <p class="jk-checklist-desc">벚꽃 시즌은 3~6개월 전 예약 필수! 취소 가능 플랜 추천</p>
+            </div>
+          </div>
+          <div class="jk-checklist-item">
+            <div class="jk-checklist-check" onclick="this.classList.toggle('is-checked')"></div>
+            <div class="jk-checklist-content">
+              <div class="jk-checklist-label">🛡️ 여행자보험 가입</div>
+              <p class="jk-checklist-desc">일본 의료비 비싸요! 보험 필수</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="jk-checklist-divider">🌸 3~4월 일본, 이거 필수! 🌸</div>
+        
+        <div class="jk-checklist-group">
+          <div class="jk-checklist-item jk-checklist-item--highlight">
+            <div class="jk-checklist-check" onclick="this.classList.toggle('is-checked')"></div>
+            <div class="jk-checklist-content">
+              <div class="jk-checklist-label">😷 花粉症 대책</div>
+              <p class="jk-checklist-desc">3~4월은 삼나무 꽃가루 피크! 마스크·알레르기약 필수</p>
+              <a href="https://www.japankuru.com/kr/search?q=꽃가루+알레르기" class="jk-checklist-link" target="_blank" rel="noopener">
+                花粉症 대책 가이드 →
+              </a>
+            </div>
+          </div>
+          <div class="jk-checklist-item jk-checklist-item--highlight">
+            <div class="jk-checklist-check" onclick="this.classList.toggle('is-checked')"></div>
+            <div class="jk-checklist-content">
+              <div class="jk-checklist-label">☀️ UV케어</div>
+              <p class="jk-checklist-desc">봄볕 자외선 의외로 강함! 선크림 필수</p>
+              <a href="https://www.japankuru.com/kr/search?q=일본+뷰티" class="jk-checklist-link" target="_blank" rel="noopener">
+                일본 뷰티템 추천 →
+              </a>
+            </div>
+          </div>
+          <div class="jk-checklist-item">
+            <div class="jk-checklist-check" onclick="this.classList.toggle('is-checked')"></div>
+            <div class="jk-checklist-content">
+              <div class="jk-checklist-label">🩹 피로회복·상비약</div>
+              <p class="jk-checklist-desc">하루 2만보 걸음, 발 아파요! 파스·진통제·밴드 챙기기</p>
+              <a href="https://www.japankuru.com/kr/search?q=드럭스토어" class="jk-checklist-link" target="_blank" rel="noopener">
+                드럭스토어 가이드 →
+              </a>
+            </div>
+          </div>
+          <div class="jk-checklist-item">
+            <div class="jk-checklist-check" onclick="this.classList.toggle('is-checked')"></div>
+            <div class="jk-checklist-content">
+              <div class="jk-checklist-label">📱 보조배터리</div>
+              <p class="jk-checklist-desc">사진 많이 찍으면 배터리 순삭! 대용량 추천</p>
+            </div>
+          </div>
+          <div class="jk-checklist-item">
+            <div class="jk-checklist-check" onclick="this.classList.toggle('is-checked')"></div>
+            <div class="jk-checklist-content">
+              <div class="jk-checklist-label">🧥 겉옷 (바람막이)</div>
+              <p class="jk-checklist-desc">벚꽃 시즌 일교차 커요! 10~20도 오락가락</p>
+            </div>
+          </div>
+          <div class="jk-checklist-item">
+            <div class="jk-checklist-check" onclick="this.classList.toggle('is-checked')"></div>
+            <div class="jk-checklist-content">
+              <div class="jk-checklist-label">👟 편한 신발</div>
+              <p class="jk-checklist-desc">공원·산책로 많이 걸어요! 운동화 필수</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FAQ ===== -->
+  <section class="jk-section jk-section--cream">
+    <div class="jk-container">
+      <div class="jk-section-header jk-section-header--center jk-fade-in"><div class="jk-section-label">FAQ</div><h2 class="jk-section-title jk-title-jp">자주 묻는 질문</h2></div>
+      <div class="jk-faq-list jk-fade-in">
+        <div class="jk-faq-item"><div class="jk-faq-q">개화일이 지났는데 벚꽃 볼 수 있나요?</div><div class="jk-faq-a"><div class="jk-faq-a-inner">네! 개화부터 벚꽃눈까지 약 2주간 즐길 수 있어요.</div></div></div>
+        <div class="jk-faq-item"><div class="jk-faq-q">언제가 가장 예쁜가요?</div><div class="jk-faq-a"><div class="jk-faq-a-inner">만개 전후 1주일이 가장 예뻐요. 취향에 따라 벚꽃눈도 추천!</div></div></div>
+        <div class="jk-faq-item"><div class="jk-faq-q">숙소 예약은 언제?</div><div class="jk-faq-a"><div class="jk-faq-a-inner">도쿄·교토는 3~6개월 전 예약 추천. 취소 가능 플랜으로!<div class="jk-faq-tip"><span class="jk-faq-tip-label">💡 TIP</span> 벚꽃 시즌 호텔은 빨리 마감돼요. 취소 무료 플랜으로 미리 잡아두세요!</div></div></div></div>
+        <div class="jk-faq-item"><div class="jk-faq-q">인파를 피하려면?</div><div class="jk-faq-a"><div class="jk-faq-a-inner">4월 첫째 주 주말 피하고, 평일 아침 방문 or 동북 지방!<div class="jk-faq-tip"><span class="jk-faq-tip-label">💡 TIP</span> 히로사키·센다이는 도쿄보다 2~3주 늦어서 인파가 적어요</div></div></div></div>
+        <div class="jk-faq-item"><div class="jk-faq-q">花粉症(꽃가루 알레르기) 심한데요?</div><div class="jk-faq-a"><div class="jk-faq-a-inner">3~4월 일본은 삼나무 꽃가루 시즌! 마스크와 알레르기약 필수. 현지 드럭스토어에서도 쉽게 구매 가능해요.<div class="jk-faq-tip"><span class="jk-faq-tip-label">💡 TIP</span> 花粉症 걱정 없이 벚꽃 보고 싶다면? 5월 삿포로 추천!</div></div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 푸터 ===== -->
+  <footer class="jk-footer">
+    <p class="jk-footer-text">도움이 됐다면 친구에게도 공유해주세요</p>
+    <div class="jk-footer-btns">
+      <button type="button" class="jk-footer-btn" onclick="handleShare()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.59 13.51l6.83 3.98M15.41 6.51l-6.82 3.98"/></svg>공유</button>
+      <button type="button" class="jk-footer-btn" onclick="copyLink()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>링크 복사</button>
+    </div>
+    <div class="jk-footer-source">데이터: <a href="https://www.data.jma.go.jp/sakura/data/sakura_kaika.html" target="_blank">일본 기상청</a> 평년값 · © JAPANKURU</div>
+  </footer>
+
+  <!-- ===== 서베이 모달 ===== -->
+  <div class="jk-survey-modal-overlay" id="jkSurveyModal">
+    <div class="jk-survey-modal">
+      <div class="jk-survey-modal-header">
+        <img class="jk-survey-modal-img" id="jkModalImg" src="" alt="">
+        <button type="button" class="jk-survey-modal-close" id="jkModalClose">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+        <span class="jk-survey-modal-badge" id="jkModalBadge">🌸 투표 완료!</span>
+      </div>
+      <div class="jk-survey-modal-body">
+        <h3 class="jk-survey-modal-title" id="jkModalTitle">우에노 공원</h3>
+        <p class="jk-survey-modal-spot" id="jkModalSpot">도쿄 · 1,000그루+ 벚나무</p>
+        <div class="jk-survey-modal-dates" id="jkModalDates">
+          <span class="jk-survey-modal-date">🌸 開花 3/24</span>
+          <span class="jk-survey-modal-date">🌺 満開 3/31</span>
+        </div>
+        
+        <div class="jk-survey-modal-section">
+          <div class="jk-survey-modal-section-title">📍 추천 코스</div>
+          <div class="jk-survey-modal-course" id="jkModalCourse">
+            <!-- JS에서 생성 -->
+          </div>
+        </div>
+        
+        <div class="jk-survey-modal-highlight" id="jkModalHighlight">
+          💡 우에노 공원은 박물관·동물원도 함께! 하루 종일 즐기기 좋아요.
+        </div>
+        
+        <div class="jk-survey-modal-actions">
+          <a href="#" class="jk-survey-modal-btn jk-survey-modal-btn--primary" id="jkModalArticle" target="_blank">관련 기사 보기</a>
+          <button type="button" class="jk-survey-modal-btn" id="jkModalScrollTo">📍 Google 지도</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+  // ===== 도시 데이터 =====
+  const CITIES = [
+    { id: 'sapporo', name: '札幌', nameKr: '삿포로', lat: 43.06, lng: 141.35, bloom: '5/1', full: '5/6', fall: '5/10', snow: '5/13',
+      spot: '마루야마 공원', spotDesc: '홋카이도 대표 벚꽃 명소. 에조야마자쿠라 200그루가 만개하는 봄, 징기스칸과 함께 꽃놀이!',
+      spotImg: 'https://images.unsplash.com/photo-1513407030348-c983a97b98d8?auto=format&fit=crop&w=600&q=80',
+      article: 'https://www.japankuru.com/kr/search?q=삿포로+벚꽃',
+      editorPick: { name: '다루마 징기스칸', desc: '꽃놀이하며 먹는 양고기 바비큐! 현지인 맛집', link: 'https://www.japankuru.com/kr/search?q=삿포로+맛집' },
+      tip: '삿포로는 벚꽃 시즌이 5월이라 花粉症 걱정 없이 편하게 즐길 수 있어요!',
+      highlight: '🍖 징기스칸 + 벚꽃 = 홋카이도식 꽃놀이!',
+      course: ['마루야마 공원 벚꽃 산책', '다루마 징기스칸에서 점심', '오도리 공원 산책', '삿포로 맥주박물관'],
+      cardPos: { top: 15, right: 15 } },
+    { id: 'aomori', name: '青森', nameKr: '아오모리', lat: 40.82, lng: 140.74, bloom: '4/22', full: '4/28', fall: '5/2', snow: '5/5',
+      spot: '히로사키성', spotDesc: '2,600그루 벚꽃 + 해자 위 꽃뗏목. 일본 3대 벚꽃 명소 중 하나로 꼽히는 압도적 스케일.',
+      spotImg: 'https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?auto=format&fit=crop&w=600&q=80',
+      article: 'https://www.japankuru.com/kr/search?q=히로사키+벚꽃',
+      editorPick: { name: '히로사키 애플파이', desc: '사과의 고장 아오모리! 성 근처 카페에서 맛보세요', link: 'https://www.japankuru.com/kr/search?q=아오모리+애플파이' },
+      tip: '히로사키성 해자의 "꽃뗏목(花筏)"은 만개 후 3~4일 차에 가장 예뻐요!',
+      highlight: '🌊 해자 위 꽃뗏목(花筏) 명소!',
+      course: ['히로사키성 본관 관람', '해자 따라 한 바퀴', '애플파이 카페 휴식', '야간 라이트업'],
+      cardPos: { top: 80, right: 15 } },
+    { id: 'sendai', name: '仙台', nameKr: '센다이', lat: 38.27, lng: 140.87, bloom: '4/8', full: '4/14', fall: '4/18', snow: '4/21',
+      spot: '니시공원', spotDesc: '200그루+ 벚꽃, 센다이 현지인들의 꽃놀이 성지. 다테 마사무네 동상과 함께!',
+      spotImg: 'https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?auto=format&fit=crop&w=600&q=80',
+      article: 'https://www.japankuru.com/kr/search?q=센다이+벚꽃',
+      editorPick: { name: '규탕 맛집거리', desc: '센다이 명물 소혀 구이! 역 앞 규탕 거리 추천', link: 'https://www.japankuru.com/kr/search?q=센다이+규탕' },
+      tip: '센다이역에서 루프 버스 "るーぷる仙台"로 벚꽃 명소 순회 가능!',
+      highlight: '🚌 루프버스로 편하게 명소 순회!',
+      course: ['센다이역 루프버스 탑승', '니시공원 벚꽃', '즈이호덴(다테 영묘)', '규탕 거리 저녁'],
+      cardPos: { top: 145, right: 15 } },
+    { id: 'tokyo', name: '東京', nameKr: '도쿄', lat: 35.68, lng: 139.77, bloom: '3/24', full: '3/31', fall: '4/4', snow: '4/7',
+      spot: '우에노 공원', spotDesc: '1,000그루+ 벚나무, 도쿄 대표 꽃놀이 명소. 박물관·동물원과 함께 하루 종일 즐기기!',
+      spotImg: 'https://images.unsplash.com/photo-1490806843957-31f4c9a91c65?auto=format&fit=crop&w=600&q=80',
+      article: 'https://www.japankuru.com/kr/search?q=도쿄+벚꽃',
+      editorPick: { name: '사쿠라 테라스 카페', desc: '우에노 공원 뷰 테라스석! 벚꽃 보며 브런치', link: 'https://www.japankuru.com/kr/search?q=도쿄+카페' },
+      tip: '도쿄는 3월 말 花粉症 피크! 마스크·알레르기약 필수로 챙기세요',
+      highlight: '🏛️ 벚꽃 + 박물관 + 동물원 한번에!',
+      course: ['우에노 공원 벚꽃길', '도쿄 국립박물관', '아메요코 시장 간식', '시노바즈 연못 산책'],
+      cardPos: { top: 210, right: 15 } },
+    { id: 'kanazawa', name: '金沢', nameKr: '가나자와', lat: 36.56, lng: 136.66, bloom: '4/3', full: '4/9', fall: '4/13', snow: '4/16',
+      spot: '겐로쿠엔', spotDesc: '일본 3대 정원 + 벚꽃의 조화. 야간 라이트업 시 환상적인 분위기!',
+      spotImg: 'https://images.unsplash.com/photo-1528360983277-13d401cdc186?auto=format&fit=crop&w=600&q=80',
+      article: 'https://www.japankuru.com/kr/search?q=가나자와+벚꽃',
+      editorPick: { name: '히가시 차야거리', desc: '게이샤 거리에서 말차 디저트! 분위기 최고', link: 'https://www.japankuru.com/kr/search?q=가나자와+히가시차야' },
+      tip: '겐로쿠엔 야간 라이트업은 만개 시기에만! 사전에 일정 확인 필수',
+      highlight: '🌙 야간 라이트업이 환상적!',
+      course: ['겐로쿠엔 정원 산책', '가나자와성 공원', '히가시 차야거리 말차', '야간 라이트업'],
+      cardPos: { top: 160, left: 15 } },
+    { id: 'kyoto', name: '京都', nameKr: '교토', lat: 35.01, lng: 135.77, bloom: '3/26', full: '4/2', fall: '4/6', snow: '4/9',
+      spot: '철학의 길', spotDesc: '2km 수로변 벚꽃 산책로. 긴카쿠지~난젠지 코스로 교토의 봄을 만끽!',
+      spotImg: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=600&q=80',
+      article: 'https://www.japankuru.com/kr/search?q=교토+벚꽃',
+      editorPick: { name: '요지야 카페', desc: '철학의 길 끝! 정원 뷰 말차 라떼 인생샷', link: 'https://www.japankuru.com/kr/search?q=교토+카페' },
+      tip: '교토 벚꽃 시즌은 숙소 6개월 전 예약 필수! 취소 가능 플랜으로',
+      highlight: '🚶 2km 수로변 산책로 = 교토 최고 코스',
+      course: ['긴카쿠지(은각사) 출발', '철학의 길 2km 산책', '요지야 카페 휴식', '난젠지 경내 관람'],
+      cardPos: { top: 225, left: 15 } },
+    { id: 'osaka', name: '大阪', nameKr: '오사카', lat: 34.69, lng: 135.50, bloom: '3/27', full: '4/3', fall: '4/7', snow: '4/10',
+      spot: '오사카성 공원', spotDesc: '천수각 배경 3,000그루 벚꽃 장관. 서문 광장 야경이 특히 아름다워요!',
+      spotImg: 'https://images.unsplash.com/photo-1589308078059-be1415eab4c3?auto=format&fit=crop&w=600&q=80',
+      article: 'https://www.japankuru.com/kr/search?q=오사카+벚꽃',
+      editorPick: { name: '도톤보리 타코야키', desc: '벚꽃 보고 타코야키! 쿠쿠루 vs 오오타코 대결', link: 'https://www.japankuru.com/kr/search?q=오사카+타코야키' },
+      tip: '오사카성 서문 광장 야간 벚꽃이 가장 예뻐요! 해질녘 방문 추천',
+      highlight: '🏯 천수각 배경 야경이 최고!',
+      course: ['오사카성 천수각 관람', '서문 광장 벚꽃', '도톤보리 타코야키', '신세카이 저녁'],
+      cardPos: { top: 290, left: 15 } },
+    { id: 'hiroshima', name: '広島', nameKr: '히로시마', lat: 34.39, lng: 132.46, bloom: '3/25', full: '4/1', fall: '4/5', snow: '4/8',
+      spot: '평화기념공원', spotDesc: '역사와 벚꽃이 어우러진 특별한 명소. 오타강변 300그루 벚꽃 산책.',
+      spotImg: 'https://images.unsplash.com/photo-1576675784201-0e142b423952?auto=format&fit=crop&w=600&q=80',
+      article: 'https://www.japankuru.com/kr/search?q=히로시마+벚꽃',
+      editorPick: { name: '오코노미무라', desc: '히로시마식 오코노미야키 빌딩! 현지인 추천 맛집', link: 'https://www.japankuru.com/kr/search?q=히로시마+오코노미야키' },
+      tip: '히로시마에서 미야지마 당일치기! 벚꽃+사슴+모미지만쥬 3콤보',
+      highlight: '🕊️ 역사와 벚꽃이 어우러진 특별한 곳',
+      course: ['평화기념공원 산책', '원폭돔 관람', '오코노미무라 점심', '미야지마 당일치기'],
+      cardPos: { top: 355, left: 15 } },
+    { id: 'fukuoka', name: '福岡', nameKr: '후쿠오카', lat: 33.59, lng: 130.40, bloom: '3/22', full: '3/29', fall: '4/2', snow: '4/5',
+      spot: '마이즈루 공원', spotDesc: '후쿠오카성터 1,000그루 벚꽃. 하카타 라멘 투어와 함께 즐기는 꽃놀이!',
+      spotImg: 'https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=600&q=80',
+      article: 'https://www.japankuru.com/kr/search?q=후쿠오카+벚꽃',
+      editorPick: { name: '이치란 본점', desc: '본고장 하카타 라멘! 이치란 1호점 방문 인증', link: 'https://www.japankuru.com/kr/search?q=후쿠오카+라멘' },
+      tip: '후쿠오카는 일본에서 가장 빨리 개화! 3월 하순이 베스트',
+      highlight: '🍜 일본 최초 개화 + 하카타 라멘!',
+      course: ['마이즈루 공원 벚꽃', '후쿠오카성 터 산책', '이치란 본점 라멘', '나카스 야타이 투어'],
+      cardPos: { top: 420, left: 15 } },
+    { id: 'kagoshima', name: '鹿児島', nameKr: '가고시마', lat: 31.60, lng: 130.56, bloom: '3/26', full: '4/2', fall: '4/6', snow: '4/9',
+      spot: '시로야마 공원', spotDesc: '사쿠라지마 화산 뷰 + 벚꽃. 가고시마만의 이색적인 풍경!',
+      spotImg: 'https://images.unsplash.com/photo-1528164344705-47542687000d?auto=format&fit=crop&w=600&q=80',
+      article: 'https://www.japankuru.com/kr/search?q=가고시마+벚꽃',
+      editorPick: { name: '시로쿠마 빙수', desc: '가고시마 명물 백곰 빙수! 텐몬칸 무쟈키 본점', link: 'https://www.japankuru.com/kr/search?q=가고시마+시로쿠마' },
+      tip: '활화산 사쿠라지마 뷰 + 벚꽃 조합은 가고시마에서만 가능!',
+      highlight: '🌋 활화산 뷰 + 벚꽃 = 유일무이!',
+      course: ['시로야마 전망대', '사쿠라지마 페리', '시로쿠마 빙수', '텐몬칸 거리 쇼핑'],
+      cardPos: { top: 485, left: 15 } }
+  ];
+
+  // ===== 히어로 슬라이더 =====
+  const slides = document.querySelectorAll('.jk-hero-slide'), dots = document.querySelectorAll('.jk-hero-dot');
+  let cur = 0, interval;
+  function show(i) { slides.forEach((s,idx) => s.classList.toggle('is-active',idx===i)); dots.forEach((d,idx) => d.classList.toggle('is-active',idx===i)); cur = i; }
+  function next() { show((cur+1)%slides.length); }
+  function start() { interval = setInterval(next, 6000); }
+  dots.forEach(d => d.addEventListener('click', function() { clearInterval(interval); show(+this.dataset.index); start(); }));
+  if (slides.length > 1) start();
+
+  // ===== 현재 날짜 기준 벚꽃 상태 계산 =====
+  function getCurrentStatus(city) {
+    const now = new Date();
+    const year = now.getMonth() < 6 ? now.getFullYear() : now.getFullYear() + 1;
     
-    <script>
-    (function() {
-      // FAQ 아코디언
-      document.querySelectorAll(".jk-sakura2026-faq-item").forEach(function(item) {
-        var q = item.querySelector(".jk-sakura2026-faq-q");
-        q.addEventListener("click", function() {
-          var isOpen = item.classList.contains("is-open");
-          document.querySelectorAll(".jk-sakura2026-faq-item").forEach(function(i) { i.classList.remove("is-open"); });
-          if (!isOpen) item.classList.add("is-open");
-        });
+    const bloom = parseDate2026(city.bloom, year);
+    const full = parseDate2026(city.full, year);
+    const fall = parseDate2026(city.fall, year);
+    const snow = parseDate2026(city.snow, year);
+    
+    // 시즌 끝난 후 (다음 해 기준으로 계산)
+    if (now > snow) {
+      const nextBloom = parseDate2026(city.bloom, year + 1);
+      const daysUntil = Math.ceil((nextBloom - now) / (1000*60*60*24));
+      return { status: 'waiting', current: 'bloom', daysUntil, label: `開花まで`, sublabel: `D-${daysUntil}` };
+    }
+    
+    // 아직 개화 전
+    if (now < bloom) {
+      const daysUntil = Math.ceil((bloom - now) / (1000*60*60*24));
+      return { status: 'waiting', current: 'bloom', daysUntil, label: `開花まで`, sublabel: `D-${daysUntil}` };
+    }
+    
+    // 개화 ~ 만개 전
+    if (now >= bloom && now < full) {
+      return { status: 'active', current: 'bloom', label: '🌸 開花中!', sublabel: '' };
+    }
+    
+    // 만개 ~ 지기 시작 전
+    if (now >= full && now < fall) {
+      return { status: 'active', current: 'full', label: '🌺 満開!', sublabel: '見頃' };
+    }
+    
+    // 지기 시작 ~ 벚꽃눈 전
+    if (now >= fall && now < snow) {
+      return { status: 'active', current: 'fall', label: '🍃 散り始め', sublabel: '' };
+    }
+    
+    // 벚꽃눈 (마지막 단계)
+    return { status: 'ending', current: 'snow', label: '💨 桜吹雪', sublabel: 'ラスト!' };
+  }
+  
+  // 레거시 호환
+  function getNearestDateKey(city) {
+    return getCurrentStatus(city).current;
+  }
+  
+  function parseDate2026(str, year = 2026) {
+    const [m, d] = str.split('/').map(Number);
+    return new Date(year, m - 1, d);
+  }
+
+  // ===== 결과 카드 닫기 =====
+  document.getElementById('jkResultClose').addEventListener('click', function() {
+    document.getElementById('jkResultCard').classList.remove('is-visible');
+  });
+
+  // ===== Leaflet 지도 + 사이드바 연동 =====
+  const mapEl = document.getElementById('jk-sakura-map');
+  let map;
+  if (mapEl && typeof L !== 'undefined') {
+    map = L.map('jk-sakura-map', {
+      scrollWheelZoom: false,
+      zoomControl: true,
+      attributionControl: false
+    });
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { maxZoom: 18 }).addTo(map);
+    map.fitBounds([[30, 128], [46, 146]]);
+
+    // 마커 저장
+    window.jkMarkers = {};
+    const markers = window.jkMarkers;
+    let activeCity = null;
+    
+    // 개화 순서대로 정렬
+    const CITIES_BY_BLOOM = [...CITIES].sort((a, b) => parseDate2026(a.bloom) - parseDate2026(b.bloom));
+    
+    // 마커 아이콘
+    const defaultIcon = L.divIcon({
+      className: '',
+      html: '<div style="width:12px;height:12px;background:#d4607a;border:2px solid #fff;border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,0.3);transition:all 0.2s;"></div>',
+      iconSize: [12, 12], iconAnchor: [6, 6]
+    });
+    const activeIcon = L.divIcon({
+      className: '',
+      html: '<div style="width:16px;height:16px;background:#d4607a;border:3px solid #fff;border-radius:50%;box-shadow:0 4px 12px rgba(212,96,122,0.4);"></div>',
+      iconSize: [16, 16], iconAnchor: [8, 8]
+    });
+
+    // 마커 생성
+    CITIES.forEach(c => {
+      markers[c.id] = L.marker([c.lat, c.lng], { icon: defaultIcon }).addTo(map);
+      markers[c.id].on('click', () => selectCity(c.id));
+    });
+
+    // PC 사이드바 리스트 생성
+    const sidebarList = document.getElementById('jkMapSidebarList');
+    if (sidebarList) {
+      CITIES_BY_BLOOM.forEach((c, i) => {
+        const status = getCurrentStatus(c);
+        const item = document.createElement('button');
+        item.className = 'jk-map-sidebar-item';
+        item.dataset.city = c.id;
+        item.innerHTML = `
+          <div class="jk-map-sidebar-num">${i + 1}</div>
+          <div class="jk-map-sidebar-info">
+            <div class="jk-map-sidebar-name">${c.name} ${c.nameKr}</div>
+            <div class="jk-map-sidebar-date">🌸 ${c.bloom} → 🌺 ${c.full}</div>
+          </div>
+          <div class="jk-map-sidebar-status">${status.sublabel || status.label}</div>
+        `;
+        item.addEventListener('click', () => selectCity(c.id));
+        sidebarList.appendChild(item);
       });
+    }
+
+    // 도시 선택 함수
+    function selectCity(cityId) {
+      const city = CITIES.find(c => c.id === cityId);
+      if (!city) return;
+      
+      // 사이드바 활성화
+      document.querySelectorAll('.jk-map-sidebar-item').forEach(item => {
+        item.classList.toggle('is-active', item.dataset.city === cityId);
+      });
+      
+      // 마커 아이콘 변경
+      Object.keys(markers).forEach(id => {
+        markers[id].setIcon(id === cityId ? activeIcon : defaultIcon);
+      });
+      
+      // 지도 이동
+      map.flyTo([city.lat, city.lng], 7, { duration: 0.6 });
+      
+      // PC 상세 카드 업데이트
+      const status = getCurrentStatus(city);
+      const nearestKey = status.current;
+      
+      document.getElementById('jkDetailName').textContent = city.name;
+      document.getElementById('jkDetailNameKr').textContent = city.nameKr;
+      document.getElementById('jkDetailStatus').textContent = status.sublabel || status.label;
+      document.getElementById('jkDetailHighlight').textContent = city.highlight || city.tip;
+      
+      document.getElementById('jkDetailDates').innerHTML = `
+        <div class="jk-map-detail-date ${nearestKey === 'bloom' ? 'is-current' : ''}">
+          <span>🌸</span>
+          <div>
+            <div class="jk-map-detail-date-label">開花</div>
+            <div class="jk-map-detail-date-value">${city.bloom}</div>
+          </div>
+        </div>
+        <div class="jk-map-detail-date ${nearestKey === 'full' ? 'is-current' : ''}">
+          <span>🌺</span>
+          <div>
+            <div class="jk-map-detail-date-label">満開</div>
+            <div class="jk-map-detail-date-value">${city.full}</div>
+          </div>
+        </div>
+        <div class="jk-map-detail-date ${nearestKey === 'fall' ? 'is-current' : ''}">
+          <span>🍃</span>
+          <div>
+            <div class="jk-map-detail-date-label">散り始め</div>
+            <div class="jk-map-detail-date-value">${city.fall}</div>
+          </div>
+        </div>
+        <div class="jk-map-detail-date ${nearestKey === 'snow' ? 'is-current' : ''}">
+          <span>💨</span>
+          <div>
+            <div class="jk-map-detail-date-label">桜吹雪</div>
+            <div class="jk-map-detail-date-value">~${city.snow}</div>
+          </div>
+        </div>
+      `;
+      
+      document.getElementById('jkMapDetailCard').classList.add('is-visible');
+      activeCity = cityId;
+    }
+
+    // 첫 번째 도시 자동 선택 (PC)
+    if (window.innerWidth >= 768) {
+      setTimeout(() => selectCity(CITIES_BY_BLOOM[0].id), 300);
+    }
+  }
+
+  // ===== 모바일 슬라이더 =====
+  const mobileSlider = document.getElementById('jkMapMobileSlider');
+  const dotsContainer = document.getElementById('jkMapMobileSliderDots');
+  const mobileSliderCards = {};
+  const sliderDots = {};
+  let currentMobileCity = null;
+  
+  // 개화 순서대로 정렬 (남→북, 빠른 순) - 전역 사용
+  const CITIES_SORTED = [...CITIES].sort((a, b) => parseDate2026(a.bloom) - parseDate2026(b.bloom));
+  
+  if (mobileSlider) {
+    CITIES_SORTED.forEach((c, index) => {
+      const status = getCurrentStatus(c);
+      const nearestKey = status.current;
+      const card = document.createElement('div');
+      card.className = 'jk-map-mobile-card' + (index === 0 ? ' is-active' : '');
+      card.dataset.city = c.id;
+      card.innerHTML = `
+        <div class="jk-map-mobile-card-header">
+          <span class="jk-map-mobile-card-name">${c.name}</span>
+          <span class="jk-map-mobile-card-name-kr">${c.nameKr}</span>
+        </div>
+        <div class="jk-map-mobile-card-status ${status.status}">${status.label}${status.sublabel ? ' <small>' + status.sublabel + '</small>' : ''}</div>
+        <div class="jk-map-mobile-card-dates">
+          <div class="jk-map-mobile-card-row ${nearestKey === 'bloom' ? 'is-nearest' : ''}"><span class="icon">🌸</span>開花<span>${c.bloom}</span></div>
+          <div class="jk-map-mobile-card-row ${nearestKey === 'full' ? 'is-nearest' : ''}"><span class="icon">🌺</span>満開<span>${c.full}</span></div>
+          <div class="jk-map-mobile-card-row ${nearestKey === 'fall' ? 'is-nearest' : ''}"><span class="icon">🍃</span>散り始め<span>${c.fall}</span></div>
+          <div class="jk-map-mobile-card-row ${nearestKey === 'snow' ? 'is-nearest' : ''}"><span class="icon">💨</span>桜吹雪<span>~${c.snow}</span></div>
+        </div>
+        ${c.highlight ? `<div class="jk-map-mobile-card-highlight">${c.highlight}</div>` : ''}
+        <button class="jk-map-mobile-card-btn" data-city="${c.id}">상세 보기 →</button>
+      `;
+      mobileSlider.appendChild(card);
+      mobileSliderCards[c.id] = card;
+      
+      // 인디케이터 점 생성
+      if (dotsContainer) {
+        const dot = document.createElement('div');
+        dot.className = 'jk-map-mobile-slider-dot' + (index === 0 ? ' is-active' : '');
+        dot.dataset.city = c.id;
+        dot.addEventListener('click', () => {
+          mobileSliderCards[c.id].scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
+        });
+        dotsContainer.appendChild(dot);
+        sliderDots[c.id] = dot;
+      }
+    });
+  }
+  
+  // 슬라이더 스크롤 → 지도 이동 (Intersection Observer)
+  // 초기 로드 시에는 비활성화, 1.5초 후 활성화
+  let sliderObserverEnabled = false;
+  setTimeout(() => { sliderObserverEnabled = true; }, 1500);
+  
+  if (map && mobileSlider && 'IntersectionObserver' in window) {
+    const sliderObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && entry.intersectionRatio > 0.6) {
+          const cityId = entry.target.dataset.city;
+          const city = CITIES.find(c => c.id === cityId);
+          
+          // 인디케이터 점 업데이트 (항상)
+          Object.values(sliderDots).forEach(d => d.classList.remove('is-active'));
+          if (sliderDots[cityId]) sliderDots[cityId].classList.add('is-active');
+          
+          // 지도 이동 (초기 로드 후에만)
+          if (sliderObserverEnabled && city && cityId !== currentMobileCity) {
+            currentMobileCity = cityId;
+            map.flyTo([city.lat, city.lng], 7, { duration: 0.5 });
+            Object.values(mobileSliderCards).forEach(c => c.classList.remove('is-active'));
+            mobileSliderCards[cityId].classList.add('is-active');
+          }
+        }
+      });
+    }, { 
+      root: mobileSlider, 
+      threshold: 0.6 
+    });
     
-      // 뷰 토글 초기화
-      function initViewToggle() {
-        var isMobile = window.innerWidth < 768;
-        var listBtn = document.querySelector('[data-view="list"]');
-        var mapBtn = document.querySelector('[data-view="map"]');
-        if (isMobile) {
-          listBtn && listBtn.classList.add('is-active');
-          mapBtn && mapBtn.classList.remove('is-active');
+    Object.values(mobileSliderCards).forEach(card => sliderObserver.observe(card));
+  }
+  
+  // 마커 클릭 → 슬라이더 해당 카드로 스크롤 (모바일)
+  if (map && window.jkMarkers) {
+    CITIES.forEach(c => {
+      if (window.jkMarkers[c.id]) {
+        window.jkMarkers[c.id].on('click', () => {
+          if (window.innerWidth < 768 && mobileSliderCards[c.id]) {
+            mobileSliderCards[c.id].scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
+          }
+        });
+      }
+    });
+  }
+  
+  // 상세 보기 버튼 클릭
+  if (mobileSlider) {
+    mobileSlider.addEventListener('click', (e) => {
+      if (e.target.classList.contains('jk-map-mobile-card-btn')) {
+        const cityId = e.target.dataset.city;
+        const spotCard = document.querySelector(`.jk-spot-card[data-city="${cityId}"]`);
+        if (spotCard) {
+          spotCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          spotCard.style.animation = 'jkPulse 0.5s ease';
+          setTimeout(() => spotCard.style.animation = '', 500);
         }
       }
-      initViewToggle();
-      window.addEventListener('resize', initViewToggle);
-    })();
-    
-    function toggleView(view) {
-      var mapView = document.getElementById('mapView');
-      var listView = document.getElementById('listView');
-      var listBtn = document.querySelector('[data-view="list"]');
-      var mapBtn = document.querySelector('[data-view="map"]');
-      
-      if (view === 'map') {
-        mapView.classList.add('is-active');
-        mapView.classList.remove('is-hidden');
-        listView.classList.remove('is-active');
-        listView.classList.add('is-hidden');
-        mapBtn.classList.add('is-active');
-        listBtn.classList.remove('is-active');
-      } else {
-        listView.classList.add('is-active');
-        listView.classList.remove('is-hidden');
-        mapView.classList.remove('is-active');
-        mapView.classList.add('is-hidden');
-        listBtn.classList.add('is-active');
-        mapBtn.classList.remove('is-active');
-      }
-    }
-    
-    function handleNativeShare() {
-      if (navigator.share) {
-        navigator.share({
-          title: '2026 일본 벚꽃 4단계 타임라인 🌸',
-          text: '개화부터 벚꽃눈까지! 날짜별 벚꽃 일정 한눈에 보기',
-          url: window.location.href
-        }).catch(function(err) { console.log('Share cancelled:', err); });
-      } else {
-        copyLink();
-      }
-    }
-    
-    function shareToX() {
-      var text = encodeURIComponent('2026 일본 벚꽃 4단계 타임라인 🌸 개화부터 벚꽃눈까지 약 2주간!');
-      var url = encodeURIComponent(window.location.href);
-      window.open('https://twitter.com/intent/tweet?text=' + text + '&url=' + url, '_blank');
-    }
-    
-    function shareToFacebook() {
-      var url = encodeURIComponent(window.location.href);
-      window.open('https://www.facebook.com/sharer/sharer.php?u=' + url, '_blank');
-    }
-    
-    function copyLink() {
-      navigator.clipboard.writeText(window.location.href).then(function() {
-        alert('링크가 복사되었습니다! 📋');
-      }).catch(function() {
-        prompt('아래 링크를 복사하세요:', window.location.href);
+    });
+  }
+
+  // 레거시 모바일 카드 (숨김 상태) - 사용 안 함
+  const mobileCards = document.getElementById('jkMapMobileCards');
+  if (mobileCards) {
+    CITIES.forEach(c => {
+      const nearestKey = getNearestDateKey(c);
+      const card = document.createElement('div');
+      card.className = 'jk-map-mobile-card';
+      card.dataset.city = c.id;
+      card.style.cursor = 'pointer';
+      card.innerHTML = `
+        <div class="jk-map-mobile-card-name">${c.name}</div>
+        <div class="jk-map-mobile-card-row ${nearestKey === 'bloom' ? 'is-nearest' : ''}"><span class="icon">🌸</span>開花<span>${c.bloom}</span></div>
+        <div class="jk-map-mobile-card-row ${nearestKey === 'full' ? 'is-nearest' : ''}"><span class="icon">🌺</span>満開<span>${c.full}</span></div>
+        <div class="jk-map-mobile-card-row ${nearestKey === 'fall' ? 'is-nearest' : ''}"><span class="icon">🍃</span>散り始め<span>${c.fall}</span></div>
+        ${c.highlight ? `<div style="font-size:0.65rem;color:#d4607a;margin-top:4px;padding-top:4px;border-top:1px dashed #e8e4e0;">${c.highlight}</div>` : ''}
+      `;
+      card.addEventListener('click', () => {
+        const spotCard = document.querySelector(`.jk-spot-card[data-city="${c.id}"]`);
+        if (spotCard) {
+          spotCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
       });
+      mobileCards.appendChild(card);
+    });
+  }
+
+  // ===== 추천명소 카드 그리드 =====
+  const spotsGrid = document.getElementById('jkSpotsGrid');
+  if (spotsGrid) {
+    CITIES.forEach(c => {
+      const card = document.createElement('div');
+      card.className = 'jk-spot-card';
+      card.dataset.city = c.id;
+      card.innerHTML = `
+        <div class="jk-spot-card-img">
+          <img src="${c.spotImg}" alt="${c.spot}" loading="lazy">
+          <span class="jk-spot-card-tag">${c.nameKr}</span>
+        </div>
+        <div class="jk-spot-card-body">
+          <h4 class="jk-spot-card-name">${c.spot}</h4>
+          <p class="jk-spot-card-desc">${c.spotDesc}</p>
+          <a href="${c.article}" class="jk-spot-card-link" target="_blank" rel="noopener">
+            관련 기사 보기
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
+          </a>
+          ${c.editorPick ? `
+          <div class="jk-spot-card-editor">
+            <div class="jk-spot-card-editor-label">에디터 픽</div>
+            <div class="jk-spot-card-editor-name">${c.editorPick.name}</div>
+            <div class="jk-spot-card-editor-desc">${c.editorPick.desc}</div>
+            <a href="${c.editorPick.link}" class="jk-spot-card-editor-link" target="_blank" rel="noopener">자세히 →</a>
+          </div>
+          ` : ''}
+        </div>
+      `;
+      spotsGrid.appendChild(card);
+    });
+  }
+
+  // ===== 날짜 → 결과 =====
+  function parseDate(str, year=2026) { const [m,d] = str.split('/').map(Number); return new Date(year, m-1, d); }
+  document.getElementById('jkDateSubmit').addEventListener('click', function() {
+    const sv = document.getElementById('jkTravelStart').value, ev = document.getElementById('jkTravelEnd').value;
+    if (!sv || !ev) { alert('날짜를 선택해주세요'); return; }
+    const start = new Date(sv), end = new Date(ev);
+    let best = null, bestScore = -1, bestStage = '';
+    CITIES.forEach(c => {
+      const bloom = parseDate(c.bloom), full = parseDate(c.full), fall = parseDate(c.fall), snow = parseDate(c.snow);
+      const os = new Date(Math.max(start, bloom)), oe = new Date(Math.min(end, snow)), overlap = (oe - os) / 864e5;
+      if (overlap > 0) {
+        const mid = new Date((start.getTime() + end.getTime()) / 2), dist = Math.abs(mid - full) / 864e5;
+        const score = overlap * 10 - dist;
+        if (score > bestScore) { bestScore = score; best = c; bestStage = mid < bloom ? 'before' : mid < full ? 'bloom' : mid < fall ? 'full' : mid < snow ? 'fall' : 'snow'; }
+      }
+    });
+    if (!best) { alert('해당 기간에 벚꽃을 볼 수 있는 도시가 없어요!'); return; }
+    const info = { before: { icon: '🌱', badge: 'COMING SOON', status: '아직 봉오리!' }, bloom: { icon: '🌸', badge: 'BLOOMING', status: '개화 중!' }, full: { icon: '🌺', badge: 'BEST MATCH', status: '만개! 베스트 타이밍' }, fall: { icon: '🍃', badge: 'FALLING', status: '지기 시작!' }, snow: { icon: '💨', badge: 'FUBUKI', status: '벚꽃눈!' } }[bestStage];
+    document.getElementById('jkResultImg').src = best.spotImg;
+    document.getElementById('jkResultIcon').textContent = info.icon;
+    document.getElementById('jkResultBadge').textContent = info.badge;
+    document.getElementById('jkResultCity').textContent = best.nameKr;
+    document.getElementById('jkResultStatus').textContent = info.status;
+    document.getElementById('jkResultDates').innerHTML = `<div class="jk-result-date-item ${bestStage==='bloom'?'is-match':''}">開花 ${best.bloom}</div><div class="jk-result-date-item ${bestStage==='full'?'is-match':''}">満開 ${best.full}</div><div class="jk-result-date-item ${bestStage==='fall'?'is-match':''}">散り始め ${best.fall}</div><div class="jk-result-date-item ${bestStage==='snow'?'is-match':''}">桜吹雪 ~${best.snow}</div>`;
+    document.getElementById('jkResultSpotName').textContent = best.spot;
+    document.getElementById('jkResultSpotDesc').textContent = best.spotDesc;
+    document.getElementById('jkResultArticle').href = best.article;
+    // 꿀팁 표시
+    if (best.tip) {
+      document.getElementById('jkResultCityName2').textContent = best.nameKr;
+      document.getElementById('jkResultTipText').textContent = best.tip;
+      document.getElementById('jkResultTip').style.display = 'block';
+    } else {
+      document.getElementById('jkResultTip').style.display = 'none';
     }
-    </script>
+    document.getElementById('jkResultCard').classList.add('is-visible');
+    document.getElementById('jkResultCard').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
+
+  document.getElementById('jkSaveImage').addEventListener('click', async function() {
+    try { const canvas = await html2canvas(document.getElementById('jkResultCard'), { backgroundColor: '#fff', scale: 2 }); const link = document.createElement('a'); link.download = 'sakura-2026.png'; link.href = canvas.toDataURL('image/png'); link.click(); } catch { alert('스크린샷을 이용해주세요!'); }
+  });
+  document.getElementById('jkShareResult').addEventListener('click', handleShare);
+
+  // ===== Q1 앙케이트 =====
+  const STORAGE_KEY = 'jkSakura2026SpotVotes', spotButtons = document.querySelectorAll('.jk-spot-choice'), surveyResult = document.getElementById('jkSpotSurveyResult');
+  const spotLabels = { ueno: '우에노 공원', meguro: '메구로강', tetsugaku: '철학의 길', osaka: '오사카성 공원', hirosaki: '히로사키성', maizuru: '마이즈루 공원' };
+  const spotToCityId = { ueno: 'tokyo', meguro: 'tokyo', tetsugaku: 'kyoto', osaka: 'osaka', hirosaki: 'aomori', maizuru: 'fukuoka' };
+  const spotTips = {
+    ueno: '우에노 공원은 박물관·동물원도 함께! 도쿄 국립박물관 앞 벚꽃길이 특히 예뻐요',
+    meguro: '메구로강은 나카메구로역 하차! 밤 벚꽃 보고 주변 카페거리 산책 추천',
+    tetsugaku: '철학의 길은 긴카쿠지~난젠지 코스로! 끝나고 요지야 카페에서 말차 한잔',
+    osaka: '오사카성은 서문 광장 야경이 최고! 해질녘 방문하면 라이트업까지 볼 수 있어요',
+    hirosaki: '히로사키성은 "꽃뗏목(花筏)" 보려면 만개 후 3~4일 차에 방문하세요',
+    maizuru: '마이즈루 공원 보고 근처 이치란 본점에서 하카타 라멘 어때요?'
+  };
+  function loadVotes() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch { return {}; } }
+  function saveVotes(v) { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(v)); } catch {} }
+  function renderSurveyResult(mySpot) {
+    const votes = loadVotes(), total = Object.values(votes).reduce((s,v) => s+v, 0) || 0;
+    if (!total) { surveyResult.innerHTML = '<p class="jk-spot-survey-result-title">첫 번째 투표자가 되어주세요 🌸</p>'; return; }
+    let html = '<p class="jk-spot-survey-result-title">지금까지 이 페이지에서의 인기 순위</p><div class="jk-spot-bars">';
+    const sorted = Object.entries(spotLabels).sort((a,b) => (votes[b[0]]||0) - (votes[a[0]]||0));
+    sorted.forEach(([key, label]) => { const pct = Math.round(((votes[key]||0)/total)*100); html += `<div class="jk-spot-bar ${key===mySpot?'is-mine':''}"><span class="jk-spot-bar-name">${label}</span><div class="jk-spot-bar-track"><div class="jk-spot-bar-fill" style="width:${pct}%;"></div></div><span class="jk-spot-bar-value">${pct}%</span></div>`; });
+    html += '</div>';
+    // 1위 꿀팁
+    const topKey = sorted[0][0];
+    if (spotTips[topKey]) {
+      html += `<div class="jk-survey-top-tip"><div class="jk-survey-top-tip-label">💡 1위 ${spotLabels[topKey]} 꿀팁</div>${spotTips[topKey]}</div>`;
+    }
+    surveyResult.innerHTML = html;
+  }
+  
+  // 구글 지도 링크
+  const spotToGoogleMap = {
+    ueno: 'https://maps.google.com/?q=Ueno+Park,Tokyo,Japan',
+    meguro: 'https://maps.google.com/?q=Meguro+River,Nakameguro,Tokyo,Japan',
+    tetsugaku: 'https://maps.google.com/?q=Philosopher%27s+Path,Kyoto,Japan',
+    osaka: 'https://maps.google.com/?q=Osaka+Castle+Park,Japan',
+    hirosaki: 'https://maps.google.com/?q=Hirosaki+Castle,Aomori,Japan',
+    maizuru: 'https://maps.google.com/?q=Maizuru+Park,Fukuoka,Japan'
+  };
+  
+  // 서베이 모달 열기
+  function openSurveyModal(spotKey) {
+    const cityId = spotToCityId[spotKey];
+    const city = CITIES.find(c => c.id === cityId);
+    if (!city) return;
+    
+    const modal = document.getElementById('jkSurveyModal');
+    document.getElementById('jkModalImg').src = city.spotImg;
+    document.getElementById('jkModalTitle').textContent = spotLabels[spotKey];
+    document.getElementById('jkModalSpot').textContent = `${city.nameKr} · ${city.spotDesc.split('.')[0]}`;
+    document.getElementById('jkModalDates').innerHTML = `
+      <span class="jk-survey-modal-date">🌸 開花 ${city.bloom}</span>
+      <span class="jk-survey-modal-date">🌺 満開 ${city.full}</span>
+      <span class="jk-survey-modal-date">🍃 散り始め ${city.fall}</span>
+    `;
+    
+    // 코스 추천
+    if (city.course) {
+      document.getElementById('jkModalCourse').innerHTML = city.course.map((item, i) => 
+        `<div class="jk-survey-modal-course-item"><span class="jk-survey-modal-course-num">${i+1}</span><span class="jk-survey-modal-course-text">${item}</span></div>`
+      ).join('');
+    }
+    
+    // 하이라이트 팁
+    document.getElementById('jkModalHighlight').innerHTML = `💡 ${spotTips[spotKey] || city.tip}`;
+    document.getElementById('jkModalArticle').href = city.article;
+    
+    // 구글 지도에서 보기 버튼
+    document.getElementById('jkModalScrollTo').onclick = () => {
+      window.open(spotToGoogleMap[spotKey], '_blank');
+    };
+    
+    modal.classList.add('is-visible');
+    document.body.style.overflow = 'hidden';
+  }
+  
+  // 모달 닫기
+  document.getElementById('jkModalClose').addEventListener('click', () => {
+    document.getElementById('jkSurveyModal').classList.remove('is-visible');
+    document.body.style.overflow = '';
+  });
+  document.getElementById('jkSurveyModal').addEventListener('click', (e) => {
+    if (e.target.id === 'jkSurveyModal') {
+      document.getElementById('jkSurveyModal').classList.remove('is-visible');
+      document.body.style.overflow = '';
+    }
+  });
+  
+  const prevChoice = sessionStorage.getItem('jkSakura2026SpotMyChoice');
+  spotButtons.forEach(btn => { if (btn.dataset.spot === prevChoice) btn.classList.add('is-selected'); });
+  renderSurveyResult(prevChoice);
+  spotButtons.forEach(btn => { 
+    btn.addEventListener('click', () => { 
+      spotButtons.forEach(b => b.classList.remove('is-selected')); 
+      btn.classList.add('is-selected'); 
+      const votes = loadVotes(); 
+      votes[btn.dataset.spot] = (votes[btn.dataset.spot]||0)+1; 
+      saveVotes(votes); 
+      sessionStorage.setItem('jkSakura2026SpotMyChoice', btn.dataset.spot); 
+      renderSurveyResult(btn.dataset.spot);
+      // 모달 열기
+      openSurveyModal(btn.dataset.spot);
+    }); 
+  });
+
+  // ===== FAQ =====
+  document.querySelectorAll('.jk-faq-item').forEach(item => { item.querySelector('.jk-faq-q').addEventListener('click', () => { const open = item.classList.contains('is-open'); document.querySelectorAll('.jk-faq-item').forEach(i => i.classList.remove('is-open')); if (!open) item.classList.add('is-open'); }); });
+
+  // ===== Intersection Observer =====
+  const fadeEls = document.querySelectorAll('.jk-fade-in');
+  if ('IntersectionObserver' in window) { const obs = new IntersectionObserver(entries => { entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('is-visible'); obs.unobserve(e.target); } }); }, { threshold: 0.1 }); fadeEls.forEach(el => obs.observe(el)); } else { fadeEls.forEach(el => el.classList.add('is-visible')); }
+
+  // ===== 모바일 내비 스크롤 활성화 =====
+  const mobileNavItems = document.querySelectorAll('.jk-mobile-nav-item');
+  const navSections = ['date-picker', 'forecast-map', 'survey', 'spots', 'checklist'];
+  
+  if ('IntersectionObserver' in window && window.innerWidth < 768) {
+    const navObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const sectionId = entry.target.id;
+          mobileNavItems.forEach(item => {
+            item.classList.toggle('is-active', item.dataset.section === sectionId);
+          });
+        }
+      });
+    }, { 
+      threshold: 0.3,
+      rootMargin: '-50% 0px -50% 0px'
+    });
+    
+    navSections.forEach(id => {
+      const section = document.getElementById(id);
+      if (section) navObserver.observe(section);
+    });
+  }
+});
+
+function handleShare() { if (navigator.share) navigator.share({ title: '2026 일본 벚꽃 가이드', text: '개화부터 벚꽃눈까지 약 2주!', url: location.href }).catch(() => {}); else copyLink(); }
+function copyLink() { navigator.clipboard.writeText(location.href).then(() => alert('링크 복사!')).catch(() => prompt('링크:', location.href)); }
+</script>
+</body>
+</html>
