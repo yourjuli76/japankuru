@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <title>JAPANKURU · 2026 桜ガイド</title>
+  <title>JAPANKURU · 2026桜ガイド</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <!-- Leaflet -->
@@ -18,7 +18,7 @@
     crossorigin=""
   ></script>
 
-  <!-- Noto Serif JPのみ使用、Pretendard はローカル／ウェブフォント想定 -->
+  <!-- Noto Serif JP -->
   <link
     rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@500;700&display=swap"
@@ -66,7 +66,7 @@
       font-weight: 700;
     }
 
-    /* 共通レイアウト */
+    /* 공통 레이아웃 */
     .jk-container {
       max-width: 1100px;
       margin: 0 auto;
@@ -118,7 +118,7 @@
       margin: 0 auto;
     }
 
-    /* ヘッダー */
+    /* 헤더 */
     .jk-header {
       position: sticky;
       top: 0;
@@ -201,7 +201,7 @@
       font-weight: 600;
     }
 
-    /* ヒーロー */
+    /* 히어로 */
     .jk-hero {
       position: relative;
       height: 70vh;
@@ -273,7 +273,13 @@
     .jk-hero-lead {
       font-size: 0.95rem;
       opacity: 0.95;
-      margin: 8px 0 20px;
+      margin: 8px 0 8px;
+    }
+
+    .jk-hero-subline {
+      font-size: 0.8rem;
+      opacity: 0.9;
+      margin: 0 0 18px;
     }
 
     .jk-hero-cta {
@@ -335,7 +341,7 @@
       transform: scale(1.3);
     }
 
-    /* 日付セクション */
+    /* 날짜 선택 섹션 */
     .jk-date-section {
       background: linear-gradient(
         135deg,
@@ -411,7 +417,7 @@
       margin-top: 8px;
     }
 
-    /* 結果カード */
+    /* 결과 카드 */
     .jk-result-card {
       display: none;
       background: #fff;
@@ -584,7 +590,7 @@
       color: #fff;
     }
 
-    /* 桜の4段階セクション */
+    /* 벚꽃 4단계 섹션 */
     .jk-stages-grid {
       display: grid;
       gap: 12px;
@@ -689,7 +695,7 @@
       color: var(--jk-pink);
     }
 
-    /* 地図セクション */
+    /* 지도 섹션 */
     .jk-map-wrapper {
       position: relative;
       background: var(--jk-pink-bg);
@@ -770,7 +776,7 @@
       line-height: 1.4;
     }
 
-    /* モバイル用リスト */
+    /* 모바일용 리스트 */
     .jk-map-mobile-list {
       display: none;
       padding: 10px 12px 14px;
@@ -819,7 +825,7 @@
       }
     }
 
-    /* Leaflet スタイル微調整 */
+    /* Leaflet 스타일 */
     .jk-sakura2026 .leaflet-container {
       background: var(--jk-pink-bg);
     }
@@ -855,7 +861,7 @@
       box-shadow: 0 0 0 3px rgba(212, 96, 122, 0.5);
     }
 
-    /* アンケート */
+    /* 서베이 */
     .jk-spot-survey {
       background: #fff;
       border-radius: var(--jk-radius-lg);
@@ -977,7 +983,7 @@
       font-weight: 600;
     }
 
-    /* 都市別おすすめスポットカード */
+    /* 도시별 추천 스팟 카드 */
     .jk-spots-grid {
       display: grid;
       gap: 16px;
@@ -1084,7 +1090,7 @@
       transform: translateY(-2px);
     }
 
-    /* FAQ + フッター */
+    /* FAQ + 푸터 */
     .jk-faq-list {
       display: flex;
       flex-direction: column;
@@ -1193,7 +1199,7 @@
       text-decoration: underline;
     }
 
-    /* フェードイン */
+    /* 페이드인 */
     .jk-fade-in {
       opacity: 0;
       transform: translateY(16px);
@@ -1228,7 +1234,7 @@
 </head>
 <body>
 <div class="jk-sakura2026">
-  <!-- ヘッダー -->
+  <!-- 헤더 -->
   <header class="jk-header">
     <div class="jk-header-inner">
       <div class="jk-header-left">
@@ -1255,14 +1261,14 @@
             人気スポット
           </button>
           <button class="jk-header-link" data-target="#jkSpotSection">
-            都市別おすすめ
+            都市別モデルコース
           </button>
         </nav>
       </div>
     </div>
   </header>
 
-  <!-- ヒーロー -->
+  <!-- 히어로 -->
   <section class="jk-hero" id="top">
     <div class="jk-hero-slider" id="jkHeroSlider">
       <div class="jk-hero-slide is-active" data-caption="東京・目黒川の夜桜">
@@ -1272,7 +1278,7 @@
         <img src="https://img.japankuru.com/prg_img/img/img2019030414083494430600.jpg" alt="京都の桜" />
       </div>
       <div class="jk-hero-slide" data-caption="大阪・大阪城公園">
-        <img src="https://img.japankuru.com/prg_img/img/img2022032216222456582000.jpg" alt="大阪の桜" />
+        <img src="https://img.japankuru.com/prg_img/img/img2022032216222456582000.jpg" alt="大阪城の桜" />
       </div>
       <div class="jk-hero-slide" data-caption="青森・弘前城">
         <img src="https://www.japankuru.com/gld-kanri/data/uploads/2025/01/D05_6288-1536x1024.jpg" alt="弘前の桜" />
@@ -1281,16 +1287,16 @@
     <div class="jk-hero-overlay"></div>
     <div class="jk-hero-content">
       <div class="jk-section-label" style="color:#ffdfe9;">SAKURA 2026</div>
-      <h1 class="jk-title-jp">「開花日」だけが、桜旅のすべてじゃない。</h1>
+      <h1 class="jk-title-jp">桜は、開花日だけがすべてじゃない。</h1>
       <p class="jk-hero-lead">
-        一般的に<strong>「開花」から「桜吹雪」まで約2週間</strong>。<br>
-        あなたの旅行日程に合わせて、いちばんきれいな街を選んでみませんか？
+        ふつうは<strong>「開花」から「桜吹雪」まで約2週間</strong>。<br>
+        あなたの旅行日程に合わせて、一番きれいな街を選んでみませんか？
       </p>
-      <p class="jk-hero-lead" style="font-size:0.85rem; margin-top:-8px;">
-        JAPANKURUが毎年集めている現地データと取材記事をもとに、<br>
-        2026年の桜旅を<strong>「日付に合わせて選べるプランナー」</strong>のようにお手伝いします。
+      <p class="jk-hero-subline">
+        JAPANKURUが毎年集めた現地データと取材記事をもとに、2026年の桜旅を
+        <strong>「日付別プランナー」</strong>のようにサポートします。
       </p>
-      <a href="#jkDateSection" class="jk-hero-cta">📅 自分の旅行日から探す</a>
+      <a href="#jkDateSection" class="jk-hero-cta">📅 日付から探してみる</a>
     </div>
     <div class="jk-hero-caption" id="jkHeroCaption">東京・目黒川の夜桜</div>
     <div class="jk-hero-dots" id="jkHeroDots">
@@ -1301,13 +1307,14 @@
     </div>
   </section>
 
-  <!-- 日付選択 -->
+  <!-- 날짜 선택 -->
   <section class="jk-date-section" id="jkDateSection">
     <div class="jk-container">
       <div class="jk-date-inner">
-        <h2 class="jk-title-jp">いつ日本へ行きますか？</h2>
+        <h2 class="jk-title-jp">日本には、いつ来る予定ですか？</h2>
         <p style="font-size:0.9rem; margin:4px 0 0;">
-          旅行期間を入力すると、その期間と<strong>「満開・桜吹雪」のタイミング</strong>が一番よく重なる都市をおすすめします。
+          旅行期間を入力すると、その期間と<strong>桜の「満開・桜吹雪」の時期</strong>が
+          一番重なりやすい都市をおすすめします。
         </p>
         <div class="jk-date-form">
           <div class="jk-date-input-wrap">
@@ -1318,10 +1325,10 @@
             <input type="date" class="jk-date-input" id="jkTravelEnd" value="2026-04-02" />
             <span class="jk-date-label">まで</span>
           </div>
-          <button type="button" class="jk-date-submit" id="jkDateSubmit">結果を表示</button>
+          <button type="button" class="jk-date-submit" id="jkDateSubmit">結果を見る</button>
         </div>
         <p class="jk-date-hint">
-          ※ 基準：気象庁の平年の開花・満開日 + 「開花〜桜吹雪」約2週間の重なり具合
+          ※ ベース：気象庁の平年の開花・満開日 ＋ 「開花〜桜吹雪」およそ2週間の重なり具合
         </p>
 
         <div class="jk-result-card" id="jkResultCard">
@@ -1335,28 +1342,28 @@
               </div>
             </div>
             <p class="jk-result-status" id="jkResultStatus">
-              ちょうど満開！もっとも華やかなタイミングです。
+              満開！一番華やかなタイミングです。
             </p>
             <div class="jk-result-dates" id="jkResultDates"></div>
             <div class="jk-result-spot">
-              <div class="jk-result-spot-title">この時期に特におすすめのスポット</div>
+              <div class="jk-result-spot-title">この期間に特におすすめのスポット</div>
               <div class="jk-result-spot-name" id="jkResultSpotName">上野公園</div>
               <div class="jk-result-spot-desc" id="jkResultSpotDesc">
-                東京お花見の定番。約1000本の桜と美術館・動物園で一日中楽しめます。
+                東京お花見の定番。1000本の桜と美術館・動物園まで、一日中楽しめます。
               </div>
             </div>
             <p class="jk-result-explain">
-              ※ 旅行期間と各都市の<strong>「開花〜桜吹雪」（約2週間）</strong>の重なり方と、満開日にどれだけ近いかを一緒にスコア化しています。
+              ※ 旅行期間と各都市の<strong>「開花〜桜吹雪（約2週間）」</strong>の重なり具合＋満開日との日数差をもとにスコアリングしています。
             </p>
             <div class="jk-result-actions">
               <a href="#" target="_blank" rel="noopener" class="jk-result-btn jk-result-btn--primary" id="jkResultArticle">
                 関連記事を見る
               </a>
               <button type="button" class="jk-result-btn" id="jkScrollToSpotsBtn">
-                📍 この都市の他のスポットも見る
+                📍 この都市の他スポットも見る
               </button>
               <button type="button" class="jk-result-btn" id="jkCopyLinkBtn">
-                🔖 このページのリンクをコピー
+                🔖 ページのリンクをコピー
               </button>
             </div>
           </div>
@@ -1365,14 +1372,14 @@
     </div>
   </section>
 
-  <!-- 桜4ステージ -->
+  <!-- 벚꽃 4단계 -->
   <section class="jk-section jk-section--white" id="jkStageSection">
     <div class="jk-container">
       <div class="jk-section-header jk-section-header--center jk-fade-in">
         <div class="jk-section-label">Timeline</div>
-        <h2 class="jk-section-title jk-title-jp">桜の4つのステージ、実際はこうやって続きます</h2>
+        <h2 class="jk-section-title jk-title-jp">桜の4ステージ、実際はこうつながっています</h2>
         <p class="jk-section-desc">
-          気象台で「開花宣言」が出てから、花びらが舞う桜吹雪まで。ふつうは<strong>だいたい2週間ほどのゆとり</strong>があります。
+          開花宣言が出てから、花びらが風に舞う「桜吹雪」まで。ふつうは<strong>約2週間ほどのゆとり</strong>があります。
         </p>
       </div>
       <div class="jk-stages-grid jk-fade-in">
@@ -1383,11 +1390,11 @@
           </div>
           <div class="jk-stage-body">
             <div class="jk-stage-name">開花</div>
-            <div class="jk-stage-name-jp">開花 · カイカ</div>
+            <div class="jk-stage-name-jp">開花（かいか）</div>
             <p class="jk-stage-desc">
-              標本木（基準の木）に<strong>5〜6輪以上の花が咲いたとき</strong>、「開花」として発表されます。
+              標本木（基準の木）に<strong>5〜6輪以上の花が咲くと</strong>「開花」と発表されます。
             </p>
-            <span class="jk-stage-timing">基準となる日</span>
+            <span class="jk-stage-timing">基準日</span>
           </div>
         </div>
         <div class="jk-stage-card jk-stage-card--highlight">
@@ -1397,9 +1404,9 @@
           </div>
           <div class="jk-stage-body">
             <div class="jk-stage-name">満開</div>
-            <div class="jk-stage-name-jp">満開 · マンカイ</div>
+            <div class="jk-stage-name-jp">満開（まんかい）</div>
             <p class="jk-stage-desc">
-              全体の<strong>80％以上が咲きそろった状態</strong>。いちばん華やかなタイミングです。
+              全体の<strong>80％以上が咲いている状態</strong>。もっとも華やかなタイミングです。
             </p>
             <span class="jk-stage-timing">開花＋7日前後</span>
           </div>
@@ -1411,9 +1418,9 @@
           </div>
           <div class="jk-stage-body">
             <div class="jk-stage-name">散り始め</div>
-            <div class="jk-stage-name-jp">散り始め · チリハジメ</div>
+            <div class="jk-stage-name-jp">散り始め（ちりはじめ）</div>
             <p class="jk-stage-desc">
-              地面に花びらが少しずつ積もり始めるころ。ゆっくりお散歩や写真撮影にぴったりです。
+              地面に花びらが少しずつ積もり始める時期。ゆっくりお散歩と写真にぴったりです。
             </p>
             <span class="jk-stage-timing">満開＋3〜4日</span>
           </div>
@@ -1425,29 +1432,29 @@
           </div>
           <div class="jk-stage-body">
             <div class="jk-stage-name">桜吹雪</div>
-            <div class="jk-stage-name-jp">桜吹雪 · サクラフブキ</div>
+            <div class="jk-stage-name-jp">桜吹雪（さくらふぶき）</div>
             <p class="jk-stage-desc">
-              風が吹くたびに花びらが雪のように舞う時期。動画・リール撮影には最高の瞬間です。
+              風が吹くたびに花びらが雪のように舞う時期。動画撮影に最高のタイミング。
             </p>
             <span class="jk-stage-timing">散り始め＋2〜3日</span>
           </div>
         </div>
       </div>
       <div class="jk-stage-message jk-fade-in">
-        開花日を逃しても大丈夫。<strong>街ごとに開花タイミングは違います</strong>し、同じ街でも
-        <strong>満開〜桜吹雪まで約2週間</strong>は、たっぷり桜を楽しめる余裕があります。
+        開花日を逃しても大丈夫。<strong>都市ごとに開花タイミングが違い</strong>、同じ都市の中でも
+        <strong>「満開〜桜吹雪」まで約2週間</strong>は、十分にお花見を楽しめる余裕があります。
       </div>
     </div>
   </section>
 
-  <!-- 地図 -->
+  <!-- 지도 -->
   <section class="jk-section jk-section--pink" id="jkMapSection">
     <div class="jk-container">
       <div class="jk-section-header jk-section-header--center jk-fade-in">
         <div class="jk-section-label">2026 Forecast Map</div>
-        <h2 class="jk-section-title jk-title-jp">全国の桜予想スケジュールを一目でチェック</h2>
+        <h2 class="jk-section-title jk-title-jp">全国の桜予想スケジュールを一目で</h2>
         <p class="jk-section-desc">
-          南の福岡から、北の北海道まで駆け上がっていく<strong>「桜前線」</strong>を地図で確認できます。
+          南の福岡から、北の北海道まで駆け上がる<strong>「桜前線」</strong>を、マップでざっくりチェックできます。
         </p>
       </div>
 
@@ -1455,50 +1462,51 @@
         <div class="jk-map-container">
           <div id="jk-sakura-map"></div>
           <svg class="jk-map-lines" id="jkMapLines"></svg>
-          <!-- PC用都市カードは JS で生成 -->
+          <!-- PC용 도시 카드들은 JS에서 생성 -->
         </div>
-        <!-- モバイル用都市リスト -->
+        <!-- 모바일용 도시 리스트 -->
         <div class="jk-map-mobile-list" id="jkMapMobileList"></div>
       </div>
       <p style="font-size:0.72rem; color:var(--jk-text-muted); margin-top:8px;">
-        ※ データ：気象庁の平年の開花・満開日を基準に作成 / 実際の2026年予報が発表され次第、内容を更新予定です。
+        ※ データ元：気象庁「さくらの開花状況」（12月〜6月／1日3回更新）。
+        このページではその公式データをもとに、週1回程度の頻度で2026年の情報を反映していきます。
       </p>
     </div>
   </section>
 
-  <!-- アンケート + 都市別おすすめ -->
+  <!-- 서베이 + 도시별 추천 -->
   <section class="jk-section jk-section--white" id="jkSurveySection">
     <div class="jk-container">
-      <!-- アンケート -->
+      <!-- 서베이 -->
       <div class="jk-spot-survey jk-fade-in">
         <div class="jk-section-label">Survey</div>
-        <h3 class="jk-section-title jk-title-jp">今年、いちばん行ってみたい桜スポットは？</h3>
+        <h3 class="jk-section-title jk-title-jp">今年いちばん行ってみたい桜スポットは？</h3>
         <p class="jk-section-desc" style="max-width:none;">
-          気になるスポットをひとつ選んでください。このページを見た人たちの<strong>リアルタイム人気ランキング</strong>もあわせて表示します。
+          気になるスポットをひとつ選んでください。このページを見ている人たちの<strong>リアルタイム人気ランキング</strong>がわかります。
         </p>
 
         <div class="jk-spot-survey-grid" id="jkSurveyGrid">
-          <!-- JSで9つ生成 -->
+          <!-- JS에서 9개 생성 -->
         </div>
         <div class="jk-spot-survey-result" id="jkSpotSurveyResult"></div>
       </div>
 
-      <!-- 都市別おすすめ -->
+      <!-- 도시별 추천 -->
       <div class="jk-section-header jk-section-header--center jk-fade-in" id="jkSpotSection">
         <div class="jk-section-label">City Guide</div>
-        <h2 class="jk-section-title jk-title-jp">都市ごとの桜おすすめコース</h2>
+        <h2 class="jk-section-title jk-title-jp">都市別・桜モデルコース</h2>
         <p class="jk-section-desc">
-          一つの都市だけでも<strong>3〜7スポット以上</strong>を一気に回ることができます。下のカードでは、代表スポット1か所と
-          同じ都市のいくつかの名所をセットで紹介します。
+          ひとつの都市でも、<strong>3〜7スポット以上</strong>の桜名所をまとめて巡ることができます。
+          下のカードでは代表スポット1か所と、その街の周辺スポットをまとめて紹介しています。
         </p>
       </div>
       <div class="jk-spots-grid jk-fade-in" id="jkSpotsGrid">
-        <!-- JSで12枚のカードを生成 -->
+        <!-- JS에서 12개 카드 생성 -->
       </div>
     </div>
   </section>
 
-  <!-- FAQ & フッター -->
+  <!-- FAQ & 푸터 -->
   <section class="jk-section jk-section--cream" id="jkFaqSection">
     <div class="jk-container">
       <div class="jk-section-header jk-section-header--center jk-fade-in">
@@ -1507,11 +1515,11 @@
       </div>
       <div class="jk-faq-list jk-fade-in">
         <div class="jk-faq-item">
-          <div class="jk-faq-q">開花宣言が出たあとに行くと、もう遅いですか？</div>
+          <div class="jk-faq-q">「開花宣言」が出てから行くと、もう遅いですか？</div>
           <div class="jk-faq-a">
             <div class="jk-faq-a-inner">
-              一般的に<strong>「開花〜桜吹雪」までは10〜14日</strong>ほどの余裕があるため、開花日を過ぎても
-              しばらくは十分に桜を楽しむことができます。ただし週末・連休は人出が多くなるので、できれば平日の午前中がおすすめです。
+              一般的には<strong>「開花〜桜吹雪」まで10〜14日ほど</strong>の余裕があるため、開花日を過ぎても
+              しばらくはお花見を楽しめます。ただし土日・連休は人が集中しやすいので、できれば平日の午前中がおすすめです。
             </div>
           </div>
         </div>
@@ -1519,28 +1527,28 @@
           <div class="jk-faq-q">3日くらいの短い日程なら、どこがおすすめですか？</div>
           <div class="jk-faq-a">
             <div class="jk-faq-a-inner">
-              初めての日本の桜旅なら、<strong>東京（上野・目黒川・新宿御苑）</strong>や
-              <strong>大阪＋京都</strong>の組み合わせが人気です。上の日付検索の結果とあわせて、
-              <strong>都市別おすすめカード</strong>も見ながら、日程に合う街を選んでみてください。
+              初めての桜旅なら、<strong>東京（上野・目黒川・新宿御苑）</strong>や
+              <strong>大阪＋京都エリア</strong>が定番です。上の「日付から探す」の結果と、
+              <strong>都市別モデルコース</strong>をあわせて、日程に合う街を選んでみてください。
             </div>
           </div>
         </div>
         <div class="jk-faq-item">
-          <div class="jk-faq-q">ホテルはどのくらい前に予約した方がいいですか？</div>
+          <div class="jk-faq-q">ホテルはどれくらい前に予約するのが良いですか？</div>
           <div class="jk-faq-a">
             <div class="jk-faq-a-inner">
-              東京・大阪・京都の桜シーズン週末は、<strong>3〜6か月前</strong>から埋まり始めます。
-              可能であればキャンセル可のプランで早めに押さえておき、開花予報が出てから細かい日程を調整するのが安心です。
+              東京・大阪・京都などの大都市では、桜シーズンの週末は<strong>3〜6か月前</strong>から埋まり始めます。
+              可能であればキャンセル可のプランで早めにおさえておき、開花予想が出てから細かい日程を調整するのが安心です。
             </div>
           </div>
         </div>
         <div class="jk-faq-item">
-          <div class="jk-faq-q">なるべく人混みを避けて桜を見たいのですが…</div>
+          <div class="jk-faq-q">人混みを少し避けて、桜を見たいのですが…。</div>
           <div class="jk-faq-a">
             <div class="jk-faq-a-inner">
-              <strong>東北エリア（仙台・青森・弘前）</strong>や九州の一部エリアは、比較的ゆったり見られることが多いです。
-              同じ都市の中でも、超定番スポットは朝早めに訪れて、午後は<strong>地元の公園や川沿いの遊歩道</strong>を
-              ねらってみるのもおすすめです。
+              比較的人が少ないのは、<strong>東北地方（仙台・青森・弘前）</strong>や九州の一部エリアです。
+              同じ街の中でも有名スポットには朝早く行って、午後は<strong>住宅街の公園や川沿いの遊歩道</strong>など、
+              ローカルな場所を狙ってみるのも良い方法です。
             </div>
           </div>
         </div>
@@ -1552,10 +1560,10 @@
     <div class="jk-footer-main">JAPANKURU SAKURA 2026 GUIDE</div>
     <div class="jk-footer-buttons">
       <button type="button" class="jk-footer-btn" id="jkFooterBookmarkBtn">
-        🔖 このページをブックマーク／ホーム画面に保存する方法
+        🔖 このページをホーム画面／ブックマークに保存する方法
       </button>
       <button type="button" class="jk-footer-btn" id="jkFooterTopBtn">
-        ↑ ページトップに戻る
+        ↑ 一番上へ戻る
       </button>
     </div>
     <p class="jk-footer-tip" id="jkBookmarkTip">
@@ -1563,20 +1571,23 @@
       PCブラウザ：Ctrl+D / ⌘+D でブックマークできます。
     </p>
     <div class="jk-footer-source">
-      データ：<a href="https://www.data.jma.go.jp/sakura/data/sakura_kaika.html" target="_blank" rel="noopener">気象庁</a> 平年値を基準に作成 ·
-      © JAPANKURU
+      データ元：
+      <a href="https://www.data.jma.go.jp/sakura/data/sakura_kaika.html" target="_blank" rel="noopener">
+        気象庁「さくらの開花状況」
+      </a>
+      （12月〜6月／1日3回更新）を基準に作成 · © JAPANKURU
     </div>
   </footer>
 </div>
 
 <script>
   // ---------- データ定義 ----------
-  // 地図・日付おすすめ用 都市データ（10都市）
+  // 地図・日付レコメンド用都市データ（10都市）
   const MAP_CITIES = [
     {
       id: "sapporo",
       nameJp: "札幌",
-      nameKr: "Sapporo",
+      nameKana: "さっぽろ",
       lat: 43.06,
       lng: 141.35,
       bloom: "5/1",
@@ -1585,17 +1596,17 @@
       snow: "5/13",
       spot: "円山公園",
       spotDesc:
-        "北海道を代表する桜スポット。エゾヤマザクラ約200本と神社の森が織りなす風景。",
+        "北海道を代表する桜スポット。エゾヤマザクラ約200本と神社の杜が作る風景。",
       heroImg:
         "https://images.unsplash.com/photo-1513407030348-cf8726f514f8?auto=format&fit=crop&w=800&q=80",
       article:
-        "https://www.japankuru.com/kr/search?q=%EC%82%BF%ED%8F%AC%EB%A1%9C+%EB%B2%9A%EA%BD%83",
+        "https://www.japankuru.com/jp/search?q=%E6%9C%AD%E5%B9%8C+%E6%A1%9C",
       cardPos: { top: 40, right: 60 },
     },
     {
       id: "aomori",
       nameJp: "青森",
-      nameKr: "Aomori",
+      nameKana: "あおもり",
       lat: 40.82,
       lng: 140.74,
       bloom: "4/22",
@@ -1604,17 +1615,17 @@
       snow: "5/5",
       spot: "弘前城",
       spotDesc:
-        "お堀一面を覆う「花いかだ」で有名な青森の桜。約2600本が咲き誇ります。",
+        "お堀を覆う「花いかだ」が有名な青森の桜。約2600本の桜が咲き誇ります。",
       heroImg:
         "https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?auto=format&fit=crop&w=800&q=80",
       article:
-        "https://www.japankuru.com/kr/search?q=%ED%9E%88%EB%A1%9C%EC%82%AC%ED%82%A4+%EB%B2%9A%EA%BD%83",
+        "https://www.japankuru.com/jp/search?q=%E5%BC%98%E5%89%8D+%E6%A1%9C",
       cardPos: { top: 110, right: 50 },
     },
     {
       id: "sendai",
       nameJp: "仙台",
-      nameKr: "Sendai",
+      nameKana: "せんだい",
       lat: 38.27,
       lng: 140.87,
       bloom: "4/8",
@@ -1623,17 +1634,17 @@
       snow: "4/21",
       spot: "西公園",
       spotDesc:
-        "伊達政宗公の像と一緒に楽しめる、仙台市内のお花見スポット。地元の人に愛される場所です。",
+        "伊達政宗像とともに楽しむ、仙台市内のお花見スポット。地元の人に人気。",
       heroImg:
         "https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?auto=format&fit=crop&w=800&q=80",
       article:
-        "https://www.japankuru.com/kr/search?q=%EC%84%BC%EB%8B%A4%EC%9D%B4+%EB%B2%9A%EA%BD%83",
+        "https://www.japankuru.com/jp/search?q=%E4%BB%99%E5%8F%B0+%E6%A1%9C",
       cardPos: { top: 180, right: 40 },
     },
     {
       id: "tokyo",
       nameJp: "東京",
-      nameKr: "Tokyo",
+      nameKana: "とうきょう",
       lat: 35.68,
       lng: 139.77,
       bloom: "3/24",
@@ -1642,17 +1653,17 @@
       snow: "4/7",
       spot: "上野公園",
       spotDesc:
-        "東京お花見の王道。1000本以上の桜と、博物館・動物園など見どころがぎっしり。",
+        "東京お花見の定番。1000本以上の桜と、美術館・動物園まで一度に楽しめます。",
       heroImg:
         "https://images.unsplash.com/photo-1490806843957-31f4c9a91c65?auto=format&fit=crop&w=800&q=80",
       article:
-        "https://www.japankuru.com/kr/search?q=%EB%8F%84%EC%BF%84+%EB%B2%9A%EA%BD%83",
+        "https://www.japankuru.com/jp/search?q=%E6%9D%B1%E4%BA%AC+%E6%A1%9C",
       cardPos: { top: 270, right: 60 },
     },
     {
       id: "kanazawa",
       nameJp: "金沢",
-      nameKr: "Kanazawa",
+      nameKana: "かなざわ",
       lat: 36.56,
       lng: 136.66,
       bloom: "4/3",
@@ -1661,17 +1672,17 @@
       snow: "4/16",
       spot: "兼六園",
       spotDesc:
-        "日本三名園のひとつ。庭園と桜、そして夜のライトアップが幻想的な名所です。",
+        "日本三名園のひとつ。庭園と桜、ライトアップがつくる幻想的な夜の風景。",
       heroImg:
         "https://images.unsplash.com/photo-1528360983277-13d401cdc186?auto=format&fit=crop&w=800&q=80",
       article:
-        "https://www.japankuru.com/kr/search?q=%EA%B0%80%EB%82%98%EC%9E%90%EC%99%80+%EB%B2%9A%EA%BD%83",
+        "https://www.japankuru.com/jp/search?q=%E9%87%91%E6%B2%A2+%E6%A1%9C",
       cardPos: { top: 210, left: 50 },
     },
     {
       id: "kyoto",
       nameJp: "京都",
-      nameKr: "Kyoto",
+      nameKana: "きょうと",
       lat: 35.01,
       lng: 135.77,
       bloom: "3/26",
@@ -1680,17 +1691,17 @@
       snow: "4/9",
       spot: "哲学の道",
       spotDesc:
-        "銀閣寺から南禅寺まで続く疎水沿いの散歩道。京都らしい静かな春の風景が楽しめます。",
+        "銀閣寺から南禅寺へと続く疏水沿いの散歩道。しっとりした京都の春を楽しめます。",
       heroImg:
         "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=800&q=80",
       article:
-        "https://www.japankuru.com/kr/search?q=%EA%B5%90%ED%86%A0+%EB%B2%9A%EA%BD%83",
+        "https://www.japankuru.com/jp/search?q=%E4%BA%AC%E9%83%BD+%E6%A1%9C",
       cardPos: { top: 300, left: 50 },
     },
     {
       id: "osaka",
       nameJp: "大阪",
-      nameKr: "Osaka",
+      nameKana: "おおさか",
       lat: 34.69,
       lng: 135.5,
       bloom: "3/27",
@@ -1699,17 +1710,17 @@
       snow: "4/10",
       spot: "大阪城公園",
       spotDesc:
-        "天守閣を囲む約3000本の桜。昼も夜も絵になる、大阪を代表するお花見スポットです。",
+        "天守閣を囲む約3000本の桜。昼も夜も見応えのある大阪の代表スポット。",
       heroImg:
         "https://images.unsplash.com/photo-1589308078059-be1415eab4c3?auto=format&fit=crop&w=800&q=80",
       article:
-        "https://www.japankuru.com/kr/search?q=%EC%98%A4%EC%82%AC%EC%B9%B4%EC%84%B1+%EB%B2%9A%EA%BD%83",
+        "https://www.japankuru.com/jp/search?q=%E5%A4%A7%E9%98%AA%E5%9F%8E+%E6%A1%9C",
       cardPos: { top: 360, left: 130 },
     },
     {
       id: "hiroshima",
       nameJp: "広島",
-      nameKr: "Hiroshima",
+      nameKana: "ひろしま",
       lat: 34.39,
       lng: 132.46,
       bloom: "3/25",
@@ -1718,17 +1729,17 @@
       snow: "4/8",
       spot: "平和記念公園",
       spotDesc:
-        "川沿いに続く桜並木で、少し落ち着いた雰囲気の春時間を過ごせるスポット。",
+        "川沿いに続く桜並木とともに、少し落ち着いた雰囲気で春を感じられる場所。",
       heroImg:
         "https://images.unsplash.com/photo-1576675784201-0e142b423952?auto=format&fit=crop&w=800&q=80",
       article:
-        "https://www.japankuru.com/kr/search?q=%ED%9E%88%EB%A1%9C%EC%8B%9C%EB%A7%88+%EB%B2%9A%EA%BD%83",
+        "https://www.japankuru.com/jp/search?q=%E5%BA%83%E5%B3%B6+%E6%A1%9C",
       cardPos: { top: 380, left: 40 },
     },
     {
       id: "fukuoka",
       nameJp: "福岡",
-      nameKr: "Fukuoka",
+      nameKana: "ふくおか",
       lat: 33.59,
       lng: 130.4,
       bloom: "3/22",
@@ -1737,17 +1748,17 @@
       snow: "4/5",
       spot: "舞鶴公園",
       spotDesc:
-        "福岡城跡を囲む桜と、博多ラーメン食べ歩きを一緒に楽しめる春コース。",
+        "福岡城跡を囲む桜と、博多ラーメン食べ歩きを一緒に楽しめる春の王道コース。",
       heroImg:
         "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=800&q=80",
       article:
-        "https://www.japankuru.com/kr/search?q=%ED%9B%84%EC%BF%A0%EC%98%A4%EC%B9%B4+%EB%B2%9A%EA%BD%83",
+        "https://www.japankuru.com/jp/search?q=%E7%A6%8F%E5%B2%A1+%E6%A1%9C",
       cardPos: { top: 460, left: 50 },
     },
     {
       id: "kagoshima",
       nameJp: "鹿児島",
-      nameKr: "Kagoshima",
+      nameKana: "かごしま",
       lat: 31.6,
       lng: 130.56,
       bloom: "3/26",
@@ -1756,16 +1767,16 @@
       snow: "4/9",
       spot: "城山公園",
       spotDesc:
-        "桜の向こうに見える桜島のシルエットが印象的。鹿児島らしい風景を楽しめるスポットです。",
+        "桜の向こうに桜島を望む、鹿児島ならではの風景。温泉旅とあわせて楽しみたい南国の春。",
       heroImg:
         "https://images.unsplash.com/photo-1528164344705-47542687000d?auto=format&fit=crop&w=800&q=80",
       article:
-        "https://www.japankuru.com/kr/search?q=%EA%B0%80%EA%B3%A0%EC%8B%9C%EB%A7%88+%EB%B2%9A%EA%BD%83",
+        "https://www.japankuru.com/jp/search?q=%E9%B9%BF%E5%85%90%E5%B3%B6+%E6%A1%9C",
       cardPos: { top: 540, left: 110 },
     },
   ];
 
-  // アンケート用スポット9件
+  // 서베이용 스팟 9개
   const SURVEY_SPOTS = [
     {
       id: "ueno",
@@ -1777,35 +1788,35 @@
     {
       id: "meguro",
       label: "東京・目黒川",
-      desc: "夜桜と写真映えスポットの定番",
+      desc: "夜桜と写真スポットが連続",
       thumb:
         "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?auto=format&fit=crop&w=300&q=80",
     },
     {
       id: "shinjuku",
       label: "東京・新宿御苑",
-      desc: "芝生でのんびりピクニックお花見",
+      desc: "芝生でゆったりピクニック",
       thumb:
         "https://images.unsplash.com/photo-1488342994276-7c3bc074204b?auto=format&fit=crop&w=300&q=80",
     },
     {
       id: "tetsugaku",
       label: "京都・哲学の道",
-      desc: "水路沿いの静かな散歩コース",
+      desc: "疏水沿いを歩くしっとり散歩コース",
       thumb:
         "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=300&q=80",
     },
     {
       id: "maruyama",
       label: "京都・円山公園",
-      desc: "夜に映えるシダレザクラの名木",
+      desc: "夜に輝くしだれ桜",
       thumb:
         "https://images.unsplash.com/photo-1497005367839-6e852de72767?auto=format&fit=crop&w=300&q=80",
     },
     {
       id: "osakaCastle",
       label: "大阪・大阪城公園",
-      desc: "天守閣と桜の王道コンビ",
+      desc: "天守閣と桜の王道ショット",
       thumb:
         "https://images.unsplash.com/photo-1589308078059-be1415eab4c3?auto=format&fit=crop&w=300&q=80",
     },
@@ -1819,7 +1830,7 @@
     {
       id: "hirosaki",
       label: "青森・弘前城",
-      desc: "お堀を埋め尽くす「花筏」",
+      desc: "お堀を埋め尽くす「花いかだ」",
       thumb:
         "https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?auto=format&fit=crop&w=300&q=80",
     },
@@ -1832,7 +1843,7 @@
     },
   ];
 
-  // 都市別おすすめカード12枚
+  // 도시별 추천 카드 12개
   const SPOT_CARDS = [
     {
       id: "tokyo",
@@ -1841,45 +1852,45 @@
       heroImg:
         "https://images.unsplash.com/photo-1490806843957-31f4c9a91c65?auto=format&fit=crop&w=900&q=80",
       summary:
-        "初めての桜旅なら東京で「都会の桜」のいろいろな顔を一気に楽しめます。",
+        "初めての桜旅なら東京。街なかの桜の「いろんな顔」を一度に楽しめます。",
       spots: ["上野公園", "目黒川", "新宿御苑", "千鳥ヶ淵", "隅田川テラス"],
       article:
-        "https://www.japankuru.com/kr/search?q=%EB%8F%84%EC%BF%84+%EB%B2%9A%EA%BD%83",
+        "https://www.japankuru.com/jp/search?q=%E6%9D%B1%E4%BA%AC+%E6%A1%9C",
     },
     {
       id: "kyoto",
       cityLabel: "KYOTO",
-      title: "京都・お寺と疎水をめぐる春の一日",
+      title: "京都・寺院と疏水をたどる一日さんぽ",
       heroImg:
         "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=900&q=80",
       summary:
-        "お寺や疎水、石畳が続く京都は、「歩くこと」そのものが旅になる街です。",
+        "静かな寺院と疏水、石畳が続く京都は「歩くこと」そのものが旅になる街です。",
       spots: [
         "哲学の道",
         "円山公園",
         "祇園白川",
-        "嵐山 渡月橋周辺",
+        "嵐山・渡月橋周辺",
         "銀閣寺周辺",
       ],
       article:
-        "https://www.japankuru.com/kr/search?q=%EA%B5%90%ED%86%A0+%EB%B2%9A%EA%BD%83",
+        "https://www.japankuru.com/jp/search?q=%E4%BA%AC%E9%83%BD+%E6%A1%9C",
     },
     {
       id: "osaka",
       cityLabel: "OSAKA",
-      title: "大阪・お城と川、夜景まで欲張りに楽しむ",
+      title: "大阪・お城と川と夜景をまとめて",
       heroImg:
         "https://images.unsplash.com/photo-1589308078059-be1415eab4c3?auto=format&fit=crop&w=900&q=80",
       summary:
-        "昼はお城と公園、夜は川沿いと道頓堀。グルメも写真スポットも勢ぞろい。",
+        "昼はお城と公園、夜は川沿いと道頓堀。グルメも写真スポットもぎゅっと詰まっています。",
       spots: [
         "大阪城公園",
         "毛馬桜之宮公園",
-        "ジョウテラス大阪",
-        "大阪城西の丸庭園 夜桜",
+        "大川沿い遊歩道",
+        "大阪城西の丸庭園の夜桜",
       ],
       article:
-        "https://www.japankuru.com/kr/search?q=%EC%98%A4%EC%82%AC%EC%B9%B4+%EB%B2%9A%EA%BD%83",
+        "https://www.japankuru.com/jp/search?q=%E5%A4%A7%E9%98%AA%E5%9F%8E+%E6%A1%9C",
     },
     {
       id: "fukuoka",
@@ -1888,41 +1899,41 @@
       heroImg:
         "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=900&q=80",
       summary:
-        "短い日程でも楽しみやすい福岡。市内中心部からあまり移動せずに桜を満喫できます。",
+        "短い日程でも組みやすい福岡。市内移動だけで、十分にお花見が楽しめます。",
       spots: [
         "舞鶴公園",
         "西公園",
         "大濠公園",
-        "百道浜・海沿いの散歩道（春の海散歩）",
+        "百道浜の海辺さんぽ（春の海）",
       ],
       article:
-        "https://www.japankuru.com/kr/search?q=%ED%9B%84%EC%BF%A0%EC%98%A4%EC%B9%B4+%EB%B2%9A%EA%BD%83",
+        "https://www.japankuru.com/jp/search?q=%E7%A6%8F%E5%B2%A1+%E6%A1%9C",
     },
     {
       id: "hiroshima",
       cityLabel: "HIROSHIMA",
-      title: "広島・川と島で、少しゆったり春時間",
+      title: "広島・川と島でのんびり桜時間",
       heroImg:
         "https://images.unsplash.com/photo-1576675784201-0e142b423952?auto=format&fit=crop&w=900&q=80",
       summary:
-        "落ち着いた雰囲気で桜を楽しみたいなら広島。宮島とセットで訪れるのもおすすめです。",
+        "少し落ち着いた雰囲気のお花見なら広島。宮島とのセット旅にもぴったりです。",
       spots: [
         "平和記念公園",
         "元安川沿い",
         "広島城周辺",
-        "宮島 厳島神社周辺",
+        "宮島・厳島神社近くの桜",
       ],
       article:
-        "https://www.japankuru.com/kr/search?q=%ED%9E%88%EB%A1%9C%EC%8B%9C%EB%A7%88+%EB%B2%9A%EA%BD%83",
+        "https://www.japankuru.com/jp/search?q=%E5%BA%83%E5%B3%B6+%E6%A1%9C",
     },
     {
       id: "kanazawa",
       cityLabel: "KANAZAWA",
-      title: "金沢・庭園と城下町、雨の日も絵になる桜旅",
+      title: "金沢・庭園と城と路地裏まで続く春",
       heroImg:
         "https://images.unsplash.com/photo-1528360983277-13d401cdc186?auto=format&fit=crop&w=900&q=80",
       summary:
-        "雨の日でも絵になる金沢。庭園・城・茶屋街までコンパクトに回れるのが魅力です。",
+        "雨の日も絵になる金沢。庭園・お城・茶屋街をコンパクトに巡れます。",
       spots: [
         "兼六園",
         "金沢城公園",
@@ -1930,74 +1941,74 @@
         "ひがし茶屋街の路地",
       ],
       article:
-        "https://www.japankuru.com/kr/search?q=%EA%B0%80%EB%82%98%EC%9E%90%EC%99%80+%EB%B2%9A%EA%BD%83",
+        "https://www.japankuru.com/jp/search?q=%E9%87%91%E6%B2%A2+%E6%A1%9C",
     },
     {
       id: "sendai",
       cityLabel: "SENDAI",
-      title: "仙台・東北エリア入門の桜旅コース",
+      title: "仙台・東北の桜入門コース",
       heroImg:
         "https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?auto=format&fit=crop&w=900&q=80",
       summary:
-        "東京より少し遅れて咲く東北の桜。人混みを少し避けて、ゆったり楽しみたい人に。",
+        "東京より少し遅れて咲く東北の桜。人混みを避けてのんびり楽しみたい人に。",
       spots: [
         "西公園",
         "榴岡公園",
         "広瀬川沿い",
-        "青葉城址周辺",
+        "青葉城跡周辺",
       ],
       article:
-        "https://www.japankuru.com/kr/search?q=%EC%84%BC%EB%8B%A4%EC%9D%B4+%EB%B2%9A%EA%BD%83",
+        "https://www.japankuru.com/jp/search?q=%E4%BB%99%E5%8F%B0+%E6%A1%9C",
     },
     {
       id: "nagoya",
       cityLabel: "NAGOYA",
-      title: "名古屋・お城と川沿い、東京より少しゆるめの春",
+      title: "名古屋・お城と川、東京より少しゆるい春",
       heroImg:
         "https://images.unsplash.com/photo-1462957794353-7d4f56eaf8fb?auto=format&fit=crop&w=900&q=80",
       summary:
-        "東京と大阪のあいだを移動するなら、途中で立ち寄りやすい名古屋。動線に組み込みやすい街です。",
+        "東京〜大阪の移動ついでに立ち寄りやすい名古屋。動線に組み込みやすい街です。",
       spots: [
-        "名古屋城",
-        "山崎川の桜並木",
+        "名古屋城周辺",
+        "山崎川の桜道",
         "鶴舞公園",
         "名城公園",
       ],
       article:
-        "https://www.japankuru.com/kr/search?q=%EB%82%98%EA%B3%A0%EC%95%BC+%EB%B2%9A%EA%BD%83",
+        "https://www.japankuru.com/jp/search?q=%E5%90%8D%E5%8F%A4%E5%B1%8B+%E6%A1%9C",
     },
     {
       id: "nara",
       cityLabel: "NARA",
-      title: "奈良・鹿と桜が一緒に楽しめる公園へ",
+      title: "奈良・鹿と桜が一緒の公園散歩",
       heroImg:
         "https://images.unsplash.com/photo-1502072243-7ea748ffb08e?auto=format&fit=crop&w=900&q=80",
       summary:
-        "鹿が歩く公園とお寺のまわりに続く桜。1日だけでも、ゆっくり歩いてみたくなる街です。",
+        "鹿が歩く公園と寺院をつなぐ桜。1日かけてゆっくり歩きたい古都です。",
       spots: [
         "奈良公園",
         "東大寺周辺",
         "春日大社参道",
-        "浮見堂（池の周り）",
+        "浮見堂（鷺池）周辺",
       ],
       article:
-        "https://www.japankuru.com/kr/search?q=%EB%82%98%EB%9D%BC+%EB%B2%9A%EA%BD%83",
+        "https://www.japankuru.com/jp/search?q=%E5%A5%88%E8%89%AF+%E6%A1%9C",
     },
     {
       id: "aomori",
       cityLabel: "AOMORI",
-      title: "青森・弘前城の桜をとことん味わう旅",
+      title: "青森・弘前城の桜を主役にした旅",
       heroImg:
         "https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?auto=format&fit=crop&w=900&q=80",
       summary:
-        "「桜のためだけに」北へ向かう人も多い、日本三大桜名所のひとつ。",
+        "「桜のためだけに」北へ向かう人も多い、日本三大桜名所のひとつです。",
       spots: [
-        "弘前公園（弘前城）",
+        "弘前城公園",
         "弘前公園のお堀",
-        "岩木山ビュースポット",
+        "岩木山を望むビュースポット",
       ],
       article:
-        "https://www.japankuru.com/kr/search?q=%ED%9E%88%EB%A1%9C%EC%82%AC%ED%82%A4+%EB%B2%9A%EA%BD%83",
+        "https://www.japankuru.com/jp/search?q=%E5%BC%98%E5%89%8D+%E6%A1%9C",
     },
     {
       id: "sapporo",
@@ -2006,7 +2017,7 @@
       heroImg:
         "https://images.unsplash.com/photo-1513407030348-cf8726f514f8?auto=format&fit=crop&w=900&q=80",
       summary:
-        "4月末〜5月上旬、日本の他の都市より一歩遅れてやってくる春を感じられます。",
+        "4月末〜5月上旬、日本の他の都市より一歩遅れて訪れる春を楽しめます。",
       spots: [
         "円山公園",
         "北海道神宮",
@@ -2014,7 +2025,7 @@
         "真駒内公園",
       ],
       article:
-        "https://www.japankuru.com/kr/search?q=%EC%82%BF%ED%8F%AC%EB%A1%9C+%EB%B2%9A%EA%BD%83",
+        "https://www.japankuru.com/jp/search?q=%E6%9C%AD%E5%B9%8C+%E6%A1%9C",
     },
     {
       id: "kagoshima",
@@ -2023,14 +2034,14 @@
       heroImg:
         "https://images.unsplash.com/photo-1528164344705-47542687000d?auto=format&fit=crop&w=900&q=80",
       summary:
-        "桜の向こうに桜島の火山を望む、鹿児島ならではの景色。温泉旅とセットで訪れたい南の桜です。",
+        "桜の向こうに桜島のシルエット。温泉旅とセットにしたくなる南の桜旅です。",
       spots: [
         "城山公園",
-        "出水麓武家屋敷群周辺",
-        "ドルフィンポート周辺遊歩道",
+        "出水麓武家屋敷通り",
+        "磯庭園周辺の散歩道",
       ],
       article:
-        "https://www.japankuru.com/kr/search?q=%EA%B0%80%EA%B3%A0%EC%8B%9C%EB%A7%88+%EB%B2%9A%EA%BD%83",
+        "https://www.japankuru.com/jp/search?q=%E9%B9%BF%E5%85%90%E5%B3%B6+%E6%A1%9C",
     },
   ];
 
@@ -2054,7 +2065,7 @@
   }
 
   document.addEventListener("DOMContentLoaded", function () {
-    // ---------- ヘッダーナビ ----------
+    // ---------- 헤더 내비 ----------
     const headerLinks = document.querySelectorAll(".jk-header-link");
     headerLinks.forEach((btn) => {
       btn.addEventListener("click", (e) => {
@@ -2069,7 +2080,6 @@
       });
     });
 
-    // スクロール時の現在セクション強調（簡易版）
     const sectionsForNav = [
       "#jkDateSection",
       "#jkStageSection",
@@ -2099,7 +2109,7 @@
     window.addEventListener("scroll", updateNavOnScroll);
     updateNavOnScroll();
 
-    // ---------- ヒーロースライダー ----------
+    // ---------- 히어로 슬라이더 ----------
     const heroSlides = Array.from(
       document.querySelectorAll("#jkHeroSlider .jk-hero-slide")
     );
@@ -2145,7 +2155,7 @@
     setHero(0);
     startHeroTimer();
 
-    // ---------- 日付 → 都市おすすめ ----------
+    // ---------- 날짜 → 도시 추천 ----------
     const dateBtn = document.getElementById("jkDateSubmit");
     const resultCard = document.getElementById("jkResultCard");
     const resultImg = document.getElementById("jkResultImg");
@@ -2172,7 +2182,7 @@
       const startDate = new Date(sv);
       const endDate = new Date(ev);
       if (startDate > endDate) {
-        alert("開始日が終了日より後になることはできません。");
+        alert("開始日が終了日より後ろにはできません。");
         return;
       }
       const midTime = (startDate.getTime() + endDate.getTime()) / 2;
@@ -2201,7 +2211,7 @@
 
         const distToFull =
           Math.abs(midDate.getTime() - full.getTime()) / 86400000;
-        const score = overlapDays * 12 - distToFull; // 重み付け
+        const score = overlapDays * 12 - distToFull;
 
         if (score > bestScore) {
           bestScore = score;
@@ -2217,7 +2227,7 @@
 
       if (!bestCity) {
         alert(
-          "入力された期間では、桜が見ごろの街が少ないかもしれません。\n旅行日程を少しずらしてみるのもおすすめです。"
+          "入力された期間では、桜を見るのが難しいエリアが多そうです。\n日程を少しずらしてみるのもおすすめです。"
         );
         return;
       }
@@ -2227,25 +2237,25 @@
           icon: "🌱",
           badge: "COMING SOON",
           status:
-            "つぼみがふくらみ始める頃。人出は少なめで、のんびりお散歩気分で楽しめます。",
+            "つぼみがふくらみ始めたタイミング。人も少なく、落ち着いてお散歩できます。",
         },
         bloom: {
           icon: "🌸",
           badge: "BLOOMING",
           status:
-            "開花が進んでいる時期。スポットによっては満開の木とつぼみが同時に見られます。",
+            "開花が進んでいる時期。場所によって、満開の木とつぼみの木が一緒に楽しめます。",
         },
         full: {
           icon: "🌺",
           badge: "BEST MATCH",
           status:
-            "満開のタイミングとよく重なる日程です！もっとも華やかな桜に出会える可能性が高いです。",
+            "満開のタイミングとよく重なる日程！もっとも華やかな桜に出会える確率が高いです。",
         },
         fall: {
           icon: "🍃",
           badge: "FALLING",
           status:
-            "花びらが地面に少しずつ積もり始める頃。「桜のじゅうたん」を歩くような気分で楽しめます。",
+            "花びらが少しずつ地面に積もり始める時期。歩くだけで気持ちいい「桜のカーペット」シーズン。",
         },
         snow: {
           icon: "💨",
@@ -2257,7 +2267,6 @@
 
       const stageInfo = stageInfoMap[bestStageKey] || stageInfoMap.full;
 
-      // 結果カードを埋める
       resultImg.src = bestCity.heroImg;
       resultIcon.textContent = stageInfo.icon;
       resultBadge.textContent = stageInfo.badge;
@@ -2293,7 +2302,6 @@
       resultCard.scrollIntoView({ behavior: "smooth", block: "center" });
 
       lastRecommendedCityId = bestCity.id;
-      // 地図・カードハイライト連動
       setActiveCity(bestCity.id, { scrollMap: false, scrollSpotCard: false });
     }
 
@@ -2329,14 +2337,14 @@
         if (navigator.clipboard && navigator.clipboard.writeText) {
           navigator.clipboard
             .writeText(url)
-            .then(() => alert("このページのリンクをコピーしました。"));
+            .then(() => alert("ページのリンクをコピーしました。"));
         } else {
           prompt("リンクをコピーしてください：", url);
         }
       });
     }
 
-    // ---------- 地図 + カード + 点線 ----------
+    // ---------- 지도 + 카드 + 점선 ----------
     let leafletMap = null;
     const mapContainer = document.querySelector(".jk-map-container");
     const mapDom = document.getElementById("jk-sakura-map");
@@ -2364,7 +2372,6 @@
         [46, 146],
       ]);
 
-      // マーカー + カード生成
       MAP_CITIES.forEach((city) => {
         const markerIcon = L.divIcon({
           className: "",
@@ -2386,17 +2393,7 @@
           });
         });
 
-        marker.on("add", () => {
-          const el = marker.getElement();
-          if (el) {
-            const dot = el.querySelector(".jk-map-marker-dot");
-            if (dot) {
-              cityMarkerEls[city.id] = dot;
-            }
-          }
-        });
-
-        // PC用カード
+        // PC용 카드
         if (mapContainer && city.cardPos) {
           const card = document.createElement("div");
           card.className = "jk-map-city-card";
@@ -2404,8 +2401,9 @@
           card.innerHTML =
             '<div class="jk-map-city-name">' +
             city.nameJp +
-            " · " +
-            city.nameKr +
+            "（" +
+            city.nameKana +
+            "）" +
             '</div><div class="jk-map-city-dates">' +
             "🌸 開花 " +
             city.bloom +
@@ -2436,21 +2434,21 @@
           cityCards[city.id] = card;
         }
 
-        // モバイルカード
+        // 모바일 카드
         if (mobileList) {
           const mCard = document.createElement("div");
           mCard.className = "jk-map-mobile-card";
           mCard.dataset.city = city.id;
 
           mCard.innerHTML = `
-    <div class="jk-map-mobile-name">
-      ${city.nameJp} · ${city.nameKr}
-    </div>
-    <div class="jk-map-mobile-dates">
-      🌸 開花 ${city.bloom} · 🌺 満開 ${city.full}<br>
-      🍃 散り始め ${city.fall} · 💨 桜吹雪 〜${city.snow}
-    </div>
-  `;
+            <div class="jk-map-mobile-name">
+              ${city.nameJp}（${city.nameKana}）
+            </div>
+            <div class="jk-map-mobile-dates">
+              🌸 開花 ${city.bloom} · 🌺 満開 ${city.full}<br>
+              🍃 散り始め ${city.fall} · 💨 桜吹雪 〜${city.snow}
+            </div>
+          `;
 
           mCard.addEventListener("click", () => {
             leafletMap.panTo([city.lat, city.lng]);
@@ -2463,60 +2461,71 @@
           mobileList.appendChild(mCard);
           mobileCards[city.id] = mCard;
         }
-
       });
 
-      // 点線描画
-      function drawLines() {
-        if (!leafletMap || !linesSvg || !mapDom) return;
-
-        const mapRect = mapDom.getBoundingClientRect();
-        const w = mapRect.width;
-        const h = mapRect.height;
-
-        linesSvg.setAttribute("width", w);
-        linesSvg.setAttribute("height", h);
-        linesSvg.setAttribute("viewBox", "0 0 " + w + " " + h);
-        linesSvg.innerHTML = "";
-
-        // モバイルでは非表示
-        if (window.innerWidth <= 768) return;
-
-        MAP_CITIES.forEach((city) => {
-          const card = cityCards[city.id];
-          if (!card) return;
-
-          const pt = leafletMap.latLngToContainerPoint([
-            city.lat,
-            city.lng,
-          ]);
-          const markerX = pt.x;
-          const markerY = pt.y;
-
-          const cardRect = card.getBoundingClientRect();
-          const cardX =
-            cardRect.left + cardRect.width / 2 - mapRect.left;
-          const cardY =
-            cardRect.top + cardRect.height / 2 - mapRect.top;
-
-          const line = document.createElementNS(
-            "http://www.w3.org/2000/svg",
-            "line"
-          );
-          line.setAttribute("x1", markerX);
-          line.setAttribute("y1", markerY);
-          line.setAttribute("x2", cardX);
-          line.setAttribute("y2", cardY);
-          linesSvg.appendChild(line);
-        });
-      }
-
+      // 마커 DOM 동기화 + 점선 이벤트 연결
+      syncMarkerEls();
+      leafletMap.on("zoomend moveend layeradd", syncMarkerEls);
       leafletMap.on("moveend zoomend", drawLines);
       window.addEventListener("resize", drawLines);
       setTimeout(drawLines, 600);
     }
 
-    // 都市アクティブ状態（地図・カード・モバイル連動）
+    // 마커 DOM을 다시 잡아주는 헬퍼
+    function syncMarkerEls() {
+      if (!leafletMap) return;
+      MAP_CITIES.forEach((city) => {
+        const marker = cityMarkers[city.id];
+        if (!marker) return;
+        const el = marker.getElement();
+        if (!el) return;
+        const dot = el.querySelector(".jk-map-marker-dot") || el;
+        cityMarkerEls[city.id] = dot;
+      });
+    }
+
+    // 점선 그리기
+    function drawLines() {
+      if (!leafletMap || !linesSvg || !mapDom) return;
+
+      const mapRect = mapDom.getBoundingClientRect();
+      const w = mapRect.width;
+      const h = mapRect.height;
+
+      linesSvg.setAttribute("width", w);
+      linesSvg.setAttribute("height", h);
+      linesSvg.setAttribute("viewBox", "0 0 " + w + " " + h);
+      linesSvg.innerHTML = "";
+
+      if (window.innerWidth <= 768) return;
+
+      MAP_CITIES.forEach((city) => {
+        const card = cityCards[city.id];
+        if (!card) return;
+
+        const pt = leafletMap.latLngToContainerPoint([city.lat, city.lng]);
+        const markerX = pt.x;
+        const markerY = pt.y;
+
+        const cardRect = card.getBoundingClientRect();
+        const cardX =
+          cardRect.left + cardRect.width / 2 - mapRect.left;
+        const cardY =
+          cardRect.top + cardRect.height / 2 - mapRect.top;
+
+        const line = document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "line"
+        );
+        line.setAttribute("x1", markerX);
+        line.setAttribute("y1", markerY);
+        line.setAttribute("x2", cardX);
+        line.setAttribute("y2", cardY);
+        linesSvg.appendChild(line);
+      });
+    }
+
+    // 도시 활성화 (지도・카드・모바일 연동)
     function setActiveCity(cityId, opts) {
       opts = opts || {};
       const scrollMap = !!opts.scrollMap;
@@ -2560,54 +2569,10 @@
         }
       }
 
-      drawLines(); // 位置が変わっているかもしれないので再描画
+      drawLines();
     }
 
-    function drawLines() {
-      // leafletMap 初期化前に呼ばれる可能性があるのでガード
-      if (!leafletMap || !linesSvg || !mapDom) return;
-
-      const mapRect = mapDom.getBoundingClientRect();
-      const w = mapRect.width;
-      const h = mapRect.height;
-
-      linesSvg.setAttribute("width", w);
-      linesSvg.setAttribute("height", h);
-      linesSvg.setAttribute("viewBox", "0 0 " + w + " " + h);
-      linesSvg.innerHTML = "";
-
-      if (window.innerWidth <= 768) return;
-
-      MAP_CITIES.forEach((city) => {
-        const card = cityCards[city.id];
-        if (!card) return;
-
-        const pt = leafletMap.latLngToContainerPoint([
-          city.lat,
-          city.lng,
-        ]);
-        const markerX = pt.x;
-        const markerY = pt.y;
-
-        const cardRect = card.getBoundingClientRect();
-        const cardX =
-          cardRect.left + cardRect.width / 2 - mapRect.left;
-        const cardY =
-          cardRect.top + cardRect.height / 2 - mapRect.top;
-
-        const line = document.createElementNS(
-          "http://www.w3.org/2000/svg",
-          "line"
-        );
-        line.setAttribute("x1", markerX);
-        line.setAttribute("y1", markerY);
-        line.setAttribute("x2", cardX);
-        line.setAttribute("y2", cardY);
-        linesSvg.appendChild(line);
-      });
-    }
-
-    // ---------- アンケート9件生成 & ローカルストレージ ----------
+    // ---------- 서베이 9개 생성 & 로컬 스토리지 ----------
     const surveyGrid = document.getElementById("jkSurveyGrid");
     const surveyResult = document.getElementById("jkSpotSurveyResult");
     const SURVEY_STORAGE_KEY = "jkSakura2026SurveyV2";
@@ -2667,7 +2632,7 @@
       if (!surveyResult) return;
       if (total === 0) {
         surveyResult.innerHTML =
-          '<p style="font-size:0.8rem; color:var(--jk-text-muted); margin:0;">まだ投票結果はありません。気になるスポットを、ぜひ最初の1票として選んでみてください 🌸</p>';
+          '<p style="font-size:0.8rem; color:var(--jk-text-muted); margin:0;">まだ投票がありません。好きなスポットを最初に選んでみませんか？ 🌸</p>';
         return;
       }
 
@@ -2678,7 +2643,7 @@
       });
 
       let html =
-        '<p style="font-size:0.8rem; margin:0 0 4px;">これまでにこのページで一番多く選ばれたスポット</p>';
+        '<p style="font-size:0.8rem; margin:0 0 4px;">これまでこのページで選ばれた、人気の桜スポット</p>';
       html += '<div class="jk-spot-bars">';
 
       sorted.forEach((spot) => {
@@ -2703,7 +2668,6 @@
       html += "</div>";
       surveyResult.innerHTML = html;
 
-      // 上部カードの小さいバーも更新
       const voteBars =
         surveyGrid &&
         surveyGrid.querySelectorAll(".jk-spot-bar-fill[data-bar]");
@@ -2747,7 +2711,7 @@
       });
     }
 
-    // ---------- 都市別おすすめカード ----------
+    // ---------- 도시별 추천 카드 ----------
     const spotsGrid = document.getElementById("jkSpotsGrid");
     const spotCardMap = {};
 
@@ -2766,7 +2730,7 @@
         card.className = "jk-spot-card";
         card.dataset.city = cardData.id;
 
-        const spotsStr = cardData.spots.join(" · ");
+        const spotsStr = cardData.spots.join("・");
 
         card.innerHTML =
           '<div class="jk-spot-card-img-wrap">' +
@@ -2786,7 +2750,7 @@
           '<p class="jk-spot-card-desc">' +
           cardData.summary +
           "</p>" +
-          '<p class="jk-spot-card-spots">代表スポット：' +
+          '<p class="jk-spot-card-spots">主なスポット：' +
           spotsStr +
           "</p>" +
           '<a class="jk-spot-card-link" target="_blank" rel="noopener" href="' +
@@ -2819,7 +2783,7 @@
       });
     });
 
-    // ---------- フッターブックマーク案内 ----------
+    // ---------- footer 북마크 안내 ----------
     const footerBookmarkBtn = document.getElementById(
       "jkFooterBookmarkBtn"
     );
@@ -2838,7 +2802,7 @@
       });
     }
 
-    // ---------- フェードイン ----------
+    // ---------- 페이드인 ----------
     const fadeEls = document.querySelectorAll(".jk-fade-in");
     if ("IntersectionObserver" in window) {
       const io = new IntersectionObserver(
