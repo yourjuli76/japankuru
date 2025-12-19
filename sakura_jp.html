@@ -280,6 +280,28 @@
   .jk-survey-modal-btn--primary{background:var(--jk-pink);border-color:var(--jk-pink);color:#fff}
   .jk-survey-modal-btn--primary:hover{background:var(--jk-pink-dark);border-color:var(--jk-pink-dark);color:#fff}
   @keyframes jkPulse{0%,100%{box-shadow:0 0 0 0 rgba(212,96,122,0.4)}50%{box-shadow:0 0 0 10px rgba(212,96,122,0)}}
+  .jk-promo-section{padding:40px 0}
+  .jk-promo-grid{display:grid;gap:16px}
+  @media(min-width:768px){.jk-promo-grid{grid-template-columns:repeat(2,1fr);gap:20px}}
+  .jk-promo-card{position:relative;border-radius:var(--jk-radius-lg);overflow:hidden;min-height:200px;display:flex;flex-direction:column;justify-content:flex-end;text-decoration:none;color:#fff;transition:all 0.3s ease;box-shadow:var(--jk-shadow)}
+  .jk-promo-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(212,96,122,0.25)}
+  .jk-promo-card::before{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(45,41,38,0.85) 0%,rgba(45,41,38,0.4) 50%,rgba(45,41,38,0.1) 100%);z-index:1;transition:background 0.3s}
+  .jk-promo-card:hover::before{background:linear-gradient(to top,rgba(212,96,122,0.9) 0%,rgba(212,96,122,0.5) 50%,rgba(212,96,122,0.2) 100%)}
+  .jk-promo-card-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease}
+  .jk-promo-card:hover .jk-promo-card-bg{transform:scale(1.08)}
+  .jk-promo-card-content{position:relative;z-index:2;padding:24px 20px}
+  .jk-promo-card-badge{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;background:rgba(255,255,255,0.2);backdrop-filter:blur(4px);border-radius:999px;font-size:0.68rem;font-weight:600;letter-spacing:0.05em;margin-bottom:10px;border:1px solid rgba(255,255,255,0.3)}
+  .jk-promo-card-title{font-size:1.15rem;font-weight:700;margin:0 0 6px;line-height:1.4;text-shadow:0 2px 8px rgba(0,0,0,0.3)}
+  @media(min-width:768px){.jk-promo-card-title{font-size:1.25rem}}
+  .jk-promo-card-desc{font-size:0.82rem;margin:0 0 12px;opacity:0.9;line-height:1.5}
+  .jk-promo-card-cta{display:inline-flex;align-items:center;gap:6px;padding:10px 18px;background:#fff;color:var(--jk-pink);font-size:0.8rem;font-weight:700;border-radius:999px;transition:all 0.2s;box-shadow:0 4px 12px rgba(0,0,0,0.15)}
+  .jk-promo-card:hover .jk-promo-card-cta{background:var(--jk-pink);color:#fff;transform:translateX(4px)}
+  .jk-promo-card-cta svg{width:14px;height:14px;transition:transform 0.2s}
+  .jk-promo-card:hover .jk-promo-card-cta svg{transform:translateX(3px)}
+  .jk-promo-card--product{background:linear-gradient(135deg,#fce4ec 0%,#f8bbd9 100%)}
+  .jk-promo-card--event{background:linear-gradient(135deg,#e8f5e9 0%,#c8e6c9 100%)}
+  .jk-promo-new{position:absolute;top:16px;right:16px;z-index:3;padding:5px 10px;background:linear-gradient(135deg,#ff6b6b,#ee5a5a);color:#fff;font-size:0.65rem;font-weight:700;border-radius:4px;letter-spacing:0.05em;animation:jkNewPulse 2s infinite}
+  @keyframes jkNewPulse{0%,100%{opacity:1}50%{opacity:0.7}}
 </style>
 </head>
 <body>
@@ -302,9 +324,9 @@
   </nav>
   <section class="jk-hero">
     <div class="jk-hero-slider" id="jkHeroSlider">
-      <div class="jk-hero-slide is-active"><img src="https://img.japankuru.com/prg_img/img/img2022032216222456582000.jpg" alt="日本の桜"></div>
+      <div class="jk-hero-slide is-active"><img src="https://img.japankuru.com/prg_img/img/img2021041917113780259900.gif" alt="日本の桜"></div>
       <div class="jk-hero-slide"><img src="https://img.japankuru.com/prg_img/img/img2022032216080462220500.jpg" alt="富士山と桜" loading="lazy"></div>
-      <div class="jk-hero-slide"><img src="https://img.japankuru.com/prg_img/img/img2019030414083494430600.jpg" alt="川沿いの桜" loading="lazy"></div>
+      <div class="jk-hero-slide"><img src="https://img.japankuru.com/prg_img/img/img2019022116005070291000.jpg" alt="川沿いの桜" loading="lazy"></div>
       <div class="jk-hero-slide"><img src="https://www.japankuru.com/gld-kanri/data/uploads/2025/01/D05_6288-1536x1024.jpg" alt="京都の桜" loading="lazy"></div>
     </div>
     <div class="jk-hero-overlay"></div>
@@ -366,6 +388,31 @@
         <div class="jk-stage-card"><div class="jk-stage-img"><span class="jk-stage-num">4</span><img src="https://www.543life.com/content/wp-content/uploads/2024/04/main_240407-670x670.webp" alt="桜吹雪" loading="lazy"></div><div class="jk-stage-body"><div class="jk-stage-name">桜吹雪</div><div class="jk-stage-name-jp">さくらふぶき</div><p class="jk-stage-desc">風に舞う花びら</p><span class="jk-stage-timing">散り始め +3日</span></div></div>
       </div>
       <div class="jk-stage-message jk-fade-in"><p>開花から桜吹雪まで<strong>約2週間</strong>、桜を楽しめます！</p></div>
+    </div>
+  </section>
+  <section class="jk-promo-section jk-section--cream">
+    <div class="jk-container">
+      <div class="jk-promo-grid jk-fade-in">
+        <a href="https://www.japankuru.com/ja/search?q=桜+限定" class="jk-promo-card" target="_blank" rel="noopener">
+          <span class="jk-promo-new">NEW</span>
+          <img class="jk-promo-card-bg" src="https://img.japankuru.com/prg_img/img/img2019021120244275002000.jpg" alt="桜限定商品">
+          <div class="jk-promo-card-content">
+            <span class="jk-promo-card-badge">🛍️ SHOPPING</span>
+            <h3 class="jk-promo-card-title">2026 桜限定商品まとめ</h3>
+            <p class="jk-promo-card-desc">スタバ、コンビニ、コスメ...今年の新作をチェック！</p>
+            <span class="jk-promo-card-cta">記事を見る <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+          </div>
+        </a>
+        <a href="https://www.japankuru.com/ja/search?q=桜+祭り" class="jk-promo-card" target="_blank" rel="noopener">
+          <img class="jk-promo-card-bg" src="https://img.japankuru.com/prg_img/img/img2019022115191290429500.jpg" alt="桜祭り">
+          <div class="jk-promo-card-content">
+            <span class="jk-promo-card-badge">🎪 EVENT</span>
+            <h3 class="jk-promo-card-title">全国 桜祭り&イベント</h3>
+            <p class="jk-promo-card-desc">ライトアップ、屋台、クルーズ...見逃せない春イベント</p>
+            <span class="jk-promo-card-cta">記事を見る <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+          </div>
+        </a>
+      </div>
     </div>
   </section>
   <section class="jk-section jk-section--pink" id="forecast-map">
@@ -435,6 +482,30 @@
         <div class="jk-faq-item"><div class="jk-faq-q">宿泊予約はいつがベスト？</div><div class="jk-faq-a"><div class="jk-faq-a-inner">東京・京都は3〜6ヶ月前の予約がおすすめ。キャンセル可能プランで！<div class="jk-faq-tip"><span class="jk-faq-tip-label">💡 TIP</span> 桜シーズンのホテルは早く埋まります。</div></div></div></div>
         <div class="jk-faq-item"><div class="jk-faq-q">混雑を避けるには？</div><div class="jk-faq-a"><div class="jk-faq-a-inner">4月第1週の週末を避けて、平日の朝に訪問 or 東北地方へ！<div class="jk-faq-tip"><span class="jk-faq-tip-label">💡 TIP</span> 弘前・仙台は東京より2〜3週間遅いので混雑も少なめ</div></div></div></div>
         <div class="jk-faq-item"><div class="jk-faq-q">花粉症がひどいのですが？</div><div class="jk-faq-a"><div class="jk-faq-a-inner">3〜4月はスギ花粉シーズン！マスクとアレルギー薬は必須。<div class="jk-faq-tip"><span class="jk-faq-tip-label">💡 TIP</span> 花粉症の心配なく桜を見たいなら？5月の札幌がおすすめ！</div></div></div></div>
+      </div>
+    </div>
+  </section>
+  <section class="jk-promo-section jk-section--white">
+    <div class="jk-container">
+      <div class="jk-promo-grid jk-fade-in">
+        <a href="https://www.japankuru.com/ja/search?q=桜+写真" class="jk-promo-card" target="_blank" rel="noopener">
+          <img class="jk-promo-card-bg" src="https://img.japankuru.com/prg_img/img/img2019022115464850452300.jpg" alt="桜撮影スポット">
+          <div class="jk-promo-card-content">
+            <span class="jk-promo-card-badge">📸 PHOTO SPOT</span>
+            <h3 class="jk-promo-card-title">インスタ映え！桜撮影スポット</h3>
+            <p class="jk-promo-card-desc">プロが教える構図・時間帯・穴場スポット</p>
+            <span class="jk-promo-card-cta">記事を見る <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+          </div>
+        </a>
+        <a href="https://www.japankuru.com/ja/search?q=桜+グルメ" class="jk-promo-card" target="_blank" rel="noopener">
+          <span class="jk-promo-new">🍡</span>          <img class="jk-promo-card-bg" src="https://precious.ismcdn.jp/mwimgs/e/6/1080/img_e6ae4e31bb1d1a308034b75a2794007b128885.jpg" alt="桜グルメ">
+          <div class="jk-promo-card-content">
+            <span class="jk-promo-card-badge">🍽️ GOURMET</span>
+            <h3 class="jk-promo-card-title">春限定！桜スイーツ&グルメ</h3>
+            <p class="jk-promo-card-desc">桜餅、花見弁当、桜ラテ...春の味覚を堪能</p>
+            <span class="jk-promo-card-cta">記事を見る <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+          </div>
+        </a>
       </div>
     </div>
   </section>
