@@ -10,7 +10,6 @@
 <title>2026年 桜開花予想 | JAPANKURU</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@500;700&display=swap');
   .jk-sakura2026{--jk-pink:#d4607a;--jk-pink-dark:#b84d65;--jk-pink-soft:#f2d4dc;--jk-pink-light:#fff0f5;--jk-pink-bg:#fdf5f8;--jk-cream:#faf8f5;--jk-warm-gray:#6b635d;--jk-text:#2d2926;--jk-text-sub:#5c5652;--jk-text-muted:#9a918a;--jk-border:#e8e4e0;--jk-radius:12px;--jk-radius-lg:20px;--jk-shadow:0 4px 20px rgba(45,41,38,0.08);--jk-shadow-hover:0 8px 30px rgba(45,41,38,0.12);font-family:'Noto Serif JP',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;background:var(--jk-cream);color:var(--jk-text);line-height:1.7;padding-bottom:70px}
@@ -345,7 +344,6 @@
             <div class="jk-result-spot"><div class="jk-result-spot-title">おすすめスポット</div><div class="jk-result-spot-name" id="jkResultSpotName">上野公園</div><div class="jk-result-spot-desc" id="jkResultSpotDesc">1,000本以上の桜</div></div>
             <div class="jk-result-actions">
               <a href="#" class="jk-result-btn jk-result-btn--primary" id="jkResultArticle" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>関連記事</a>
-              <button type="button" class="jk-result-btn" id="jkSaveImage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>保存</button>
               <button type="button" class="jk-result-btn" id="jkShareResult"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.59 13.51l6.83 3.98M15.41 6.51l-6.82 3.98"/></svg>共有</button>
             </div>
             <div class="jk-result-tip" id="jkResultTip" style="display:none;"><div class="jk-result-tip-label">💡 <span id="jkResultCityName2"></span>のヒント</div><p class="jk-result-tip-text" id="jkResultTipText"></p></div>
@@ -543,13 +541,17 @@ document.addEventListener('DOMContentLoaded', function() {
   const spotsGrid = document.getElementById('jkSpotsGrid');
   if (spotsGrid) { CITIES.forEach(c => { const card = document.createElement('div'); card.className = 'jk-spot-card'; card.dataset.city = c.id; card.innerHTML = '<div class="jk-spot-card-img"><img src="'+c.spotImg+'" alt="'+c.spot+'" loading="lazy"><span class="jk-spot-card-tag">'+c.name+'</span></div><div class="jk-spot-card-body"><h4 class="jk-spot-card-name">'+c.spot+'</h4><p class="jk-spot-card-desc">'+c.spotDesc+'</p><a href="'+c.article+'" class="jk-spot-card-link" target="_blank" rel="noopener">関連記事を見る <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg></a>'+(c.editorPick ? '<div class="jk-spot-card-editor"><div class="jk-spot-card-editor-label">エディターピック</div><div class="jk-spot-card-editor-name">'+c.editorPick.name+'</div><div class="jk-spot-card-editor-desc">'+c.editorPick.desc+'</div><a href="'+c.editorPick.link+'" class="jk-spot-card-editor-link" target="_blank" rel="noopener">詳しく →</a></div>' : '')+'</div>'; spotsGrid.appendChild(card); }); }
   function parseDate(str, year=2026) { const [m,d] = str.split('/').map(Number); return new Date(year, m-1, d); }
-  document.getElementById('jkDateSubmit').addEventListener('click', function() {
+  document.getElementById('jkDateSubmit').addEventListener('click', function() { doSearch(); });
+  function doSearch(autoScroll = true) {
     const sv = document.getElementById('jkTravelStart').value, ev = document.getElementById('jkTravelEnd').value;
     if (!sv || !ev) { alert('日付を選択してください'); return; }
     const start = new Date(sv), end = new Date(ev);
     let best = null, bestScore = -1, bestStage = '';
     CITIES.forEach(c => { const bloom = parseDate(c.bloom), full = parseDate(c.full), fall = parseDate(c.fall), snow = parseDate(c.snow); const os = new Date(Math.max(start, bloom)), oe = new Date(Math.min(end, snow)), overlap = (oe - os) / 864e5; if (overlap > 0) { const mid = new Date((start.getTime() + end.getTime()) / 2), dist = Math.abs(mid - full) / 864e5; const score = overlap * 10 - dist; if (score > bestScore) { bestScore = score; best = c; bestStage = mid < bloom ? 'before' : mid < full ? 'bloom' : mid < fall ? 'full' : mid < snow ? 'fall' : 'snow'; } } });
     if (!best) { alert('その期間に桜を見られる都市がありません！'); return; }
+    // URL 업데이트
+    history.replaceState(null, '', `?start=${sv}&end=${ev}`);
+    window.jkLastResult = { city: best, stage: bestStage };
     const info = { before: { icon: '🌱', badge: 'COMING SOON', status: 'まだつぼみ！' }, bloom: { icon: '🌸', badge: 'BLOOMING', status: '開花中！' }, full: { icon: '🌺', badge: 'BEST MATCH', status: '満開！ベストタイミング' }, fall: { icon: '🍃', badge: 'FALLING', status: '散り始め！' }, snow: { icon: '💨', badge: 'FUBUKI', status: '桜吹雪！' } }[bestStage];
     document.getElementById('jkResultImg').src = best.spotImg;
     document.getElementById('jkResultIcon').textContent = info.icon;
@@ -562,10 +564,24 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('jkResultArticle').href = best.article;
     if (best.tip) { document.getElementById('jkResultCityName2').textContent = best.name; document.getElementById('jkResultTipText').textContent = best.tip; document.getElementById('jkResultTip').style.display = 'block'; } else { document.getElementById('jkResultTip').style.display = 'none'; }
     document.getElementById('jkResultCard').classList.add('is-visible');
-    document.getElementById('jkResultCard').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (autoScroll) document.getElementById('jkResultCard').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+  // 페이지 로드 시 URL 파라미터 체크
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('start') && urlParams.get('end')) {
+    document.getElementById('jkTravelStart').value = urlParams.get('start');
+    document.getElementById('jkTravelEnd').value = urlParams.get('end');
+    setTimeout(() => doSearch(true), 500);
+  }
+  document.getElementById('jkShareResult').addEventListener('click', function() {
+    const result = window.jkLastResult;
+    const text = result ? `🌸 ${result.city.name}の桜情報をチェック！` : '2026年 日本の桜ガイド';
+    if (navigator.share) {
+      navigator.share({ title: '2026年 桜開花予想', text: text, url: location.href }).catch(() => {});
+    } else {
+      navigator.clipboard.writeText(location.href).then(() => alert('リンクをコピーしました！')).catch(() => prompt('リンク:', location.href));
+    }
   });
-  document.getElementById('jkSaveImage').addEventListener('click', async function() { try { const canvas = await html2canvas(document.getElementById('jkResultCard'), { backgroundColor: '#fff', scale: 2 }); const link = document.createElement('a'); link.download = 'sakura-2026.png'; link.href = canvas.toDataURL('image/png'); link.click(); } catch { alert('スクリーンショットをご利用ください！'); } });
-  document.getElementById('jkShareResult').addEventListener('click', handleShare);
   const STORAGE_KEY = 'jkSakura2026SpotVotes', spotButtons = document.querySelectorAll('.jk-spot-choice'), surveyResult = document.getElementById('jkSpotSurveyResult');
   const spotLabels = { ueno: '上野公園', meguro: '目黒川', tetsugaku: '哲学の道', osaka: '大阪城公園', hirosaki: '弘前城', maizuru: '舞鶴公園' };
   const spotToCityId = { ueno: 'tokyo', meguro: 'tokyo', tetsugaku: 'kyoto', osaka: 'osaka', hirosaki: 'aomori', maizuru: 'fukuoka' };
