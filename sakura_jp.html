@@ -1,1112 +1,319 @@
 <!-- ==============================
      JAPANKURU SAKURA 2026 LANDING
-     v10 - 모바일 슬라이더 연동 + 서베이 섬네일
+     v10 - 日本語版
      ============================== -->
-
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026年 桜開花予想 | JAPANKURU</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@500;700&display=swap');
-
-  .jk-sakura2026 {
-    --jk-pink: #d4607a;
-    --jk-pink-dark: #b84d65;
-    --jk-pink-soft: #f2d4dc;
-    --jk-pink-light: #fff0f5;
-    --jk-pink-bg: #fdf5f8;
-    --jk-cream: #faf8f5;
-    --jk-warm-gray: #6b635d;
-    --jk-text: #2d2926;
-    --jk-text-sub: #5c5652;
-    --jk-text-muted: #9a918a;
-    --jk-border: #e8e4e0;
-    --jk-radius: 12px;
-    --jk-radius-lg: 20px;
-    --jk-shadow: 0 4px 20px rgba(45, 41, 38, 0.08);
-    --jk-shadow-hover: 0 8px 30px rgba(45, 41, 38, 0.12);
-  }
-
-  .jk-sakura2026 {
-    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-    background: var(--jk-cream);
-    color: var(--jk-text);
-    line-height: 1.7;
-  }
-  .jk-sakura2026 *, .jk-sakura2026 *::before, .jk-sakura2026 *::after { box-sizing: border-box; }
-  .jk-title-jp { font-family: 'Noto Serif JP', serif; font-weight: 700; }
-
-  /* ===== HERO ===== */
-  .jk-hero {
-    position: relative; height: 75vh; min-height: 450px; max-height: 680px;
-    display: flex; align-items: flex-end; justify-content: center; overflow: hidden;
-  }
-  .jk-hero-slider { position: absolute; inset: 0; }
-  .jk-hero-slide { position: absolute; inset: 0; opacity: 0; transition: opacity 1.5s ease-in-out; }
-  .jk-hero-slide.is-active { opacity: 1; }
-  .jk-hero-slide img { width: 100%; height: 100%; object-fit: cover; }
-  .jk-hero-slide.is-active img { animation: jkKenBurns 8s ease-out forwards; }
-  @keyframes jkKenBurns { from { transform: scale(1); } to { transform: scale(1.05); } }
-  .jk-hero-overlay {
-    position: absolute; inset: 0;
-    background: linear-gradient(to top, rgba(45,41,38,0.85) 0%, rgba(45,41,38,0.2) 60%, rgba(45,41,38,0.1) 100%);
-    z-index: 1;
-  }
-  .jk-hero-content { position: relative; z-index: 2; max-width: 620px; padding: 0 24px 36px; text-align: center; color: #fff; }
-  .jk-hero-kicker { font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.8); margin-bottom: 8px; }
-  .jk-hero h1 { font-size: clamp(1.6rem, 5vw, 2.4rem); margin: 0 0 12px; line-height: 1.35; }
-  .jk-hero-lead { font-size: 0.92rem; color: rgba(255,255,255,0.9); margin: 0 0 18px; line-height: 1.8; }
-  .jk-hero-lead strong { color: #fff; background: linear-gradient(transparent 60%, var(--jk-pink) 60%); }
-  .jk-hero-cta {
-    display: inline-flex; align-items: center; gap: 6px; padding: 11px 22px;
-    font-size: 0.85rem; font-weight: 600; border-radius: 999px; background: var(--jk-pink);
-    color: #fff; text-decoration: none; transition: background 0.2s;
-  }
-  .jk-hero-cta:hover { background: var(--jk-pink-dark); }
-  .jk-hero-cta svg { width: 15px; height: 15px; }
-  .jk-hero-indicators { position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%); display: flex; gap: 6px; z-index: 3; }
-  .jk-hero-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.4); cursor: pointer; transition: all 0.3s; }
-  .jk-hero-dot.is-active { background: #fff; transform: scale(1.3); }
-
-  /* ===== 공통 ===== */
-  .jk-container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
-  .jk-section { padding: 56px 0; }
-  .jk-section--white { background: #fff; }
-  .jk-section--cream { background: var(--jk-cream); }
-  .jk-section--pink { background: var(--jk-pink-bg); }
-
-  .jk-section-header { margin-bottom: 28px; }
-  .jk-section-header--center { text-align: center; }
-  .jk-section-label { font-size: 0.65rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--jk-pink); margin-bottom: 5px; }
-  .jk-section-title { font-size: clamp(1.25rem, 3.5vw, 1.7rem); margin: 0 0 6px; }
-  .jk-section-desc { font-size: 0.88rem; color: var(--jk-text-sub); margin: 0; max-width: 480px; }
-  .jk-section-header--center .jk-section-desc { margin: 0 auto; }
-
-  /* ===== 날짜 선택 ===== */
-  .jk-date-section { background: linear-gradient(135deg, var(--jk-pink) 0%, var(--jk-pink-dark) 100%); padding: 36px 0; color: #fff; }
-  .jk-date-inner { max-width: 520px; margin: 0 auto; text-align: center; }
-  .jk-date-title { font-size: 1.2rem; margin: 0 0 4px; }
-  .jk-date-sub { font-size: 0.82rem; opacity: 0.9; margin: 0 0 18px; }
-  .jk-date-form { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 10px; }
-  .jk-date-input-wrap { display: flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.15); border-radius: 999px; padding: 3px 10px 3px 3px; }
-  .jk-date-input { width: 120px; padding: 8px 10px; border: none; border-radius: 999px; font-size: 0.85rem; background: #fff; color: var(--jk-text); }
-  .jk-date-input:focus { outline: 2px solid var(--jk-pink-soft); }
-  .jk-date-label { font-size: 0.72rem; color: rgba(255,255,255,0.8); }
-  .jk-date-submit { padding: 10px 22px; font-size: 0.85rem; font-weight: 600; border: 2px solid #fff; border-radius: 999px; background: transparent; color: #fff; cursor: pointer; transition: all 0.2s; }
-  .jk-date-submit:hover { background: #fff; color: var(--jk-pink); }
-
-  /* 결과 카드 */
-  .jk-result-card { display: none; background: #fff; border-radius: var(--jk-radius-lg); overflow: hidden; color: var(--jk-text); box-shadow: var(--jk-shadow); margin-top: 14px; text-align: left; }
-  .jk-result-card.is-visible { display: block; animation: jkFadeUp 0.4s ease-out; }
-  @keyframes jkFadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
-  .jk-result-img { width: 100%; height: 140px; object-fit: cover; }
-  .jk-result-body { padding: 18px; }
-  .jk-result-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-  .jk-result-icon { width: 44px; height: 44px; border-radius: 50%; background: var(--jk-pink-soft); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; flex-shrink: 0; }
-  .jk-result-badge { font-size: 0.62rem; letter-spacing: 0.08em; color: var(--jk-pink); text-transform: uppercase; }
-  .jk-result-city { font-size: 1.1rem; font-weight: 700; margin: 0; }
-  .jk-result-status { font-size: 0.88rem; margin: 0 0 10px; padding: 8px 10px; background: linear-gradient(90deg, var(--jk-pink-soft) 0%, transparent 100%); border-left: 3px solid var(--jk-pink); border-radius: 0 6px 6px 0; }
-  .jk-result-dates { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px; font-size: 0.75rem; margin-bottom: 10px; }
-  .jk-result-date-item { padding: 5px 7px; background: var(--jk-cream); border-radius: 4px; }
-  .jk-result-date-item.is-match { background: var(--jk-pink); color: #fff; }
-  .jk-result-spot { padding: 10px; background: var(--jk-cream); border-radius: var(--jk-radius); margin-bottom: 10px; }
-  .jk-result-spot-title { font-size: 0.72rem; color: var(--jk-text-muted); margin-bottom: 3px; }
-  .jk-result-spot-name { font-size: 0.9rem; font-weight: 600; margin-bottom: 3px; }
-  .jk-result-spot-desc { font-size: 0.78rem; color: var(--jk-text-sub); line-height: 1.45; }
-  .jk-result-actions { display: flex; gap: 5px; flex-wrap: wrap; }
-  .jk-result-btn { flex: 1; min-width: 90px; padding: 8px 12px; font-size: 0.75rem; font-weight: 600; border-radius: 999px; border: 1px solid var(--jk-border); background: #fff; color: var(--jk-text); cursor: pointer; transition: all 0.15s; display: flex; align-items: center; justify-content: center; gap: 4px; text-decoration: none; }
-  .jk-result-btn:hover { border-color: var(--jk-pink); color: var(--jk-pink); }
-  .jk-result-btn--primary { background: var(--jk-pink); border-color: var(--jk-pink); color: #fff; }
-  .jk-result-btn--primary:hover { background: var(--jk-pink-dark); color: #fff; }
-  .jk-result-btn svg { width: 12px; height: 12px; }
-
-  /* ===== 4단계 ===== */
-  .jk-stages-grid { display: grid; gap: 12px; }
-  @media (min-width: 600px) { .jk-stages-grid { grid-template-columns: repeat(2, 1fr); } }
-  @media (min-width: 900px) { .jk-stages-grid { grid-template-columns: repeat(4, 1fr); } }
-  .jk-stage-card { background: #fff; border-radius: var(--jk-radius); overflow: hidden; border: 1px solid var(--jk-border); transition: all 0.2s; }
-  .jk-stage-card:hover { box-shadow: var(--jk-shadow-hover); transform: translateY(-2px); }
-  .jk-stage-card--highlight { border: 2px solid var(--jk-pink); }
-  .jk-stage-img { position: relative; aspect-ratio: 4/3; overflow: hidden; }
-  .jk-stage-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
-  .jk-stage-card:hover .jk-stage-img img { transform: scale(1.05); }
-  .jk-stage-num { position: absolute; top: 8px; left: 8px; width: 24px; height: 24px; border-radius: 50%; background: var(--jk-pink); color: #fff; font-size: 0.7rem; font-weight: 700; display: flex; align-items: center; justify-content: center; }
-  .jk-stage-body { padding: 12px; }
-  .jk-stage-name { font-size: 0.9rem; font-weight: 700; margin: 0 0 2px; }
-  .jk-stage-name-jp { font-size: 0.68rem; color: var(--jk-text-muted); margin-bottom: 5px; }
-  .jk-stage-desc { font-size: 0.78rem; color: var(--jk-text-sub); line-height: 1.5; margin: 0 0 6px; }
-  .jk-stage-timing { font-size: 0.65rem; padding: 3px 7px; background: var(--jk-cream); border-radius: 999px; color: var(--jk-warm-gray); }
-  .jk-stage-message { margin-top: 18px; padding: 12px 16px; background: linear-gradient(90deg, var(--jk-pink-soft) 0%, var(--jk-cream) 100%); border-left: 3px solid var(--jk-pink); border-radius: 0 var(--jk-radius) var(--jk-radius) 0; }
-  .jk-stage-message p { margin: 0; font-size: 0.88rem; }
-  .jk-stage-message strong { color: var(--jk-pink); }
-
-  /* ===== Leaflet 지도 + 카드 오버레이 ===== */
-  .jk-map-source-bar {
-    display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px;
-    margin-bottom: 14px; padding: 9px 12px; background: #fff;
-    border-radius: var(--jk-radius); border: 1px solid var(--jk-border); font-size: 0.72rem;
-  }
-  .jk-map-source-text { color: var(--jk-text-sub); }
-  .jk-map-source-text a { color: var(--jk-pink); text-decoration: underline; }
-  .jk-map-source-updated { color: var(--jk-text-muted); font-size: 0.68rem; }
-
-  .jk-map-wrapper {
-    position: relative;
-    background: var(--jk-pink-bg);
-    border-radius: var(--jk-radius-lg);
-    overflow: hidden;
-  }
-
-  .jk-map-container {
-    position: relative;
-    height: 650px;
-  }
-  @media (max-width: 900px) { .jk-map-container { height: 550px; } }
-
-  #jk-sakura-map {
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-  }
-
-  /* Leaflet 커스텀 스타일 */
-  .jk-sakura2026 .leaflet-container { background: var(--jk-pink-bg); }
-  .jk-sakura2026 .leaflet-tile-pane { filter: saturate(0.3) brightness(1.05); opacity: 0.5; }
-  .jk-sakura2026 .leaflet-control-zoom { border: none; box-shadow: var(--jk-shadow); }
-  .jk-sakura2026 .leaflet-control-zoom a { background: #fff; color: var(--jk-pink); border: none; }
-  .jk-sakura2026 .leaflet-control-zoom a:hover { background: var(--jk-pink-light); }
-
-  /* 도시 카드 (Leaflet 위 오버레이) */
-  .jk-map-city-card {
-    position: absolute;
-    background: #fff;
-    border-radius: 10px;
-    padding: 10px 12px;
-    box-shadow: var(--jk-shadow);
-    border: 1px solid var(--jk-border);
-    min-width: 110px;
-    max-width: 130px;
-    font-size: 0.7rem;
-    z-index: 1000;
-    transition: all 0.2s;
-    pointer-events: auto;
-  }
-  .jk-map-city-card:hover {
-    transform: scale(1.05);
-    box-shadow: var(--jk-shadow-hover);
-    z-index: 1100;
-  }
-  .jk-map-city-card-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 6px;
-    margin-bottom: 6px;
-  }
-  .jk-map-city-card-name {
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: var(--jk-pink);
-  }
-  .jk-map-city-card-status {
-    font-size: 0.6rem;
-    font-weight: 600;
-    padding: 2px 6px;
-    border-radius: 4px;
-    white-space: nowrap;
-  }
-  .jk-map-city-card-status.waiting {
-    background: linear-gradient(135deg, #e8e4e0, #f5f3f0);
-    color: #666;
-  }
-  .jk-map-city-card-status.active {
-    background: linear-gradient(135deg, #d4607a, #e87a94);
-    color: #fff;
-    animation: jkStatusPulse 2s infinite;
-  }
-  .jk-map-city-card-status.ending {
-    background: linear-gradient(135deg, #a0c4ff, #bfd7ff);
-    color: #3d5a80;
-  }
-  .jk-map-city-card-status small {
-    opacity: 0.85;
-    font-weight: 500;
-  }
-  @keyframes jkStatusPulse {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(212, 96, 122, 0.4); }
-    50% { box-shadow: 0 0 0 4px rgba(212, 96, 122, 0); }
-  }
-  .jk-map-city-card-dates { display: flex; flex-direction: column; gap: 1px; }
-  .jk-map-city-card-row {
-    display: flex; align-items: center; gap: 3px;
-    color: var(--jk-text-sub); font-size: 0.65rem;
-  }
-  .jk-map-city-card-row .icon { font-size: 0.72rem; }
-  .jk-map-city-card-row span { margin-left: auto; font-weight: 600; color: var(--jk-text); }
-
-  /* 점선 연결 (SVG로 그림) */
-  .jk-map-lines {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    pointer-events: none;
-    z-index: 999;
-  }
-  .jk-map-lines line {
-    stroke: var(--jk-pink);
-    stroke-width: 1.5;
-    stroke-dasharray: 4 3;
-  }
-
-  /* 모바일: 지도 + 아래 카드 그리드 */
-  @media (max-width: 767px) {
-    .jk-map-container { height: 350px; }
-    .jk-map-city-card { display: none; }
-    .jk-map-lines { display: none; }
-    
-    /* 모바일 슬라이더 */
-    .jk-map-mobile-slider {
-      display: flex;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      -webkit-overflow-scrolling: touch;
-      gap: 12px;
-      padding: 16px;
-      scroll-padding-left: 16px;
-    }
-    .jk-map-mobile-slider::-webkit-scrollbar { display: none; }
-    .jk-map-mobile-slider { -ms-overflow-style: none; scrollbar-width: none; }
-    
-    .jk-map-mobile-card {
-      flex: 0 0 280px;
-      scroll-snap-align: start;
-      background: #fff;
-      border-radius: 12px;
-      padding: 14px;
-      box-shadow: var(--jk-shadow);
-      border: 2px solid transparent;
-      transition: all 0.2s;
-    }
-    .jk-map-mobile-card.is-active {
-      border-color: var(--jk-pink);
-      box-shadow: 0 4px 20px rgba(212, 96, 122, 0.2);
-    }
-    .jk-map-mobile-card-header {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 10px;
-    }
-    .jk-map-mobile-card-name { 
-      font-size: 1rem; 
-      font-weight: 700; 
-      color: var(--jk-pink);
-    }
-    .jk-map-mobile-card-name-kr {
-      font-size: 0.75rem;
-      color: var(--jk-text-sub);
-    }
-    .jk-map-mobile-card-status {
-      display: inline-block;
-      font-size: 0.75rem;
-      font-weight: 600;
-      padding: 4px 10px;
-      border-radius: 6px;
-      margin-bottom: 10px;
-    }
-    .jk-map-mobile-card-status.waiting {
-      background: linear-gradient(135deg, #e8e4e0, #f5f3f0);
-      color: #666;
-    }
-    .jk-map-mobile-card-status.active {
-      background: linear-gradient(135deg, #d4607a, #e87a94);
-      color: #fff;
-      animation: jkStatusPulse 2s infinite;
-    }
-    .jk-map-mobile-card-status.ending {
-      background: linear-gradient(135deg, #a0c4ff, #bfd7ff);
-      color: #3d5a80;
-    }
-    .jk-map-mobile-card-status small {
-      opacity: 0.85;
-      font-weight: 500;
-    }
-    .jk-map-mobile-card-dates {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 4px;
-      margin-bottom: 10px;
-    }
-    .jk-map-mobile-card-row { 
-      display: flex; 
-      align-items: center; 
-      gap: 3px; 
-      font-size: 0.72rem; 
-      color: var(--jk-text-sub);
-      padding: 4px 6px;
-      background: var(--jk-cream);
-      border-radius: 4px;
-    }
-    .jk-map-mobile-card-row span { 
-      margin-left: auto; 
-      font-weight: 600; 
-      color: var(--jk-text); 
-    }
-    .jk-map-mobile-card-row.is-nearest {
-      background: var(--jk-pink);
-      color: #fff;
-    }
-    .jk-map-mobile-card-row.is-nearest span {
-      color: #fff;
-    }
-    .jk-map-mobile-card-highlight {
-      font-size: 0.72rem;
-      color: var(--jk-pink);
-      padding: 8px;
-      background: var(--jk-pink-light);
-      border-radius: 6px;
-      line-height: 1.4;
-    }
-    .jk-map-mobile-card-btn {
-      display: block;
-      width: 100%;
-      margin-top: 10px;
-      padding: 8px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      text-align: center;
-      background: var(--jk-pink);
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    
-    /* 레거시 그리드 숨김 */
-    .jk-map-mobile-cards { display: none; }
-  }
-  @media (min-width: 768px) {
-    .jk-map-mobile-slider { display: none; }
-    .jk-map-mobile-cards { display: none; }
-  }
-
-  /* ===== Q1 스팟 앙케이트 ===== */
-  .jk-spot-survey {
-    margin-bottom: 32px; padding: 20px 18px;
-    background: #fff; border-radius: var(--jk-radius-lg);
-    border: 1px solid var(--jk-border); box-shadow: var(--jk-shadow);
-  }
-  .jk-spot-survey-header { margin-bottom: 18px; }
-  .jk-spot-survey-grid { display: grid; gap: 10px; }
-  @media (min-width: 720px) { .jk-spot-survey-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-  @media (min-width: 1000px) { .jk-spot-survey-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-
-  .jk-spot-choice {
-    width: 100%; text-align: left; border-radius: var(--jk-radius);
-    border: 1px solid var(--jk-border); background: var(--jk-cream);
-    padding: 0; cursor: pointer;
-    display: flex; flex-direction: column; transition: all 0.15s;
-    overflow: hidden;
-  }
-  .jk-spot-choice:hover {
-    border-color: var(--jk-pink); background: #fff;
-    box-shadow: var(--jk-shadow); transform: translateY(-1px);
-  }
-  .jk-spot-choice.is-selected { border-color: var(--jk-pink); background: var(--jk-pink-light); }
-  .jk-spot-choice-img {
-    width: 100%;
-    height: 100px;
-    object-fit: cover;
-  }
-  .jk-spot-choice-body {
-    padding: 10px 12px;
-  }
-  .jk-spot-choice-main { display: flex; flex-direction: column; gap: 4px; }
-  .jk-spot-choice-tag {
-    display: inline-flex; align-items: center; padding: 2px 8px;
-    font-size: 0.7rem; border-radius: 999px;
-    background: var(--jk-pink-soft); color: var(--jk-pink-dark); align-self: flex-start;
-  }
-  .jk-spot-choice-name { font-size: 0.95rem; font-weight: 700; color: var(--jk-text); }
-  .jk-spot-choice-desc { font-size: 0.8rem; color: var(--jk-text-sub); margin: 0; }
-  .jk-spot-choice-article { font-size: 0.78rem; color: var(--jk-pink-dark); text-decoration: none; }
-  .jk-spot-choice-article:hover { text-decoration: underline; }
-
-  .jk-spot-survey-result { margin-top: 18px; padding-top: 14px; border-top: 1px dashed var(--jk-border); }
-  .jk-spot-survey-result-title { font-size: 0.85rem; color: var(--jk-text-sub); margin: 0 0 8px; }
-  .jk-spot-bars { display: flex; flex-direction: column; gap: 6px; }
-  .jk-spot-bar { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 3fr) auto; gap: 6px; align-items: center; font-size: 0.78rem; }
-  .jk-spot-bar-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .jk-spot-bar-track { position: relative; height: 7px; border-radius: 999px; background: var(--jk-cream); overflow: hidden; }
-  .jk-spot-bar-fill { position: absolute; inset: 0; width: 0; background: linear-gradient(90deg, var(--jk-pink-soft), var(--jk-pink)); border-radius: 999px; transition: width 0.3s ease; }
-  .jk-spot-bar-value { font-variant-numeric: tabular-nums; color: var(--jk-text-muted); }
-  .jk-spot-bar.is-mine .jk-spot-bar-name { font-weight: 700; color: var(--jk-pink-dark); }
-  .jk-spot-bar.is-mine .jk-spot-bar-value { color: var(--jk-pink-dark); }
-
-  /* ===== 추천 명소 카드 그리드 ===== */
-  .jk-spots-grid {
-    display: grid;
-    gap: 16px;
-    margin-top: 32px;
-  }
-  @media (min-width: 600px) { .jk-spots-grid { grid-template-columns: repeat(2, 1fr); } }
-  @media (min-width: 900px) { .jk-spots-grid { grid-template-columns: repeat(3, 1fr); } }
-
-  .jk-spot-card {
-    background: #fff;
-    border-radius: var(--jk-radius);
-    overflow: hidden;
-    border: 1px solid var(--jk-border);
-    transition: all 0.2s;
-  }
-  .jk-spot-card:hover {
-    box-shadow: var(--jk-shadow-hover);
-    transform: translateY(-3px);
-  }
-  .jk-spot-card-img {
-    position: relative;
-    aspect-ratio: 16/10;
-    overflow: hidden;
-  }
-  .jk-spot-card-img img {
-    width: 100%; height: 100%;
-    object-fit: cover;
-    transition: transform 0.4s;
-  }
-  .jk-spot-card:hover .jk-spot-card-img img { transform: scale(1.05); }
-  .jk-spot-card-tag {
-    position: absolute;
-    top: 10px; left: 10px;
-    padding: 3px 10px;
-    font-size: 0.68rem;
-    font-weight: 600;
-    border-radius: 999px;
-    background: var(--jk-pink);
-    color: #fff;
-  }
-  .jk-spot-card-body { padding: 14px; }
-  .jk-spot-card-name { font-size: 1rem; font-weight: 700; margin: 0 0 4px; }
-  .jk-spot-card-desc { font-size: 0.82rem; color: var(--jk-text-sub); line-height: 1.5; margin: 0 0 10px; }
-  .jk-spot-card-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 0.78rem;
-    font-weight: 600;
-    color: var(--jk-pink);
-    text-decoration: none;
-    transition: color 0.15s;
-  }
-  .jk-spot-card-link:hover { color: var(--jk-pink-dark); text-decoration: underline; }
-  .jk-spot-card-link svg { width: 12px; height: 12px; }
-
-  /* ===== FAQ ===== */
-  .jk-faq-list { display: flex; flex-direction: column; gap: 8px; max-width: 660px; margin: 0 auto; }
-  .jk-faq-item { background: #fff; border-radius: var(--jk-radius); border: 1px solid var(--jk-border); overflow: hidden; }
-  .jk-faq-q { padding: 12px 14px; font-size: 0.88rem; font-weight: 600; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
-  .jk-faq-q::after { content: ''; width: 16px; height: 16px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23d4607a'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E") center/contain no-repeat; transition: transform 0.2s; flex-shrink: 0; }
-  .jk-faq-item.is-open .jk-faq-q::after { transform: rotate(180deg); }
-  .jk-faq-a { max-height: 0; overflow: hidden; transition: max-height 0.3s; }
-  .jk-faq-item.is-open .jk-faq-a { max-height: 280px; }
-  .jk-faq-a-inner { padding: 0 14px 12px; font-size: 0.82rem; color: var(--jk-text-sub); line-height: 1.7; }
-
-  /* ===== 푸터 ===== */
-  .jk-footer { text-align: center; padding: 36px 20px; background: var(--jk-text); color: #fff; }
-  .jk-footer-text { font-size: 0.9rem; margin: 0 0 14px; opacity: 0.9; }
-  .jk-footer-btns { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
-  .jk-footer-btn { display: inline-flex; align-items: center; gap: 5px; padding: 9px 16px; font-size: 0.78rem; font-weight: 600; border-radius: 999px; border: 1px solid rgba(255,255,255,0.3); background: transparent; color: #fff; cursor: pointer; transition: all 0.15s; }
-  .jk-footer-btn:hover { background: rgba(255,255,255,0.1); }
-  .jk-footer-btn svg { width: 13px; height: 13px; }
-  .jk-footer-source { font-size: 0.68rem; color: rgba(255,255,255,0.5); line-height: 1.6; }
-  .jk-footer-source a { color: rgba(255,255,255,0.7); text-decoration: underline; }
-
-  /* Fade */
-  .jk-fade-in { opacity: 0; transform: translateY(18px); transition: opacity 0.5s, transform 0.5s; }
-  .jk-fade-in.is-visible { opacity: 1; transform: translateY(0); }
-
-  @media (max-width: 600px) {
-    .jk-section { padding: 44px 0; }
-    .jk-result-dates { grid-template-columns: 1fr; }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .jk-fade-in { opacity: 1; transform: none; transition: none; }
-    .jk-hero-slide.is-active img { animation: none; }
-  }
-
-  /* ===== 체크리스트 섹션 ===== */
-  .jk-checklist-section {
-    background: linear-gradient(180deg, var(--jk-pink-bg) 0%, #fff 100%);
-  }
-  .jk-checklist-box {
-    max-width: 560px;
-    margin: 0 auto;
-    background: #fff;
-    border-radius: var(--jk-radius-lg);
-    padding: 24px 20px;
-    box-shadow: var(--jk-shadow);
-    border: 1px solid var(--jk-border);
-  }
-  .jk-checklist-header {
-    text-align: center;
-    margin-bottom: 18px;
-    padding-bottom: 14px;
-    border-bottom: 1px dashed var(--jk-border);
-  }
-  .jk-checklist-title {
-    font-size: 1.1rem;
-    font-weight: 700;
-    margin: 0 0 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-  }
-  .jk-checklist-sub {
-    font-size: 0.78rem;
-    color: var(--jk-text-sub);
-    margin: 0;
-  }
-  .jk-checklist-group {
-    margin-bottom: 16px;
-  }
-  .jk-checklist-group:last-child {
-    margin-bottom: 0;
-  }
-  .jk-checklist-group-title {
-    font-size: 0.72rem;
-    color: var(--jk-text-muted);
-    letter-spacing: 0.05em;
-    margin: 0 0 8px;
-    padding-left: 2px;
-  }
-  .jk-checklist-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    padding: 10px 12px;
-    background: var(--jk-cream);
-    border-radius: var(--jk-radius);
-    margin-bottom: 6px;
-    transition: all 0.15s;
-  }
-  .jk-checklist-item:hover {
-    background: var(--jk-pink-light);
-  }
-  .jk-checklist-item--highlight {
-    background: linear-gradient(90deg, var(--jk-pink-soft) 0%, var(--jk-cream) 100%);
-    border-left: 3px solid var(--jk-pink);
-  }
-  .jk-checklist-check {
-    width: 18px;
-    height: 18px;
-    border: 2px solid var(--jk-border);
-    border-radius: 4px;
-    flex-shrink: 0;
-    margin-top: 1px;
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-  .jk-checklist-item:hover .jk-checklist-check {
-    border-color: var(--jk-pink);
-  }
-  .jk-checklist-check.is-checked {
-    background: var(--jk-pink);
-    border-color: var(--jk-pink);
-    position: relative;
-  }
-  .jk-checklist-check.is-checked::after {
-    content: '✓';
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    font-size: 0.7rem;
-    font-weight: 700;
-  }
-  .jk-checklist-content {
-    flex: 1;
-    min-width: 0;
-  }
-  .jk-checklist-label {
-    font-size: 0.88rem;
-    font-weight: 600;
-    color: var(--jk-text);
-    margin-bottom: 2px;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-  }
-  .jk-checklist-desc {
-    font-size: 0.75rem;
-    color: var(--jk-text-sub);
-    line-height: 1.5;
-    margin: 0;
-  }
-  .jk-checklist-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 3px;
-    font-size: 0.72rem;
-    color: var(--jk-pink);
-    text-decoration: none;
-    margin-top: 4px;
-    font-weight: 500;
-  }
-  .jk-checklist-link:hover {
-    text-decoration: underline;
-  }
-  .jk-checklist-link svg {
-    width: 10px;
-    height: 10px;
-  }
-  .jk-checklist-divider {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin: 16px 0;
-    font-size: 0.7rem;
-    color: var(--jk-pink);
-    font-weight: 600;
-  }
-  .jk-checklist-divider::before,
-  .jk-checklist-divider::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--jk-pink-soft), transparent);
-  }
-
-  /* ===== 에디터 픽 (도시 카드 내) ===== */
-  .jk-spot-card-editor {
-    margin-top: 10px;
-    padding-top: 10px;
-    border-top: 1px dashed var(--jk-border);
-  }
-  .jk-spot-card-editor-label {
-    font-size: 0.65rem;
-    color: var(--jk-pink);
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    margin-bottom: 4px;
-    display: flex;
-    align-items: center;
-    gap: 3px;
-  }
-  .jk-spot-card-editor-name {
-    font-size: 0.82rem;
-    font-weight: 600;
-    color: var(--jk-text);
-    margin-bottom: 2px;
-  }
-  .jk-spot-card-editor-desc {
-    font-size: 0.72rem;
-    color: var(--jk-text-sub);
-    line-height: 1.45;
-    margin-bottom: 4px;
-  }
-  .jk-spot-card-editor-link {
-    font-size: 0.7rem;
-    color: var(--jk-pink);
-    text-decoration: none;
-  }
-  .jk-spot-card-editor-link:hover {
-    text-decoration: underline;
-  }
-
-  /* ===== 결과 카드 꿀팁 ===== */
-  .jk-result-tip {
-    margin-top: 12px;
-    padding: 12px;
-    background: linear-gradient(135deg, var(--jk-pink-light) 0%, var(--jk-cream) 100%);
-    border-radius: var(--jk-radius);
-    border-left: 3px solid var(--jk-pink);
-  }
-  .jk-result-tip-label {
-    font-size: 0.68rem;
-    color: var(--jk-pink);
-    font-weight: 600;
-    margin-bottom: 4px;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-  .jk-result-tip-text {
-    font-size: 0.8rem;
-    color: var(--jk-text);
-    line-height: 1.55;
-    margin: 0;
-  }
-  .jk-result-tip-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 3px;
-    font-size: 0.72rem;
-    color: var(--jk-pink);
-    text-decoration: none;
-    margin-top: 6px;
-    font-weight: 500;
-  }
-  .jk-result-tip-link:hover {
-    text-decoration: underline;
-  }
-
-  /* ===== 서베이 결과 팁 ===== */
-  .jk-survey-top-tip {
-    margin-top: 14px;
-    padding: 10px 12px;
-    background: var(--jk-pink-light);
-    border-radius: var(--jk-radius);
-    font-size: 0.78rem;
-    color: var(--jk-text);
-  }
-  .jk-survey-top-tip-label {
-    font-size: 0.68rem;
-    color: var(--jk-pink);
-    font-weight: 600;
-    margin-bottom: 3px;
-  }
-
-  /* ===== FAQ 팁 ===== */
-  .jk-faq-tip {
-    margin-top: 10px;
-    padding: 8px 10px;
-    background: var(--jk-pink-light);
-    border-radius: 6px;
-    font-size: 0.75rem;
-  }
-  .jk-faq-tip-label {
-    color: var(--jk-pink);
-    font-weight: 600;
-    margin-right: 4px;
-  }
-  .jk-faq-tip a {
-    color: var(--jk-pink);
-    text-decoration: underline;
-  }
-
-  /* ===== 결과 카드 닫기 버튼 ===== */
-  .jk-result-close {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: rgba(0,0,0,0.5);
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10;
-    transition: background 0.2s;
-  }
-  .jk-result-close:hover {
-    background: rgba(0,0,0,0.7);
-  }
-  .jk-result-close svg {
-    width: 16px;
-    height: 16px;
-    stroke: #fff;
-  }
-  .jk-result-card {
-    position: relative;
-  }
-
-  /* ===== 벚꽃 4단계 모바일 가로 슬라이더 ===== */
-  @media (max-width: 600px) {
-    .jk-stages-grid {
-      display: flex;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      -webkit-overflow-scrolling: touch;
-      gap: 12px;
-      padding-bottom: 12px;
-      margin: 0 -20px;
-      padding-left: 20px;
-      padding-right: 20px;
-    }
-    .jk-stages-grid::-webkit-scrollbar {
-      height: 4px;
-    }
-    .jk-stages-grid::-webkit-scrollbar-track {
-      background: var(--jk-cream);
-      border-radius: 2px;
-    }
-    .jk-stages-grid::-webkit-scrollbar-thumb {
-      background: var(--jk-pink-soft);
-      border-radius: 2px;
-    }
-    .jk-stage-card {
-      flex: 0 0 75%;
-      min-width: 240px;
-      scroll-snap-align: start;
-    }
-  }
-
-  /* ===== 지도 카드 인터랙션 ===== */
-  .jk-map-city-card {
-    cursor: pointer;
-    transition: all 0.2s ease;
-    opacity: 0.85;
-  }
-  .jk-map-city-card:hover,
-  .jk-map-city-card.is-active {
-    opacity: 1;
-    transform: scale(1.05);
-    box-shadow: 0 6px 24px rgba(212, 96, 122, 0.25);
-    z-index: 100;
-  }
-  .jk-map-city-card.is-active {
-    border: 2px solid var(--jk-pink);
-  }
-  .jk-map-city-card-highlight {
-    font-size: 0.62rem;
-    color: var(--jk-pink);
-    margin-top: 6px;
-    padding-top: 6px;
-    border-top: 1px dashed var(--jk-border);
-    line-height: 1.4;
-  }
-  .jk-map-city-card-row.is-nearest {
-    background: var(--jk-pink);
-    color: #fff;
-    border-radius: 3px;
-    padding: 1px 4px;
-    margin: -1px -4px;
-  }
-  .jk-map-city-card-row.is-nearest span {
-    color: #fff;
-    font-weight: 700;
-  }
-
-  /* 모바일 카드 날짜 강조 */
-  .jk-map-mobile-card-row.is-nearest {
-    background: var(--jk-pink);
-    color: #fff;
-    border-radius: 3px;
-    padding: 2px 6px;
-    margin: 2px -6px;
-  }
-  .jk-map-mobile-card-row.is-nearest span {
-    color: #fff;
-  }
-
-  /* ===== 서베이 모달 ===== */
-  .jk-survey-modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.6);
-    z-index: 9999;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
-  .jk-survey-modal-overlay.is-visible {
-    display: flex;
-    opacity: 1;
-  }
-  .jk-survey-modal {
-    background: #fff;
-    border-radius: var(--jk-radius-lg);
-    max-width: 420px;
-    width: 100%;
-    max-height: 85vh;
-    overflow-y: auto;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-    animation: jkModalSlideUp 0.3s ease-out;
-  }
-  @keyframes jkModalSlideUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  .jk-survey-modal-header {
-    position: relative;
-    padding: 0;
-  }
-  .jk-survey-modal-img {
-    width: 100%;
-    height: 160px;
-    object-fit: cover;
-    border-radius: var(--jk-radius-lg) var(--jk-radius-lg) 0 0;
-  }
-  .jk-survey-modal-close {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: rgba(0,0,0,0.5);
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .jk-survey-modal-close:hover {
-    background: rgba(0,0,0,0.7);
-  }
-  .jk-survey-modal-close svg {
-    width: 16px;
-    height: 16px;
-    stroke: #fff;
-  }
-  .jk-survey-modal-badge {
-    position: absolute;
-    bottom: -14px;
-    left: 20px;
-    padding: 6px 14px;
-    background: var(--jk-pink);
-    color: #fff;
-    font-size: 0.7rem;
-    font-weight: 700;
-    border-radius: 999px;
-    letter-spacing: 0.05em;
-  }
-  .jk-survey-modal-body {
-    padding: 28px 20px 20px;
-  }
-  .jk-survey-modal-title {
-    font-size: 1.2rem;
-    font-weight: 700;
-    margin: 0 0 4px;
-  }
-  .jk-survey-modal-spot {
-    font-size: 0.85rem;
-    color: var(--jk-text-sub);
-    margin: 0 0 12px;
-  }
-  .jk-survey-modal-dates {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-bottom: 16px;
-  }
-  .jk-survey-modal-date {
-    font-size: 0.72rem;
-    padding: 4px 10px;
-    background: var(--jk-cream);
-    border-radius: 999px;
-  }
-  .jk-survey-modal-section {
-    margin-bottom: 16px;
-  }
-  .jk-survey-modal-section-title {
-    font-size: 0.72rem;
-    color: var(--jk-pink);
-    font-weight: 600;
-    margin-bottom: 6px;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-  .jk-survey-modal-course {
-    background: var(--jk-cream);
-    border-radius: var(--jk-radius);
-    padding: 12px;
-  }
-  .jk-survey-modal-course-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 8px;
-    padding: 8px 0;
-    border-bottom: 1px dashed var(--jk-border);
-  }
-  .jk-survey-modal-course-item:last-child {
-    border-bottom: none;
-    padding-bottom: 0;
-  }
-  .jk-survey-modal-course-item:first-child {
-    padding-top: 0;
-  }
-  .jk-survey-modal-course-num {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: var(--jk-pink);
-    color: #fff;
-    font-size: 0.65rem;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
-  .jk-survey-modal-course-text {
-    font-size: 0.82rem;
-    line-height: 1.5;
-  }
-  .jk-survey-modal-highlight {
-    background: linear-gradient(90deg, var(--jk-pink-soft) 0%, var(--jk-cream) 100%);
-    border-left: 3px solid var(--jk-pink);
-    padding: 10px 12px;
-    border-radius: 0 var(--jk-radius) var(--jk-radius) 0;
-    font-size: 0.8rem;
-    line-height: 1.55;
-  }
-  .jk-survey-modal-actions {
-    display: flex;
-    gap: 8px;
-    margin-top: 16px;
-  }
-  .jk-survey-modal-btn {
-    flex: 1;
-    padding: 11px 16px;
-    font-size: 0.82rem;
-    font-weight: 600;
-    border-radius: 999px;
-    border: 1px solid var(--jk-border);
-    background: #fff;
-    color: var(--jk-text);
-    cursor: pointer;
-    transition: all 0.15s;
-    text-decoration: none;
-    text-align: center;
-  }
-  .jk-survey-modal-btn:hover {
-    border-color: var(--jk-pink);
-    color: var(--jk-pink);
-  }
-  .jk-survey-modal-btn--primary {
-    background: var(--jk-pink);
-    border-color: var(--jk-pink);
-    color: #fff;
-  }
-  .jk-survey-modal-btn--primary:hover {
-    background: var(--jk-pink-dark);
-    border-color: var(--jk-pink-dark);
-    color: #fff;
-  }
-
-  /* ===== 펄스 애니메이션 ===== */
-  @keyframes jkPulse {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(212, 96, 122, 0.4); }
-    50% { box-shadow: 0 0 0 10px rgba(212, 96, 122, 0); }
-  }
+  .jk-sakura2026{--jk-pink:#d4607a;--jk-pink-dark:#b84d65;--jk-pink-soft:#f2d4dc;--jk-pink-light:#fff0f5;--jk-pink-bg:#fdf5f8;--jk-cream:#faf8f5;--jk-warm-gray:#6b635d;--jk-text:#2d2926;--jk-text-sub:#5c5652;--jk-text-muted:#9a918a;--jk-border:#e8e4e0;--jk-radius:12px;--jk-radius-lg:20px;--jk-shadow:0 4px 20px rgba(45,41,38,0.08);--jk-shadow-hover:0 8px 30px rgba(45,41,38,0.12);font-family:'Noto Serif JP',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;background:var(--jk-cream);color:var(--jk-text);line-height:1.7;padding-bottom:70px}
+  .jk-sakura2026 *,.jk-sakura2026 *::before,.jk-sakura2026 *::after{box-sizing:border-box}
+  .jk-title-jp{font-family:'Noto Serif JP',serif;font-weight:700}
+  .jk-header{position:sticky;top:0;z-index:9999;display:flex;align-items:center;justify-content:space-between;padding:12px 24px;background:rgba(255,255,255,0.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--jk-border)}
+  .jk-header-logo img{height:28px}
+  .jk-header-nav{display:flex;gap:24px}
+  .jk-header-nav a{font-size:0.85rem;font-weight:500;color:var(--jk-text-sub);text-decoration:none;transition:color 0.2s}
+  .jk-header-nav a:hover{color:var(--jk-pink)}
+  @media(max-width:767px){.jk-header{padding:10px 16px}.jk-header-nav{display:none}.jk-header-logo img{height:24px}}
+  .jk-mobile-nav{display:none}
+  @media(max-width:767px){.jk-mobile-nav{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:9999;background:#fff;border-top:1px solid var(--jk-border);box-shadow:0 -4px 20px rgba(0,0,0,0.08);padding:8px 0;padding-bottom:calc(8px + env(safe-area-inset-bottom))}.jk-mobile-nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;text-decoration:none;font-size:0.65rem;color:var(--jk-text-sub);transition:color 0.2s}.jk-mobile-nav-item.is-active{color:var(--jk-pink)}.jk-mobile-nav-icon{font-size:1.2rem}}
+  @media(min-width:768px){.jk-sakura2026{padding-bottom:0}}
+  .jk-hero{position:relative;height:75vh;min-height:450px;max-height:680px;display:flex;align-items:flex-end;justify-content:center;overflow:hidden}
+  .jk-hero-slider{position:absolute;inset:0}
+  .jk-hero-slide{position:absolute;inset:0;opacity:0;transition:opacity 1.5s ease-in-out}
+  .jk-hero-slide.is-active{opacity:1}
+  .jk-hero-slide img{width:100%;height:100%;object-fit:cover}
+  .jk-hero-slide.is-active img{animation:jkKenBurns 8s ease-out forwards}
+  @keyframes jkKenBurns{from{transform:scale(1)}to{transform:scale(1.05)}}
+  .jk-hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(45,41,38,0.85) 0%,rgba(45,41,38,0.2) 60%,rgba(45,41,38,0.1) 100%);z-index:1}
+  .jk-hero-content{position:relative;z-index:2;max-width:620px;padding:0 24px 36px;text-align:center;color:#fff}
+  .jk-hero-kicker{font-size:0.65rem;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.8);margin-bottom:8px}
+  .jk-hero h1{font-size:clamp(1.6rem,5vw,2.4rem);margin:0 0 12px;line-height:1.35}
+  .jk-hero-lead{font-size:0.92rem;color:rgba(255,255,255,0.9);margin:0 0 18px;line-height:1.8}
+  .jk-hero-lead strong{color:#fff;background:linear-gradient(transparent 60%,var(--jk-pink) 60%)}
+  .jk-hero-cta{display:inline-flex;align-items:center;gap:6px;padding:11px 22px;font-size:0.85rem;font-weight:600;border-radius:999px;background:var(--jk-pink);color:#fff;text-decoration:none;transition:background 0.2s}
+  .jk-hero-cta:hover{background:var(--jk-pink-dark)}
+  .jk-hero-cta svg{width:15px;height:15px}
+  .jk-hero-indicators{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:3}
+  .jk-hero-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.4);cursor:pointer;transition:all 0.3s}
+  .jk-hero-dot.is-active{background:#fff;transform:scale(1.3)}
+  .jk-container{max-width:1100px;margin:0 auto;padding:0 20px}
+  .jk-section{padding:56px 0}
+  .jk-section--white{background:#fff}
+  .jk-section--cream{background:var(--jk-cream)}
+  .jk-section--pink{background:var(--jk-pink-bg)}
+  .jk-section-header{margin-bottom:28px}
+  .jk-section-header--center{text-align:center}
+  .jk-section-label{font-size:0.65rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--jk-pink);margin-bottom:5px}
+  .jk-section-title{font-size:clamp(1.25rem,3.5vw,1.7rem);margin:0 0 6px}
+  .jk-section-desc{font-size:0.88rem;color:var(--jk-text-sub);margin:0;max-width:480px}
+  .jk-section-header--center .jk-section-desc{margin:0 auto}
+  .jk-date-section{background:linear-gradient(135deg,var(--jk-pink) 0%,var(--jk-pink-dark) 100%);padding:36px 0;color:#fff}
+  .jk-date-inner{max-width:520px;margin:0 auto;text-align:center}
+  .jk-date-title{font-size:1.2rem;margin:0 0 4px}
+  .jk-date-sub{font-size:0.82rem;opacity:0.9;margin:0 0 18px}
+  .jk-date-form{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-bottom:10px}
+  .jk-date-input-wrap{display:flex;align-items:center;gap:5px;background:rgba(255,255,255,0.15);border-radius:999px;padding:3px 10px 3px 3px}
+  .jk-date-input{width:120px;padding:8px 10px;border:none;border-radius:999px;font-size:0.85rem;background:#fff;color:var(--jk-text)}
+  .jk-date-input:focus{outline:2px solid var(--jk-pink-soft)}
+  .jk-date-label{font-size:0.72rem;color:rgba(255,255,255,0.8)}
+  .jk-date-submit{padding:10px 22px;font-size:0.85rem;font-weight:600;border:2px solid #fff;border-radius:999px;background:transparent;color:#fff;cursor:pointer;transition:all 0.2s}
+  .jk-date-submit:hover{background:#fff;color:var(--jk-pink)}
+  .jk-result-card{display:none;background:#fff;border-radius:var(--jk-radius-lg);overflow:hidden;color:var(--jk-text);box-shadow:var(--jk-shadow);margin-top:14px;text-align:left;position:relative}
+  .jk-result-card.is-visible{display:block;animation:jkFadeUp 0.4s ease-out}
+  @keyframes jkFadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+  .jk-result-img{width:100%;height:140px;object-fit:cover}
+  .jk-result-body{padding:18px}
+  .jk-result-header{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+  .jk-result-icon{width:44px;height:44px;border-radius:50%;background:var(--jk-pink-soft);display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0}
+  .jk-result-badge{font-size:0.62rem;letter-spacing:0.08em;color:var(--jk-pink);text-transform:uppercase}
+  .jk-result-city{font-size:1.1rem;font-weight:700;margin:0}
+  .jk-result-status{font-size:0.88rem;margin:0 0 10px;padding:8px 10px;background:linear-gradient(90deg,var(--jk-pink-soft) 0%,transparent 100%);border-left:3px solid var(--jk-pink);border-radius:0 6px 6px 0}
+  .jk-result-dates{display:grid;grid-template-columns:repeat(2,1fr);gap:4px;font-size:0.75rem;margin-bottom:10px}
+  .jk-result-date-item{padding:5px 7px;background:var(--jk-cream);border-radius:4px}
+  .jk-result-date-item.is-match{background:var(--jk-pink);color:#fff}
+  .jk-result-spot{padding:10px;background:var(--jk-cream);border-radius:var(--jk-radius);margin-bottom:10px}
+  .jk-result-spot-title{font-size:0.72rem;color:var(--jk-text-muted);margin-bottom:3px}
+  .jk-result-spot-name{font-size:0.9rem;font-weight:600;margin-bottom:3px}
+  .jk-result-spot-desc{font-size:0.78rem;color:var(--jk-text-sub);line-height:1.45}
+  .jk-result-actions{display:flex;gap:5px;flex-wrap:wrap}
+  .jk-result-btn{flex:1;min-width:90px;padding:8px 12px;font-size:0.75rem;font-weight:600;border-radius:999px;border:1px solid var(--jk-border);background:#fff;color:var(--jk-text);cursor:pointer;transition:all 0.15s;display:flex;align-items:center;justify-content:center;gap:4px;text-decoration:none}
+  .jk-result-btn:hover{border-color:var(--jk-pink);color:var(--jk-pink)}
+  .jk-result-btn--primary{background:var(--jk-pink);border-color:var(--jk-pink);color:#fff}
+  .jk-result-btn--primary:hover{background:var(--jk-pink-dark);color:#fff}
+  .jk-result-btn svg{width:12px;height:12px}
+  .jk-result-close{position:absolute;top:10px;right:10px;width:32px;height:32px;border-radius:50%;background:rgba(0,0,0,0.5);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10;transition:background 0.2s}
+  .jk-result-close:hover{background:rgba(0,0,0,0.7)}
+  .jk-result-close svg{width:16px;height:16px;stroke:#fff}
+  .jk-result-tip{margin-top:12px;padding:12px;background:linear-gradient(135deg,var(--jk-pink-light) 0%,var(--jk-cream) 100%);border-radius:var(--jk-radius);border-left:3px solid var(--jk-pink)}
+  .jk-result-tip-label{font-size:0.68rem;color:var(--jk-pink);font-weight:600;margin-bottom:4px;display:flex;align-items:center;gap:4px}
+  .jk-result-tip-text{font-size:0.8rem;color:var(--jk-text);line-height:1.55;margin:0}
+  .jk-stages-grid{display:grid;gap:12px}
+  @media(min-width:600px){.jk-stages-grid{grid-template-columns:repeat(2,1fr)}}
+  @media(min-width:900px){.jk-stages-grid{grid-template-columns:repeat(4,1fr)}}
+  .jk-stage-card{background:#fff;border-radius:var(--jk-radius);overflow:hidden;border:1px solid var(--jk-border);transition:all 0.2s}
+  .jk-stage-card:hover{box-shadow:var(--jk-shadow-hover);transform:translateY(-2px)}
+  .jk-stage-card--highlight{border:2px solid var(--jk-pink)}
+  .jk-stage-img{position:relative;aspect-ratio:4/3;overflow:hidden}
+  .jk-stage-img img{width:100%;height:100%;object-fit:cover;transition:transform 0.4s}
+  .jk-stage-card:hover .jk-stage-img img{transform:scale(1.05)}
+  .jk-stage-num{position:absolute;top:8px;left:8px;width:24px;height:24px;border-radius:50%;background:var(--jk-pink);color:#fff;font-size:0.7rem;font-weight:700;display:flex;align-items:center;justify-content:center}
+  .jk-stage-body{padding:12px}
+  .jk-stage-name{font-size:0.9rem;font-weight:700;margin:0 0 2px}
+  .jk-stage-name-jp{font-size:0.68rem;color:var(--jk-text-muted);margin-bottom:5px}
+  .jk-stage-desc{font-size:0.78rem;color:var(--jk-text-sub);line-height:1.5;margin:0 0 6px}
+  .jk-stage-timing{font-size:0.65rem;padding:3px 7px;background:var(--jk-cream);border-radius:999px;color:var(--jk-warm-gray)}
+  .jk-stage-message{margin-top:18px;padding:12px 16px;background:linear-gradient(90deg,var(--jk-pink-soft) 0%,var(--jk-cream) 100%);border-left:3px solid var(--jk-pink);border-radius:0 var(--jk-radius) var(--jk-radius) 0}
+  .jk-stage-message p{margin:0;font-size:0.88rem}
+  .jk-stage-message strong{color:var(--jk-pink)}
+  .jk-map-source-bar{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;margin-bottom:14px;padding:9px 12px;background:#fff;border-radius:var(--jk-radius);border:1px solid var(--jk-border);font-size:0.72rem}
+  .jk-map-source-text{color:var(--jk-text-sub)}
+  .jk-map-source-text a{color:var(--jk-pink);text-decoration:underline}
+  .jk-map-source-updated{color:var(--jk-text-muted);font-size:0.68rem}
+  .jk-map-wrapper{position:relative;background:var(--jk-pink-bg);border-radius:var(--jk-radius-lg);overflow:hidden}
+  @media(min-width:768px){.jk-map-wrapper{display:flex}}
+  .jk-map-sidebar{display:none}
+  @media(min-width:768px){.jk-map-sidebar{display:flex;flex-direction:column;width:240px;flex-shrink:0;background:#fff;border-right:1px solid var(--jk-border)}}
+  .jk-map-sidebar-header{padding:14px 16px;border-bottom:1px solid var(--jk-border);background:linear-gradient(135deg,var(--jk-pink-bg),#fff)}
+  .jk-map-sidebar-title{font-size:0.85rem;font-weight:700;color:var(--jk-pink)}
+  .jk-map-sidebar-sub{font-size:0.68rem;color:var(--jk-text-muted);margin-top:2px}
+  .jk-map-sidebar-list{flex:1;overflow-y:auto;padding:8px}
+  .jk-map-sidebar-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;cursor:pointer;transition:all 0.15s;margin-bottom:2px;border:none;background:none;width:100%;text-align:left}
+  .jk-map-sidebar-item:hover{background:var(--jk-pink-bg)}
+  .jk-map-sidebar-item.is-active{background:var(--jk-pink);color:#fff}
+  .jk-map-sidebar-num{width:22px;height:22px;border-radius:50%;background:var(--jk-pink-soft);color:var(--jk-pink);font-size:0.65rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .jk-map-sidebar-item.is-active .jk-map-sidebar-num{background:rgba(255,255,255,0.25);color:#fff}
+  .jk-map-sidebar-info{flex:1;min-width:0}
+  .jk-map-sidebar-name{font-size:0.8rem;font-weight:600;color:var(--jk-text)}
+  .jk-map-sidebar-item.is-active .jk-map-sidebar-name{color:#fff}
+  .jk-map-sidebar-date{font-size:0.68rem;color:var(--jk-text-muted)}
+  .jk-map-sidebar-item.is-active .jk-map-sidebar-date{color:rgba(255,255,255,0.85)}
+  .jk-map-sidebar-status{font-size:0.6rem;color:var(--jk-text-muted);padding:2px 6px;background:var(--jk-cream);border-radius:4px;flex-shrink:0}
+  .jk-map-sidebar-item.is-active .jk-map-sidebar-status{background:rgba(255,255,255,0.2);color:rgba(255,255,255,0.9)}
+  .jk-map-area{flex:1;position:relative;min-width:0}
+  .jk-map-container{position:relative;height:600px}
+  @media(max-width:900px){.jk-map-container{height:500px}}
+  @media(max-width:767px){.jk-map-container{height:350px}}
+  #jk-sakura-map{width:100%;height:100%;z-index:1}
+  .jk-map-detail-card{display:none}
+  @media(min-width:768px){.jk-map-detail-card{display:none;position:absolute;bottom:16px;left:16px;right:16px;background:#fff;border-radius:var(--jk-radius);padding:14px 16px;box-shadow:var(--jk-shadow-hover);z-index:1000}.jk-map-detail-card.is-visible{display:block}}
+  .jk-map-detail-header{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+  .jk-map-detail-name{font-size:1rem;font-weight:700;color:var(--jk-pink)}
+  .jk-map-detail-status{margin-left:auto;font-size:0.7rem;background:var(--jk-cream);color:var(--jk-text-sub);padding:3px 8px;border-radius:4px}
+  .jk-map-detail-dates{display:flex;gap:8px;flex-wrap:wrap}
+  .jk-map-detail-date{display:flex;align-items:center;gap:6px;padding:6px 10px;background:var(--jk-cream);border-radius:6px;font-size:0.75rem}
+  .jk-map-detail-date.is-current{background:var(--jk-pink);color:#fff}
+  .jk-map-detail-date-label{color:var(--jk-text-muted);font-size:0.65rem}
+  .jk-map-detail-date.is-current .jk-map-detail-date-label{color:rgba(255,255,255,0.8)}
+  .jk-map-detail-date-value{font-weight:600}
+  .jk-map-detail-highlight{margin-top:10px;padding:8px 12px;background:linear-gradient(90deg,var(--jk-pink-bg),#fff);border-left:3px solid var(--jk-pink);border-radius:0 6px 6px 0;font-size:0.78rem;color:var(--jk-text-sub)}
+  .jk-sakura2026 .leaflet-container{background:var(--jk-pink-bg)}
+  .jk-sakura2026 .leaflet-tile-pane{filter:saturate(0.3) brightness(1.05);opacity:0.5}
+  .jk-sakura2026 .leaflet-control-zoom{border:none;box-shadow:var(--jk-shadow)}
+  .jk-sakura2026 .leaflet-control-zoom a{background:#fff;color:var(--jk-pink);border:none}
+  .jk-sakura2026 .leaflet-control-zoom a:hover{background:var(--jk-pink-light)}
+  @media(max-width:767px){.jk-map-mobile-slider{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;gap:12px;padding:16px;scroll-padding-left:16px}.jk-map-mobile-slider::-webkit-scrollbar{display:none}.jk-map-mobile-slider{-ms-overflow-style:none;scrollbar-width:none}.jk-map-mobile-card{flex:0 0 280px;scroll-snap-align:start;background:#fff;border-radius:12px;padding:14px;box-shadow:var(--jk-shadow);border:2px solid transparent;transition:all 0.2s}.jk-map-mobile-card.is-active{border-color:var(--jk-pink);box-shadow:0 4px 20px rgba(212,96,122,0.2)}.jk-map-mobile-card-header{display:flex;align-items:center;gap:8px;margin-bottom:10px}.jk-map-mobile-card-name{font-size:1rem;font-weight:700;color:var(--jk-pink)}.jk-map-mobile-card-status{display:inline-block;font-size:0.75rem;font-weight:600;padding:4px 10px;border-radius:6px;margin-bottom:10px}.jk-map-mobile-card-status.waiting{background:linear-gradient(135deg,#e8e4e0,#f5f3f0);color:#666}.jk-map-mobile-card-status.active{background:linear-gradient(135deg,#d4607a,#e87a94);color:#fff}.jk-map-mobile-card-status.ending{background:linear-gradient(135deg,#a0c4ff,#bfd7ff);color:#3d5a80}.jk-map-mobile-card-dates{display:grid;grid-template-columns:repeat(2,1fr);gap:4px;margin-bottom:10px}.jk-map-mobile-card-row{display:flex;align-items:center;gap:3px;font-size:0.72rem;color:var(--jk-text-sub);padding:4px 6px;background:var(--jk-cream);border-radius:4px}.jk-map-mobile-card-row span{margin-left:auto;font-weight:600;color:var(--jk-text)}.jk-map-mobile-card-row.is-nearest{background:var(--jk-pink);color:#fff}.jk-map-mobile-card-row.is-nearest span{color:#fff}.jk-map-mobile-card-highlight{font-size:0.72rem;color:var(--jk-pink);padding:8px;background:var(--jk-pink-light);border-radius:6px;line-height:1.4}.jk-map-mobile-card-btn{display:block;width:100%;margin-top:10px;padding:8px;font-size:0.75rem;font-weight:600;text-align:center;background:var(--jk-pink);color:#fff;border:none;border-radius:6px;cursor:pointer}.jk-map-mobile-slider-wrapper{position:relative}.jk-map-mobile-slider-hint{text-align:center;font-size:0.7rem;color:var(--jk-text-sub);padding:8px 0 4px;animation:jkHintFade 3s ease-out forwards}@keyframes jkHintFade{0%,70%{opacity:1}100%{opacity:0}}.jk-map-mobile-slider-dots{display:flex;justify-content:center;gap:6px;padding:12px 0}.jk-map-mobile-slider-dot{width:8px;height:8px;border-radius:50%;background:var(--jk-border);transition:all 0.2s}.jk-map-mobile-slider-dot.is-active{background:var(--jk-pink);transform:scale(1.2)}}
+  @media(min-width:768px){.jk-map-mobile-slider-wrapper{display:none}.jk-map-mobile-slider{display:none}}
+  .jk-spot-survey{margin-bottom:32px;padding:20px 18px;background:#fff;border-radius:var(--jk-radius-lg);border:1px solid var(--jk-border);box-shadow:var(--jk-shadow)}
+  .jk-spot-survey-header{margin-bottom:18px}
+  .jk-spot-survey-grid{display:grid;gap:10px}
+  @media(min-width:720px){.jk-spot-survey-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  @media(min-width:1000px){.jk-spot-survey-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+  .jk-spot-choice{width:100%;text-align:left;border-radius:var(--jk-radius);border:1px solid var(--jk-border);background:var(--jk-cream);padding:0;cursor:pointer;display:flex;flex-direction:column;transition:all 0.15s;overflow:hidden}
+  .jk-spot-choice:hover{border-color:var(--jk-pink);background:#fff;box-shadow:var(--jk-shadow);transform:translateY(-1px)}
+  .jk-spot-choice.is-selected{border-color:var(--jk-pink);background:var(--jk-pink-light)}
+  .jk-spot-choice-img{width:100%;height:100px;object-fit:cover}
+  .jk-spot-choice-body{padding:10px 12px}
+  .jk-spot-choice-main{display:flex;flex-direction:column;gap:4px}
+  .jk-spot-choice-tag{display:inline-flex;align-items:center;padding:2px 8px;font-size:0.7rem;border-radius:999px;background:var(--jk-pink-soft);color:var(--jk-pink-dark);align-self:flex-start}
+  .jk-spot-choice-name{font-size:0.95rem;font-weight:700;color:var(--jk-text)}
+  .jk-spot-choice-desc{font-size:0.8rem;color:var(--jk-text-sub);margin:0}
+  .jk-spot-survey-result{margin-top:18px;padding-top:14px;border-top:1px dashed var(--jk-border)}
+  .jk-spot-survey-result-title{font-size:0.85rem;color:var(--jk-text-sub);margin:0 0 8px}
+  .jk-spot-bars{display:flex;flex-direction:column;gap:6px}
+  .jk-spot-bar{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,3fr) auto;gap:6px;align-items:center;font-size:0.78rem}
+  .jk-spot-bar-name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .jk-spot-bar-track{position:relative;height:7px;border-radius:999px;background:var(--jk-cream);overflow:hidden}
+  .jk-spot-bar-fill{position:absolute;inset:0;width:0;background:linear-gradient(90deg,var(--jk-pink-soft),var(--jk-pink));border-radius:999px;transition:width 0.3s ease}
+  .jk-spot-bar-value{font-variant-numeric:tabular-nums;color:var(--jk-text-muted)}
+  .jk-spot-bar.is-mine .jk-spot-bar-name{font-weight:700;color:var(--jk-pink-dark)}
+  .jk-spot-bar.is-mine .jk-spot-bar-value{color:var(--jk-pink-dark)}
+  .jk-survey-top-tip{margin-top:14px;padding:10px 12px;background:var(--jk-pink-light);border-radius:var(--jk-radius);font-size:0.78rem;color:var(--jk-text)}
+  .jk-survey-top-tip-label{font-size:0.68rem;color:var(--jk-pink);font-weight:600;margin-bottom:3px}
+  .jk-spots-grid{display:grid;gap:16px;margin-top:32px}
+  @media(min-width:600px){.jk-spots-grid{grid-template-columns:repeat(2,1fr)}}
+  @media(min-width:900px){.jk-spots-grid{grid-template-columns:repeat(3,1fr)}}
+  .jk-spot-card{background:#fff;border-radius:var(--jk-radius);overflow:hidden;border:1px solid var(--jk-border);transition:all 0.2s}
+  .jk-spot-card:hover{box-shadow:var(--jk-shadow-hover);transform:translateY(-3px)}
+  .jk-spot-card-img{position:relative;aspect-ratio:16/10;overflow:hidden}
+  .jk-spot-card-img img{width:100%;height:100%;object-fit:cover;transition:transform 0.4s}
+  .jk-spot-card:hover .jk-spot-card-img img{transform:scale(1.05)}
+  .jk-spot-card-tag{position:absolute;top:10px;left:10px;padding:3px 10px;font-size:0.68rem;font-weight:600;border-radius:999px;background:var(--jk-pink);color:#fff}
+  .jk-spot-card-body{padding:14px}
+  .jk-spot-card-name{font-size:1rem;font-weight:700;margin:0 0 4px}
+  .jk-spot-card-desc{font-size:0.82rem;color:var(--jk-text-sub);line-height:1.5;margin:0 0 10px}
+  .jk-spot-card-link{display:inline-flex;align-items:center;gap:4px;font-size:0.78rem;font-weight:600;color:var(--jk-pink);text-decoration:none;transition:color 0.15s}
+  .jk-spot-card-link:hover{color:var(--jk-pink-dark);text-decoration:underline}
+  .jk-spot-card-link svg{width:12px;height:12px}
+  .jk-spot-card-editor{margin-top:10px;padding-top:10px;border-top:1px dashed var(--jk-border)}
+  .jk-spot-card-editor-label{font-size:0.65rem;color:var(--jk-pink);font-weight:600;letter-spacing:0.04em;margin-bottom:4px}
+  .jk-spot-card-editor-name{font-size:0.82rem;font-weight:600;color:var(--jk-text);margin-bottom:2px}
+  .jk-spot-card-editor-desc{font-size:0.72rem;color:var(--jk-text-sub);line-height:1.45;margin-bottom:4px}
+  .jk-spot-card-editor-link{font-size:0.7rem;color:var(--jk-pink);text-decoration:none}
+  .jk-spot-card-editor-link:hover{text-decoration:underline}
+  .jk-checklist-section{background:linear-gradient(180deg,var(--jk-pink-bg) 0%,#fff 100%)}
+  .jk-checklist-box{max-width:560px;margin:0 auto;background:#fff;border-radius:var(--jk-radius-lg);padding:24px 20px;box-shadow:var(--jk-shadow);border:1px solid var(--jk-border)}
+  .jk-checklist-header{text-align:center;margin-bottom:18px;padding-bottom:14px;border-bottom:1px dashed var(--jk-border)}
+  .jk-checklist-title{font-size:1.1rem;font-weight:700;margin:0 0 4px;display:flex;align-items:center;justify-content:center;gap:6px}
+  .jk-checklist-sub{font-size:0.78rem;color:var(--jk-text-sub);margin:0}
+  .jk-checklist-group{margin-bottom:16px}
+  .jk-checklist-group:last-child{margin-bottom:0}
+  .jk-checklist-item{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:var(--jk-cream);border-radius:var(--jk-radius);margin-bottom:6px;transition:all 0.15s}
+  .jk-checklist-item:hover{background:var(--jk-pink-light)}
+  .jk-checklist-item--highlight{background:linear-gradient(90deg,var(--jk-pink-soft) 0%,var(--jk-cream) 100%);border-left:3px solid var(--jk-pink)}
+  .jk-checklist-check{width:18px;height:18px;border:2px solid var(--jk-border);border-radius:4px;flex-shrink:0;margin-top:1px;cursor:pointer;transition:all 0.15s}
+  .jk-checklist-item:hover .jk-checklist-check{border-color:var(--jk-pink)}
+  .jk-checklist-check.is-checked{background:var(--jk-pink);border-color:var(--jk-pink);position:relative}
+  .jk-checklist-check.is-checked::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:0.7rem;font-weight:700}
+  .jk-checklist-content{flex:1;min-width:0}
+  .jk-checklist-label{font-size:0.88rem;font-weight:600;color:var(--jk-text);margin-bottom:2px}
+  .jk-checklist-desc{font-size:0.75rem;color:var(--jk-text-sub);line-height:1.5;margin:0}
+  .jk-checklist-link{display:inline-flex;align-items:center;gap:3px;font-size:0.72rem;color:var(--jk-pink);text-decoration:none;margin-top:4px;font-weight:500}
+  .jk-checklist-link:hover{text-decoration:underline}
+  .jk-checklist-divider{display:flex;align-items:center;gap:10px;margin:16px 0;font-size:0.7rem;color:var(--jk-pink);font-weight:600}
+  .jk-checklist-divider::before,.jk-checklist-divider::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--jk-pink-soft),transparent)}
+  .jk-faq-list{display:flex;flex-direction:column;gap:8px;max-width:660px;margin:0 auto}
+  .jk-faq-item{background:#fff;border-radius:var(--jk-radius);border:1px solid var(--jk-border);overflow:hidden}
+  .jk-faq-q{padding:12px 14px;font-size:0.88rem;font-weight:600;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+  .jk-faq-q::after{content:'';width:16px;height:16px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23d4607a'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E") center/contain no-repeat;transition:transform 0.2s;flex-shrink:0}
+  .jk-faq-item.is-open .jk-faq-q::after{transform:rotate(180deg)}
+  .jk-faq-a{max-height:0;overflow:hidden;transition:max-height 0.3s}
+  .jk-faq-item.is-open .jk-faq-a{max-height:280px}
+  .jk-faq-a-inner{padding:0 14px 12px;font-size:0.82rem;color:var(--jk-text-sub);line-height:1.7}
+  .jk-faq-tip{margin-top:10px;padding:8px 10px;background:var(--jk-pink-light);border-radius:6px;font-size:0.75rem}
+  .jk-faq-tip-label{color:var(--jk-pink);font-weight:600;margin-right:4px}
+  .jk-footer{text-align:center;padding:36px 20px;background:var(--jk-text);color:#fff}
+  .jk-footer-text{font-size:0.9rem;margin:0 0 14px;opacity:0.9}
+  .jk-footer-btns{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+  .jk-footer-btn{display:inline-flex;align-items:center;gap:5px;padding:9px 16px;font-size:0.78rem;font-weight:600;border-radius:999px;border:1px solid rgba(255,255,255,0.3);background:transparent;color:#fff;cursor:pointer;transition:all 0.15s}
+  .jk-footer-btn:hover{background:rgba(255,255,255,0.1)}
+  .jk-footer-btn svg{width:13px;height:13px}
+  .jk-footer-source{font-size:0.68rem;color:rgba(255,255,255,0.5);line-height:1.6}
+  .jk-footer-source a{color:rgba(255,255,255,0.7);text-decoration:underline}
+  .jk-fade-in{opacity:0;transform:translateY(18px);transition:opacity 0.5s,transform 0.5s}
+  .jk-fade-in.is-visible{opacity:1;transform:translateY(0)}
+  @media(max-width:600px){.jk-section{padding:44px 0}.jk-result-dates{grid-template-columns:1fr}.jk-stages-grid{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;gap:12px;padding-bottom:12px;margin:0 -20px;padding-left:20px;padding-right:20px}.jk-stage-card{flex:0 0 75%;min-width:240px;scroll-snap-align:start}}
+  @media(prefers-reduced-motion:reduce){.jk-fade-in{opacity:1;transform:none;transition:none}.jk-hero-slide.is-active img{animation:none}}
+  .jk-survey-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9999;display:none;align-items:center;justify-content:center;padding:20px;opacity:0;transition:opacity 0.3s}
+  .jk-survey-modal-overlay.is-visible{display:flex;opacity:1}
+  .jk-survey-modal{background:#fff;border-radius:var(--jk-radius-lg);max-width:420px;width:100%;max-height:85vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.3);animation:jkModalSlideUp 0.3s ease-out}
+  @keyframes jkModalSlideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+  .jk-survey-modal-header{position:relative;padding:0}
+  .jk-survey-modal-img{width:100%;height:160px;object-fit:cover;border-radius:var(--jk-radius-lg) var(--jk-radius-lg) 0 0}
+  .jk-survey-modal-close{position:absolute;top:10px;right:10px;width:32px;height:32px;border-radius:50%;background:rgba(0,0,0,0.5);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center}
+  .jk-survey-modal-close:hover{background:rgba(0,0,0,0.7)}
+  .jk-survey-modal-close svg{width:16px;height:16px;stroke:#fff}
+  .jk-survey-modal-badge{position:absolute;bottom:-14px;left:20px;padding:6px 14px;background:var(--jk-pink);color:#fff;font-size:0.7rem;font-weight:700;border-radius:999px}
+  .jk-survey-modal-body{padding:28px 20px 20px}
+  .jk-survey-modal-title{font-size:1.2rem;font-weight:700;margin:0 0 4px}
+  .jk-survey-modal-spot{font-size:0.85rem;color:var(--jk-text-sub);margin:0 0 12px}
+  .jk-survey-modal-dates{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+  .jk-survey-modal-date{font-size:0.72rem;padding:4px 10px;background:var(--jk-cream);border-radius:999px}
+  .jk-survey-modal-section{margin-bottom:16px}
+  .jk-survey-modal-section-title{font-size:0.72rem;color:var(--jk-pink);font-weight:600;margin-bottom:6px}
+  .jk-survey-modal-course{background:var(--jk-cream);border-radius:var(--jk-radius);padding:12px}
+  .jk-survey-modal-course-item{display:flex;align-items:flex-start;gap:8px;padding:8px 0;border-bottom:1px dashed var(--jk-border)}
+  .jk-survey-modal-course-item:last-child{border-bottom:none;padding-bottom:0}
+  .jk-survey-modal-course-item:first-child{padding-top:0}
+  .jk-survey-modal-course-num{width:20px;height:20px;border-radius:50%;background:var(--jk-pink);color:#fff;font-size:0.65rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .jk-survey-modal-course-text{font-size:0.82rem;line-height:1.5}
+  .jk-survey-modal-highlight{background:linear-gradient(90deg,var(--jk-pink-soft) 0%,var(--jk-cream) 100%);border-left:3px solid var(--jk-pink);padding:10px 12px;border-radius:0 var(--jk-radius) var(--jk-radius) 0;font-size:0.8rem;line-height:1.55}
+  .jk-survey-modal-actions{display:flex;gap:8px;margin-top:16px}
+  .jk-survey-modal-btn{flex:1;padding:11px 16px;font-size:0.82rem;font-weight:600;border-radius:999px;border:1px solid var(--jk-border);background:#fff;color:var(--jk-text);cursor:pointer;transition:all 0.15s;text-decoration:none;text-align:center}
+  .jk-survey-modal-btn:hover{border-color:var(--jk-pink);color:var(--jk-pink)}
+  .jk-survey-modal-btn--primary{background:var(--jk-pink);border-color:var(--jk-pink);color:#fff}
+  .jk-survey-modal-btn--primary:hover{background:var(--jk-pink-dark);border-color:var(--jk-pink-dark);color:#fff}
+  @keyframes jkPulse{0%,100%{box-shadow:0 0 0 0 rgba(212,96,122,0.4)}50%{box-shadow:0 0 0 10px rgba(212,96,122,0)}}
 </style>
-
+</head>
+<body>
 <div class="jk-sakura2026">
-  <!-- ===== HERO ===== -->
+  <header class="jk-header">
+    <a href="https://www.japankuru.com/ja/" class="jk-header-logo"><img src="https://www.japankuru.com/gld-kanri/data/uploads/2022/01/japankuru_logo.png" alt="JAPANKURU"></a>
+    <nav class="jk-header-nav">
+      <a href="#date-picker">日付選択</a>
+      <a href="#forecast-map">開花マップ</a>
+      <a href="#survey">投票</a>
+      <a href="#spots">おすすめ</a>
+    </nav>
+  </header>
+  <nav class="jk-mobile-nav" id="jkMobileNav">
+    <a href="#date-picker" class="jk-mobile-nav-item is-active" data-section="date-picker"><span class="jk-mobile-nav-icon">📅</span><span>日付</span></a>
+    <a href="#forecast-map" class="jk-mobile-nav-item" data-section="forecast-map"><span class="jk-mobile-nav-icon">🗾</span><span>地図</span></a>
+    <a href="#survey" class="jk-mobile-nav-item" data-section="survey"><span class="jk-mobile-nav-icon">🗳️</span><span>投票</span></a>
+    <a href="#spots" class="jk-mobile-nav-item" data-section="spots"><span class="jk-mobile-nav-icon">📍</span><span>スポット</span></a>
+    <a href="#checklist" class="jk-mobile-nav-item" data-section="checklist"><span class="jk-mobile-nav-icon">✅</span><span>準備</span></a>
+  </nav>
   <section class="jk-hero">
     <div class="jk-hero-slider" id="jkHeroSlider">
-      <div class="jk-hero-slide is-active"><img src="https://img.japankuru.com/prg_img/img/img2022032216222456582000.jpg" alt="일본 벚꽃"></div>
-      <div class="jk-hero-slide"><img src="https://img.japankuru.com/prg_img/img/img2022032216080462220500.jpg" alt="후지산 벚꽃" loading="lazy"></div>
-      <div class="jk-hero-slide"><img src="https://img.japankuru.com/prg_img/img/img2019030414083494430600.jpg" alt="강변 벚꽃" loading="lazy"></div>
-      <div class="jk-hero-slide"><img src="https://www.japankuru.com/gld-kanri/data/uploads/2025/01/D05_6288-1536x1024.jpg" alt="교토 벚꽃" loading="lazy"></div>
+      <div class="jk-hero-slide is-active"><img src="https://img.japankuru.com/prg_img/img/img2022032216222456582000.jpg" alt="日本の桜"></div>
+      <div class="jk-hero-slide"><img src="https://img.japankuru.com/prg_img/img/img2022032216080462220500.jpg" alt="富士山と桜" loading="lazy"></div>
+      <div class="jk-hero-slide"><img src="https://img.japankuru.com/prg_img/img/img2019030414083494430600.jpg" alt="川沿いの桜" loading="lazy"></div>
+      <div class="jk-hero-slide"><img src="https://www.japankuru.com/gld-kanri/data/uploads/2025/01/D05_6288-1536x1024.jpg" alt="京都の桜" loading="lazy"></div>
     </div>
     <div class="jk-hero-overlay"></div>
     <div class="jk-hero-content">
-      <div class="jk-hero-kicker">JAPANKURU · 벚꽃 2026</div>
-      <h1 class="jk-title-jp">벚꽃, 개화일이 전부가 아니에요</h1>
-      <p class="jk-hero-lead">놓쳤다고 생각했나요?<br><strong>개화부터 벚꽃눈까지 약 2주</strong>가 있어요.</p>
-      <a href="#date-picker" class="jk-hero-cta">내 여행 날짜로 확인 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 13l5 5 5-5M7 7l5 5 5-5"/></svg></a>
+      <div class="jk-hero-kicker">JAPANKURU · 桜 2026</div>
+      <h1 class="jk-title-jp">桜は、開花日だけじゃない</h1>
+      <p class="jk-hero-lead">見逃したと思っていませんか？<br><strong>開花から桜吹雪まで約2週間</strong>あります。</p>
+      <a href="#date-picker" class="jk-hero-cta">旅行日程で確認 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 13l5 5 5-5M7 7l5 5 5-5"/></svg></a>
     </div>
     <div class="jk-hero-indicators">
       <span class="jk-hero-dot is-active" data-index="0"></span>
@@ -1115,434 +322,155 @@
       <span class="jk-hero-dot" data-index="3"></span>
     </div>
   </section>
-
-  <!-- ===== 날짜 입력 ===== -->
   <section class="jk-date-section" id="date-picker">
     <div class="jk-container">
       <div class="jk-date-inner">
-        <h2 class="jk-date-title jk-title-jp">내 여행 날짜는?</h2>
-        <p class="jk-date-sub">날짜를 선택하면 맞춤 도시와 추천 명소를 알려드려요</p>
+        <h2 class="jk-date-title jk-title-jp">旅行の日程は？</h2>
+        <p class="jk-date-sub">日付を選ぶと、おすすめの都市とスポットをご紹介します</p>
         <div class="jk-date-form">
-          <div class="jk-date-input-wrap"><input type="date" class="jk-date-input" id="jkTravelStart" value="2026-03-28"><span class="jk-date-label">부터</span></div>
-          <div class="jk-date-input-wrap"><input type="date" class="jk-date-input" id="jkTravelEnd" value="2026-04-03"><span class="jk-date-label">까지</span></div>
-          <button type="button" class="jk-date-submit" id="jkDateSubmit">확인</button>
+          <div class="jk-date-input-wrap"><input type="date" class="jk-date-input" id="jkTravelStart" value="2026-03-28"><span class="jk-date-label">から</span></div>
+          <div class="jk-date-input-wrap"><input type="date" class="jk-date-input" id="jkTravelEnd" value="2026-04-03"><span class="jk-date-label">まで</span></div>
+          <button type="button" class="jk-date-submit" id="jkDateSubmit">検索</button>
         </div>
         <div class="jk-result-card" id="jkResultCard">
-          <button type="button" class="jk-result-close" id="jkResultClose">
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
-          </button>
+          <button type="button" class="jk-result-close" id="jkResultClose"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
           <img class="jk-result-img" id="jkResultImg" src="" alt="">
           <div class="jk-result-body">
             <div class="jk-result-header">
               <div class="jk-result-icon" id="jkResultIcon">🌺</div>
-              <div><div class="jk-result-badge" id="jkResultBadge">BEST MATCH</div><h3 class="jk-result-city" id="jkResultCity">도쿄</h3></div>
+              <div><div class="jk-result-badge" id="jkResultBadge">BEST MATCH</div><h3 class="jk-result-city" id="jkResultCity">東京</h3></div>
             </div>
-            <p class="jk-result-status" id="jkResultStatus">만개! 가장 화려한 타이밍</p>
+            <p class="jk-result-status" id="jkResultStatus">満開！一番華やかな時期</p>
             <div class="jk-result-dates" id="jkResultDates"></div>
-            <div class="jk-result-spot"><div class="jk-result-spot-title">추천 명소</div><div class="jk-result-spot-name" id="jkResultSpotName">우에노 공원</div><div class="jk-result-spot-desc" id="jkResultSpotDesc">1,000그루+ 벚나무</div></div>
+            <div class="jk-result-spot"><div class="jk-result-spot-title">おすすめスポット</div><div class="jk-result-spot-name" id="jkResultSpotName">上野公園</div><div class="jk-result-spot-desc" id="jkResultSpotDesc">1,000本以上の桜</div></div>
             <div class="jk-result-actions">
-              <a href="#" class="jk-result-btn jk-result-btn--primary" id="jkResultArticle" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>관련 기사</a>
-              <button type="button" class="jk-result-btn" id="jkSaveImage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>저장</button>
-              <button type="button" class="jk-result-btn" id="jkShareResult"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.59 13.51l6.83 3.98M15.41 6.51l-6.82 3.98"/></svg>공유</button>
+              <a href="#" class="jk-result-btn jk-result-btn--primary" id="jkResultArticle" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>関連記事</a>
+              <button type="button" class="jk-result-btn" id="jkSaveImage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>保存</button>
+              <button type="button" class="jk-result-btn" id="jkShareResult"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.59 13.51l6.83 3.98M15.41 6.51l-6.82 3.98"/></svg>共有</button>
             </div>
-            <!-- 꿀팁 -->
-            <div class="jk-result-tip" id="jkResultTip" style="display:none;">
-              <div class="jk-result-tip-label">💡 <span id="jkResultCityName2"></span> 꿀팁</div>
-              <p class="jk-result-tip-text" id="jkResultTipText"></p>
-            </div>
+            <div class="jk-result-tip" id="jkResultTip" style="display:none;"><div class="jk-result-tip-label">💡 <span id="jkResultCityName2"></span>のヒント</div><p class="jk-result-tip-text" id="jkResultTipText"></p></div>
           </div>
         </div>
       </div>
     </div>
   </section>
-
-  <!-- ===== 4단계 ===== -->
   <section class="jk-section jk-section--white">
     <div class="jk-container">
       <div class="jk-section-header jk-section-header--center jk-fade-in">
         <div class="jk-section-label">Timeline</div>
-        <h2 class="jk-section-title jk-title-jp">벚꽃의 4단계</h2>
-        <p class="jk-section-desc">개화일이 지나도 약 2주간 벚꽃을 즐길 수 있어요</p>
+        <h2 class="jk-section-title jk-title-jp">桜の4段階</h2>
+        <p class="jk-section-desc">開花日を過ぎても約2週間、桜を楽しめます</p>
       </div>
       <div class="jk-stages-grid jk-fade-in">
-        <div class="jk-stage-card"><div class="jk-stage-img"><span class="jk-stage-num">1</span><img src="https://images.unsplash.com/photo-1551489186-cf8726f514f8?auto=format&fit=crop&w=600&q=80" alt="개화" loading="lazy"></div><div class="jk-stage-body"><div class="jk-stage-name">개화</div><div class="jk-stage-name-jp">開花 · 카이카</div><p class="jk-stage-desc">5~6송이 꽃이 피면 개화 선언</p><span class="jk-stage-timing">기준일</span></div></div>
-        <div class="jk-stage-card jk-stage-card--highlight"><div class="jk-stage-img"><span class="jk-stage-num">2</span><img src="https://images.unsplash.com/photo-1522383225653-ed111181a951?auto=format&fit=crop&w=600&q=80" alt="만개" loading="lazy"></div><div class="jk-stage-body"><div class="jk-stage-name">만개</div><div class="jk-stage-name-jp">満開 · 만카이</div><p class="jk-stage-desc">80% 이상 활짝! 베스트 타이밍</p><span class="jk-stage-timing">개화 +7일</span></div></div>
-        <div class="jk-stage-card"><div class="jk-stage-img"><span class="jk-stage-num">3</span><img src="https://images.unsplash.com/photo-1493238792000-8113da705763?auto=format&fit=crop&w=600&q=80" alt="지기 시작" loading="lazy"></div><div class="jk-stage-body"><div class="jk-stage-name">지기 시작</div><div class="jk-stage-name-jp">散り始め · 치리하지메</div><p class="jk-stage-desc">꽃잎이 떨어지기 시작</p><span class="jk-stage-timing">만개 +4일</span></div></div>
-        <div class="jk-stage-card"><div class="jk-stage-img"><span class="jk-stage-num">4</span><img src="https://images.unsplash.com/photo-1462275646964-a0e3571f4f95?auto=format&fit=crop&w=600&q=80" alt="벚꽃눈" loading="lazy"></div><div class="jk-stage-body"><div class="jk-stage-name">벚꽃눈</div><div class="jk-stage-name-jp">桜吹雪 · 사쿠라후부키</div><p class="jk-stage-desc">바람에 흩날리는 꽃잎</p><span class="jk-stage-timing">지기 시작 +3일</span></div></div>
+        <div class="jk-stage-card"><div class="jk-stage-img"><span class="jk-stage-num">1</span><img src="https://images.unsplash.com/photo-1551489186-cf8726f514f8?auto=format&fit=crop&w=600&q=80" alt="開花" loading="lazy"></div><div class="jk-stage-body"><div class="jk-stage-name">開花</div><div class="jk-stage-name-jp">かいか</div><p class="jk-stage-desc">5〜6輪の花が咲くと開花宣言</p><span class="jk-stage-timing">基準日</span></div></div>
+        <div class="jk-stage-card jk-stage-card--highlight"><div class="jk-stage-img"><span class="jk-stage-num">2</span><img src="https://images.unsplash.com/photo-1522383225653-ed111181a951?auto=format&fit=crop&w=600&q=80" alt="満開" loading="lazy"></div><div class="jk-stage-body"><div class="jk-stage-name">満開</div><div class="jk-stage-name-jp">まんかい</div><p class="jk-stage-desc">80%以上開花！ベストタイミング</p><span class="jk-stage-timing">開花 +7日</span></div></div>
+        <div class="jk-stage-card"><div class="jk-stage-img"><span class="jk-stage-num">3</span><img src="https://images.unsplash.com/photo-1493238792000-8113da705763?auto=format&fit=crop&w=600&q=80" alt="散り始め" loading="lazy"></div><div class="jk-stage-body"><div class="jk-stage-name">散り始め</div><div class="jk-stage-name-jp">ちりはじめ</div><p class="jk-stage-desc">花びらが落ち始める頃</p><span class="jk-stage-timing">満開 +4日</span></div></div>
+        <div class="jk-stage-card"><div class="jk-stage-img"><span class="jk-stage-num">4</span><img src="https://images.unsplash.com/photo-1462275646964-a0e3571f4f95?auto=format&fit=crop&w=600&q=80" alt="桜吹雪" loading="lazy"></div><div class="jk-stage-body"><div class="jk-stage-name">桜吹雪</div><div class="jk-stage-name-jp">さくらふぶき</div><p class="jk-stage-desc">風に舞う花びら</p><span class="jk-stage-timing">散り始め +3日</span></div></div>
       </div>
-      <div class="jk-stage-message jk-fade-in"><p>개화부터 벚꽃눈까지 <strong>약 2주간</strong> 벚꽃을 즐길 수 있어요!</p></div>
+      <div class="jk-stage-message jk-fade-in"><p>開花から桜吹雪まで<strong>約2週間</strong>、桜を楽しめます！</p></div>
     </div>
   </section>
-
-  <!-- ===== Leaflet 지도 + 카드 오버레이 ===== -->
-  <section class="jk-section jk-section--pink">
+  <section class="jk-section jk-section--pink" id="forecast-map">
     <div class="jk-container">
       <div class="jk-section-header jk-section-header--center jk-fade-in">
         <div class="jk-section-label">2026 Forecast Map</div>
-        <h2 class="jk-section-title jk-title-jp">전국 벚꽃 예상 일정</h2>
+        <h2 class="jk-section-title jk-title-jp">全国桜開花予想</h2>
       </div>
       <div class="jk-map-source-bar jk-fade-in">
-        <div class="jk-map-source-text">데이터: <a href="https://www.data.jma.go.jp/sakura/data/sakura_kaika.html" target="_blank" rel="noopener">일본 기상청</a> 평년값</div>
-        <div class="jk-map-source-updated">업데이트: <strong>2025-12-11</strong></div>
+        <div class="jk-map-source-text">データ: <a href="https://www.data.jma.go.jp/sakura/data/sakura_kaika.html" target="_blank" rel="noopener">気象庁</a> 平年値基準</div>
+        <div class="jk-map-source-updated">更新: <strong>2025-12-11</strong></div>
       </div>
-
       <div class="jk-map-wrapper jk-fade-in">
-        <div class="jk-map-container">
-          <div id="jk-sakura-map"></div>
-          <!-- 점선 연결 SVG -->
-          <svg class="jk-map-lines" id="jkMapLines"></svg>
-          <!-- 카드들은 JS에서 생성 -->
+        <div class="jk-map-sidebar"><div class="jk-map-sidebar-header"><div class="jk-map-sidebar-title">🌸 2026 桜開花順</div><div class="jk-map-sidebar-sub">開花が早い順</div></div><div class="jk-map-sidebar-list" id="jkMapSidebarList"></div></div>
+        <div class="jk-map-area">
+          <div class="jk-map-container"><div id="jk-sakura-map"></div><div class="jk-map-detail-card" id="jkMapDetailCard"><div class="jk-map-detail-header"><div><span class="jk-map-detail-name" id="jkDetailName">東京</span></div><div class="jk-map-detail-status" id="jkDetailStatus">D-102</div></div><div class="jk-map-detail-dates" id="jkDetailDates"></div><div class="jk-map-detail-highlight" id="jkDetailHighlight"></div></div></div>
+          <div class="jk-map-mobile-slider-wrapper"><div class="jk-map-mobile-slider-hint">← スワイプして都市を選択 →</div><div class="jk-map-mobile-slider" id="jkMapMobileSlider"></div><div class="jk-map-mobile-slider-dots" id="jkMapMobileSliderDots"></div></div>
         </div>
-
-        <!-- 모바일용 슬라이더 -->
-        <div class="jk-map-mobile-slider" id="jkMapMobileSlider">
-          <!-- JS에서 생성 -->
-        </div>
-        
-        <!-- 레거시 그리드 (숨김) -->
-        <div class="jk-map-mobile-cards" id="jkMapMobileCards"></div>
       </div>
     </div>
   </section>
-
-  <!-- ===== Q1 앙케이트 + 추천명소 ===== -->
   <section class="jk-section jk-section--white">
     <div class="jk-container">
-      <!-- Q1 앙케이트 -->
-      <div class="jk-spot-survey jk-fade-in">
-        <div class="jk-spot-survey-header">
-          <div class="jk-section-label">Survey</div>
-          <h3 class="jk-section-title jk-title-jp">Q1. 올해 가장 가고 싶은 벚꽃 스팟은?</h3>
-          <p class="jk-section-desc">한 곳만 골라주세요. 선택하면 <strong>다른 사람들이 많이 고른 스팟 순위</strong>가 바로 보여요.</p>
-        </div>
+      <div class="jk-spot-survey jk-fade-in" id="survey">
+        <div class="jk-spot-survey-header"><div class="jk-section-label">Survey</div><h3 class="jk-section-title jk-title-jp">Q1. 今年一番行きたい桜スポットは？</h3><p class="jk-section-desc">一つだけ選んでください。選ぶと<strong>他の人の人気ランキング</strong>がすぐに見えます。</p></div>
         <div class="jk-spot-survey-grid">
-          <button class="jk-spot-choice" data-spot="ueno">
-            <img class="jk-spot-choice-img" src="https://images.unsplash.com/photo-1490806843957-31f4c9a91c65?auto=format&fit=crop&w=400&q=80" alt="우에노 공원">
-            <div class="jk-spot-choice-body">
-              <div class="jk-spot-choice-main">
-                <span class="jk-spot-choice-tag">TOKYO</span>
-                <span class="jk-spot-choice-name">우에노 공원</span>
-                <p class="jk-spot-choice-desc">도쿄 꽃놀이 정석, 1,000그루 벚꽃</p>
-              </div>
-            </div>
-          </button>
-          <button class="jk-spot-choice" data-spot="meguro">
-            <img class="jk-spot-choice-img" src="https://images.unsplash.com/photo-1522383225653-ed111181a951?auto=format&fit=crop&w=400&q=80" alt="메구로강">
-            <div class="jk-spot-choice-body">
-              <div class="jk-spot-choice-main">
-                <span class="jk-spot-choice-tag">TOKYO</span>
-                <span class="jk-spot-choice-name">메구로강</span>
-                <p class="jk-spot-choice-desc">밤 라이트업이 예쁜 강변 벚꽃 터널</p>
-              </div>
-            </div>
-          </button>
-          <button class="jk-spot-choice" data-spot="tetsugaku">
-            <img class="jk-spot-choice-img" src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=400&q=80" alt="철학의 길">
-            <div class="jk-spot-choice-body">
-              <div class="jk-spot-choice-main">
-                <span class="jk-spot-choice-tag">KYOTO</span>
-                <span class="jk-spot-choice-name">철학의 길</span>
-                <p class="jk-spot-choice-desc">긴카쿠지~난젠지, 수로 옆 산책 벚꽃</p>
-              </div>
-            </div>
-          </button>
-          <button class="jk-spot-choice" data-spot="osaka">
-            <img class="jk-spot-choice-img" src="https://images.unsplash.com/photo-1589308078059-be1415eab4c3?auto=format&fit=crop&w=400&q=80" alt="오사카성">
-            <div class="jk-spot-choice-body">
-              <div class="jk-spot-choice-main">
-                <span class="jk-spot-choice-tag">OSAKA</span>
-                <span class="jk-spot-choice-name">오사카성 공원</span>
-                <p class="jk-spot-choice-desc">천수각 배경 3,000그루 벚꽃 장관</p>
-              </div>
-            </div>
-          </button>
-          <button class="jk-spot-choice" data-spot="hirosaki">
-            <img class="jk-spot-choice-img" src="https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?auto=format&fit=crop&w=400&q=80" alt="히로사키성">
-            <div class="jk-spot-choice-body">
-              <div class="jk-spot-choice-main">
-                <span class="jk-spot-choice-tag">AOMORI</span>
-                <span class="jk-spot-choice-name">히로사키성</span>
-                <p class="jk-spot-choice-desc">해자 위 '꽃뗏목'으로 유명한 명소</p>
-              </div>
-            </div>
-          </button>
-          <button class="jk-spot-choice" data-spot="maizuru">
-            <img class="jk-spot-choice-img" src="https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=400&q=80" alt="마이즈루 공원">
-            <div class="jk-spot-choice-body">
-              <div class="jk-spot-choice-main">
-                <span class="jk-spot-choice-tag">FUKUOKA</span>
-                <span class="jk-spot-choice-name">마이즈루 공원</span>
-                <p class="jk-spot-choice-desc">후쿠오카성터, 라멘 투어랑 함께 즐기기</p>
-              </div>
-            </div>
-          </button>
+          <button class="jk-spot-choice" data-spot="ueno"><img class="jk-spot-choice-img" src="https://images.unsplash.com/photo-1490806843957-31f4c9a91c65?auto=format&fit=crop&w=400&q=80" alt="上野公園"><div class="jk-spot-choice-body"><div class="jk-spot-choice-main"><span class="jk-spot-choice-tag">TOKYO</span><span class="jk-spot-choice-name">上野公園</span><p class="jk-spot-choice-desc">東京花見の定番、1,000本の桜</p></div></div></button>
+          <button class="jk-spot-choice" data-spot="meguro"><img class="jk-spot-choice-img" src="https://images.unsplash.com/photo-1522383225653-ed111181a951?auto=format&fit=crop&w=400&q=80" alt="目黒川"><div class="jk-spot-choice-body"><div class="jk-spot-choice-main"><span class="jk-spot-choice-tag">TOKYO</span><span class="jk-spot-choice-name">目黒川</span><p class="jk-spot-choice-desc">夜のライトアップが美しい桜並木</p></div></div></button>
+          <button class="jk-spot-choice" data-spot="tetsugaku"><img class="jk-spot-choice-img" src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=400&q=80" alt="哲学の道"><div class="jk-spot-choice-body"><div class="jk-spot-choice-main"><span class="jk-spot-choice-tag">KYOTO</span><span class="jk-spot-choice-name">哲学の道</span><p class="jk-spot-choice-desc">銀閣寺〜南禅寺、疏水沿いの桜散歩</p></div></div></button>
+          <button class="jk-spot-choice" data-spot="osaka"><img class="jk-spot-choice-img" src="https://images.unsplash.com/photo-1589308078059-be1415eab4c3?auto=format&fit=crop&w=400&q=80" alt="大阪城"><div class="jk-spot-choice-body"><div class="jk-spot-choice-main"><span class="jk-spot-choice-tag">OSAKA</span><span class="jk-spot-choice-name">大阪城公園</span><p class="jk-spot-choice-desc">天守閣を背景に3,000本の桜</p></div></div></button>
+          <button class="jk-spot-choice" data-spot="hirosaki"><img class="jk-spot-choice-img" src="https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?auto=format&fit=crop&w=400&q=80" alt="弘前城"><div class="jk-spot-choice-body"><div class="jk-spot-choice-main"><span class="jk-spot-choice-tag">AOMORI</span><span class="jk-spot-choice-name">弘前城</span><p class="jk-spot-choice-desc">お濠の「花筏」で有名な名所</p></div></div></button>
+          <button class="jk-spot-choice" data-spot="maizuru"><img class="jk-spot-choice-img" src="https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=400&q=80" alt="舞鶴公園"><div class="jk-spot-choice-body"><div class="jk-spot-choice-main"><span class="jk-spot-choice-tag">FUKUOKA</span><span class="jk-spot-choice-name">舞鶴公園</span><p class="jk-spot-choice-desc">福岡城跡、ラーメンと一緒に</p></div></div></button>
         </div>
         <div class="jk-spot-survey-result" id="jkSpotSurveyResult"></div>
       </div>
-
-      <!-- 도시별 추천명소 카드 그리드 -->
-      <div class="jk-section-header jk-section-header--center jk-fade-in" style="margin-top: 48px;">
-        <div class="jk-section-label">Recommended Spots</div>
-        <h2 class="jk-section-title jk-title-jp">도시별 추천 벚꽃 명소</h2>
-        <p class="jk-section-desc">각 도시의 대표 벚꽃 스팟과 JAPANKURU 기사를 확인하세요</p>
-      </div>
-      <div class="jk-spots-grid jk-fade-in" id="jkSpotsGrid">
-        <!-- JS에서 생성 -->
-      </div>
+      <div class="jk-section-header jk-section-header--center jk-fade-in" style="margin-top:48px;" id="spots"><div class="jk-section-label">Recommended Spots</div><h2 class="jk-section-title jk-title-jp">都市別おすすめ桜スポット</h2><p class="jk-section-desc">各都市の代表的な桜スポットとJAPANKURU記事</p></div>
+      <div class="jk-spots-grid jk-fade-in" id="jkSpotsGrid"></div>
     </div>
   </section>
-
-  <!-- ===== 체크리스트 섹션 ===== -->
-  <section class="jk-section jk-checklist-section">
+  <section class="jk-section jk-checklist-section" id="checklist">
     <div class="jk-container">
-      <div class="jk-section-header jk-section-header--center jk-fade-in">
-        <div class="jk-section-label">Checklist</div>
-        <h2 class="jk-section-title jk-title-jp">벚꽃 여행 준비 체크리스트</h2>
-        <p class="jk-section-desc">3~4월 일본 여행, 이것만은 꼭 챙기세요!</p>
-      </div>
-      
+      <div class="jk-section-header jk-section-header--center jk-fade-in"><div class="jk-section-label">Checklist</div><h2 class="jk-section-title jk-title-jp">桜旅行準備チェックリスト</h2><p class="jk-section-desc">3〜4月の旅行、これだけは忘れずに！</p></div>
       <div class="jk-checklist-box jk-fade-in">
-        <div class="jk-checklist-header">
-          <h3 class="jk-checklist-title">✅ 출발 전 체크</h3>
-          <p class="jk-checklist-sub">체크박스를 눌러 확인하세요</p>
-        </div>
-        
+        <div class="jk-checklist-header"><h3 class="jk-checklist-title">✅ 出発前チェック</h3><p class="jk-checklist-sub">チェックボックスをクリックして確認</p></div>
         <div class="jk-checklist-group">
-          <div class="jk-checklist-item">
-            <div class="jk-checklist-check" onclick="this.classList.toggle('is-checked')"></div>
-            <div class="jk-checklist-content">
-              <div class="jk-checklist-label">✈️ 항공권·숙소 예약</div>
-              <p class="jk-checklist-desc">벚꽃 시즌은 3~6개월 전 예약 필수! 취소 가능 플랜 추천</p>
-            </div>
-          </div>
-          <div class="jk-checklist-item">
-            <div class="jk-checklist-check" onclick="this.classList.toggle('is-checked')"></div>
-            <div class="jk-checklist-content">
-              <div class="jk-checklist-label">🛡️ 여행자보험 가입</div>
-              <p class="jk-checklist-desc">일본 의료비 비싸요! 보험 필수</p>
-            </div>
-          </div>
+          <div class="jk-checklist-item"><div class="jk-checklist-check" onclick="this.classList.toggle('is-checked')"></div><div class="jk-checklist-content"><div class="jk-checklist-label">✈️ 航空券・宿泊予約</div><p class="jk-checklist-desc">桜シーズンは3〜6ヶ月前の予約必須！キャンセル可能プランがおすすめ</p></div></div>
+          <div class="jk-checklist-item"><div class="jk-checklist-check" onclick="this.classList.toggle('is-checked')"></div><div class="jk-checklist-content"><div class="jk-checklist-label">🛡️ 海外旅行保険加入</div><p class="jk-checklist-desc">日本の医療費は高額！保険は必須</p></div></div>
         </div>
-        
-        <div class="jk-checklist-divider">🌸 3~4월 일본, 이거 필수! 🌸</div>
-        
+        <div class="jk-checklist-divider">🌸 3〜4月の必須アイテム 🌸</div>
         <div class="jk-checklist-group">
-          <div class="jk-checklist-item jk-checklist-item--highlight">
-            <div class="jk-checklist-check" onclick="this.classList.toggle('is-checked')"></div>
-            <div class="jk-checklist-content">
-              <div class="jk-checklist-label">😷 花粉症 대책</div>
-              <p class="jk-checklist-desc">3~4월은 삼나무 꽃가루 피크! 마스크·알레르기약 필수</p>
-              <a href="https://www.japankuru.com/kr/search?q=꽃가루+알레르기" class="jk-checklist-link" target="_blank" rel="noopener">
-                花粉症 대책 가이드 →
-              </a>
-            </div>
-          </div>
-          <div class="jk-checklist-item jk-checklist-item--highlight">
-            <div class="jk-checklist-check" onclick="this.classList.toggle('is-checked')"></div>
-            <div class="jk-checklist-content">
-              <div class="jk-checklist-label">☀️ UV케어</div>
-              <p class="jk-checklist-desc">봄볕 자외선 의외로 강함! 선크림 필수</p>
-              <a href="https://www.japankuru.com/kr/search?q=일본+뷰티" class="jk-checklist-link" target="_blank" rel="noopener">
-                일본 뷰티템 추천 →
-              </a>
-            </div>
-          </div>
-          <div class="jk-checklist-item">
-            <div class="jk-checklist-check" onclick="this.classList.toggle('is-checked')"></div>
-            <div class="jk-checklist-content">
-              <div class="jk-checklist-label">🩹 피로회복·상비약</div>
-              <p class="jk-checklist-desc">하루 2만보 걸음, 발 아파요! 파스·진통제·밴드 챙기기</p>
-              <a href="https://www.japankuru.com/kr/search?q=드럭스토어" class="jk-checklist-link" target="_blank" rel="noopener">
-                드럭스토어 가이드 →
-              </a>
-            </div>
-          </div>
-          <div class="jk-checklist-item">
-            <div class="jk-checklist-check" onclick="this.classList.toggle('is-checked')"></div>
-            <div class="jk-checklist-content">
-              <div class="jk-checklist-label">📱 보조배터리</div>
-              <p class="jk-checklist-desc">사진 많이 찍으면 배터리 순삭! 대용량 추천</p>
-            </div>
-          </div>
-          <div class="jk-checklist-item">
-            <div class="jk-checklist-check" onclick="this.classList.toggle('is-checked')"></div>
-            <div class="jk-checklist-content">
-              <div class="jk-checklist-label">🧥 겉옷 (바람막이)</div>
-              <p class="jk-checklist-desc">벚꽃 시즌 일교차 커요! 10~20도 오락가락</p>
-            </div>
-          </div>
-          <div class="jk-checklist-item">
-            <div class="jk-checklist-check" onclick="this.classList.toggle('is-checked')"></div>
-            <div class="jk-checklist-content">
-              <div class="jk-checklist-label">👟 편한 신발</div>
-              <p class="jk-checklist-desc">공원·산책로 많이 걸어요! 운동화 필수</p>
-            </div>
-          </div>
+          <div class="jk-checklist-item jk-checklist-item--highlight"><div class="jk-checklist-check" onclick="this.classList.toggle('is-checked')"></div><div class="jk-checklist-content"><div class="jk-checklist-label">😷 花粉症対策</div><p class="jk-checklist-desc">3〜4月はスギ花粉のピーク！マスク・アレルギー薬必須</p><a href="https://www.japankuru.com/ja/search?q=花粉症" class="jk-checklist-link" target="_blank" rel="noopener">花粉症対策ガイド →</a></div></div>
+          <div class="jk-checklist-item jk-checklist-item--highlight"><div class="jk-checklist-check" onclick="this.classList.toggle('is-checked')"></div><div class="jk-checklist-content"><div class="jk-checklist-label">☀️ UVケア</div><p class="jk-checklist-desc">春の紫外線は意外と強い！日焼け止め必須</p></div></div>
+          <div class="jk-checklist-item"><div class="jk-checklist-check" onclick="this.classList.toggle('is-checked')"></div><div class="jk-checklist-content"><div class="jk-checklist-label">🩹 疲労回復・常備薬</div><p class="jk-checklist-desc">1日2万歩も歩くと足が痛い！湿布・鎮痛剤・絆創膏を準備</p></div></div>
+          <div class="jk-checklist-item"><div class="jk-checklist-check" onclick="this.classList.toggle('is-checked')"></div><div class="jk-checklist-content"><div class="jk-checklist-label">📱 モバイルバッテリー</div><p class="jk-checklist-desc">写真をたくさん撮るとバッテリー消耗が激しい！大容量推奨</p></div></div>
+          <div class="jk-checklist-item"><div class="jk-checklist-check" onclick="this.classList.toggle('is-checked')"></div><div class="jk-checklist-content"><div class="jk-checklist-label">🧥 上着（ウィンドブレーカー）</div><p class="jk-checklist-desc">桜シーズンは寒暖差が大きい！10〜20度の変動も</p></div></div>
+          <div class="jk-checklist-item"><div class="jk-checklist-check" onclick="this.classList.toggle('is-checked')"></div><div class="jk-checklist-content"><div class="jk-checklist-label">👟 歩きやすい靴</div><p class="jk-checklist-desc">公園・散策路をたくさん歩きます！スニーカー必須</p></div></div>
         </div>
       </div>
     </div>
   </section>
-
-  <!-- ===== FAQ ===== -->
   <section class="jk-section jk-section--cream">
     <div class="jk-container">
-      <div class="jk-section-header jk-section-header--center jk-fade-in"><div class="jk-section-label">FAQ</div><h2 class="jk-section-title jk-title-jp">자주 묻는 질문</h2></div>
+      <div class="jk-section-header jk-section-header--center jk-fade-in"><div class="jk-section-label">FAQ</div><h2 class="jk-section-title jk-title-jp">よくある質問</h2></div>
       <div class="jk-faq-list jk-fade-in">
-        <div class="jk-faq-item"><div class="jk-faq-q">개화일이 지났는데 벚꽃 볼 수 있나요?</div><div class="jk-faq-a"><div class="jk-faq-a-inner">네! 개화부터 벚꽃눈까지 약 2주간 즐길 수 있어요.</div></div></div>
-        <div class="jk-faq-item"><div class="jk-faq-q">언제가 가장 예쁜가요?</div><div class="jk-faq-a"><div class="jk-faq-a-inner">만개 전후 1주일이 가장 예뻐요. 취향에 따라 벚꽃눈도 추천!</div></div></div>
-        <div class="jk-faq-item"><div class="jk-faq-q">숙소 예약은 언제?</div><div class="jk-faq-a"><div class="jk-faq-a-inner">도쿄·교토는 3~6개월 전 예약 추천. 취소 가능 플랜으로!<div class="jk-faq-tip"><span class="jk-faq-tip-label">💡 TIP</span> 벚꽃 시즌 호텔은 빨리 마감돼요. 취소 무료 플랜으로 미리 잡아두세요!</div></div></div></div>
-        <div class="jk-faq-item"><div class="jk-faq-q">인파를 피하려면?</div><div class="jk-faq-a"><div class="jk-faq-a-inner">4월 첫째 주 주말 피하고, 평일 아침 방문 or 동북 지방!<div class="jk-faq-tip"><span class="jk-faq-tip-label">💡 TIP</span> 히로사키·센다이는 도쿄보다 2~3주 늦어서 인파가 적어요</div></div></div></div>
-        <div class="jk-faq-item"><div class="jk-faq-q">花粉症(꽃가루 알레르기) 심한데요?</div><div class="jk-faq-a"><div class="jk-faq-a-inner">3~4월 일본은 삼나무 꽃가루 시즌! 마스크와 알레르기약 필수. 현지 드럭스토어에서도 쉽게 구매 가능해요.<div class="jk-faq-tip"><span class="jk-faq-tip-label">💡 TIP</span> 花粉症 걱정 없이 벚꽃 보고 싶다면? 5월 삿포로 추천!</div></div></div></div>
+        <div class="jk-faq-item"><div class="jk-faq-q">開花日を過ぎても桜は見られますか？</div><div class="jk-faq-a"><div class="jk-faq-a-inner">はい！開花から桜吹雪まで約2週間楽しめます。</div></div></div>
+        <div class="jk-faq-item"><div class="jk-faq-q">一番きれいな時期はいつですか？</div><div class="jk-faq-a"><div class="jk-faq-a-inner">満開前後の1週間が一番きれいです。好みによって桜吹雪もおすすめ！</div></div></div>
+        <div class="jk-faq-item"><div class="jk-faq-q">宿泊予約はいつがベスト？</div><div class="jk-faq-a"><div class="jk-faq-a-inner">東京・京都は3〜6ヶ月前の予約がおすすめ。キャンセル可能プランで！<div class="jk-faq-tip"><span class="jk-faq-tip-label">💡 TIP</span> 桜シーズンのホテルは早く埋まります。</div></div></div></div>
+        <div class="jk-faq-item"><div class="jk-faq-q">混雑を避けるには？</div><div class="jk-faq-a"><div class="jk-faq-a-inner">4月第1週の週末を避けて、平日の朝に訪問 or 東北地方へ！<div class="jk-faq-tip"><span class="jk-faq-tip-label">💡 TIP</span> 弘前・仙台は東京より2〜3週間遅いので混雑も少なめ</div></div></div></div>
+        <div class="jk-faq-item"><div class="jk-faq-q">花粉症がひどいのですが？</div><div class="jk-faq-a"><div class="jk-faq-a-inner">3〜4月はスギ花粉シーズン！マスクとアレルギー薬は必須。<div class="jk-faq-tip"><span class="jk-faq-tip-label">💡 TIP</span> 花粉症の心配なく桜を見たいなら？5月の札幌がおすすめ！</div></div></div></div>
       </div>
     </div>
   </section>
-
-  <!-- ===== 푸터 ===== -->
   <footer class="jk-footer">
-    <p class="jk-footer-text">도움이 됐다면 친구에게도 공유해주세요</p>
+    <p class="jk-footer-text">役に立ったら友達にも共有してください</p>
     <div class="jk-footer-btns">
-      <button type="button" class="jk-footer-btn" onclick="handleShare()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.59 13.51l6.83 3.98M15.41 6.51l-6.82 3.98"/></svg>공유</button>
-      <button type="button" class="jk-footer-btn" onclick="copyLink()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>링크 복사</button>
+      <button type="button" class="jk-footer-btn" onclick="handleShare()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.59 13.51l6.83 3.98M15.41 6.51l-6.82 3.98"/></svg>共有</button>
+      <button type="button" class="jk-footer-btn" onclick="copyLink()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>リンクコピー</button>
     </div>
-    <div class="jk-footer-source">데이터: <a href="https://www.data.jma.go.jp/sakura/data/sakura_kaika.html" target="_blank">일본 기상청</a> 평년값 · © JAPANKURU</div>
+    <div class="jk-footer-source">データ: <a href="https://www.data.jma.go.jp/sakura/data/sakura_kaika.html" target="_blank">気象庁</a> 平年値 · © JAPANKURU</div>
   </footer>
-
-  <!-- ===== 서베이 모달 ===== -->
   <div class="jk-survey-modal-overlay" id="jkSurveyModal">
     <div class="jk-survey-modal">
-      <div class="jk-survey-modal-header">
-        <img class="jk-survey-modal-img" id="jkModalImg" src="" alt="">
-        <button type="button" class="jk-survey-modal-close" id="jkModalClose">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
-        </button>
-        <span class="jk-survey-modal-badge" id="jkModalBadge">🌸 투표 완료!</span>
-      </div>
-      <div class="jk-survey-modal-body">
-        <h3 class="jk-survey-modal-title" id="jkModalTitle">우에노 공원</h3>
-        <p class="jk-survey-modal-spot" id="jkModalSpot">도쿄 · 1,000그루+ 벚나무</p>
-        <div class="jk-survey-modal-dates" id="jkModalDates">
-          <span class="jk-survey-modal-date">🌸 開花 3/24</span>
-          <span class="jk-survey-modal-date">🌺 満開 3/31</span>
-        </div>
-        
-        <div class="jk-survey-modal-section">
-          <div class="jk-survey-modal-section-title">📍 추천 코스</div>
-          <div class="jk-survey-modal-course" id="jkModalCourse">
-            <!-- JS에서 생성 -->
-          </div>
-        </div>
-        
-        <div class="jk-survey-modal-highlight" id="jkModalHighlight">
-          💡 우에노 공원은 박물관·동물원도 함께! 하루 종일 즐기기 좋아요.
-        </div>
-        
-        <div class="jk-survey-modal-actions">
-          <a href="#" class="jk-survey-modal-btn jk-survey-modal-btn--primary" id="jkModalArticle" target="_blank">관련 기사 보기</a>
-          <button type="button" class="jk-survey-modal-btn" id="jkModalScrollTo">지도에서 보기</button>
-        </div>
-      </div>
+      <div class="jk-survey-modal-header"><img class="jk-survey-modal-img" id="jkModalImg" src="" alt=""><button type="button" class="jk-survey-modal-close" id="jkModalClose"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button><span class="jk-survey-modal-badge" id="jkModalBadge">🌸 投票完了！</span></div>
+      <div class="jk-survey-modal-body"><h3 class="jk-survey-modal-title" id="jkModalTitle">上野公園</h3><p class="jk-survey-modal-spot" id="jkModalSpot">東京 · 1,000本以上の桜</p><div class="jk-survey-modal-dates" id="jkModalDates"></div><div class="jk-survey-modal-section"><div class="jk-survey-modal-section-title">📍 おすすめコース</div><div class="jk-survey-modal-course" id="jkModalCourse"></div></div><div class="jk-survey-modal-highlight" id="jkModalHighlight"></div><div class="jk-survey-modal-actions"><a href="#" class="jk-survey-modal-btn jk-survey-modal-btn--primary" id="jkModalArticle" target="_blank">関連記事を見る</a><button type="button" class="jk-survey-modal-btn" id="jkModalScrollTo">📍 Google マップ</button></div></div>
     </div>
   </div>
 </div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-
-  // ===== 도시 데이터 =====
   const CITIES = [
-    { id: 'sapporo', name: '札幌', nameKr: '삿포로', lat: 43.06, lng: 141.35, bloom: '5/1', full: '5/6', fall: '5/10', snow: '5/13',
-      spot: '마루야마 공원', spotDesc: '홋카이도 대표 벚꽃 명소. 에조야마자쿠라 200그루가 만개하는 봄, 징기스칸과 함께 꽃놀이!',
-      spotImg: 'https://images.unsplash.com/photo-1513407030348-c983a97b98d8?auto=format&fit=crop&w=600&q=80',
-      article: 'https://www.japankuru.com/kr/search?q=삿포로+벚꽃',
-      editorPick: { name: '다루마 징기스칸', desc: '꽃놀이하며 먹는 양고기 바비큐! 현지인 맛집', link: 'https://www.japankuru.com/kr/search?q=삿포로+맛집' },
-      tip: '삿포로는 벚꽃 시즌이 5월이라 花粉症 걱정 없이 편하게 즐길 수 있어요!',
-      highlight: '🍖 징기스칸 + 벚꽃 = 홋카이도식 꽃놀이!',
-      course: ['마루야마 공원 벚꽃 산책', '다루마 징기스칸에서 점심', '오도리 공원 산책', '삿포로 맥주박물관'],
-      cardPos: { top: 30, right: 50 } },
-    { id: 'aomori', name: '青森', nameKr: '아오모리', lat: 40.82, lng: 140.74, bloom: '4/22', full: '4/28', fall: '5/2', snow: '5/5',
-      spot: '히로사키성', spotDesc: '2,600그루 벚꽃 + 해자 위 꽃뗏목. 일본 3대 벚꽃 명소 중 하나로 꼽히는 압도적 스케일.',
-      spotImg: 'https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?auto=format&fit=crop&w=600&q=80',
-      article: 'https://www.japankuru.com/kr/search?q=히로사키+벚꽃',
-      editorPick: { name: '히로사키 애플파이', desc: '사과의 고장 아오모리! 성 근처 카페에서 맛보세요', link: 'https://www.japankuru.com/kr/search?q=아오모리+애플파이' },
-      tip: '히로사키성 해자의 "꽃뗏목(花筏)"은 만개 후 3~4일 차에 가장 예뻐요!',
-      highlight: '🌊 해자 위 꽃뗏목(花筏) 명소!',
-      course: ['히로사키성 본관 관람', '해자 따라 한 바퀴', '애플파이 카페 휴식', '야간 라이트업'],
-      cardPos: { top: 100, right: 50 } },
-    { id: 'sendai', name: '仙台', nameKr: '센다이', lat: 38.27, lng: 140.87, bloom: '4/8', full: '4/14', fall: '4/18', snow: '4/21',
-      spot: '니시공원', spotDesc: '200그루+ 벚꽃, 센다이 현지인들의 꽃놀이 성지. 다테 마사무네 동상과 함께!',
-      spotImg: 'https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?auto=format&fit=crop&w=600&q=80',
-      article: 'https://www.japankuru.com/kr/search?q=센다이+벚꽃',
-      editorPick: { name: '규탕 맛집거리', desc: '센다이 명물 소혀 구이! 역 앞 규탕 거리 추천', link: 'https://www.japankuru.com/kr/search?q=센다이+규탕' },
-      tip: '센다이역에서 루프 버스 "るーぷる仙台"로 벚꽃 명소 순회 가능!',
-      highlight: '🚌 루프버스로 편하게 명소 순회!',
-      course: ['센다이역 루프버스 탑승', '니시공원 벚꽃', '즈이호덴(다테 영묘)', '규탕 거리 저녁'],
-      cardPos: { top: 170, right: 50 } },
-    { id: 'tokyo', name: '東京', nameKr: '도쿄', lat: 35.68, lng: 139.77, bloom: '3/24', full: '3/31', fall: '4/4', snow: '4/7',
-      spot: '우에노 공원', spotDesc: '1,000그루+ 벚나무, 도쿄 대표 꽃놀이 명소. 박물관·동물원과 함께 하루 종일 즐기기!',
-      spotImg: 'https://images.unsplash.com/photo-1490806843957-31f4c9a91c65?auto=format&fit=crop&w=600&q=80',
-      article: 'https://www.japankuru.com/kr/search?q=도쿄+벚꽃',
-      editorPick: { name: '사쿠라 테라스 카페', desc: '우에노 공원 뷰 테라스석! 벚꽃 보며 브런치', link: 'https://www.japankuru.com/kr/search?q=도쿄+카페' },
-      tip: '도쿄는 3월 말 花粉症 피크! 마스크·알레르기약 필수로 챙기세요',
-      highlight: '🏛️ 벚꽃 + 박물관 + 동물원 한번에!',
-      course: ['우에노 공원 벚꽃길', '도쿄 국립박물관', '아메요코 시장 간식', '시노바즈 연못 산책'],
-      cardPos: { top: 260, right: 50 } },
-    { id: 'kanazawa', name: '金沢', nameKr: '가나자와', lat: 36.56, lng: 136.66, bloom: '4/3', full: '4/9', fall: '4/13', snow: '4/16',
-      spot: '겐로쿠엔', spotDesc: '일본 3대 정원 + 벚꽃의 조화. 야간 라이트업 시 환상적인 분위기!',
-      spotImg: 'https://images.unsplash.com/photo-1528360983277-13d401cdc186?auto=format&fit=crop&w=600&q=80',
-      article: 'https://www.japankuru.com/kr/search?q=가나자와+벚꽃',
-      editorPick: { name: '히가시 차야거리', desc: '게이샤 거리에서 말차 디저트! 분위기 최고', link: 'https://www.japankuru.com/kr/search?q=가나자와+히가시차야' },
-      tip: '겐로쿠엔 야간 라이트업은 만개 시기에만! 사전에 일정 확인 필수',
-      highlight: '🌙 야간 라이트업이 환상적!',
-      course: ['겐로쿠엔 정원 산책', '가나자와성 공원', '히가시 차야거리 말차', '야간 라이트업'],
-      cardPos: { top: 190, left: 50 } },
-    { id: 'kyoto', name: '京都', nameKr: '교토', lat: 35.01, lng: 135.77, bloom: '3/26', full: '4/2', fall: '4/6', snow: '4/9',
-      spot: '철학의 길', spotDesc: '2km 수로변 벚꽃 산책로. 긴카쿠지~난젠지 코스로 교토의 봄을 만끽!',
-      spotImg: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=600&q=80',
-      article: 'https://www.japankuru.com/kr/search?q=교토+벚꽃',
-      editorPick: { name: '요지야 카페', desc: '철학의 길 끝! 정원 뷰 말차 라떼 인생샷', link: 'https://www.japankuru.com/kr/search?q=교토+카페' },
-      tip: '교토 벚꽃 시즌은 숙소 6개월 전 예약 필수! 취소 가능 플랜으로',
-      highlight: '🚶 2km 수로변 산책로 = 교토 최고 코스',
-      course: ['긴카쿠지(은각사) 출발', '철학의 길 2km 산책', '요지야 카페 휴식', '난젠지 경내 관람'],
-      cardPos: { top: 280, left: 50 } },
-    { id: 'osaka', name: '大阪', nameKr: '오사카', lat: 34.69, lng: 135.50, bloom: '3/27', full: '4/3', fall: '4/7', snow: '4/10',
-      spot: '오사카성 공원', spotDesc: '천수각 배경 3,000그루 벚꽃 장관. 서문 광장 야경이 특히 아름다워요!',
-      spotImg: 'https://images.unsplash.com/photo-1589308078059-be1415eab4c3?auto=format&fit=crop&w=600&q=80',
-      article: 'https://www.japankuru.com/kr/search?q=오사카+벚꽃',
-      editorPick: { name: '도톤보리 타코야키', desc: '벚꽃 보고 타코야키! 쿠쿠루 vs 오오타코 대결', link: 'https://www.japankuru.com/kr/search?q=오사카+타코야키' },
-      tip: '오사카성 서문 광장 야간 벚꽃이 가장 예뻐요! 해질녘 방문 추천',
-      highlight: '🏯 천수각 배경 야경이 최고!',
-      course: ['오사카성 천수각 관람', '서문 광장 벚꽃', '도톤보리 타코야키', '신세카이 저녁'],
-      cardPos: { top: 360, left: 120 } },
-    { id: 'hiroshima', name: '広島', nameKr: '히로시마', lat: 34.39, lng: 132.46, bloom: '3/25', full: '4/1', fall: '4/5', snow: '4/8',
-      spot: '평화기념공원', spotDesc: '역사와 벚꽃이 어우러진 특별한 명소. 오타강변 300그루 벚꽃 산책.',
-      spotImg: 'https://images.unsplash.com/photo-1576675784201-0e142b423952?auto=format&fit=crop&w=600&q=80',
-      article: 'https://www.japankuru.com/kr/search?q=히로시마+벚꽃',
-      editorPick: { name: '오코노미무라', desc: '히로시마식 오코노미야키 빌딩! 현지인 추천 맛집', link: 'https://www.japankuru.com/kr/search?q=히로시마+오코노미야키' },
-      tip: '히로시마에서 미야지마 당일치기! 벚꽃+사슴+모미지만쥬 3콤보',
-      highlight: '🕊️ 역사와 벚꽃이 어우러진 특별한 곳',
-      course: ['평화기념공원 산책', '원폭돔 관람', '오코노미무라 점심', '미야지마 당일치기'],
-      cardPos: { top: 370, left: 50 } },
-    { id: 'fukuoka', name: '福岡', nameKr: '후쿠오카', lat: 33.59, lng: 130.40, bloom: '3/22', full: '3/29', fall: '4/2', snow: '4/5',
-      spot: '마이즈루 공원', spotDesc: '후쿠오카성터 1,000그루 벚꽃. 하카타 라멘 투어와 함께 즐기는 꽃놀이!',
-      spotImg: 'https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=600&q=80',
-      article: 'https://www.japankuru.com/kr/search?q=후쿠오카+벚꽃',
-      editorPick: { name: '이치란 본점', desc: '본고장 하카타 라멘! 이치란 1호점 방문 인증', link: 'https://www.japankuru.com/kr/search?q=후쿠오카+라멘' },
-      tip: '후쿠오카는 일본에서 가장 빨리 개화! 3월 하순이 베스트',
-      highlight: '🍜 일본 최초 개화 + 하카타 라멘!',
-      course: ['마이즈루 공원 벚꽃', '후쿠오카성 터 산책', '이치란 본점 라멘', '나카스 야타이 투어'],
-      cardPos: { top: 460, left: 50 } },
-    { id: 'kagoshima', name: '鹿児島', nameKr: '가고시마', lat: 31.60, lng: 130.56, bloom: '3/26', full: '4/2', fall: '4/6', snow: '4/9',
-      spot: '시로야마 공원', spotDesc: '사쿠라지마 화산 뷰 + 벚꽃. 가고시마만의 이색적인 풍경!',
-      spotImg: 'https://images.unsplash.com/photo-1528164344705-47542687000d?auto=format&fit=crop&w=600&q=80',
-      article: 'https://www.japankuru.com/kr/search?q=가고시마+벚꽃',
-      editorPick: { name: '시로쿠마 빙수', desc: '가고시마 명물 백곰 빙수! 텐몬칸 무쟈키 본점', link: 'https://www.japankuru.com/kr/search?q=가고시마+시로쿠마' },
-      tip: '활화산 사쿠라지마 뷰 + 벚꽃 조합은 가고시마에서만 가능!',
-      highlight: '🌋 활화산 뷰 + 벚꽃 = 유일무이!',
-      course: ['시로야마 전망대', '사쿠라지마 페리', '시로쿠마 빙수', '텐몬칸 거리 쇼핑'],
-      cardPos: { top: 540, left: 100 } }
+    { id: 'sapporo', name: '札幌', lat: 43.06, lng: 141.35, bloom: '5/1', full: '5/6', fall: '5/10', snow: '5/13', spot: '円山公園', spotDesc: '北海道を代表する桜の名所。エゾヤマザクラ200本が満開になる春、ジンギスカンと一緒にお花見！', spotImg: 'https://images.unsplash.com/photo-1513407030348-c983a97b98d8?auto=format&fit=crop&w=600&q=80', article: 'https://www.japankuru.com/ja/search?q=札幌+桜', editorPick: { name: 'だるまジンギスカン', desc: 'お花見しながらラム肉BBQ！地元の人気店', link: 'https://www.japankuru.com/ja/search?q=札幌+グルメ' }, tip: '札幌は桜シーズンが5月なので花粉症の心配なく楽しめます！', highlight: '🍖 ジンギスカン + 桜 = 北海道式お花見！', course: ['円山公園で桜散歩', 'だるまジンギスカンでランチ', '大通公園を散策', '札幌ビール博物館'] },
+    { id: 'aomori', name: '青森', lat: 40.82, lng: 140.74, bloom: '4/22', full: '4/28', fall: '5/2', snow: '5/5', spot: '弘前城', spotDesc: '2,600本の桜 + お濠の花筏。日本三大桜名所の一つ。', spotImg: 'https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?auto=format&fit=crop&w=600&q=80', article: 'https://www.japankuru.com/ja/search?q=弘前+桜', editorPick: { name: '弘前アップルパイ', desc: 'りんごの産地青森！城の近くのカフェでどうぞ', link: 'https://www.japankuru.com/ja/search?q=青森+アップルパイ' }, tip: '弘前城のお濠の「花筏」は満開後3〜4日目が一番きれい！', highlight: '🌊 お濠の花筏が名物！', course: ['弘前城本丸観覧', 'お濠沿いを一周', 'アップルパイカフェで休憩', '夜間ライトアップ'] },
+    { id: 'sendai', name: '仙台', lat: 38.27, lng: 140.87, bloom: '4/8', full: '4/14', fall: '4/18', snow: '4/21', spot: '西公園', spotDesc: '200本以上の桜、仙台市民のお花見の聖地。', spotImg: 'https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?auto=format&fit=crop&w=600&q=80', article: 'https://www.japankuru.com/ja/search?q=仙台+桜', editorPick: { name: '牛タン通り', desc: '仙台名物の牛タン焼き！駅前の牛タン通りがおすすめ', link: 'https://www.japankuru.com/ja/search?q=仙台+牛タン' }, tip: '仙台駅からるーぷる仙台バスで桜名所巡りが可能！', highlight: '🚌 るーぷるバスで名所巡り！', course: ['仙台駅からるーぷるバス乗車', '西公園の桜', '瑞鳳殿（伊達家霊廟）', '牛タン通りで夕食'] },
+    { id: 'tokyo', name: '東京', lat: 35.68, lng: 139.77, bloom: '3/24', full: '3/31', fall: '4/4', snow: '4/7', spot: '上野公園', spotDesc: '1,000本以上の桜、東京を代表するお花見スポット。博物館・動物園と一緒に！', spotImg: 'https://images.unsplash.com/photo-1490806843957-31f4c9a91c65?auto=format&fit=crop&w=600&q=80', article: 'https://www.japankuru.com/ja/search?q=東京+桜', editorPick: { name: '桜テラスカフェ', desc: '上野公園ビューのテラス席！桜を見ながらブランチ', link: 'https://www.japankuru.com/ja/search?q=東京+カフェ' }, tip: '東京は3月末が花粉症のピーク！マスク・アレルギー薬を忘れずに', highlight: '🏛️ 桜 + 博物館 + 動物園を一度に！', course: ['上野公園の桜並木', '東京国立博物館', 'アメ横でおやつ', '不忍池を散策'] },
+    { id: 'kanazawa', name: '金沢', lat: 36.56, lng: 136.66, bloom: '4/3', full: '4/9', fall: '4/13', snow: '4/16', spot: '兼六園', spotDesc: '日本三名園 + 桜のハーモニー。夜間ライトアップは幻想的！', spotImg: 'https://images.unsplash.com/photo-1528360983277-13d401cdc186?auto=format&fit=crop&w=600&q=80', article: 'https://www.japankuru.com/ja/search?q=金沢+桜', editorPick: { name: 'ひがし茶屋街', desc: '芸妓街で抹茶デザート！雰囲気最高', link: 'https://www.japankuru.com/ja/search?q=金沢+ひがし茶屋街' }, tip: '兼六園の夜間ライトアップは満開時期のみ！事前に日程確認を', highlight: '🌙 夜間ライトアップが幻想的！', course: ['兼六園を散策', '金沢城公園', 'ひがし茶屋街で抹茶', '夜間ライトアップ'] },
+    { id: 'kyoto', name: '京都', lat: 35.01, lng: 135.77, bloom: '3/26', full: '4/2', fall: '4/6', snow: '4/9', spot: '哲学の道', spotDesc: '2kmの疏水沿い桜並木散歩道。銀閣寺〜南禅寺コースで京都の春を満喫！', spotImg: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=600&q=80', article: 'https://www.japankuru.com/ja/search?q=京都+桜', editorPick: { name: 'よーじやカフェ', desc: '哲学の道の終点！庭園ビューで抹茶ラテ', link: 'https://www.japankuru.com/ja/search?q=京都+カフェ' }, tip: '京都の桜シーズンは宿泊6ヶ月前の予約必須！', highlight: '🚶 2kmの疏水沿い散歩道 = 京都最高のコース', course: ['銀閣寺から出発', '哲学の道2km散歩', 'よーじやカフェで休憩', '南禅寺境内を観覧'] },
+    { id: 'osaka', name: '大阪', lat: 34.69, lng: 135.50, bloom: '3/27', full: '4/3', fall: '4/7', snow: '4/10', spot: '大阪城公園', spotDesc: '天守閣を背景に3,000本の桜が壮観。西の丸庭園の夜景が特に美しい！', spotImg: 'https://images.unsplash.com/photo-1589308078059-be1415eab4c3?auto=format&fit=crop&w=600&q=80', article: 'https://www.japankuru.com/ja/search?q=大阪+桜', editorPick: { name: '道頓堀たこ焼き', desc: '桜を見てたこ焼き！くくる vs 大たこ対決', link: 'https://www.japankuru.com/ja/search?q=大阪+たこ焼き' }, tip: '大阪城西の丸庭園の夜桜が一番きれい！夕方の訪問がおすすめ', highlight: '🏯 天守閣背景の夜景が最高！', course: ['大阪城天守閣観覧', '西の丸庭園の桜', '道頓堀でたこ焼き', '新世界で夕食'] },
+    { id: 'hiroshima', name: '広島', lat: 34.39, lng: 132.46, bloom: '3/25', full: '4/1', fall: '4/5', snow: '4/8', spot: '平和記念公園', spotDesc: '歴史と桜が調和する特別な名所。太田川沿い300本の桜散歩。', spotImg: 'https://images.unsplash.com/photo-1576675784201-0e142b423952?auto=format&fit=crop&w=600&q=80', article: 'https://www.japankuru.com/ja/search?q=広島+桜', editorPick: { name: 'お好み村', desc: '広島風お好み焼きビル！地元おすすめ店', link: 'https://www.japankuru.com/ja/search?q=広島+お好み焼き' }, tip: '広島から宮島日帰り！桜+鹿+もみじ饅頭の3コンボ', highlight: '🕊️ 歴史と桜が調和する特別な場所', course: ['平和記念公園散歩', '原爆ドーム観覧', 'お好み村でランチ', '宮島日帰り'] },
+    { id: 'fukuoka', name: '福岡', lat: 33.59, lng: 130.40, bloom: '3/22', full: '3/29', fall: '4/2', snow: '4/5', spot: '舞鶴公園', spotDesc: '福岡城跡の1,000本の桜。博多ラーメンツアーと一緒にお花見！', spotImg: 'https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=600&q=80', article: 'https://www.japankuru.com/ja/search?q=福岡+桜', editorPick: { name: '一蘭本店', desc: '本場の博多ラーメン！一蘭1号店訪問記念', link: 'https://www.japankuru.com/ja/search?q=福岡+ラーメン' }, tip: '福岡は日本で最も早く開花！3月下旬がベスト', highlight: '🍜 日本最速開花 + 博多ラーメン！', course: ['舞鶴公園の桜', '福岡城跡を散策', '一蘭本店でラーメン', '中洲屋台ツアー'] },
+    { id: 'kagoshima', name: '鹿児島', lat: 31.60, lng: 130.56, bloom: '3/26', full: '4/2', fall: '4/6', snow: '4/9', spot: '城山公園', spotDesc: '桜島火山ビュー + 桜。鹿児島ならではのユニークな風景！', spotImg: 'https://images.unsplash.com/photo-1528164344705-47542687000d?auto=format&fit=crop&w=600&q=80', article: 'https://www.japankuru.com/ja/search?q=鹿児島+桜', editorPick: { name: '白熊かき氷', desc: '鹿児島名物シロクマかき氷！天文館むじゃき本店', link: 'https://www.japankuru.com/ja/search?q=鹿児島+白熊' }, tip: '活火山桜島ビュー + 桜の組み合わせは鹿児島だけ！', highlight: '🌋 活火山ビュー + 桜 = 唯一無二！', course: ['城山展望台', '桜島フェリー', '白熊かき氷', '天文館通りでショッピング'] },
+    { id: 'nagoya', name: '名古屋', lat: 35.18, lng: 136.91, bloom: '3/25', full: '4/1', fall: '4/5', snow: '4/8', spot: '名古屋城', spotDesc: '金のシャチホコと桜のコラボ！城内1,000本の桜が咲き誇る中部地方の代表名所。', spotImg: 'https://images.unsplash.com/photo-1545569341-9eb8b30979d9?auto=format&fit=crop&w=600&q=80', article: 'https://www.japankuru.com/ja/search?q=名古屋+桜', editorPick: { name: 'ひつまぶし', desc: '名古屋めし代表！うなぎを3通りで楽しむ', link: 'https://www.japankuru.com/ja/search?q=名古屋+ひつまぶし' }, tip: '名古屋城の桜まつり期間中は夜間ライトアップも！', highlight: '🏯 金シャチ × 桜 = 名古屋らしさ全開！', course: ['名古屋城本丸御殿', '城内桜並木散歩', 'ひつまぶしランチ', '大須商店街'] },
+    { id: 'nara', name: '奈良', lat: 34.69, lng: 135.80, bloom: '3/28', full: '4/4', fall: '4/8', snow: '4/11', spot: '奈良公園', spotDesc: '鹿と桜の夢のような風景！1,700頭の鹿と共に楽しむ日本唯一の桜スポット。', spotImg: 'https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?auto=format&fit=crop&w=600&q=80', article: 'https://www.japankuru.com/ja/search?q=奈良+桜', editorPick: { name: '鹿せんべい', desc: '鹿と触れ合いながらお花見！150円で購入可能', link: 'https://www.japankuru.com/ja/search?q=奈良+鹿' }, tip: '早朝の奈良公園は鹿も観光客も少なくて写真撮影に最適！', highlight: '🦌 鹿 × 桜 = 世界でここだけの風景！', course: ['奈良公園で鹿と桜', '東大寺大仏殿', '春日大社参拝', 'ならまち散策'] }
   ];
-
-  // ===== 히어로 슬라이더 =====
   const slides = document.querySelectorAll('.jk-hero-slide'), dots = document.querySelectorAll('.jk-hero-dot');
   let cur = 0, interval;
   function show(i) { slides.forEach((s,idx) => s.classList.toggle('is-active',idx===i)); dots.forEach((d,idx) => d.classList.toggle('is-active',idx===i)); cur = i; }
@@ -1550,473 +478,117 @@ document.addEventListener('DOMContentLoaded', function() {
   function start() { interval = setInterval(next, 6000); }
   dots.forEach(d => d.addEventListener('click', function() { clearInterval(interval); show(+this.dataset.index); start(); }));
   if (slides.length > 1) start();
-
-  // ===== 현재 날짜 기준 벚꽃 상태 계산 =====
   function getCurrentStatus(city) {
-    const now = new Date();
-    const year = now.getMonth() < 6 ? now.getFullYear() : now.getFullYear() + 1;
-    
-    const bloom = parseDate2026(city.bloom, year);
-    const full = parseDate2026(city.full, year);
-    const fall = parseDate2026(city.fall, year);
-    const snow = parseDate2026(city.snow, year);
-    
-    // 시즌 끝난 후 (다음 해 기준으로 계산)
-    if (now > snow) {
-      const nextBloom = parseDate2026(city.bloom, year + 1);
-      const daysUntil = Math.ceil((nextBloom - now) / (1000*60*60*24));
-      return { status: 'waiting', current: 'bloom', daysUntil, label: `開花まで`, sublabel: `D-${daysUntil}` };
-    }
-    
-    // 아직 개화 전
-    if (now < bloom) {
-      const daysUntil = Math.ceil((bloom - now) / (1000*60*60*24));
-      return { status: 'waiting', current: 'bloom', daysUntil, label: `開花まで`, sublabel: `D-${daysUntil}` };
-    }
-    
-    // 개화 ~ 만개 전
-    if (now >= bloom && now < full) {
-      return { status: 'active', current: 'bloom', label: '🌸 開花中!', sublabel: '' };
-    }
-    
-    // 만개 ~ 지기 시작 전
-    if (now >= full && now < fall) {
-      return { status: 'active', current: 'full', label: '🌺 満開!', sublabel: '見頃' };
-    }
-    
-    // 지기 시작 ~ 벚꽃눈 전
-    if (now >= fall && now < snow) {
-      return { status: 'active', current: 'fall', label: '🍃 散り始め', sublabel: '' };
-    }
-    
-    // 벚꽃눈 (마지막 단계)
+    const now = new Date(), year = now.getMonth() < 6 ? now.getFullYear() : now.getFullYear() + 1;
+    const bloom = parseDate2026(city.bloom, year), full = parseDate2026(city.full, year), fall = parseDate2026(city.fall, year), snow = parseDate2026(city.snow, year);
+    if (now > snow) { const nextBloom = parseDate2026(city.bloom, year + 1); const daysUntil = Math.ceil((nextBloom - now) / (1000*60*60*24)); return { status: 'waiting', current: 'bloom', daysUntil, label: '開花まで', sublabel: 'D-'+daysUntil }; }
+    if (now < bloom) { const daysUntil = Math.ceil((bloom - now) / (1000*60*60*24)); return { status: 'waiting', current: 'bloom', daysUntil, label: '開花まで', sublabel: 'D-'+daysUntil }; }
+    if (now >= bloom && now < full) { return { status: 'active', current: 'bloom', label: '🌸 開花中!', sublabel: '' }; }
+    if (now >= full && now < fall) { return { status: 'active', current: 'full', label: '🌺 満開!', sublabel: '見頃' }; }
+    if (now >= fall && now < snow) { return { status: 'active', current: 'fall', label: '🍃 散り始め', sublabel: '' }; }
     return { status: 'ending', current: 'snow', label: '💨 桜吹雪', sublabel: 'ラスト!' };
   }
-  
-  // 레거시 호환
-  function getNearestDateKey(city) {
-    return getCurrentStatus(city).current;
-  }
-  
-  function parseDate2026(str, year = 2026) {
-    const [m, d] = str.split('/').map(Number);
-    return new Date(year, m - 1, d);
-  }
-
-  // ===== 결과 카드 닫기 =====
-  document.getElementById('jkResultClose').addEventListener('click', function() {
-    document.getElementById('jkResultCard').classList.remove('is-visible');
-  });
-
-  // ===== Leaflet 지도 + 카드 오버레이 =====
+  function parseDate2026(str, year = 2026) { const [m, d] = str.split('/').map(Number); return new Date(year, m - 1, d); }
+  document.getElementById('jkResultClose').addEventListener('click', function() { document.getElementById('jkResultCard').classList.remove('is-visible'); });
   const mapEl = document.getElementById('jk-sakura-map');
   let map;
   if (mapEl && typeof L !== 'undefined') {
-    map = L.map('jk-sakura-map', {
-      scrollWheelZoom: false,
-      zoomControl: true,
-      attributionControl: false
-    });
-
+    map = L.map('jk-sakura-map', { scrollWheelZoom: false, zoomControl: true, attributionControl: false });
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { maxZoom: 18 }).addTo(map);
     map.fitBounds([[30, 128], [46, 146]]);
-
-    const container = document.querySelector('.jk-map-container');
-    const linesSvg = document.getElementById('jkMapLines');
-
-    // 마커 + 카드 생성 (전역)
     window.jkMarkers = {};
     const markers = window.jkMarkers;
-    const cityCards = {};
-    let activeCity = 'tokyo'; // 기본 활성화
-    
-    CITIES.forEach(c => {
-      // 마커
-      const icon = L.divIcon({
-        className: '',
-        html: `<div class="jk-map-marker" data-city="${c.id}" style="width:12px;height:12px;background:#d4607a;border:2px solid #fff;border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,0.3);cursor:pointer;transition:transform 0.2s;"></div>`,
-        iconSize: [12, 12], iconAnchor: [6, 6]
-      });
-      markers[c.id] = L.marker([c.lat, c.lng], { icon }).addTo(map);
-      
-      // 마커 클릭 이벤트
-      markers[c.id].on('click', () => {
-        setActiveCity(c.id);
-        scrollToSpotCard(c.id);
-      });
-
-      // 현재 날짜 기준 벚꽃 상태 계산
-      const status = getCurrentStatus(c);
-      const nearestKey = status.current;
-
-      // 카드 (데스크톱)
-      const card = document.createElement('div');
-      card.className = 'jk-map-city-card' + (c.id === activeCity ? ' is-active' : '');
-      card.dataset.city = c.id;
-      card.innerHTML = `
-        <div class="jk-map-city-card-header">
-          <span class="jk-map-city-card-name">${c.name}</span>
-          <span class="jk-map-city-card-status ${status.status}">${status.label}${status.sublabel ? ' <small>' + status.sublabel + '</small>' : ''}</span>
-        </div>
-        <div class="jk-map-city-card-dates">
-          <div class="jk-map-city-card-row ${nearestKey === 'bloom' ? 'is-nearest' : ''}"><span class="icon">🌸</span>開花<span>${c.bloom}</span></div>
-          <div class="jk-map-city-card-row ${nearestKey === 'full' ? 'is-nearest' : ''}"><span class="icon">🌺</span>満開<span>${c.full}</span></div>
-          <div class="jk-map-city-card-row ${nearestKey === 'fall' ? 'is-nearest' : ''}"><span class="icon">🍃</span>散り始め<span>${c.fall}</span></div>
-          ${c.snow ? `<div class="jk-map-city-card-row ${nearestKey === 'snow' ? 'is-nearest' : ''}"><span class="icon">💨</span>桜吹雪<span>~${c.snow}</span></div>` : ''}
-        </div>
-        ${c.highlight ? `<div class="jk-map-city-card-highlight">${c.highlight}</div>` : ''}
-      `;
-      if (c.cardPos.right !== undefined) {
-        card.style.top = c.cardPos.top + 'px';
-        card.style.right = c.cardPos.right + 'px';
-      } else {
-        card.style.top = c.cardPos.top + 'px';
-        card.style.left = c.cardPos.left + 'px';
-      }
-      
-      // 카드 클릭/호버 이벤트
-      card.addEventListener('mouseenter', () => setActiveCity(c.id));
-      card.addEventListener('click', () => scrollToSpotCard(c.id));
-      
-      container.appendChild(card);
-      cityCards[c.id] = card;
-    });
-    
-    // 활성 도시 설정 함수
-    function setActiveCity(cityId) {
-      Object.values(cityCards).forEach(card => card.classList.remove('is-active'));
-      if (cityCards[cityId]) cityCards[cityId].classList.add('is-active');
-      activeCity = cityId;
+    const CITIES_BY_BLOOM = [...CITIES].sort((a, b) => parseDate2026(a.bloom) - parseDate2026(b.bloom));
+    const defaultIcon = L.divIcon({ className: '', html: '<div style="width:12px;height:12px;background:#d4607a;border:2px solid #fff;border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,0.3);"></div>', iconSize: [12, 12], iconAnchor: [6, 6] });
+    const activeIcon = L.divIcon({ className: '', html: '<div style="width:16px;height:16px;background:#d4607a;border:3px solid #fff;border-radius:50%;box-shadow:0 4px 12px rgba(212,96,122,0.4);"></div>', iconSize: [16, 16], iconAnchor: [8, 8] });
+    CITIES.forEach(c => { markers[c.id] = L.marker([c.lat, c.lng], { icon: defaultIcon }).addTo(map); markers[c.id].on('click', () => selectCity(c.id)); });
+    const sidebarList = document.getElementById('jkMapSidebarList');
+    if (sidebarList) { CITIES_BY_BLOOM.forEach((c, i) => { const status = getCurrentStatus(c); const item = document.createElement('button'); item.className = 'jk-map-sidebar-item'; item.dataset.city = c.id; item.innerHTML = '<div class="jk-map-sidebar-num">'+(i+1)+'</div><div class="jk-map-sidebar-info"><div class="jk-map-sidebar-name">'+c.name+'</div><div class="jk-map-sidebar-date">🌸 '+c.bloom+' → 🌺 '+c.full+'</div></div><div class="jk-map-sidebar-status">'+(status.sublabel || status.label)+'</div>'; item.addEventListener('click', () => selectCity(c.id)); sidebarList.appendChild(item); }); }
+    function selectCity(cityId) {
+      const city = CITIES.find(c => c.id === cityId); if (!city) return;
+      document.querySelectorAll('.jk-map-sidebar-item').forEach(item => { item.classList.toggle('is-active', item.dataset.city === cityId); });
+      Object.keys(markers).forEach(id => { markers[id].setIcon(id === cityId ? activeIcon : defaultIcon); });
+      map.flyTo([city.lat, city.lng], 7, { duration: 0.6 });
+      const status = getCurrentStatus(city), nearestKey = status.current;
+      document.getElementById('jkDetailName').textContent = city.name;
+      document.getElementById('jkDetailStatus').textContent = status.sublabel || status.label;
+      document.getElementById('jkDetailHighlight').textContent = city.highlight || city.tip;
+      document.getElementById('jkDetailDates').innerHTML = '<div class="jk-map-detail-date '+(nearestKey==='bloom'?'is-current':'')+'"><span>🌸</span><div><div class="jk-map-detail-date-label">開花</div><div class="jk-map-detail-date-value">'+city.bloom+'</div></div></div><div class="jk-map-detail-date '+(nearestKey==='full'?'is-current':'')+'"><span>🌺</span><div><div class="jk-map-detail-date-label">満開</div><div class="jk-map-detail-date-value">'+city.full+'</div></div></div><div class="jk-map-detail-date '+(nearestKey==='fall'?'is-current':'')+'"><span>🍃</span><div><div class="jk-map-detail-date-label">散り始め</div><div class="jk-map-detail-date-value">'+city.fall+'</div></div></div><div class="jk-map-detail-date '+(nearestKey==='snow'?'is-current':'')+'"><span>💨</span><div><div class="jk-map-detail-date-label">桜吹雪</div><div class="jk-map-detail-date-value">~'+city.snow+'</div></div></div>';
+      document.getElementById('jkMapDetailCard').classList.add('is-visible');
     }
-    
-    // 스팟 카드로 스크롤
-    function scrollToSpotCard(cityId) {
-      const spotCard = document.querySelector(`.jk-spot-card[data-city="${cityId}"]`);
-      if (spotCard) {
-        spotCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        spotCard.style.animation = 'jkPulse 0.5s ease';
-        setTimeout(() => spotCard.style.animation = '', 500);
-      }
-    }
-
-    // 점선 연결 그리기
-    function drawLines() {
-      linesSvg.innerHTML = '';
-      CITIES.forEach(c => {
-        const card = container.querySelector(`.jk-map-city-card[data-city="${c.id}"]`);
-        if (!card) return;
-        const markerPoint = map.latLngToContainerPoint([c.lat, c.lng]);
-        const cardRect = card.getBoundingClientRect();
-        const containerRect = container.getBoundingClientRect();
-        
-        // 카드 중심점
-        let cardX, cardY;
-        if (c.cardPos.right !== undefined) {
-          cardX = cardRect.left - containerRect.left + cardRect.width / 2;
-        } else {
-          cardX = cardRect.left - containerRect.left + cardRect.width / 2;
-        }
-        cardY = cardRect.top - containerRect.top + cardRect.height / 2;
-
-        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-        line.setAttribute('x1', markerPoint.x);
-        line.setAttribute('y1', markerPoint.y);
-        line.setAttribute('x2', cardX);
-        line.setAttribute('y2', cardY);
-        linesSvg.appendChild(line);
-      });
-    }
-
-    map.on('moveend zoomend', drawLines);
-    setTimeout(drawLines, 500);
-    window.addEventListener('resize', drawLines);
+    if (window.innerWidth >= 768) { setTimeout(() => selectCity(CITIES_BY_BLOOM[0].id), 300); }
   }
-
-  // ===== 모바일 슬라이더 =====
-  const mobileSlider = document.getElementById('jkMapMobileSlider');
-  const mobileSliderCards = {};
-  let currentMobileCity = 'tokyo';
-  
-  CITIES.forEach((c, index) => {
-    const status = getCurrentStatus(c);
-    const nearestKey = status.current;
-    const card = document.createElement('div');
-    card.className = 'jk-map-mobile-card' + (c.id === 'tokyo' ? ' is-active' : '');
-    card.dataset.city = c.id;
-    card.innerHTML = `
-      <div class="jk-map-mobile-card-header">
-        <span class="jk-map-mobile-card-name">${c.name}</span>
-        <span class="jk-map-mobile-card-name-kr">${c.nameKr}</span>
-      </div>
-      <div class="jk-map-mobile-card-status ${status.status}">${status.label}${status.sublabel ? ' <small>' + status.sublabel + '</small>' : ''}</div>
-      <div class="jk-map-mobile-card-dates">
-        <div class="jk-map-mobile-card-row ${nearestKey === 'bloom' ? 'is-nearest' : ''}"><span class="icon">🌸</span>開花<span>${c.bloom}</span></div>
-        <div class="jk-map-mobile-card-row ${nearestKey === 'full' ? 'is-nearest' : ''}"><span class="icon">🌺</span>満開<span>${c.full}</span></div>
-        <div class="jk-map-mobile-card-row ${nearestKey === 'fall' ? 'is-nearest' : ''}"><span class="icon">🍃</span>散り始め<span>${c.fall}</span></div>
-        <div class="jk-map-mobile-card-row ${nearestKey === 'snow' ? 'is-nearest' : ''}"><span class="icon">💨</span>桜吹雪<span>~${c.snow}</span></div>
-      </div>
-      ${c.highlight ? `<div class="jk-map-mobile-card-highlight">${c.highlight}</div>` : ''}
-      <button class="jk-map-mobile-card-btn" data-city="${c.id}">상세 보기 →</button>
-    `;
-    mobileSlider.appendChild(card);
-    mobileSliderCards[c.id] = card;
-  });
-  
-  // 슬라이더 스크롤 → 지도 이동 (Intersection Observer)
-  if (map && 'IntersectionObserver' in window) {
-    const sliderObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting && entry.intersectionRatio > 0.6) {
-          const cityId = entry.target.dataset.city;
-          const city = CITIES.find(c => c.id === cityId);
-          if (city && cityId !== currentMobileCity) {
-            currentMobileCity = cityId;
-            // 지도 이동
-            map.flyTo([city.lat, city.lng], 7, { duration: 0.5 });
-            // 카드 활성화
-            Object.values(mobileSliderCards).forEach(c => c.classList.remove('is-active'));
-            mobileSliderCards[cityId].classList.add('is-active');
-          }
-        }
-      });
-    }, { 
-      root: mobileSlider, 
-      threshold: 0.6 
+  const mobileSlider = document.getElementById('jkMapMobileSlider'), dotsContainer = document.getElementById('jkMapMobileSliderDots'), mobileSliderCards = {}, sliderDots = {};
+  let currentMobileCity = null;
+  const CITIES_SORTED = [...CITIES].sort((a, b) => parseDate2026(a.bloom) - parseDate2026(b.bloom));
+  if (mobileSlider) {
+    CITIES_SORTED.forEach((c, index) => {
+      const status = getCurrentStatus(c), nearestKey = status.current;
+      const card = document.createElement('div');
+      card.className = 'jk-map-mobile-card' + (index === 0 ? ' is-active' : '');
+      card.dataset.city = c.id;
+      card.innerHTML = '<div class="jk-map-mobile-card-header"><span class="jk-map-mobile-card-name">'+c.name+'</span></div><div class="jk-map-mobile-card-status '+status.status+'">'+status.label+(status.sublabel ? ' <small>'+status.sublabel+'</small>' : '')+'</div><div class="jk-map-mobile-card-dates"><div class="jk-map-mobile-card-row '+(nearestKey==='bloom'?'is-nearest':'')+'"><span class="icon">🌸</span>開花<span>'+c.bloom+'</span></div><div class="jk-map-mobile-card-row '+(nearestKey==='full'?'is-nearest':'')+'"><span class="icon">🌺</span>満開<span>'+c.full+'</span></div><div class="jk-map-mobile-card-row '+(nearestKey==='fall'?'is-nearest':'')+'"><span class="icon">🍃</span>散り始め<span>'+c.fall+'</span></div><div class="jk-map-mobile-card-row '+(nearestKey==='snow'?'is-nearest':'')+'"><span class="icon">💨</span>桜吹雪<span>~'+c.snow+'</span></div></div>'+(c.highlight ? '<div class="jk-map-mobile-card-highlight">'+c.highlight+'</div>' : '')+'<button class="jk-map-mobile-card-btn" data-city="'+c.id+'">詳細を見る →</button>';
+      mobileSlider.appendChild(card);
+      mobileSliderCards[c.id] = card;
+      if (dotsContainer) { const dot = document.createElement('div'); dot.className = 'jk-map-mobile-slider-dot' + (index === 0 ? ' is-active' : ''); dot.dataset.city = c.id; dot.addEventListener('click', () => { mobileSliderCards[c.id].scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' }); }); dotsContainer.appendChild(dot); sliderDots[c.id] = dot; }
     });
-    
+  }
+  let sliderObserverEnabled = false; setTimeout(() => { sliderObserverEnabled = true; }, 1500);
+  if (map && mobileSlider && 'IntersectionObserver' in window) {
+    const sliderObserver = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting && entry.intersectionRatio > 0.6) { const cityId = entry.target.dataset.city, city = CITIES.find(c => c.id === cityId); Object.values(sliderDots).forEach(d => d.classList.remove('is-active')); if (sliderDots[cityId]) sliderDots[cityId].classList.add('is-active'); if (sliderObserverEnabled && city && cityId !== currentMobileCity) { currentMobileCity = cityId; map.flyTo([city.lat, city.lng], 7, { duration: 0.5 }); Object.values(mobileSliderCards).forEach(c => c.classList.remove('is-active')); mobileSliderCards[cityId].classList.add('is-active'); } } }); }, { root: mobileSlider, threshold: 0.6 });
     Object.values(mobileSliderCards).forEach(card => sliderObserver.observe(card));
   }
-  
-  // 마커 클릭 → 슬라이더 해당 카드로 스크롤 (모바일)
-  if (map && window.jkMarkers) {
-    CITIES.forEach(c => {
-      if (window.jkMarkers[c.id]) {
-        window.jkMarkers[c.id].on('click', () => {
-          if (window.innerWidth < 768 && mobileSliderCards[c.id]) {
-            mobileSliderCards[c.id].scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
-          }
-        });
-      }
-    });
-  }
-  
-  // 상세 보기 버튼 클릭
-  mobileSlider.addEventListener('click', (e) => {
-    if (e.target.classList.contains('jk-map-mobile-card-btn')) {
-      const cityId = e.target.dataset.city;
-      const spotCard = document.querySelector(`.jk-spot-card[data-city="${cityId}"]`);
-      if (spotCard) {
-        spotCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        spotCard.style.animation = 'jkPulse 0.5s ease';
-        setTimeout(() => spotCard.style.animation = '', 500);
-      }
-    }
-  });
-
-  // 레거시 모바일 카드 (숨김 상태)
-  const mobileCards = document.getElementById('jkMapMobileCards');
-  CITIES.forEach(c => {
-    const nearestKey = getNearestDateKey(c);
-    const card = document.createElement('div');
-    card.className = 'jk-map-mobile-card';
-    card.dataset.city = c.id;
-    card.style.cursor = 'pointer';
-    card.innerHTML = `
-      <div class="jk-map-mobile-card-name">${c.name}</div>
-      <div class="jk-map-mobile-card-row ${nearestKey === 'bloom' ? 'is-nearest' : ''}"><span class="icon">🌸</span>開花<span>${c.bloom}</span></div>
-      <div class="jk-map-mobile-card-row ${nearestKey === 'full' ? 'is-nearest' : ''}"><span class="icon">🌺</span>満開<span>${c.full}</span></div>
-      <div class="jk-map-mobile-card-row ${nearestKey === 'fall' ? 'is-nearest' : ''}"><span class="icon">🍃</span>散り始め<span>${c.fall}</span></div>
-      ${c.highlight ? `<div style="font-size:0.65rem;color:#d4607a;margin-top:4px;padding-top:4px;border-top:1px dashed #e8e4e0;">${c.highlight}</div>` : ''}
-    `;
-    card.addEventListener('click', () => {
-      const spotCard = document.querySelector(`.jk-spot-card[data-city="${c.id}"]`);
-      if (spotCard) {
-        spotCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    });
-    mobileCards.appendChild(card);
-  });
-
-  // ===== 추천명소 카드 그리드 =====
+  if (map && window.jkMarkers) { CITIES.forEach(c => { if (window.jkMarkers[c.id]) { window.jkMarkers[c.id].on('click', () => { if (window.innerWidth < 768 && mobileSliderCards[c.id]) { mobileSliderCards[c.id].scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' }); } }); } }); }
+  if (mobileSlider) { mobileSlider.addEventListener('click', (e) => { if (e.target.classList.contains('jk-map-mobile-card-btn')) { const cityId = e.target.dataset.city, spotCard = document.querySelector('.jk-spot-card[data-city="'+cityId+'"]'); if (spotCard) { spotCard.scrollIntoView({ behavior: 'smooth', block: 'center' }); spotCard.style.animation = 'jkPulse 0.5s ease'; setTimeout(() => spotCard.style.animation = '', 500); } } }); }
   const spotsGrid = document.getElementById('jkSpotsGrid');
-  CITIES.forEach(c => {
-    const card = document.createElement('div');
-    card.className = 'jk-spot-card';
-    card.dataset.city = c.id;
-    card.innerHTML = `
-      <div class="jk-spot-card-img">
-        <img src="${c.spotImg}" alt="${c.spot}" loading="lazy">
-        <span class="jk-spot-card-tag">${c.nameKr}</span>
-      </div>
-      <div class="jk-spot-card-body">
-        <h4 class="jk-spot-card-name">${c.spot}</h4>
-        <p class="jk-spot-card-desc">${c.spotDesc}</p>
-        <a href="${c.article}" class="jk-spot-card-link" target="_blank" rel="noopener">
-          관련 기사 보기
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
-        </a>
-        ${c.editorPick ? `
-        <div class="jk-spot-card-editor">
-          <div class="jk-spot-card-editor-label">✨ 에디터 픽</div>
-          <div class="jk-spot-card-editor-name">${c.editorPick.name}</div>
-          <div class="jk-spot-card-editor-desc">${c.editorPick.desc}</div>
-          <a href="${c.editorPick.link}" class="jk-spot-card-editor-link" target="_blank" rel="noopener">자세히 →</a>
-        </div>
-        ` : ''}
-      </div>
-    `;
-    spotsGrid.appendChild(card);
-  });
-
-  // ===== 날짜 → 결과 =====
+  if (spotsGrid) { CITIES.forEach(c => { const card = document.createElement('div'); card.className = 'jk-spot-card'; card.dataset.city = c.id; card.innerHTML = '<div class="jk-spot-card-img"><img src="'+c.spotImg+'" alt="'+c.spot+'" loading="lazy"><span class="jk-spot-card-tag">'+c.name+'</span></div><div class="jk-spot-card-body"><h4 class="jk-spot-card-name">'+c.spot+'</h4><p class="jk-spot-card-desc">'+c.spotDesc+'</p><a href="'+c.article+'" class="jk-spot-card-link" target="_blank" rel="noopener">関連記事を見る <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg></a>'+(c.editorPick ? '<div class="jk-spot-card-editor"><div class="jk-spot-card-editor-label">エディターピック</div><div class="jk-spot-card-editor-name">'+c.editorPick.name+'</div><div class="jk-spot-card-editor-desc">'+c.editorPick.desc+'</div><a href="'+c.editorPick.link+'" class="jk-spot-card-editor-link" target="_blank" rel="noopener">詳しく →</a></div>' : '')+'</div>'; spotsGrid.appendChild(card); }); }
   function parseDate(str, year=2026) { const [m,d] = str.split('/').map(Number); return new Date(year, m-1, d); }
   document.getElementById('jkDateSubmit').addEventListener('click', function() {
     const sv = document.getElementById('jkTravelStart').value, ev = document.getElementById('jkTravelEnd').value;
-    if (!sv || !ev) { alert('날짜를 선택해주세요'); return; }
+    if (!sv || !ev) { alert('日付を選択してください'); return; }
     const start = new Date(sv), end = new Date(ev);
     let best = null, bestScore = -1, bestStage = '';
-    CITIES.forEach(c => {
-      const bloom = parseDate(c.bloom), full = parseDate(c.full), fall = parseDate(c.fall), snow = parseDate(c.snow);
-      const os = new Date(Math.max(start, bloom)), oe = new Date(Math.min(end, snow)), overlap = (oe - os) / 864e5;
-      if (overlap > 0) {
-        const mid = new Date((start.getTime() + end.getTime()) / 2), dist = Math.abs(mid - full) / 864e5;
-        const score = overlap * 10 - dist;
-        if (score > bestScore) { bestScore = score; best = c; bestStage = mid < bloom ? 'before' : mid < full ? 'bloom' : mid < fall ? 'full' : mid < snow ? 'fall' : 'snow'; }
-      }
-    });
-    if (!best) { alert('해당 기간에 벚꽃을 볼 수 있는 도시가 없어요!'); return; }
-    const info = { before: { icon: '🌱', badge: 'COMING SOON', status: '아직 봉오리!' }, bloom: { icon: '🌸', badge: 'BLOOMING', status: '개화 중!' }, full: { icon: '🌺', badge: 'BEST MATCH', status: '만개! 베스트 타이밍' }, fall: { icon: '🍃', badge: 'FALLING', status: '지기 시작!' }, snow: { icon: '💨', badge: 'FUBUKI', status: '벚꽃눈!' } }[bestStage];
+    CITIES.forEach(c => { const bloom = parseDate(c.bloom), full = parseDate(c.full), fall = parseDate(c.fall), snow = parseDate(c.snow); const os = new Date(Math.max(start, bloom)), oe = new Date(Math.min(end, snow)), overlap = (oe - os) / 864e5; if (overlap > 0) { const mid = new Date((start.getTime() + end.getTime()) / 2), dist = Math.abs(mid - full) / 864e5; const score = overlap * 10 - dist; if (score > bestScore) { bestScore = score; best = c; bestStage = mid < bloom ? 'before' : mid < full ? 'bloom' : mid < fall ? 'full' : mid < snow ? 'fall' : 'snow'; } } });
+    if (!best) { alert('その期間に桜を見られる都市がありません！'); return; }
+    const info = { before: { icon: '🌱', badge: 'COMING SOON', status: 'まだつぼみ！' }, bloom: { icon: '🌸', badge: 'BLOOMING', status: '開花中！' }, full: { icon: '🌺', badge: 'BEST MATCH', status: '満開！ベストタイミング' }, fall: { icon: '🍃', badge: 'FALLING', status: '散り始め！' }, snow: { icon: '💨', badge: 'FUBUKI', status: '桜吹雪！' } }[bestStage];
     document.getElementById('jkResultImg').src = best.spotImg;
     document.getElementById('jkResultIcon').textContent = info.icon;
     document.getElementById('jkResultBadge').textContent = info.badge;
-    document.getElementById('jkResultCity').textContent = best.nameKr;
+    document.getElementById('jkResultCity').textContent = best.name;
     document.getElementById('jkResultStatus').textContent = info.status;
-    document.getElementById('jkResultDates').innerHTML = `<div class="jk-result-date-item ${bestStage==='bloom'?'is-match':''}">開花 ${best.bloom}</div><div class="jk-result-date-item ${bestStage==='full'?'is-match':''}">満開 ${best.full}</div><div class="jk-result-date-item ${bestStage==='fall'?'is-match':''}">散り始め ${best.fall}</div><div class="jk-result-date-item ${bestStage==='snow'?'is-match':''}">桜吹雪 ~${best.snow}</div>`;
+    document.getElementById('jkResultDates').innerHTML = '<div class="jk-result-date-item '+(bestStage==='bloom'?'is-match':'')+'">開花 '+best.bloom+'</div><div class="jk-result-date-item '+(bestStage==='full'?'is-match':'')+'">満開 '+best.full+'</div><div class="jk-result-date-item '+(bestStage==='fall'?'is-match':'')+'">散り始め '+best.fall+'</div><div class="jk-result-date-item '+(bestStage==='snow'?'is-match':'')+'">桜吹雪 ~'+best.snow+'</div>';
     document.getElementById('jkResultSpotName').textContent = best.spot;
     document.getElementById('jkResultSpotDesc').textContent = best.spotDesc;
     document.getElementById('jkResultArticle').href = best.article;
-    // 꿀팁 표시
-    if (best.tip) {
-      document.getElementById('jkResultCityName2').textContent = best.nameKr;
-      document.getElementById('jkResultTipText').textContent = best.tip;
-      document.getElementById('jkResultTip').style.display = 'block';
-    } else {
-      document.getElementById('jkResultTip').style.display = 'none';
-    }
+    if (best.tip) { document.getElementById('jkResultCityName2').textContent = best.name; document.getElementById('jkResultTipText').textContent = best.tip; document.getElementById('jkResultTip').style.display = 'block'; } else { document.getElementById('jkResultTip').style.display = 'none'; }
     document.getElementById('jkResultCard').classList.add('is-visible');
     document.getElementById('jkResultCard').scrollIntoView({ behavior: 'smooth', block: 'center' });
   });
-
-  document.getElementById('jkSaveImage').addEventListener('click', async function() {
-    try { const canvas = await html2canvas(document.getElementById('jkResultCard'), { backgroundColor: '#fff', scale: 2 }); const link = document.createElement('a'); link.download = 'sakura-2026.png'; link.href = canvas.toDataURL('image/png'); link.click(); } catch { alert('스크린샷을 이용해주세요!'); }
-  });
+  document.getElementById('jkSaveImage').addEventListener('click', async function() { try { const canvas = await html2canvas(document.getElementById('jkResultCard'), { backgroundColor: '#fff', scale: 2 }); const link = document.createElement('a'); link.download = 'sakura-2026.png'; link.href = canvas.toDataURL('image/png'); link.click(); } catch { alert('スクリーンショットをご利用ください！'); } });
   document.getElementById('jkShareResult').addEventListener('click', handleShare);
-
-  // ===== Q1 앙케이트 =====
   const STORAGE_KEY = 'jkSakura2026SpotVotes', spotButtons = document.querySelectorAll('.jk-spot-choice'), surveyResult = document.getElementById('jkSpotSurveyResult');
-  const spotLabels = { ueno: '우에노 공원', meguro: '메구로강', tetsugaku: '철학의 길', osaka: '오사카성 공원', hirosaki: '히로사키성', maizuru: '마이즈루 공원' };
+  const spotLabels = { ueno: '上野公園', meguro: '目黒川', tetsugaku: '哲学の道', osaka: '大阪城公園', hirosaki: '弘前城', maizuru: '舞鶴公園' };
   const spotToCityId = { ueno: 'tokyo', meguro: 'tokyo', tetsugaku: 'kyoto', osaka: 'osaka', hirosaki: 'aomori', maizuru: 'fukuoka' };
-  const spotTips = {
-    ueno: '우에노 공원은 박물관·동물원도 함께! 도쿄 국립박물관 앞 벚꽃길이 특히 예뻐요',
-    meguro: '메구로강은 나카메구로역 하차! 밤 벚꽃 보고 주변 카페거리 산책 추천',
-    tetsugaku: '철학의 길은 긴카쿠지~난젠지 코스로! 끝나고 요지야 카페에서 말차 한잔',
-    osaka: '오사카성은 서문 광장 야경이 최고! 해질녘 방문하면 라이트업까지 볼 수 있어요',
-    hirosaki: '히로사키성은 "꽃뗏목(花筏)" 보려면 만개 후 3~4일 차에 방문하세요',
-    maizuru: '마이즈루 공원 보고 근처 이치란 본점에서 하카타 라멘 어때요?'
-  };
+  const spotTips = { ueno: '上野公園は博物館・動物園も一緒に！東京国立博物館前の桜並木が特にきれい', meguro: '目黒川は中目黒駅下車！夜桜を見てから周辺のカフェ通り散歩がおすすめ', tetsugaku: '哲学の道は銀閣寺〜南禅寺コースで！最後によーじやカフェで抹茶を', osaka: '大阪城は西の丸庭園の夜景が最高！夕方に訪問するとライトアップまで見られます', hirosaki: '弘前城の「花筏」を見るなら満開後3〜4日目に訪問してください', maizuru: '舞鶴公園を見てから近くの一蘭本店で博多ラーメンはいかが？' };
+  const spotToGoogleMap = { ueno: 'https://maps.google.com/?q=Ueno+Park,Tokyo,Japan', meguro: 'https://maps.google.com/?q=Meguro+River,Tokyo,Japan', tetsugaku: 'https://maps.google.com/?q=Philosopher%27s+Path,Kyoto,Japan', osaka: 'https://maps.google.com/?q=Osaka+Castle+Park,Japan', hirosaki: 'https://maps.google.com/?q=Hirosaki+Castle,Aomori,Japan', maizuru: 'https://maps.google.com/?q=Maizuru+Park,Fukuoka,Japan' };
   function loadVotes() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch { return {}; } }
   function saveVotes(v) { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(v)); } catch {} }
-  function renderSurveyResult(mySpot) {
-    const votes = loadVotes(), total = Object.values(votes).reduce((s,v) => s+v, 0) || 0;
-    if (!total) { surveyResult.innerHTML = '<p class="jk-spot-survey-result-title">첫 번째 투표자가 되어주세요 🌸</p>'; return; }
-    let html = '<p class="jk-spot-survey-result-title">지금까지 이 페이지에서의 인기 순위</p><div class="jk-spot-bars">';
-    const sorted = Object.entries(spotLabels).sort((a,b) => (votes[b[0]]||0) - (votes[a[0]]||0));
-    sorted.forEach(([key, label]) => { const pct = Math.round(((votes[key]||0)/total)*100); html += `<div class="jk-spot-bar ${key===mySpot?'is-mine':''}"><span class="jk-spot-bar-name">${label}</span><div class="jk-spot-bar-track"><div class="jk-spot-bar-fill" style="width:${pct}%;"></div></div><span class="jk-spot-bar-value">${pct}%</span></div>`; });
-    html += '</div>';
-    // 1위 꿀팁
-    const topKey = sorted[0][0];
-    if (spotTips[topKey]) {
-      html += `<div class="jk-survey-top-tip"><div class="jk-survey-top-tip-label">💡 1위 ${spotLabels[topKey]} 꿀팁</div>${spotTips[topKey]}</div>`;
-    }
-    surveyResult.innerHTML = html;
-  }
-  
-  // 서베이 모달 열기
-  function openSurveyModal(spotKey) {
-    const cityId = spotToCityId[spotKey];
-    const city = CITIES.find(c => c.id === cityId);
-    if (!city) return;
-    
-    const modal = document.getElementById('jkSurveyModal');
-    document.getElementById('jkModalImg').src = city.spotImg;
-    document.getElementById('jkModalTitle').textContent = spotLabels[spotKey];
-    document.getElementById('jkModalSpot').textContent = `${city.nameKr} · ${city.spotDesc.split('.')[0]}`;
-    document.getElementById('jkModalDates').innerHTML = `
-      <span class="jk-survey-modal-date">🌸 開花 ${city.bloom}</span>
-      <span class="jk-survey-modal-date">🌺 満開 ${city.full}</span>
-      <span class="jk-survey-modal-date">🍃 散り始め ${city.fall}</span>
-    `;
-    
-    // 코스 추천
-    if (city.course) {
-      document.getElementById('jkModalCourse').innerHTML = city.course.map((item, i) => 
-        `<div class="jk-survey-modal-course-item"><span class="jk-survey-modal-course-num">${i+1}</span><span class="jk-survey-modal-course-text">${item}</span></div>`
-      ).join('');
-    }
-    
-    // 하이라이트 팁
-    document.getElementById('jkModalHighlight').innerHTML = `💡 ${spotTips[spotKey] || city.tip}`;
-    document.getElementById('jkModalArticle').href = city.article;
-    
-    // 지도에서 보기 버튼
-    document.getElementById('jkModalScrollTo').onclick = () => {
-      modal.classList.remove('is-visible');
-      document.body.style.overflow = '';
-      const spotCard = document.querySelector(`.jk-spot-card[data-city="${cityId}"]`);
-      if (spotCard) spotCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    };
-    
-    modal.classList.add('is-visible');
-    document.body.style.overflow = 'hidden';
-  }
-  
-  // 모달 닫기
-  document.getElementById('jkModalClose').addEventListener('click', () => {
-    document.getElementById('jkSurveyModal').classList.remove('is-visible');
-    document.body.style.overflow = '';
-  });
-  document.getElementById('jkSurveyModal').addEventListener('click', (e) => {
-    if (e.target.id === 'jkSurveyModal') {
-      document.getElementById('jkSurveyModal').classList.remove('is-visible');
-      document.body.style.overflow = '';
-    }
-  });
-  
+  function renderSurveyResult(mySpot) { const votes = loadVotes(), total = Object.values(votes).reduce((s,v) => s+v, 0) || 0; if (!total) { surveyResult.innerHTML = '<p class="jk-spot-survey-result-title">最初の投票者になってください 🌸</p>'; return; } let html = '<p class="jk-spot-survey-result-title">このページでの人気ランキング</p><div class="jk-spot-bars">'; const sorted = Object.entries(spotLabels).sort((a,b) => (votes[b[0]]||0) - (votes[a[0]]||0)); sorted.forEach(([key, label]) => { const pct = Math.round(((votes[key]||0)/total)*100); html += '<div class="jk-spot-bar '+(key===mySpot?'is-mine':'')+'"><span class="jk-spot-bar-name">'+label+'</span><div class="jk-spot-bar-track"><div class="jk-spot-bar-fill" style="width:'+pct+'%;"></div></div><span class="jk-spot-bar-value">'+pct+'%</span></div>'; }); html += '</div>'; const topKey = sorted[0][0]; if (spotTips[topKey]) { html += '<div class="jk-survey-top-tip"><div class="jk-survey-top-tip-label">💡 1位 '+spotLabels[topKey]+'のヒント</div>'+spotTips[topKey]+'</div>'; } surveyResult.innerHTML = html; }
+  function openSurveyModal(spotKey) { const cityId = spotToCityId[spotKey], city = CITIES.find(c => c.id === cityId); if (!city) return; const modal = document.getElementById('jkSurveyModal'); document.getElementById('jkModalImg').src = city.spotImg; document.getElementById('jkModalTitle').textContent = spotLabels[spotKey]; document.getElementById('jkModalSpot').textContent = city.name + ' · ' + city.spotDesc.split('。')[0]; document.getElementById('jkModalDates').innerHTML = '<span class="jk-survey-modal-date">🌸 開花 '+city.bloom+'</span><span class="jk-survey-modal-date">🌺 満開 '+city.full+'</span><span class="jk-survey-modal-date">🍃 散り始め '+city.fall+'</span>'; if (city.course) { document.getElementById('jkModalCourse').innerHTML = city.course.map((item, i) => '<div class="jk-survey-modal-course-item"><span class="jk-survey-modal-course-num">'+(i+1)+'</span><span class="jk-survey-modal-course-text">'+item+'</span></div>').join(''); } document.getElementById('jkModalHighlight').innerHTML = '💡 ' + (spotTips[spotKey] || city.tip); document.getElementById('jkModalArticle').href = city.article; document.getElementById('jkModalScrollTo').onclick = () => { window.open(spotToGoogleMap[spotKey], '_blank'); }; modal.classList.add('is-visible'); document.body.style.overflow = 'hidden'; }
+  document.getElementById('jkModalClose').addEventListener('click', () => { document.getElementById('jkSurveyModal').classList.remove('is-visible'); document.body.style.overflow = ''; });
+  document.getElementById('jkSurveyModal').addEventListener('click', (e) => { if (e.target.id === 'jkSurveyModal') { document.getElementById('jkSurveyModal').classList.remove('is-visible'); document.body.style.overflow = ''; } });
   const prevChoice = sessionStorage.getItem('jkSakura2026SpotMyChoice');
   spotButtons.forEach(btn => { if (btn.dataset.spot === prevChoice) btn.classList.add('is-selected'); });
   renderSurveyResult(prevChoice);
-  spotButtons.forEach(btn => { 
-    btn.addEventListener('click', () => { 
-      spotButtons.forEach(b => b.classList.remove('is-selected')); 
-      btn.classList.add('is-selected'); 
-      const votes = loadVotes(); 
-      votes[btn.dataset.spot] = (votes[btn.dataset.spot]||0)+1; 
-      saveVotes(votes); 
-      sessionStorage.setItem('jkSakura2026SpotMyChoice', btn.dataset.spot); 
-      renderSurveyResult(btn.dataset.spot);
-      // 모달 열기
-      openSurveyModal(btn.dataset.spot);
-    }); 
-  });
-
-  // ===== FAQ =====
+  spotButtons.forEach(btn => { btn.addEventListener('click', () => { spotButtons.forEach(b => b.classList.remove('is-selected')); btn.classList.add('is-selected'); const votes = loadVotes(); votes[btn.dataset.spot] = (votes[btn.dataset.spot]||0)+1; saveVotes(votes); sessionStorage.setItem('jkSakura2026SpotMyChoice', btn.dataset.spot); renderSurveyResult(btn.dataset.spot); openSurveyModal(btn.dataset.spot); }); });
   document.querySelectorAll('.jk-faq-item').forEach(item => { item.querySelector('.jk-faq-q').addEventListener('click', () => { const open = item.classList.contains('is-open'); document.querySelectorAll('.jk-faq-item').forEach(i => i.classList.remove('is-open')); if (!open) item.classList.add('is-open'); }); });
-
-  // ===== Intersection Observer =====
   const fadeEls = document.querySelectorAll('.jk-fade-in');
   if ('IntersectionObserver' in window) { const obs = new IntersectionObserver(entries => { entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('is-visible'); obs.unobserve(e.target); } }); }, { threshold: 0.1 }); fadeEls.forEach(el => obs.observe(el)); } else { fadeEls.forEach(el => el.classList.add('is-visible')); }
+  const mobileNavItems = document.querySelectorAll('.jk-mobile-nav-item'), navSections = ['date-picker', 'forecast-map', 'survey', 'spots', 'checklist'];
+  if ('IntersectionObserver' in window && window.innerWidth < 768) { const navObserver = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) { const sectionId = entry.target.id; mobileNavItems.forEach(item => { item.classList.toggle('is-active', item.dataset.section === sectionId); }); } }); }, { threshold: 0.3, rootMargin: '-50% 0px -50% 0px' }); navSections.forEach(id => { const section = document.getElementById(id); if (section) navObserver.observe(section); }); }
 });
-
-function handleShare() { if (navigator.share) navigator.share({ title: '2026 일본 벚꽃 가이드', text: '개화부터 벚꽃눈까지 약 2주!', url: location.href }).catch(() => {}); else copyLink(); }
-function copyLink() { navigator.clipboard.writeText(location.href).then(() => alert('링크 복사!')).catch(() => prompt('링크:', location.href)); }
+function handleShare() { if (navigator.share) navigator.share({ title: '2026年 日本の桜ガイド', text: '開花から桜吹雪まで約2週間！', url: location.href }).catch(() => {}); else copyLink(); }
+function copyLink() { navigator.clipboard.writeText(location.href).then(() => alert('リンクをコピーしました！')).catch(() => prompt('リンク:', location.href)); }
 </script>
+</body>
+</html>
