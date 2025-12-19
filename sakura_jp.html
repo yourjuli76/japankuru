@@ -1,6 +1,6 @@
 <!-- ==============================
      JAPANKURU SAKURA 2026 LANDING
-     v10 - 日本語版
+     v11 - 日本語版 (ヒーロー改善)
      ============================== -->
 <!DOCTYPE html>
 <html lang="ja">
@@ -43,6 +43,7 @@
   .jk-hero-indicators{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:3}
   .jk-hero-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.4);cursor:pointer;transition:all 0.3s}
   .jk-hero-dot.is-active{background:#fff;transform:scale(1.3)}
+  .jk-hero-location{position:absolute;bottom:60px;left:16px;z-index:2;padding:6px 12px;background:rgba(0,0,0,0.5);backdrop-filter:blur(4px);border-radius:999px;font-size:0.72rem;color:#fff;font-weight:500}
   .jk-container{max-width:1100px;margin:0 auto;padding:0 20px}
   .jk-section{padding:56px 0}
   .jk-section--white{background:#fff}
@@ -298,8 +299,6 @@
   .jk-promo-card:hover .jk-promo-card-cta{background:var(--jk-pink);color:#fff;transform:translateX(4px)}
   .jk-promo-card-cta svg{width:14px;height:14px;transition:transform 0.2s}
   .jk-promo-card:hover .jk-promo-card-cta svg{transform:translateX(3px)}
-  .jk-promo-card--product{background:linear-gradient(135deg,#fce4ec 0%,#f8bbd9 100%)}
-  .jk-promo-card--event{background:linear-gradient(135deg,#e8f5e9 0%,#c8e6c9 100%)}
   .jk-promo-new{position:absolute;top:16px;right:16px;z-index:3;padding:5px 10px;background:linear-gradient(135deg,#ff6b6b,#ee5a5a);color:#fff;font-size:0.65rem;font-weight:700;border-radius:4px;letter-spacing:0.05em;animation:jkNewPulse 2s infinite}
   @keyframes jkNewPulse{0%,100%{opacity:1}50%{opacity:0.7}}
 </style>
@@ -322,19 +321,20 @@
     <a href="#spots" class="jk-mobile-nav-item" data-section="spots"><span class="jk-mobile-nav-icon">📍</span><span>スポット</span></a>
     <a href="#checklist" class="jk-mobile-nav-item" data-section="checklist"><span class="jk-mobile-nav-icon">✅</span><span>準備</span></a>
   </nav>
+  <!-- ★ 改善されたヒーローセクション ★ -->
   <section class="jk-hero">
     <div class="jk-hero-slider" id="jkHeroSlider">
-      <div class="jk-hero-slide is-active"><img src="https://img.japankuru.com/prg_img/img/img2021041917113780259900.gif" alt="日本の桜"></div>
-      <div class="jk-hero-slide"><img src="https://img.japankuru.com/prg_img/img/img2022032216080462220500.jpg" alt="富士山と桜" loading="lazy"></div>
-      <div class="jk-hero-slide"><img src="https://img.japankuru.com/prg_img/img/img2019022116005070291000.jpg" alt="川沿いの桜" loading="lazy"></div>
-      <div class="jk-hero-slide"><img src="https://www.japankuru.com/gld-kanri/data/uploads/2025/01/D05_6288-1536x1024.jpg" alt="京都の桜" loading="lazy"></div>
+      <div class="jk-hero-slide is-active"><img src="https://img.japankuru.com/prg_img/img/img2021041917113780259900.gif" alt="目黒川の桜"><span class="jk-hero-location">📍 目黒川・東京</span></div>
+      <div class="jk-hero-slide"><img src="https://img.japankuru.com/prg_img/img/img2022032216080462220500.jpg" alt="富士山と桜" loading="lazy"><span class="jk-hero-location">📍 河口湖・山梨</span></div>
+      <div class="jk-hero-slide"><img src="https://img.japankuru.com/prg_img/img/img2019022116005070291000.jpg" alt="隅田川の桜" loading="lazy"><span class="jk-hero-location">📍 隅田川・東京</span></div>
+      <div class="jk-hero-slide"><img src="https://www.japankuru.com/gld-kanri/data/uploads/2025/01/D05_6288-1536x1024.jpg" alt="京都の桜" loading="lazy"><span class="jk-hero-location">📍 祇園白川・京都</span></div>
     </div>
     <div class="jk-hero-overlay"></div>
     <div class="jk-hero-content">
-      <div class="jk-hero-kicker">JAPANKURU · 桜 2026</div>
-      <h1 class="jk-title-jp">桜は、開花日だけじゃない</h1>
-      <p class="jk-hero-lead">見逃したと思っていませんか？<br><strong>開花から桜吹雪まで約2週間</strong>あります。</p>
-      <a href="#date-picker" class="jk-hero-cta">旅行日程で確認 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 13l5 5 5-5M7 7l5 5 5-5"/></svg></a>
+      <div class="jk-hero-kicker">🌸 SAKURA 2026</div>
+      <h1 class="jk-title-jp">2026年の桜旅行、<br>日程はもうお決まりですか？</h1>
+      <p class="jk-hero-lead">開花日を過ぎても<strong>約2週間</strong>桜を楽しめます。<br>リアルタイム更新情報をチェックして、<br>スマートなお花見旅行を計画しましょう！</p>
+      <a href="#date-picker" class="jk-hero-cta">今すぐ日程をチェック <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 13l5 5 5-5M7 7l5 5 5-5"/></svg></a>
     </div>
     <div class="jk-hero-indicators">
       <span class="jk-hero-dot is-active" data-index="0"></span>
@@ -498,7 +498,8 @@
           </div>
         </a>
         <a href="https://www.japankuru.com/ja/search?q=桜+グルメ" class="jk-promo-card" target="_blank" rel="noopener">
-          <span class="jk-promo-new">🍡</span>          <img class="jk-promo-card-bg" src="https://precious.ismcdn.jp/mwimgs/e/6/1080/img_e6ae4e31bb1d1a308034b75a2794007b128885.jpg" alt="桜グルメ">
+          <span class="jk-promo-new">🍡</span>
+          <img class="jk-promo-card-bg" src="https://precious.ismcdn.jp/mwimgs/e/6/1080/img_e6ae4e31bb1d1a308034b75a2794007b128885.jpg" alt="桜グルメ">
           <div class="jk-promo-card-content">
             <span class="jk-promo-card-badge">🍽️ GOURMET</span>
             <h3 class="jk-promo-card-title">春限定！桜スイーツ&グルメ</h3>
@@ -620,8 +621,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let best = null, bestScore = -1, bestStage = '';
     CITIES.forEach(c => { const bloom = parseDate(c.bloom), full = parseDate(c.full), fall = parseDate(c.fall), snow = parseDate(c.snow); const os = new Date(Math.max(start, bloom)), oe = new Date(Math.min(end, snow)), overlap = (oe - os) / 864e5; if (overlap > 0) { const mid = new Date((start.getTime() + end.getTime()) / 2), dist = Math.abs(mid - full) / 864e5; const score = overlap * 10 - dist; if (score > bestScore) { bestScore = score; best = c; bestStage = mid < bloom ? 'before' : mid < full ? 'bloom' : mid < fall ? 'full' : mid < snow ? 'fall' : 'snow'; } } });
     if (!best) { alert('その期間に桜を見られる都市がありません！'); return; }
-    // URL 업데이트
-    history.replaceState(null, '', `?start=${sv}&end=${ev}`);
+    history.replaceState(null, '', '?start='+sv+'&end='+ev);
     window.jkLastResult = { city: best, stage: bestStage };
     const info = { before: { icon: '🌱', badge: 'COMING SOON', status: 'まだつぼみ！' }, bloom: { icon: '🌸', badge: 'BLOOMING', status: '開花中！' }, full: { icon: '🌺', badge: 'BEST MATCH', status: '満開！ベストタイミング' }, fall: { icon: '🍃', badge: 'FALLING', status: '散り始め！' }, snow: { icon: '💨', badge: 'FUBUKI', status: '桜吹雪！' } }[bestStage];
     document.getElementById('jkResultImg').src = best.spotImg;
@@ -637,7 +637,6 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('jkResultCard').classList.add('is-visible');
     if (autoScroll) document.getElementById('jkResultCard').scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
-  // 페이지 로드 시 URL 파라미터 체크
   const urlParams = new URLSearchParams(window.location.search);
   if (urlParams.get('start') && urlParams.get('end')) {
     document.getElementById('jkTravelStart').value = urlParams.get('start');
@@ -646,7 +645,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   document.getElementById('jkShareResult').addEventListener('click', function() {
     const result = window.jkLastResult;
-    const text = result ? `🌸 ${result.city.name}の桜情報をチェック！` : '2026年 日本の桜ガイド';
+    const text = result ? '🌸 '+result.city.name+'の桜情報をチェック！' : '2026年 日本の桜ガイド';
     if (navigator.share) {
       navigator.share({ title: '2026年 桜開花予想', text: text, url: location.href }).catch(() => {});
     } else {
