@@ -144,8 +144,9 @@
         .hero-bg {
             position: absolute;
             top: 0;
+            left: 20%;
             right: 0;
-            width: 50%;
+            width: 80%;
             height: 100%;
             opacity: 0.5;
         }
@@ -154,6 +155,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+            object-position: center;
         }
 
         .hero-bg::after {
@@ -163,11 +165,12 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(90deg, var(--black) 0%, transparent 100%);
+            background: linear-gradient(90deg, var(--black) 0%, var(--black) 20%, transparent 60%);
         }
 
         .hero-container {
-            max-width: 1400px;
+            width: 100%;
+            max-width: 1600px;
             margin: 0 auto;
             padding: 60px 48px 48px;
             position: relative;
@@ -323,31 +326,31 @@
         }
 
         .phone-frame {
-            width: 220px;
-            height: 440px;
+            width: 280px;
+            height: 560px;
             background: #1a1a1a;
-            border-radius: 32px;
-            padding: 10px;
+            border-radius: 40px;
+            padding: 12px;
             box-shadow: 0 40px 80px rgba(0,0,0,0.5);
             position: relative;
         }
 
         .phone-notch {
             position: absolute;
-            top: 14px;
+            top: 16px;
             left: 50%;
             transform: translateX(-50%);
-            width: 70px;
-            height: 22px;
+            width: 80px;
+            height: 26px;
             background: #1a1a1a;
-            border-radius: 14px;
+            border-radius: 16px;
             z-index: 10;
         }
 
         .phone-screen {
             width: 100%;
             height: 100%;
-            border-radius: 24px;
+            border-radius: 30px;
             overflow: hidden;
             position: relative;
             background: #000;
@@ -368,38 +371,51 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            padding: 60px 16px 20px;
-            background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, transparent 30%, transparent 60%, rgba(0,0,0,0.6) 100%);
+            padding: 16px;
+            background: linear-gradient(180deg, rgba(0,0,0,0.2) 0%, transparent 20%, transparent 60%, rgba(0,0,0,0.5) 100%);
         }
 
         .reels-header {
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            gap: 10px;
+            padding-top: 40px;
         }
 
-        .reels-logo {
+        .reels-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid white;
+            object-fit: cover;
+        }
+
+        .reels-username {
             font-size: 14px;
             font-weight: 700;
             color: white;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
         }
 
-        .reels-badge {
-            font-size: 10px;
-            font-weight: 600;
-            padding: 4px 8px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 4px;
+        .reels-follow {
+            background: transparent;
+            border: 1px solid white;
             color: white;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 6px 16px;
+            border-radius: 8px;
+            cursor: pointer;
         }
 
         .reels-actions {
             position: absolute;
-            right: 16px;
-            bottom: 80px;
+            right: 12px;
+            bottom: 100px;
             display: flex;
             flex-direction: column;
             gap: 20px;
+            align-items: center;
         }
 
         .reels-action {
@@ -408,35 +424,144 @@
             align-items: center;
             gap: 4px;
             color: white;
-            font-size: 11px;
+            font-size: 12px;
+            font-weight: 600;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
         }
 
         .reels-action svg {
-            width: 24px;
-            height: 24px;
+            width: 28px;
+            height: 28px;
+            filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3));
+        }
+
+        /* Heart Animation */
+        .heart-container {
+            position: relative;
+        }
+
+        .heart-action svg {
+            animation: heartPulse 1s ease-in-out infinite;
+        }
+
+        @keyframes heartPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
+
+        .floating-hearts {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            pointer-events: none;
+        }
+
+        .float-heart {
+            position: absolute;
+            font-size: 16px;
+            opacity: 0;
+            animation: floatUp 3s ease-out infinite;
+        }
+
+        .float-heart:nth-child(1) { animation-delay: 0s; left: 0; }
+        .float-heart:nth-child(2) { animation-delay: 0.6s; left: -15px; }
+        .float-heart:nth-child(3) { animation-delay: 1.2s; left: 15px; }
+        .float-heart:nth-child(4) { animation-delay: 1.8s; left: -8px; }
+        .float-heart:nth-child(5) { animation-delay: 2.4s; left: 8px; }
+
+        @keyframes floatUp {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-80px) scale(0.5);
+            }
+        }
+
+        /* Reels Bottom */
+        .reels-bottom {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
         }
 
         .reels-caption {
-            font-size: 12px;
-            color: white;
-            line-height: 1.4;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
         }
 
-        .reels-caption strong {
+        .caption-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .caption-text {
+            font-size: 13px;
+            color: white;
+            line-height: 1.4;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+        }
+
+        .caption-text strong {
             font-weight: 700;
+        }
+
+        .caption-tags {
+            color: rgba(255,255,255,0.9);
+        }
+
+        .reels-music {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: white;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+        }
+
+        .music-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 4px;
+            animation: musicBounce 0.5s ease infinite alternate;
+        }
+
+        @keyframes musicBounce {
+            0% { transform: scaleY(0.8); }
+            100% { transform: scaleY(1.2); }
+        }
+
+        .music-text {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 180px;
         }
 
         .mockup-badge {
             position: absolute;
-            bottom: -16px;
+            bottom: -18px;
             left: 50%;
             transform: translateX(-50%);
             background: var(--accent);
             color: white;
-            font-size: 11px;
+            font-size: 12px;
             font-weight: 700;
-            padding: 8px 16px;
-            border-radius: 20px;
+            padding: 10px 20px;
+            border-radius: 24px;
             white-space: nowrap;
         }
 
@@ -3052,25 +3177,49 @@
                             </video>
                             <div class="reels-overlay">
                                 <div class="reels-header">
-                                    <span class="reels-logo">japankuru</span>
-                                    <span class="reels-badge">Reels</span>
+                                    <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2025/12/JAPANKURU_LOGO_SNS.jpg" alt="JAPANKURU" class="reels-avatar">
+                                    <span class="reels-username">Japankuru</span>
+                                    <button class="reels-follow">フォロー</button>
                                 </div>
                                 <div class="reels-actions">
-                                    <div class="reels-action">
-                                        <svg viewBox="0 0 24 24" fill="white" width="24" height="24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                                    <div class="reels-action heart-action">
+                                        <div class="heart-container">
+                                            <svg viewBox="0 0 24 24" fill="#ff3040"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                                            <!-- Floating hearts animation -->
+                                            <div class="floating-hearts">
+                                                <span class="float-heart">❤️</span>
+                                                <span class="float-heart">❤️</span>
+                                                <span class="float-heart">❤️</span>
+                                                <span class="float-heart">🧡</span>
+                                                <span class="float-heart">💗</span>
+                                            </div>
+                                        </div>
                                         <span>12.5K</span>
                                     </div>
                                     <div class="reels-action">
-                                        <svg viewBox="0 0 24 24" fill="white" width="24" height="24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
                                         <span>842</span>
                                     </div>
                                     <div class="reels-action">
-                                        <svg viewBox="0 0 24 24" fill="white" width="24" height="24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg>
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
                                         <span>Share</span>
                                     </div>
+                                    <div class="reels-action">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+                                    </div>
                                 </div>
-                                <div class="reels-caption">
-                                    <strong>japankuru</strong> 東京の隠れた名店を発見🍜 #japankuru #tokyo
+                                <div class="reels-bottom">
+                                    <div class="reels-caption">
+                                        <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2025/12/JAPANKURU_LOGO_SNS.jpg" alt="" class="caption-avatar">
+                                        <div class="caption-text">
+                                            <strong>japankuru</strong> 日本の隠れた名店を発見🍜
+                                            <span class="caption-tags">#japankuru #japan #おすすめスポット</span>
+                                        </div>
+                                    </div>
+                                    <div class="reels-music">
+                                        <span class="music-icon">♪</span>
+                                        <span class="music-text">Original Audio - japankuru</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -3808,7 +3957,7 @@
                         <div class="phase-number">PHASE 02</div>
                         <div class="phase-name naka">旅ナカ</div>
                         <div class="phase-period">滞在中</div>
-                        <div class="phase-action">「今どこ行く？」</div>
+                        <div class="phase-action">「何食べる？何買う？」</div>
                         <div class="phase-visual">
                             <div class="mobile-mockup">
                                 <div class="mobile-notch"></div>
