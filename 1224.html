@@ -9,18 +9,19 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         :root {
-            --black: #0a0a0a;
+            --black: #0f172a;
             --white: #ffffff;
-            --gray-50: #fafafa;
-            --gray-100: #f4f4f5;
-            --gray-200: #e4e4e7;
-            --gray-300: #d4d4d8;
-            --gray-400: #a1a1aa;
-            --gray-500: #71717a;
-            --gray-600: #52525b;
-            --gray-700: #3f3f46;
-            --accent: #dc2626;
-            --accent-dark: #b91c1c;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-400: #94a3b8;
+            --gray-500: #64748b;
+            --gray-600: #475569;
+            --accent: #3b82f6;
+            --accent-dark: #2563eb;
+            --accent-light: #60a5fa;
+            --bg-card: #1e293b;
         }
 
         html { scroll-behavior: smooth; }
@@ -33,36 +34,49 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* Navigation */
+        /* ===== NAVIGATION ===== */
         .nav {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             z-index: 1000;
-            padding: 20px 48px;
+            background: rgba(255,255,255,0.98);
+            backdrop-filter: blur(12px);
+            padding: 16px 48px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: all 0.3s ease;
-        }
-
-        .nav.scrolled {
-            background: rgba(255,255,255,0.98);
-            backdrop-filter: blur(12px);
-            padding: 14px 48px;
-            box-shadow: 0 1px 0 var(--gray-200);
+            border-bottom: 1px solid var(--gray-100);
         }
 
         .nav-logo {
             font-family: 'Inter', sans-serif;
             font-size: 18px;
             font-weight: 800;
+            color: var(--black);
+            text-decoration: none;
         }
+
+        .nav-menu {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+
+        .nav-link {
+            font-size: 13px;
+            color: var(--gray-600);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-link:hover { color: var(--black); }
 
         .nav-cta {
             padding: 10px 24px;
-            background: var(--black);
+            background: var(--accent);
             color: var(--white);
             text-decoration: none;
             font-size: 13px;
@@ -71,7 +85,49 @@
             transition: all 0.2s ease;
         }
 
-        .nav-cta:hover { background: var(--accent); }
+        .nav-cta:hover { background: var(--accent-dark); }
+
+        /* Mobile Menu */
+        .nav-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .nav-toggle span {
+            width: 24px;
+            height: 2px;
+            background: var(--black);
+            transition: all 0.3s;
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 60px;
+            left: 0;
+            right: 0;
+            background: var(--white);
+            padding: 24px;
+            border-bottom: 1px solid var(--gray-200);
+            flex-direction: column;
+            gap: 16px;
+            z-index: 999;
+        }
+
+        .mobile-menu.active { display: flex; }
+
+        .mobile-menu a {
+            font-size: 15px;
+            color: var(--black);
+            text-decoration: none;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--gray-100);
+        }
 
         /* ===== HERO ===== */
         .hero {
@@ -82,6 +138,7 @@
             align-items: center;
             position: relative;
             overflow: hidden;
+            padding-top: 60px;
         }
 
         .hero-bg {
@@ -112,7 +169,7 @@
         .hero-container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 140px 48px 100px;
+            padding: 60px 48px 48px;
             position: relative;
             z-index: 2;
         }
@@ -128,29 +185,55 @@
         }
 
         .hero-title {
-            font-size: clamp(40px, 6vw, 72px);
+            font-size: clamp(36px, 5vw, 64px);
             font-weight: 900;
-            line-height: 1.1;
-            letter-spacing: -0.03em;
-            margin-bottom: 24px;
-            max-width: 700px;
+            line-height: 1.3;
+            letter-spacing: -0.02em;
+            margin-bottom: 28px;
+        }
+
+        .title-line {
+            display: block;
+            white-space: nowrap;
+        }
+
+        .country-ruby {
+            position: relative;
+            display: inline-block;
+        }
+
+        .ruby-flags {
+            position: absolute;
+            top: -0.6em;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.35em;
+            letter-spacing: 2px;
+            white-space: nowrap;
         }
 
         .hero-desc {
-            font-size: 16px;
+            font-size: 17px;
             color: rgba(255,255,255,0.7);
-            max-width: 500px;
+            max-width: 520px;
             line-height: 1.9;
-            margin-bottom: 40px;
+            margin-bottom: 36px;
         }
+
+        .hero-desc strong {
+            color: white;
+            font-weight: 600;
+        }
+
+        .sp-only { display: none; }
 
         .hero-cta {
             display: inline-flex;
             align-items: center;
             gap: 10px;
             padding: 16px 32px;
-            background: var(--white);
-            color: var(--black);
+            background: var(--accent);
+            color: var(--white);
             text-decoration: none;
             font-size: 14px;
             font-weight: 700;
@@ -159,21 +242,22 @@
         }
 
         .hero-cta:hover {
-            background: var(--accent);
+            background: var(--accent-dark);
             color: var(--white);
         }
 
         .hero-metrics {
             display: flex;
-            gap: 56px;
-            margin-top: 64px;
-            padding-top: 40px;
+            gap: 48px;
+            margin-top: 40px;
+            padding-top: 24px;
             border-top: 1px solid rgba(255,255,255,0.15);
+            flex-wrap: wrap;
         }
 
         .hero-metric-value {
             font-family: 'Inter', sans-serif;
-            font-size: 48px;
+            font-size: clamp(32px, 4vw, 44px);
             font-weight: 900;
             line-height: 1;
         }
@@ -181,14 +265,184 @@
         .hero-metric-value span { color: var(--accent); }
 
         .hero-metric-label {
-            font-size: 12px;
+            font-size: 11px;
             color: rgba(255,255,255,0.5);
             margin-top: 8px;
         }
 
-        /* ===== CLIENT LOGOS MARQUEE ===== */
+        /* Hero Credentials */
+        .hero-credentials {
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .credentials-row {
+            display: flex;
+            align-items: baseline;
+            gap: 16px;
+            margin-bottom: 8px;
+            font-size: 12px;
+        }
+
+        .credentials-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .credentials-label {
+            font-weight: 700;
+            color: rgba(255,255,255,0.4);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            min-width: 60px;
+            flex-shrink: 0;
+        }
+
+        .credentials-items {
+            color: rgba(255,255,255,0.5);
+            line-height: 1.6;
+        }
+
+        /* Hero Main (2-column) */
+        .hero-main {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 40px;
+        }
+
+        .hero-text {
+            flex: 1;
+            max-width: 750px;
+        }
+
+        /* Phone Mockup */
+        .hero-mockup {
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .phone-frame {
+            width: 220px;
+            height: 440px;
+            background: #1a1a1a;
+            border-radius: 32px;
+            padding: 10px;
+            box-shadow: 0 40px 80px rgba(0,0,0,0.5);
+            position: relative;
+        }
+
+        .phone-notch {
+            position: absolute;
+            top: 14px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 22px;
+            background: #1a1a1a;
+            border-radius: 14px;
+            z-index: 10;
+        }
+
+        .phone-screen {
+            width: 100%;
+            height: 100%;
+            border-radius: 24px;
+            overflow: hidden;
+            position: relative;
+            background: #000;
+        }
+
+        .reels-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .reels-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 60px 16px 20px;
+            background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, transparent 30%, transparent 60%, rgba(0,0,0,0.6) 100%);
+        }
+
+        .reels-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .reels-logo {
+            font-size: 14px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .reels-badge {
+            font-size: 10px;
+            font-weight: 600;
+            padding: 4px 8px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 4px;
+            color: white;
+        }
+
+        .reels-actions {
+            position: absolute;
+            right: 16px;
+            bottom: 80px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .reels-action {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            color: white;
+            font-size: 11px;
+        }
+
+        .reels-action svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .reels-caption {
+            font-size: 12px;
+            color: white;
+            line-height: 1.4;
+        }
+
+        .reels-caption strong {
+            font-weight: 700;
+        }
+
+        .mockup-badge {
+            position: absolute;
+            bottom: -16px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--accent);
+            color: white;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 8px 16px;
+            border-radius: 20px;
+            white-space: nowrap;
+        }
+
+        /* ===== CLIENTS ===== */
         .clients-marquee {
-            padding: 32px 0;
+            padding: 28px 0;
             background: var(--white);
             border-bottom: 1px solid var(--gray-100);
             overflow: hidden;
@@ -200,7 +454,7 @@
             color: var(--gray-400);
             letter-spacing: 0.1em;
             text-align: center;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
         }
 
         .marquee-wrapper {
@@ -211,13 +465,9 @@
 
         .marquee-track {
             display: flex;
-            gap: 64px;
+            gap: 56px;
             animation: marquee 30s linear infinite;
             width: max-content;
-        }
-
-        .marquee-track:hover {
-            animation-play-state: paused;
         }
 
         @keyframes marquee {
@@ -226,31 +476,24 @@
         }
 
         .client-logo {
-            height: 32px;
+            height: 24px;
             width: auto;
             object-fit: contain;
-            filter: grayscale(0);
-            opacity: 0.8;
-            transition: all 0.3s ease;
+            opacity: 0.6;
         }
 
-        .client-logo:hover {
-            opacity: 1;
-            transform: scale(1.05);
-        }
-
-        /* Section Base */
+        /* ===== SECTION BASE ===== */
         section {
-            padding: 100px 48px;
+            padding: 80px 24px;
         }
 
         .section-inner {
-            max-width: 1200px;
+            max-width: 1100px;
             margin: 0 auto;
         }
 
         .section-header {
-            margin-bottom: 56px;
+            margin-bottom: 48px;
         }
 
         .section-header.center { text-align: center; }
@@ -264,598 +507,1378 @@
         }
 
         .section-title {
-            font-size: clamp(28px, 4vw, 40px);
+            font-size: clamp(28px, 4vw, 44px);
             font-weight: 900;
-            line-height: 1.25;
+            line-height: 1.3;
             letter-spacing: -0.02em;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
         }
 
         .section-desc {
-            font-size: 15px;
+            font-size: 16px;
             color: var(--gray-600);
             line-height: 1.9;
-            max-width: 640px;
+            max-width: 600px;
         }
 
-        .section-header.center .section-desc {
-            margin: 0 auto;
-        }
+        .section-header.center .section-desc { margin: 0 auto; }
 
-        /* ===== MARKET OPPORTUNITY - ENHANCED ===== */
+        /* ===== MARKET ===== */
         .market-section {
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
             color: var(--white);
         }
 
         .market-section .section-title { color: var(--white); }
-        .market-section .section-desc { color: rgba(255,255,255,0.6); }
 
-        .market-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 64px;
-            align-items: start;
+        .section-subtitle {
+            font-size: 17px;
+            color: rgba(255,255,255,0.5);
+            margin-top: 16px;
+            line-height: 1.8;
+            max-width: 640px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        /* Big Numbers */
-        .market-big-numbers {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 40px;
-        }
-
-        .big-number-card {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 16px;
-            padding: 28px;
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-
-        .big-number-card:hover {
-            background: rgba(255,255,255,0.08);
-            transform: translateY(-4px);
-        }
-
-        .big-number-card.highlight {
-            grid-column: span 2;
-            background: linear-gradient(135deg, rgba(220,38,38,0.2), rgba(220,38,38,0.05));
-            border-color: rgba(220,38,38,0.3);
-        }
-
-        .big-number {
-            font-family: 'Inter', sans-serif;
-            font-size: 42px;
-            font-weight: 900;
-            line-height: 1;
-            margin-bottom: 8px;
-        }
-
-        .big-number-card.highlight .big-number {
-            font-size: 56px;
-            color: var(--accent);
-        }
-
-        .big-number-label {
-            font-size: 13px;
-            color: rgba(255,255,255,0.6);
-        }
-
-        .big-number-source {
-            font-size: 10px;
-            color: rgba(255,255,255,0.3);
-            margin-top: 8px;
-        }
-
-        /* Data Cards */
-        .market-data-cards {
+        .market-story {
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 40px;
         }
 
-        .data-card {
+        .story-block {
+            display: grid;
+            grid-template-columns: auto 1fr 160px;
+            gap: 24px;
+            align-items: center;
+            padding: 24px;
             background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.08);
             border-radius: 12px;
-            padding: 20px 24px;
-            display: flex;
-            align-items: center;
-            gap: 20px;
+            border: 1px solid rgba(255,255,255,0.06);
         }
 
-        .data-card-icon {
-            width: 48px;
-            height: 48px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
+        .story-number {
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--accent);
             flex-shrink: 0;
         }
 
-        .data-card-content { flex: 1; }
-
-        .data-card-value {
-            font-family: 'Inter', sans-serif;
-            font-size: 24px;
-            font-weight: 800;
-            margin-bottom: 2px;
+        .story-content h3 {
+            font-size: 20px;
+            font-weight: 700;
+            line-height: 1.6;
+            margin-bottom: 10px;
+            color: white;
         }
 
-        .data-card-label {
-            font-size: 13px;
+        .story-content h3 strong {
+            color: var(--accent);
+        }
+
+        .story-content p {
+            font-size: 15px;
+            color: rgba(255,255,255,0.5);
+            line-height: 1.9;
+        }
+
+        .story-content p strong {
+            color: rgba(255,255,255,0.9);
+        }
+
+        .story-source {
+            display: block;
+            font-size: 12px;
+            color: rgba(255,255,255,0.3);
+            margin-top: 10px;
+        }
+
+        /* Visual Elements */
+        .story-visual {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .visual-caption {
+            font-size: 11px;
+            color: rgba(255,255,255,0.4);
+        }
+
+        /* Donut Chart */
+        .donut-chart {
+            position: relative;
+            width: 80px;
+            height: 80px;
+        }
+
+        .donut-chart svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .donut-label {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Inter', sans-serif;
+            font-size: 18px;
+            font-weight: 800;
+            color: white;
+        }
+
+        /* Bar Chart */
+        .bar-chart {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .bar-item {
+            display: grid;
+            grid-template-columns: 36px 1fr 32px;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .bar-label {
+            font-size: 10px;
             color: rgba(255,255,255,0.5);
         }
 
-        .data-card-bar {
-            width: 80px;
+        .bar-track {
             height: 6px;
             background: rgba(255,255,255,0.1);
             border-radius: 3px;
             overflow: hidden;
         }
 
-        .data-card-bar-fill {
+        .bar-fill {
             height: 100%;
             background: var(--accent);
             border-radius: 3px;
         }
 
-        /* Why Section */
-        .market-why {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 16px;
-            padding: 32px;
-            margin-top: 32px;
+        .bar-value {
+            font-family: 'Inter', sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            color: white;
+            text-align: right;
         }
 
-        .market-why h3 {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 20px;
+        /* Compare Visual */
+        .compare-visual {
             display: flex;
             align-items: center;
-            gap: 10px;
-        }
-
-        .market-why-list {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .market-why-item {
-            display: flex;
-            align-items: flex-start;
             gap: 12px;
         }
 
-        .market-why-icon {
-            width: 24px;
-            height: 24px;
-            background: var(--accent);
-            border-radius: 50%;
+        .compare-item {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            flex-shrink: 0;
-            margin-top: 2px;
+            gap: 4px;
+            padding: 10px;
+            border-radius: 8px;
         }
 
-        .market-why-item p {
+        .compare-item.bad {
+            background: rgba(255,255,255,0.05);
+            opacity: 0.5;
+        }
+
+        .compare-item.good {
+            background: rgba(220,38,38,0.15);
+            border: 1px solid rgba(220,38,38,0.3);
+        }
+
+        .compare-icon {
+            font-size: 20px;
+        }
+
+        .compare-text {
+            font-size: 9px;
+            color: rgba(255,255,255,0.7);
+        }
+
+        .compare-arrow {
+            color: rgba(255,255,255,0.3);
             font-size: 14px;
-            color: rgba(255,255,255,0.8);
-            line-height: 1.7;
         }
 
-        /* ===== WHY JAPANKURU - ENHANCED ===== */
-        .why-section { background: var(--white); }
+        .market-bottom-text {
+            margin-top: 56px;
+            text-align: center;
+        }
+
+        .market-question {
+            font-size: 22px;
+            font-weight: 600;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 28px;
+        }
+
+        .market-numbers {
+            display: flex;
+            justify-content: center;
+            align-items: baseline;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .num-item {
+            color: white;
+            font-size: 17px;
+        }
+
+        .num-item strong {
+            font-family: 'Inter', sans-serif;
+            font-size: 40px;
+            font-weight: 800;
+            color: var(--accent);
+        }
+
+        .num-note {
+            font-size: 12px;
+            color: rgba(255,255,255,0.4);
+            margin-left: 4px;
+        }
+
+        .num-divider {
+            color: rgba(255,255,255,0.2);
+            font-size: 24px;
+            margin: 0 16px;
+        }
+
+        .market-source {
+            font-size: 11px;
+            color: rgba(255,255,255,0.3);
+            margin-top: 24px;
+            text-align: center;
+        }
+
+        /* ===== PORTFOLIO MARQUEE ===== */
+        .portfolio-marquee-section {
+            background: var(--black);
+            padding: 48px 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .marquee-wrapper {
+            overflow: hidden;
+        }
+
+        .marquee-track {
+            display: flex;
+            animation: marquee 30s linear infinite;
+        }
+
+        .marquee-content {
+            display: flex;
+            gap: 16px;
+            flex-shrink: 0;
+            padding-right: 16px;
+        }
+
+        .marquee-content img {
+            height: 200px;
+            width: auto;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .marquee-label {
+            position: absolute;
+            bottom: 16px;
+            right: 32px;
+        }
+
+        .marquee-label span {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            color: var(--gray-500);
+        }
+
+        /* ===== WHY SECTION ===== */
+        .why-section { 
+            background: var(--white);
+        }
 
         .why-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
+            gap: 1px;
+            background: var(--gray-200);
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            overflow: hidden;
         }
 
         .why-card {
             background: var(--white);
-            border: 1px solid var(--gray-200);
-            border-radius: 20px;
-            padding: 36px 28px;
+            padding: 32px 24px;
             transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
         }
 
-        .why-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: var(--accent);
-            transform: scaleX(0);
-            transition: transform 0.3s ease;
-        }
-
-        .why-card:hover {
-            border-color: var(--accent);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
-            transform: translateY(-6px);
-        }
-
-        .why-card:hover::before {
-            transform: scaleX(1);
-        }
-
-        .why-icon {
-            width: 56px;
-            height: 56px;
-            background: linear-gradient(135deg, var(--gray-100), var(--gray-50));
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            margin-bottom: 20px;
-        }
-
-        .why-card:hover .why-icon {
-            background: linear-gradient(135deg, #fef2f2, #fee2e2);
-        }
+        .why-card:hover { background: var(--gray-50); }
 
         .why-number {
             font-family: 'Inter', sans-serif;
-            font-size: 11px;
-            font-weight: 800;
-            color: var(--accent);
-            margin-bottom: 12px;
-            letter-spacing: 0.1em;
+            font-size: 48px;
+            font-weight: 900;
+            color: var(--gray-100);
+            line-height: 1;
+            margin-bottom: 16px;
         }
+
+        .why-card:hover .why-number { color: #fee2e2; }
 
         .why-card h3 {
-            font-size: 18px;
+            font-size: 17px;
             font-weight: 800;
-            margin-bottom: 16px;
-            line-height: 1.4;
-        }
-
-        .why-keyword {
-            display: inline-block;
-            padding: 4px 12px;
-            background: #fef2f2;
-            color: var(--accent);
-            font-size: 12px;
-            font-weight: 700;
-            border-radius: 4px;
             margin-bottom: 12px;
+            line-height: 1.5;
         }
 
         .why-card p {
-            font-size: 14px;
-            color: var(--gray-600);
-            line-height: 1.9;
+            font-size: 15px;
+            color: var(--gray-500);
+            line-height: 1.8;
         }
 
-        /* ===== CHANNELS - REAL PLATFORMS ===== */
-        .channels-section {
+        .why-highlight {
+            background: linear-gradient(transparent 60%, #fef08a 60%);
+        }
+
+        /* ===== CHANNEL SECTION (국가별 카드) ===== */
+        .channel-section { 
             background: var(--black);
             color: var(--white);
         }
 
-        .channels-section .section-title { color: var(--white); }
-        .channels-section .section-desc { color: rgba(255,255,255,0.6); }
+        .channel-section .section-title { color: var(--white); }
+        .channel-section .section-desc { color: var(--gray-400); }
 
-        .channels-header {
+        .channel-header-row {
             display: flex;
             justify-content: space-between;
             align-items: flex-end;
-            margin-bottom: 48px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            gap: 24px;
         }
 
-        .channels-total {
+        .channel-total {
             text-align: right;
         }
 
-        .channels-total-value {
+        .channel-total-value {
             font-family: 'Inter', sans-serif;
             font-size: 48px;
             font-weight: 900;
+            line-height: 1;
         }
 
-        .channels-total-label {
-            font-size: 13px;
-            color: rgba(255,255,255,0.5);
+        .channel-total-label {
+            font-size: 14px;
+            color: var(--gray-400);
+            margin-top: 4px;
         }
 
-        .channel-grid {
+        /* Dashboard Stats */
+        .dashboard-wrapper {
+            position: relative;
+            margin-bottom: 40px;
+            padding-bottom: 40px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .dashboard-note {
+            position: absolute;
+            top: 0;
+            right: 0;
+            font-size: 11px;
+            color: var(--gray-500);
+        }
+
+        .channel-dashboard {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
             gap: 16px;
         }
 
-        .channel-card {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 16px;
-            padding: 24px 20px;
+        .dashboard-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .dashboard-icon {
+            width: 40px;
+            height: 40px;
+            margin: 0 auto 12px;
+        }
+
+        .dashboard-icon svg {
+            width: 40px;
+            height: 40px;
+        }
+
+        .dashboard-value {
+            font-family: 'Inter', sans-serif;
+            font-size: 36px;
+            font-weight: 900;
+            margin-bottom: 4px;
+            background: linear-gradient(transparent 60%, rgba(254, 240, 138, 0.3) 60%);
+            display: inline;
+        }
+
+        .dashboard-label {
+            font-size: 15px;
+            color: var(--accent);
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .dashboard-desc {
+            font-size: 13px;
+            color: var(--gray-400);
+            line-height: 1.5;
+        }
+
+        /* Country Grid */
+        .country-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .country-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px;
+            padding: 20px;
             transition: all 0.3s ease;
         }
 
-        .channel-card:hover {
-            background: rgba(255,255,255,0.08);
-            transform: translateY(-4px);
-            border-color: rgba(255,255,255,0.2);
+        .country-card:hover {
+            border-color: var(--accent);
         }
 
-        .channel-header {
+        .country-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
         }
 
-        .channel-country {
-            font-size: 14px;
+        .country-name {
+            font-size: 16px;
             font-weight: 700;
         }
 
-        .channel-flag { font-size: 24px; }
-
-        .channel-value {
-            font-family: 'Inter', sans-serif;
-            font-size: 28px;
-            font-weight: 800;
-            margin-bottom: 4px;
+        .country-flag {
+            font-size: 22px;
         }
 
-        .channel-label {
-            font-size: 11px;
-            color: rgba(255,255,255,0.4);
-            margin-bottom: 20px;
+        .country-stats {
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
         }
 
-        /* Platform Links */
-        .platform-links {
+        .country-stat {
+            font-size: 13px;
+            color: var(--gray-400);
+        }
+
+        .platform-list {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
         }
 
-        .platform-link {
+        .platform-link-item {
             display: flex;
             align-items: center;
             gap: 8px;
-            padding: 8px 12px;
+            padding: 8px 10px;
             background: rgba(255,255,255,0.05);
-            border-radius: 8px;
+            border-radius: 6px;
             text-decoration: none;
             color: rgba(255,255,255,0.8);
-            font-size: 12px;
+            font-size: 13px;
             transition: all 0.2s ease;
         }
 
-        .platform-link:hover {
-            background: rgba(255,255,255,0.15);
+        .platform-link-item:hover {
+            background: rgba(255,255,255,0.12);
             color: white;
         }
 
-        .platform-logo {
-            width: 16px;
-            height: 16px;
-            object-fit: contain;
+        .platform-icon {
+            width: 14px;
+            height: 14px;
+            flex-shrink: 0;
         }
 
-        .platform-link span {
+        .platform-link-item span {
             flex: 1;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
 
-        .platform-link .arrow {
-            font-size: 10px;
-            opacity: 0.5;
+        .link-arrow {
+            color: rgba(255,255,255,0.3);
+            flex-shrink: 0;
         }
 
-        /* Creator Bar */
-        .creator-bar {
-            margin-top: 48px;
-            padding-top: 32px;
+        /* Website Info */
+        .website-info {
+            margin-bottom: 32px;
+        }
+
+        /* Audience Quality - 이미지 포함 */
+        .audience-quality {
+            margin-bottom: 40px;
+            padding: 32px;
+            background: rgba(220, 38, 38, 0.05);
+            border: 1px solid rgba(220, 38, 38, 0.2);
+            border-radius: 16px;
+        }
+
+        .audience-header {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .audience-header h3 {
+            font-size: 18px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .audience-header p {
+            font-size: 13px;
+            color: var(--gray-400);
+        }
+
+        .audience-evidence {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        .evidence-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .evidence-image {
+            height: 100px;
+            overflow: hidden;
+        }
+
+        .evidence-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.8;
+        }
+
+        .evidence-content {
+            padding: 16px;
+        }
+
+        .evidence-content h4 {
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        .evidence-content p {
+            font-size: 11px;
+            color: var(--gray-400);
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .evidence-tag {
+            display: inline-block;
+            font-size: 10px;
+            color: var(--accent);
+            padding: 3px 8px;
+            background: rgba(220, 38, 38, 0.15);
+            border-radius: 4px;
+        }
+
+        /* Country Table (2열 그리드) */
+        .country-table {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        /* 확장 대응 row 스타일 */
+        .expansion-row {
+            background: transparent;
+            border: 1px dashed rgba(255,255,255,0.2);
+        }
+
+        .expansion-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            background: rgba(59, 130, 246, 0.15);
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .expansion-flags {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .expansion-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: var(--gray-400);
+        }
+
+        .expansion-item .exp-code {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--gray-400);
+            background: rgba(255,255,255,0.1);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .expansion-item span:first-child {
+            font-size: 18px;
+        }
+
+        .expansion-channel {
+            font-size: 9px;
+            background: rgba(225, 48, 108, 0.2);
+            color: #E1306C;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        .country-row {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding: 20px;
+            background: var(--bg-card);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 10px;
+            transition: all 0.2s;
+        }
+        
+        .country-row:hover {
+            border-color: var(--accent);
+        }
+
+        .country-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .country-flag {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--accent);
+            background: rgba(59, 130, 246, 0.15);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .country-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .country-name {
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .country-stat {
+            font-size: 11px;
+            color: var(--gray-400);
+        }
+
+        .country-channels {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .channel-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            text-decoration: none;
+            color: var(--gray-300);
+            font-size: 11px;
+            transition: all 0.2s ease;
+        }
+
+        .channel-chip:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: white;
+        }
+
+        .channel-chip svg {
+            width: 14px;
+            height: 14px;
+            flex-shrink: 0;
+        }
+
+        /* 拡張対応セクション */
+        .expansion-section {
+            margin-top: 32px;
+            padding-top: 24px;
             border-top: 1px solid rgba(255,255,255,0.1);
         }
 
-        .creator-bar-label {
-            font-size: 11px;
-            font-weight: 600;
-            color: rgba(255,255,255,0.4);
-            letter-spacing: 0.1em;
+        .expansion-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
             margin-bottom: 20px;
         }
 
-        .creator-list {
+        .expansion-label {
+            padding: 4px 12px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            color: rgba(255,255,255,0.7);
+        }
+
+        .expansion-note {
+            font-size: 13px;
+            color: rgba(255,255,255,0.5);
+        }
+
+        .expansion-countries {
             display: flex;
             gap: 32px;
             flex-wrap: wrap;
         }
 
-        .creator-item {
+        .expansion-country {
             display: flex;
             align-items: center;
             gap: 12px;
+        }
+
+        .expansion-country .country-flag {
+            font-size: 24px;
+        }
+
+        .expansion-info .country-name {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 4px;
+        }
+
+        .expansion-channels {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .mini-chip {
+            padding: 2px 8px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 4px;
+            font-size: 10px;
+            color: rgba(255,255,255,0.6);
+        }
+
+        .website-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .website-card h4 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .website-languages {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            font-size: 22px;
+            margin-bottom: 12px;
+        }
+
+        .website-card p {
+            font-size: 14px;
+            color: rgba(255,255,255,0.6);
+            margin-bottom: 16px;
+        }
+
+        .website-stat {
+            font-family: 'Inter', sans-serif;
+            font-size: 28px;
+            font-weight: 800;
+        }
+
+        .stat-date {
+            font-size: 12px;
+            font-weight: 400;
+            color: rgba(255,255,255,0.4);
+            margin-left: 8px;
+        }
+
+        /* Creator Section */
+        .creator-section {
+            padding-top: 32px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .creator-section h4 {
+            font-size: 12px;
+            font-weight: 700;
+            color: rgba(255,255,255,0.4);
+            letter-spacing: 0.1em;
+            margin-bottom: 16px;
+        }
+
+        .creator-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+        }
+
+        .creator-card {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 8px;
+            min-height: 56px;
         }
 
         .creator-avatar {
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             object-fit: cover;
-            border: 2px solid rgba(255,255,255,0.2);
+            flex-shrink: 0;
         }
 
         .creator-info { line-height: 1.3; }
-        .creator-name { font-size: 13px; font-weight: 600; }
-        .creator-role { font-size: 11px; color: rgba(255,255,255,0.5); }
+        .creator-name { font-size: 12px; font-weight: 600; white-space: nowrap; }
+        .creator-role { font-size: 10px; color: var(--gray-400); }
+        .role-code {
+            font-weight: 700;
+            color: var(--accent);
+            font-family: 'Inter', sans-serif;
+        }
 
-        /* ===== JOURNEY - JAPANKURU CONNECTED ===== */
+        /* ===== CUSTOMER JOURNEY (인포그래픽) ===== */
         .journey-section { background: var(--gray-50); }
 
-        .journey-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
+        .journey-infographic {
+            margin-top: 48px;
             position: relative;
         }
 
-        /* Connection arrows */
-        .journey-grid::before,
-        .journey-grid::after {
-            content: '→';
+        /* Floating JAPANKURU Contents */
+        .journey-floating-images {
             position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 24px;
-            color: var(--gray-300);
-            font-weight: 300;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0;
         }
 
-        .journey-grid::before { left: calc(33.33% - 12px); }
-        .journey-grid::after { left: calc(66.66% - 12px); }
-
-        .journey-phase {
-            background: var(--white);
-            border-radius: 20px;
-            padding: 32px;
-            border: 2px solid var(--gray-200);
-            position: relative;
-        }
-
-        .journey-phase-badge {
+        .floating-img {
             position: absolute;
-            top: -12px;
-            left: 24px;
-            padding: 6px 16px;
-            font-size: 11px;
-            font-weight: 700;
-            letter-spacing: 0.05em;
-            border-radius: 20px;
+            width: 120px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+            opacity: 0.7;
+            animation: float 6s ease-in-out infinite;
         }
 
-        .journey-phase:nth-child(1) .journey-phase-badge {
-            background: #dbeafe;
-            color: #1d4ed8;
+        .floating-img.img-1 { top: 8%; left: 3%; width: 100px; height: 70px; animation-delay: 0s; }
+        .floating-img.img-2 { top: 12%; right: 5%; width: 90px; height: 90px; animation-delay: 1s; }
+        .floating-img.img-3 { top: 55%; left: 2%; width: 110px; height: 70px; animation-delay: 2s; }
+        .floating-img.img-4 { top: 60%; right: 2%; width: 80px; height: 80px; animation-delay: 0.5s; }
+        .floating-img.img-5 { bottom: 15%; left: 5%; width: 90px; height: 60px; animation-delay: 1.5s; }
+        .floating-img.img-6 { bottom: 20%; right: 4%; width: 100px; height: 70px; animation-delay: 2.5s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(2deg); }
         }
 
-        .journey-phase:nth-child(2) .journey-phase-badge {
-            background: #dcfce7;
-            color: #15803d;
-        }
-
-        .journey-phase:nth-child(3) .journey-phase-badge {
-            background: #f3e8ff;
-            color: #7c3aed;
-        }
-
-        .journey-phase h3 {
-            font-size: 20px;
-            font-weight: 800;
-            margin: 16px 0 8px;
-        }
-
-        .journey-phase-timing {
-            font-size: 12px;
-            color: var(--gray-400);
-            margin-bottom: 24px;
-        }
-
-        .journey-touchpoints {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .journey-touchpoint {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 14px 16px;
-            background: var(--gray-50);
-            border-radius: 12px;
-            border: 1px solid var(--gray-100);
-            transition: all 0.2s ease;
-        }
-
-        .journey-touchpoint:hover {
-            border-color: var(--accent);
-            background: #fef2f2;
-        }
-
-        .touchpoint-icon {
+        /* JAPANKURU Badge */
+        .japankuru-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
             width: 32px;
             height: 32px;
-            background: var(--white);
-            border-radius: 8px;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            animation: pulse-badge 2s ease-in-out infinite;
+        }
+
+        .japankuru-badge img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        @keyframes pulse-badge {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* Timeline */
+        .journey-timeline {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .timeline-phase {
+            position: relative;
+            flex: 1;
+            max-width: 280px;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .phase-number {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--gray-400);
+            margin-bottom: 8px;
+            letter-spacing: 0.1em;
+        }
+
+        .phase-name {
+            font-size: 48px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 4px;
+        }
+
+        .phase-name.mae { color: #3b82f6; }
+        .phase-name.naka { color: #10b981; }
+        .phase-name.ato { color: #8b5cf6; }
+
+        .phase-period {
+            font-size: 15px;
+            color: var(--gray-500);
+            margin-bottom: 16px;
+        }
+
+        .phase-action {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--black);
+            margin-bottom: 20px;
+        }
+
+        .phase-touchpoints {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .phase-touchpoints span {
+            display: inline-block;
+            padding: 8px 16px;
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 20px;
+            font-size: 14px;
+            color: var(--gray-700);
+        }
+
+        /* Connector Arrow */
+        .timeline-connector {
+            flex-shrink: 0;
+            width: 60px;
+            padding-top: 56px;
+            color: var(--gray-300);
+        }
+
+        .timeline-connector svg {
+            width: 100%;
+            height: 24px;
+        }
+
+        /* Result */
+        .journey-result {
+            margin-top: 48px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .result-arrow {
+            color: var(--gray-300);
+            margin-bottom: 16px;
+        }
+
+        .result-arrow svg {
+            width: 24px;
+            height: 48px;
+        }
+
+        .result-box {
+            display: inline-block;
+            background: linear-gradient(135deg, #f0f7ff 0%, #e0efff 100%);
+            color: var(--black);
+            padding: 32px 48px;
+            border-radius: 16px;
+            border: 2px solid var(--accent);
+            box-shadow: 0 8px 32px rgba(30, 64, 175, 0.15);
+        }
+
+        .result-main {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .result-brand {
+            display: inline-block;
+        }
+
+        .result-brand img {
+            height: 32px;
+            width: auto;
+            vertical-align: middle;
+        }
+
+        .result-sub {
             font-size: 16px;
-            border: 1px solid var(--gray-200);
+            color: var(--gray-600);
         }
 
-        .touchpoint-content { flex: 1; }
+        /* Differentiator (타이포그래피 스타일) */
+        .differentiator {
+            margin-top: 48px;
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 48px;
+            color: white;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
 
-        .touchpoint-name {
-            font-size: 13px;
+        .diff-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .diff-lead {
+            font-size: 14px;
+            color: var(--gray-400);
+            margin-bottom: 12px;
+        }
+
+        .diff-header h3 {
+            font-size: 24px;
+            font-weight: 700;
+            line-height: 1.5;
+            color: white;
+        }
+
+        .diff-content {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 32px;
+        }
+
+        .diff-block {
+            padding: 24px;
+            border-left: 3px solid var(--accent);
+        }
+
+        .diff-keyword {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--accent);
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
+        }
+
+        .diff-block p {
+            font-size: 14px;
+            line-height: 1.8;
+            color: var(--gray-300);
+        }
+
+        .diff-block strong {
+            color: white;
             font-weight: 600;
-            margin-bottom: 2px;
         }
 
-        .touchpoint-channel {
-            font-size: 11px;
-            color: var(--gray-500);
+        /* ===== NETWORK SECTION ===== */
+        .network-section { background: var(--white); }
+
+        .community-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 40px;
         }
 
-        .touchpoint-jk {
-            font-size: 9px;
-            padding: 3px 8px;
+        .community-card {
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .community-flag {
+            font-size: 28px;
+            margin-bottom: 12px;
+        }
+
+        .community-card h4 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .community-card p {
+            font-size: 14px;
+            color: var(--gray-600);
+            line-height: 1.7;
+            margin-bottom: 12px;
+        }
+
+        .community-reach {
+            font-size: 13px;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        /* Distribution Flow */
+        .distribution-flow {
+            background: var(--gray-50);
+            border-radius: 12px;
+            padding: 28px;
+        }
+
+        .distribution-flow h4 {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--accent);
+        }
+
+        .flow-steps {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .flow-step {
+            flex: 1;
+            display: flex;
+            gap: 12px;
+        }
+
+        .flow-number {
+            width: 40px;
+            height: 40px;
             background: var(--accent);
             color: white;
-            border-radius: 4px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Inter', sans-serif;
+            font-size: 16px;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+
+        .flow-content h5 {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .flow-content p {
+            font-size: 13px;
+            color: var(--gray-600);
+            line-height: 1.5;
+        }
+
+        .flow-divider {
+            width: 32px;
+            height: 2px;
+            background: var(--gray-300);
+            margin-top: 20px;
+            flex-shrink: 0;
+        }
+
+        /* ===== COMPARISON SECTION ===== */
+        .comparison-section { background: var(--gray-50); }
+
+        .comparison-table {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .comparison-header {
+            display: grid;
+            grid-template-columns: 120px 1fr 1fr;
+            background: var(--bg-card);
+            color: white;
+        }
+
+        .comparison-row {
+            display: grid;
+            grid-template-columns: 120px 1fr 1fr;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .comparison-row:last-child { border-bottom: none; }
+
+        .comparison-col {
+            padding: 14px 16px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .col-item {
+            background: var(--gray-50);
+            font-weight: 700;
+            color: var(--black);
+        }
+
+        .col-japankuru {
+            background: rgba(59, 130, 246, 0.08);
+            border-left: 3px solid var(--accent);
+        }
+
+        .col-other {
+            color: var(--gray-500);
+            font-size: 13px;
+        }
+
+        .comparison-header .col-item {
+            background: var(--bg-card);
+            color: white;
             font-weight: 700;
         }
 
+        .comparison-header .col-japankuru {
+            background: var(--accent);
+            border-left: none;
+            color: white;
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        .comparison-header .col-other {
+            background: var(--gray-500);
+            color: white;
+            font-size: 12px;
+        }
+
         /* ===== CASES ===== */
-        .cases-section { background: var(--white); }
+        .cases-section { background: var(--gray-50); }
 
         .cases-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
+            gap: 20px;
         }
 
         .case-card {
+            background: var(--white);
             border: 1px solid var(--gray-200);
-            border-radius: 16px;
+            border-radius: 12px;
             overflow: hidden;
             transition: all 0.3s ease;
         }
 
-        .case-card:hover {
-            box-shadow: 0 16px 48px rgba(0,0,0,0.1);
-            transform: translateY(-4px);
-        }
+        .case-card:hover { box-shadow: 0 12px 32px rgba(0,0,0,0.08); }
 
         .case-image {
-            height: 200px;
+            height: 160px;
             overflow: hidden;
         }
 
@@ -863,183 +1886,173 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.5s;
         }
 
-        .case-card:hover .case-image img { transform: scale(1.08); }
-
-        .case-body { padding: 28px; }
+        .case-body { padding: 20px; }
 
         .case-category {
-            font-size: 11px;
+            font-size: 12px;
             font-weight: 700;
             color: var(--accent);
             letter-spacing: 0.1em;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
 
         .case-title {
-            font-size: 17px;
+            font-size: 16px;
             font-weight: 700;
-            margin-bottom: 12px;
+            margin-bottom: 6px;
             line-height: 1.5;
         }
 
         .case-desc {
-            font-size: 13px;
-            color: var(--gray-500);
-            line-height: 1.8;
-        }
-
-        /* Testimonials */
-        .testimonials-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 24px;
-            margin-top: 64px;
-        }
-
-        .testimonial-card {
-            background: var(--gray-50);
-            border-radius: 16px;
-            padding: 32px;
-        }
-
-        .testimonial-text {
             font-size: 14px;
-            line-height: 2;
-            color: var(--gray-700);
-            margin-bottom: 24px;
+            color: var(--gray-500);
+            line-height: 1.7;
         }
 
-        .testimonial-author {
+        /* ===== PROCESS (이미지2 스타일) ===== */
+        .process-section { background: var(--white); }
+
+        .process-intro {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .process-intro p {
+            font-size: 16px;
+            color: var(--gray-600);
+            line-height: 1.9;
+        }
+
+        /* 6 Step Timeline */
+        .process-timeline {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-        }
-
-        .testimonial-name { font-size: 13px; font-weight: 700; }
-        .testimonial-role { font-size: 12px; color: var(--gray-500); }
-
-        .testimonial-badge {
-            font-size: 11px;
-            padding: 4px 12px;
-            background: var(--white);
-            border-radius: 4px;
-            color: var(--gray-500);
-        }
-
-        /* ===== SOLUTIONS - ENHANCED ===== */
-        .solutions-section { background: var(--gray-50); }
-
-        .solutions-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 24px;
-        }
-
-        .solution-card {
-            background: var(--white);
-            border: 1px solid var(--gray-200);
-            border-radius: 20px;
-            padding: 36px;
-            transition: all 0.3s ease;
+            align-items: flex-start;
+            margin-bottom: 56px;
             position: relative;
+        }
+
+        .process-timeline::before {
+            content: '';
+            position: absolute;
+            top: 24px;
+            left: 40px;
+            right: 40px;
+            height: 2px;
+            background: #2563eb;
+        }
+
+        .process-step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+
+        .process-step-number {
+            width: 48px;
+            height: 48px;
+            background: var(--white);
+            border: 2px solid #2563eb;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Inter', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: #2563eb;
+            margin: 0 auto 12px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .process-step-title {
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        /* Process Detail Cards */
+        .process-details {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .process-detail-card {
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
             overflow: hidden;
         }
 
-        .solution-card:hover {
-            border-color: var(--accent);
-            box-shadow: 0 16px 40px rgba(0,0,0,0.08);
+        .process-detail-image {
+            height: 140px;
+            overflow: hidden;
         }
 
-        .solution-header {
-            display: flex;
-            align-items: flex-start;
-            gap: 16px;
-            margin-bottom: 24px;
+        .process-detail-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
-        .solution-icon {
-            width: 56px;
-            height: 56px;
-            background: linear-gradient(135deg, #fef2f2, #fee2e2);
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            flex-shrink: 0;
+        .process-detail-body {
+            padding: 20px;
         }
 
-        .solution-title-wrap { flex: 1; }
-
-        .solution-card h3 {
-            font-size: 18px;
+        .process-detail-body h4 {
+            font-size: 16px;
             font-weight: 800;
-            margin-bottom: 6px;
+            margin-bottom: 10px;
         }
 
-        .solution-tagline {
-            font-size: 13px;
-            color: var(--gray-500);
+        .process-detail-body p {
+            font-size: 14px;
+            color: var(--gray-600);
+            line-height: 1.8;
         }
 
-        .solution-items {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
+        .process-detail-body .lang-highlight {
+            color: #2563eb;
+            font-weight: 600;
         }
 
-        .solution-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px 16px;
+        .process-note {
+            text-align: center;
+            margin-top: 32px;
+            padding: 20px;
             background: var(--gray-50);
-            border-radius: 10px;
-            font-size: 13px;
-            transition: all 0.2s ease;
+            border-radius: 8px;
+            font-size: 15px;
+            color: var(--gray-600);
         }
 
-        .solution-item:hover {
-            background: #fef2f2;
-        }
-
-        .solution-item-icon {
-            width: 24px;
-            height: 24px;
-            background: var(--white);
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-        }
+        .process-note strong { color: var(--black); }
 
         /* ===== PRICING ===== */
-        .pricing-section { background: var(--white); }
+        .pricing-section { background: var(--gray-50); }
 
         .pricing-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
+            gap: 20px;
         }
 
         .pricing-card {
+            background: var(--white);
             border: 1px solid var(--gray-200);
-            border-radius: 20px;
+            border-radius: 12px;
             overflow: hidden;
-            transition: all 0.3s ease;
         }
 
         .pricing-card.featured {
             border-color: var(--accent);
-            box-shadow: 0 8px 32px rgba(220, 38, 38, 0.15);
+            box-shadow: 0 4px 20px rgba(220, 38, 38, 0.15);
         }
 
         .pricing-header {
-            padding: 32px;
+            padding: 24px;
             background: var(--gray-50);
         }
 
@@ -1050,13 +2063,13 @@
 
         .pricing-badge {
             display: inline-block;
-            font-size: 10px;
+            font-size: 12px;
             font-weight: 700;
-            padding: 4px 10px;
+            padding: 3px 8px;
             background: #fef3c7;
             color: #92400e;
             border-radius: 4px;
-            margin-bottom: 12px;
+            margin-bottom: 8px;
         }
 
         .pricing-card.featured .pricing-badge {
@@ -1065,222 +2078,257 @@
         }
 
         .pricing-name {
-            font-size: 18px;
+            font-size: 17px;
             font-weight: 700;
-            margin-bottom: 8px;
+            margin-bottom: 4px;
         }
 
         .pricing-price {
             font-family: 'Inter', sans-serif;
-            font-size: 32px;
+            font-size: 28px;
             font-weight: 800;
         }
 
         .pricing-price span { font-size: 14px; font-weight: 500; }
 
-        .pricing-body { padding: 32px; }
+        .pricing-body { padding: 24px; }
 
         .pricing-features {
             list-style: none;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
         }
 
         .pricing-features li {
-            padding: 10px 0;
+            padding: 8px 0;
             border-bottom: 1px solid var(--gray-100);
-            font-size: 13px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .pricing-features li::before {
-            content: '✓';
-            color: var(--accent);
-            font-weight: 700;
+            font-size: 14px;
         }
 
         .pricing-cta {
             display: block;
             text-align: center;
-            padding: 14px;
+            padding: 12px;
             background: var(--gray-100);
             color: var(--black);
             text-decoration: none;
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 600;
-            border-radius: 8px;
+            border-radius: 6px;
             transition: all 0.2s;
         }
 
         .pricing-card.featured .pricing-cta {
-            background: var(--black);
+            background: var(--accent);
             color: var(--white);
         }
 
         .pricing-cta:hover {
-            background: var(--black);
+            background: var(--accent);
             color: var(--white);
-        }
-
-        /* ===== PROCESS ===== */
-        .process-section { background: var(--gray-50); }
-
-        .process-grid {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 16px;
-        }
-
-        .process-step {
-            background: var(--white);
-            border: 1px solid var(--gray-200);
-            border-radius: 12px;
-            padding: 28px 20px;
-            text-align: center;
-            position: relative;
-        }
-
-        .process-step::after {
-            content: '→';
-            position: absolute;
-            right: -14px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--gray-300);
-            font-size: 18px;
-        }
-
-        .process-step:last-child::after { display: none; }
-
-        .process-number {
-            font-family: 'Inter', sans-serif;
-            font-size: 11px;
-            font-weight: 700;
-            color: var(--accent);
-            margin-bottom: 12px;
-        }
-
-        .process-step h4 {
-            font-size: 14px;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-
-        .process-step p {
-            font-size: 12px;
-            color: var(--gray-500);
         }
 
         /* ===== CTA ===== */
         .cta-section {
             background: var(--accent);
             color: var(--white);
-            padding: 100px 48px;
+            padding: 80px 24px;
         }
 
         .cta-inner {
-            max-width: 800px;
+            max-width: 600px;
             margin: 0 auto;
             text-align: center;
         }
 
         .cta-section h2 {
-            font-size: clamp(28px, 4vw, 40px);
+            font-size: clamp(28px, 4vw, 38px);
             font-weight: 900;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
         }
 
         .cta-section p {
-            font-size: 15px;
+            font-size: 16px;
             opacity: 0.9;
-            margin-bottom: 40px;
+            margin-bottom: 32px;
         }
 
         .cta-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 18px 48px;
+            display: inline-block;
+            padding: 16px 48px;
             background: var(--white);
             color: var(--black);
             text-decoration: none;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 700;
-            border-radius: 8px;
+            border-radius: 6px;
             transition: all 0.2s ease;
         }
 
         .cta-btn:hover {
-            background: var(--black);
-            color: var(--white);
+            background: var(--gray-100);
+            color: var(--accent);
         }
 
-        .cta-note {
-            margin-top: 20px;
-            font-size: 12px;
-            opacity: 0.7;
-        }
-
-        /* Footer */
+        /* ===== FOOTER ===== */
         .footer {
-            padding: 32px 48px;
-            background: var(--black);
+            padding: 24px;
+            background: #0f172a;
             display: flex;
             justify-content: space-between;
             align-items: center;
             color: var(--white);
+            flex-wrap: wrap;
+            gap: 12px;
         }
 
         .footer-logo {
             font-family: 'Inter', sans-serif;
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 800;
         }
 
         .footer-copy {
-            font-size: 12px;
+            font-size: 11px;
             color: rgba(255,255,255,0.4);
         }
 
-        /* Responsive */
-        @media (max-width: 1200px) {
-            .hero-bg { width: 60%; opacity: 0.3; }
-            .market-grid { grid-template-columns: 1fr; gap: 48px; }
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
             .why-grid { grid-template-columns: repeat(2, 1fr); }
-            .channel-grid { grid-template-columns: repeat(3, 1fr); }
-            .solutions-grid { grid-template-columns: 1fr; }
-            .pricing-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
-            .process-grid { grid-template-columns: repeat(3, 1fr); }
+            .channel-dashboard { grid-template-columns: repeat(2, 1fr); }
+            .audience-evidence { grid-template-columns: repeat(2, 1fr); }
+            .community-grid { grid-template-columns: 1fr; }
+            .comparison-header, .comparison-row { grid-template-columns: 100px 1fr 1fr; }
+            .process-details { grid-template-columns: repeat(2, 1fr); }
+            .pricing-grid { grid-template-columns: 1fr; max-width: 360px; margin: 0 auto; }
+            
+            /* Hero 2-column → 1-column */
+            .hero-main { flex-direction: column; text-align: center; }
+            .hero-mockup { display: none; }
         }
 
         @media (max-width: 768px) {
-            section { padding: 64px 24px; }
-            .nav { padding: 16px 24px; }
-            .hero-container { padding: 100px 24px 64px; }
-            .hero-metrics { flex-direction: column; gap: 24px; }
+            .nav { padding: 12px 20px; }
+            .nav-menu { display: none; }
+            .nav-toggle { display: flex; }
+            
+            section { padding: 56px 20px; }
+            
+            .sp-only { display: inline; }
+            .hero-title { font-size: clamp(28px, 8vw, 40px); }
+            .title-line { white-space: normal; }
+            .hero-container { padding: 60px 20px; }
+            .hero-metrics { gap: 24px; }
             .hero-bg { width: 100%; opacity: 0.2; }
-            .clients-marquee { padding: 24px 0; }
-            .big-number-card.highlight { grid-column: span 1; }
-            .market-big-numbers { grid-template-columns: 1fr; }
-            .why-grid, .journey-grid, .cases-grid, .testimonials-grid {
+            
+            .story-block { 
+                grid-template-columns: auto 1fr; 
+                gap: 16px;
+            }
+            .story-visual { display: none; }
+            .story-content h3 { font-size: 17px; }
+            .market-question { font-size: 18px; }
+            .market-numbers { flex-direction: column; gap: 16px; }
+            .num-divider { display: none; }
+            .num-item strong { font-size: 32px; }
+            
+            .why-grid { grid-template-columns: 1fr; }
+            .why-number { font-size: 36px; }
+            
+            .channel-header-row { flex-direction: column; align-items: flex-start; }
+            .channel-total { text-align: left; }
+            .channel-total-value { font-size: 36px; }
+            .channel-dashboard { grid-template-columns: 1fr 1fr; gap: 12px; }
+            .dashboard-value { font-size: 24px; }
+            .audience-evidence { grid-template-columns: 1fr; }
+            .audience-quality { padding: 20px; }
+            .country-table { grid-template-columns: 1fr; }
+            .creator-grid { grid-template-columns: repeat(3, 1fr); }
+            
+            /* Journey Infographic 모바일 */
+            .journey-timeline { 
+                flex-direction: column; 
+                gap: 32px;
+            }
+            .timeline-connector { 
+                transform: rotate(90deg);
+                width: 40px;
+                padding: 0;
+            }
+            .phase-name { font-size: 36px; }
+            .phase-touchpoints {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .result-box { padding: 24px; }
+            .result-main { font-size: 18px; }
+            
+            /* Differentiator 모바일 */
+            .differentiator { padding: 32px 20px; }
+            .diff-header h3 { font-size: 18px; }
+            .diff-content { grid-template-columns: 1fr; gap: 24px; }
+            .diff-keyword { font-size: 24px; }
+            .diff-block p { font-size: 13px; }
+            
+            .flow-steps { flex-direction: column; gap: 20px; }
+            .flow-divider { width: 2px; height: 20px; margin: 0 auto; }
+            
+            .comparison-header, .comparison-row { 
                 grid-template-columns: 1fr;
             }
-            .journey-grid::before, .journey-grid::after { display: none; }
-            .channel-grid { grid-template-columns: 1fr 1fr; }
-            .channels-header { flex-direction: column; align-items: flex-start; gap: 24px; }
-            .process-grid { grid-template-columns: 1fr; }
-            .process-step::after { display: none; }
-            .solution-items { grid-template-columns: 1fr; }
-            .creator-list { gap: 20px; }
-            .footer { flex-direction: column; gap: 12px; text-align: center; }
+            .comparison-col { display: block; }
+            .col-item { 
+                background: var(--bg-card); 
+                color: white;
+                font-size: 11px;
+            }
+            .comparison-row .col-item {
+                background: var(--gray-100);
+                color: var(--black);
+            }
+            .col-japankuru::before { content: "JAPANKURU: "; font-weight: 700; }
+            .col-other::before { content: "一般的な施策: "; }
+            
+            .cases-grid { grid-template-columns: 1fr; }
+            
+            .process-timeline { 
+                flex-direction: column; 
+                gap: 16px;
+                align-items: flex-start;
+            }
+            .process-timeline::before {
+                top: 0;
+                bottom: 0;
+                left: 24px;
+                width: 2px;
+                height: auto;
+            }
+            .process-step {
+                display: flex;
+                align-items: center;
+                gap: 16px;
+                text-align: left;
+            }
+            .process-step-number { margin: 0; flex-shrink: 0; }
+            .process-details { grid-template-columns: 1fr; }
+            
+            .footer { 
+                flex-direction: column; 
+                text-align: center;
+                padding: 20px;
+            }
         }
 
-        /* Animations */
+        @media (max-width: 480px) {
+            .creator-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Reveal Animation */
         .reveal {
             opacity: 0;
-            transform: translateY(24px);
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateY(16px);
+            transition: all 0.5s ease;
         }
         .reveal.visible {
             opacity: 1;
@@ -1290,10 +2338,31 @@
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="nav" id="nav">
-        <div class="nav-logo">JAPANKURU</div>
-        <a href="#contact" class="nav-cta">無料相談</a>
+    <nav class="nav">
+        <a href="#" class="nav-logo"><img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2025/02/JAPANKURU_RGB-1.png" alt="JAPANKURU" style="height: 24px; width: auto;"></a>
+        <div class="nav-menu">
+            <a href="#why" class="nav-link">選ばれる理由</a>
+            <a href="#channel" class="nav-link">チャンネル</a>
+            <a href="#journey" class="nav-link">仕組み</a>
+            <a href="#cases" class="nav-link">事例</a>
+            <a href="#process" class="nav-link">進め方</a>
+            <a href="#pricing" class="nav-link">料金</a>
+            <a href="#contact" class="nav-cta">無料相談</a>
+        </div>
+        <button class="nav-toggle" onclick="toggleMenu()">
+            <span></span><span></span><span></span>
+        </button>
     </nav>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="#why" onclick="toggleMenu()">選ばれる理由</a>
+        <a href="#channel" onclick="toggleMenu()">チャンネル</a>
+        <a href="#journey" onclick="toggleMenu()">仕組み</a>
+        <a href="#cases" onclick="toggleMenu()">事例</a>
+        <a href="#process" onclick="toggleMenu()">進め方</a>
+        <a href="#pricing" onclick="toggleMenu()">料金</a>
+        <a href="#contact" onclick="toggleMenu()">無料相談</a>
+    </div>
 
     <!-- Hero -->
     <section class="hero">
@@ -1301,372 +2370,696 @@
             <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/DSC_0064-1.jpg" alt="JAPANKURU">
         </div>
         <div class="hero-container">
-            <div class="hero-eyebrow">INBOUND PROMOTION</div>
-            <h1 class="hero-title">
-                外国人目線の<br>
-                多言語コンテンツで<br>
-                世界に届ける
-            </h1>
-            <p class="hero-desc">
-                JAPANKURUは、7カ国のネイティブクリエイターが
-                企画・取材・制作・配信まで一貫して行う
-                インバウンド専門のコンテンツソリューションです。
-            </p>
-            <a href="#contact" class="hero-cta">無料相談を予約 →</a>
-            <div class="hero-metrics">
-                <div>
-                    <div class="hero-metric-value">142<span>万+</span></div>
-                    <div class="hero-metric-label">総ユーザー</div>
+            <div class="hero-main">
+                <div class="hero-text">
+                    <div class="hero-eyebrow">INBOUND CONTENTS MARKETING</div>
+                    <h1 class="hero-title">
+                        <span class="title-line">外国人目線で、作る。</span>
+                        <span class="title-line"><span class="country-ruby"><span class="ruby-flags">🇰🇷🇹🇼🇹🇭🇨🇳🇺🇸🇮🇩🇻🇳</span>7カ国</span>に、届ける。</span>
+                        <span class="title-line">世界へ、広げる。</span>
+                    </h1>
+                    <p class="hero-desc">
+                        インバウンドに特化した<strong>多言語コンテンツメディア</strong>。<br>
+                        ネイティブクリエイターが企画から配信まで一貫対応。<br>
+                        海外メディア転載・SNSコミュニティで拡散します。
+                    </p>
+                    <a href="#contact" class="hero-cta">無料相談を予約</a>
+                    <div class="hero-metrics">
+                        <div>
+                            <div class="hero-metric-value">142<span>万+</span></div>
+                            <div class="hero-metric-label">総ユーザー</div>
+                        </div>
+                        <div>
+                            <div class="hero-metric-value">4,400<span>万</span></div>
+                            <div class="hero-metric-label">月間リーチ</div>
+                        </div>
+                        <div>
+                            <div class="hero-metric-value">12<span>年</span></div>
+                            <div class="hero-metric-label">運営実績</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Credentials -->
+                    <div class="hero-credentials">
+                        <div class="credentials-row">
+                            <span class="credentials-label">Award</span>
+                            <span class="credentials-items">Cannes Lions 4年連続出品 / 北関東インバウンド映像賞 / ITF台北 最優秀ブース賞</span>
+                        </div>
+                        <div class="credentials-row">
+                            <span class="credentials-label">Expo</span>
+                            <span class="credentials-items">ITF台北國際旅展 / KOMPAS Jakarta / J-POP SUMMIT SF / マーケティングWeek</span>
+                        </div>
+                        <div class="credentials-row">
+                            <span class="credentials-label">Partner</span>
+                            <span class="credentials-items">SANOOK Thailand / JR TIMES Taiwan / LINE TODAY / Yahoo奇摩</span>
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    <div class="hero-metric-value">4,400<span>万</span></div>
-                    <div class="hero-metric-label">月間リーチ</div>
-                </div>
-                <div>
-                    <div class="hero-metric-value">12<span>年</span></div>
-                    <div class="hero-metric-label">運営実績</div>
+                
+                <!-- Phone Mockup with Reels -->
+                <div class="hero-mockup">
+                    <div class="phone-frame">
+                        <div class="phone-notch"></div>
+                        <div class="phone-screen">
+                            <video autoplay muted loop playsinline class="reels-video" poster="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/DSC_0064-1.jpg">
+                                <source src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2025/09/1221_GLD03.m4v" type="video/mp4">
+                            </video>
+                            <div class="reels-overlay">
+                                <div class="reels-header">
+                                    <span class="reels-logo">japankuru</span>
+                                    <span class="reels-badge">Reels</span>
+                                </div>
+                                <div class="reels-actions">
+                                    <div class="reels-action">
+                                        <svg viewBox="0 0 24 24" fill="white" width="24" height="24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                                        <span>12.5K</span>
+                                    </div>
+                                    <div class="reels-action">
+                                        <svg viewBox="0 0 24 24" fill="white" width="24" height="24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+                                        <span>842</span>
+                                    </div>
+                                    <div class="reels-action">
+                                        <svg viewBox="0 0 24 24" fill="white" width="24" height="24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg>
+                                        <span>Share</span>
+                                    </div>
+                                </div>
+                                <div class="reels-caption">
+                                    <strong>japankuru</strong> 東京の隠れた名店を発見🍜 #japankuru #tokyo
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mockup-badge">実際の制作コンテンツ</div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Clients Marquee -->
+    <!-- Clients -->
     <div class="clients-marquee">
         <div class="clients-label">導入企業・団体</div>
         <div class="marquee-wrapper">
             <div class="marquee-track">
-                <!-- First set -->
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Seibu_logo.svg/200px-Seibu_logo.svg.png" alt="西武鉄道" class="client-logo">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Odakyu_logo.svg/200px-Odakyu_logo.svg.png" alt="小田急電鉄" class="client-logo">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/AEON_Mall_logo.svg/200px-AEON_Mall_logo.svg.png" alt="AEON MALL" class="client-logo">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Seibu_logo.svg/200px-Seibu_logo.svg.png" alt="西武" class="client-logo">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Odakyu_logo.svg/200px-Odakyu_logo.svg.png" alt="小田急" class="client-logo">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/JINS_logo.svg/200px-JINS_logo.svg.png" alt="JINS" class="client-logo">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Beams_logo.svg/200px-Beams_logo.svg.png" alt="BEAMS" class="client-logo">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Sanrio_logo.svg/200px-Sanrio_logo.svg.png" alt="Sanrio" class="client-logo">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Daiwa_House_logo.svg/200px-Daiwa_House_logo.svg.png" alt="Daiwa" class="client-logo">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/CANMAKE_logo.svg/200px-CANMAKE_logo.svg.png" alt="CANMAKE" class="client-logo">
-                <!-- Duplicate for seamless loop -->
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Seibu_logo.svg/200px-Seibu_logo.svg.png" alt="西武鉄道" class="client-logo">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Odakyu_logo.svg/200px-Odakyu_logo.svg.png" alt="小田急電鉄" class="client-logo">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/AEON_Mall_logo.svg/200px-AEON_Mall_logo.svg.png" alt="AEON MALL" class="client-logo">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Seibu_logo.svg/200px-Seibu_logo.svg.png" alt="西武" class="client-logo">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Odakyu_logo.svg/200px-Odakyu_logo.svg.png" alt="小田急" class="client-logo">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/JINS_logo.svg/200px-JINS_logo.svg.png" alt="JINS" class="client-logo">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Beams_logo.svg/200px-Beams_logo.svg.png" alt="BEAMS" class="client-logo">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Sanrio_logo.svg/200px-Sanrio_logo.svg.png" alt="Sanrio" class="client-logo">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Daiwa_House_logo.svg/200px-Daiwa_House_logo.svg.png" alt="Daiwa" class="client-logo">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/CANMAKE_logo.svg/200px-CANMAKE_logo.svg.png" alt="CANMAKE" class="client-logo">
             </div>
         </div>
     </div>
 
-    <!-- Market Opportunity -->
+    <!-- Market -->
     <section class="market-section">
         <div class="section-inner">
-            <div class="section-header reveal">
-                <div class="section-eyebrow">MARKET OPPORTUNITY</div>
-                <h2 class="section-title">過去最高を更新し続けるインバウンド市場</h2>
+            <div class="section-header center reveal">
+                <div class="section-eyebrow">WHY MULTILINGUAL</div>
+                <h2 class="section-title">なぜ多言語コンテンツが必要なのか</h2>
+                <p class="section-subtitle">翻訳の精度だけでは足りない。インフルエンサーの一過性でも届かない。<br>実際に体験した現地クリエイターの言葉だから、届く。</p>
             </div>
             
-            <div class="market-grid reveal">
-                <div>
-                    <div class="market-big-numbers">
-                        <div class="big-number-card highlight">
-                            <div class="big-number">3,687万人</div>
-                            <div class="big-number-label">2024年 訪日外国人旅行者数</div>
-                            <div class="big-number-source">過去最高・前年比+47.1%｜JNTO発表</div>
-                        </div>
-                        <div class="big-number-card">
-                            <div class="big-number">8.1兆円</div>
-                            <div class="big-number-label">訪日消費額（過去最高）</div>
-                        </div>
-                        <div class="big-number-card">
-                            <div class="big-number">6,000万人</div>
-                            <div class="big-number-label">2030年 政府目標</div>
-                        </div>
+            <div class="market-story reveal">
+                <div class="story-block">
+                    <div class="story-number">01</div>
+                    <div class="story-content">
+                        <h3>訪日外国人の<strong>80%</strong>は、旅行前に行き先を決めている</h3>
+                        <p>彼らは母国語で検索します。貴社の情報が日本語しかなければ、検索結果に表示されません。つまり、<strong>存在しないのと同じ</strong>です。</p>
+                        <span class="story-source">出典: 観光庁「訪日外国人消費動向調査」2024</span>
                     </div>
-                    
-                    <div class="market-why">
-                        <h3>💡 なぜ多言語コンテンツが必要なのか</h3>
-                        <div class="market-why-list">
-                            <div class="market-why-item">
-                                <div class="market-why-icon">1</div>
-                                <p><strong>情報収集の80%は旅マエに完了。</strong>SNSや動画で日本語以外の情報を検索しても、貴社の情報は見つかりますか？</p>
+                    <div class="story-visual">
+                        <div class="donut-chart">
+                            <svg viewBox="0 0 100 100">
+                                <circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="12"/>
+                                <circle cx="50" cy="50" r="40" fill="none" stroke="#1e40af" stroke-width="12" stroke-dasharray="201 251" stroke-linecap="round" transform="rotate(-90 50 50)"/>
+                            </svg>
+                            <div class="donut-label">80%</div>
+                        </div>
+                        <span class="visual-caption">旅マエで決定</span>
+                    </div>
+                </div>
+                
+                <div class="story-block">
+                    <div class="story-number">02</div>
+                    <div class="story-content">
+                        <h3>情報収集の<strong>1位はSNS</strong>、動画も<strong>21%</strong>が活用</h3>
+                        <p>Webサイトだけでは届きません。Instagram、YouTube、Facebook、TikTok ー <strong>彼らがいる場所</strong>に、彼らの言葉で存在する必要があります。</p>
+                        <span class="story-source">出典: JNTO「訪日旅行データハンドブック」2024</span>
+                    </div>
+                    <div class="story-visual">
+                        <div class="bar-chart">
+                            <div class="bar-item">
+                                <span class="bar-label">SNS</span>
+                                <div class="bar-track"><div class="bar-fill" style="width: 100%;"></div></div>
+                                <span class="bar-value">1位</span>
                             </div>
-                            <div class="market-why-item">
-                                <div class="market-why-icon">2</div>
-                                <p><strong>自動翻訳では伝わらない。</strong>文化的背景や微妙なニュアンス、ネイティブにしか分からない「刺さる」表現があります。</p>
+                            <div class="bar-item">
+                                <span class="bar-label">動画</span>
+                                <div class="bar-track"><div class="bar-fill" style="width: 65%;"></div></div>
+                                <span class="bar-value">21%</span>
                             </div>
-                            <div class="market-why-item">
-                                <div class="market-why-icon">3</div>
-                                <p><strong>「検索されない＝存在しない」時代。</strong>多言語でのSEO対策なしでは、どんな良いサービスも選ばれません。</p>
+                            <div class="bar-item">
+                                <span class="bar-label">ブログ</span>
+                                <div class="bar-track"><div class="bar-fill" style="width: 50%;"></div></div>
+                                <span class="bar-value">16%</span>
                             </div>
                         </div>
                     </div>
                 </div>
                 
-                <div class="market-data-cards">
-                    <div class="data-card">
-                        <div class="data-card-icon">📱</div>
-                        <div class="data-card-content">
-                            <div class="data-card-value">SNS 1位</div>
-                            <div class="data-card-label">訪日旅行の情報収集で最も参考にしたもの</div>
+                <div class="story-block">
+                    <div class="story-number">03</div>
+                    <div class="story-content">
+                        <h3>自動翻訳では、<strong>魅力が伝わらない</strong></h3>
+                        <p>「おもてなし」を "hospitality" と訳しても、本当の意味は伝わりません。<strong>その国の人が「行きたい」と思う言葉</strong>は、その国の人にしか書けません。</p>
+                        <span class="story-source">出典: JTB総研「インバウンド旅行者の情報接触実態」2024</span>
+                    </div>
+                    <div class="story-visual">
+                        <div class="compare-visual">
+                            <div class="compare-item bad">
+                                <span class="compare-icon">🤖</span>
+                                <span class="compare-text">自動翻訳</span>
+                            </div>
+                            <div class="compare-arrow">→</div>
+                            <div class="compare-item good">
+                                <span class="compare-icon">✍️</span>
+                                <span class="compare-text">ネイティブ</span>
+                            </div>
                         </div>
                     </div>
-                    <div class="data-card">
-                        <div class="data-card-icon">🎬</div>
-                        <div class="data-card-content">
-                            <div class="data-card-value">21.4%</div>
-                            <div class="data-card-label">動画サイトで情報収集</div>
-                        </div>
-                        <div class="data-card-bar"><div class="data-card-bar-fill" style="width: 85%;"></div></div>
-                    </div>
-                    <div class="data-card">
-                        <div class="data-card-icon">🇰🇷</div>
-                        <div class="data-card-content">
-                            <div class="data-card-value">93.4%</div>
-                            <div class="data-card-label">韓国のSNS利用率</div>
-                        </div>
-                        <div class="data-card-bar"><div class="data-card-bar-fill" style="width: 93%;"></div></div>
-                    </div>
-                    <div class="data-card">
-                        <div class="data-card-icon">🔄</div>
-                        <div class="data-card-content">
-                            <div class="data-card-value">77.4%</div>
-                            <div class="data-card-label">台湾人「1年以内に再訪したい」</div>
-                        </div>
-                        <div class="data-card-bar"><div class="data-card-bar-fill" style="width: 77%;"></div></div>
-                    </div>
-                    <div class="data-card">
-                        <div class="data-card-icon">🛍️</div>
-                        <div class="data-card-content">
-                            <div class="data-card-value">88.8%</div>
-                            <div class="data-card-label">帰国後も日本商品を購入</div>
-                        </div>
-                        <div class="data-card-bar"><div class="data-card-bar-fill" style="width: 88%;"></div></div>
-                    </div>
-                    <p style="font-size: 10px; color: rgba(255,255,255,0.3); margin-top: 8px;">出典: JNTO, 観光庁, JTB総合研究所, DataReportal 2024</p>
                 </div>
+            </div>
+            
+            <div class="market-bottom-text reveal">
+                <p class="market-question">この巨大市場に、多言語で挑まない理由はありますか？</p>
+                <p class="market-numbers">
+                    <span class="num-item"><strong>3,687</strong>万人<span class="num-note">2024年訪日外国人・過去最高</span></span>
+                    <span class="num-divider">／</span>
+                    <span class="num-item"><strong>8.1</strong>兆円<span class="num-note">訪日消費額・過去最高</span></span>
+                    <span class="num-divider">／</span>
+                    <span class="num-item"><strong>6,000</strong>万人<span class="num-note">2030年政府目標</span></span>
+                </p>
+                <p class="market-source">出典: JNTO, 観光庁 2024</p>
             </div>
         </div>
     </section>
 
-    <!-- Why JAPANKURU -->
-    <section class="why-section">
+    <!-- Portfolio Marquee -->
+    <section class="portfolio-marquee-section">
+        <div class="marquee-wrapper">
+            <div class="marquee-track">
+                <div class="marquee-content">
+                    <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/JINS_Kyoto_CC33-800x533-1.webp" alt="Portfolio 1">
+                    <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/Img_Layout03-1-800x450-1.webp" alt="Portfolio 2">
+                    <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/Sunflower_CC13-1-1-800x533-1.webp" alt="Portfolio 3">
+                    <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/DSC_0064-1.jpg" alt="Portfolio 4">
+                    <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/DSC01179-のコピー-scaled.jpg" alt="Portfolio 5">
+                    <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/D4S_3004.jpg" alt="Portfolio 6">
+                    <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/MakingPhoto_CC02_0-scaled.jpg" alt="Portfolio 7">
+                    <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/MakingPhoto_CC01_0-scaled-e1722583606753.jpg" alt="Portfolio 8">
+                </div>
+                <div class="marquee-content">
+                    <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/JINS_Kyoto_CC33-800x533-1.webp" alt="Portfolio 1">
+                    <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/Img_Layout03-1-800x450-1.webp" alt="Portfolio 2">
+                    <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/Sunflower_CC13-1-1-800x533-1.webp" alt="Portfolio 3">
+                    <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/DSC_0064-1.jpg" alt="Portfolio 4">
+                    <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/DSC01179-のコピー-scaled.jpg" alt="Portfolio 5">
+                    <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2023/06/60258588_2141550295893723_7403342008376360960_n.jpeg" alt="Portfolio 6">
+                    <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/D05_2614.jpg" alt="Portfolio 7">
+                    <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2023/06/69166496_2319739331408151_3163022712314527744_n.jpeg" alt="Portfolio 8">
+                </div>
+            </div>
+        </div>
+        <div class="marquee-label">
+            <span>PORTFOLIO</span>
+        </div>
+    </section>
+
+    <!-- Why -->
+    <section class="why-section" id="why">
         <div class="section-inner">
             <div class="section-header center reveal">
                 <div class="section-eyebrow">WHY JAPANKURU</div>
-                <h2 class="section-title">選ばれる6つの理由</h2>
+                <h2 class="section-title">選ばれる理由</h2>
+                <p class="section-desc">外国人クリエイターが直接体験し、企画から制作・配信・拡散まで一貫対応。<br>自社メディア × SNS × 海外メディアの複合配信で、1つのコンテンツを最大化します。</p>
             </div>
             
             <div class="why-grid reveal">
                 <div class="why-card">
-                    <div class="why-icon">🌏</div>
                     <div class="why-number">01</div>
-                    <div class="why-keyword">ネイティブ目線</div>
-                    <h3>外国人クリエイターによる制作</h3>
-                    <p>日本在住5〜20年の外国籍クリエイターが制作。翻訳ではなく「伝わる」表現で、ターゲットの心に響くコンテンツを。</p>
+                    <h3><span class="why-highlight">外国人クリエイター</span>による制作</h3>
+                    <p>日本在住5〜20年の外国籍クリエイターが制作。翻訳ではなく「伝わる」表現で、心に響くコンテンツを。</p>
                 </div>
                 <div class="why-card">
-                    <div class="why-icon">🎬</div>
                     <div class="why-number">02</div>
-                    <div class="why-keyword">高品質制作</div>
-                    <h3>ワンストップで全て対応</h3>
-                    <p>企画・取材・撮影・編集・翻訳まで一貫対応。写真・動画・テキストすべてプロクオリティで、二次活用も可能。</p>
+                    <h3><span class="why-highlight">ワンストップ</span>で全て対応</h3>
+                    <p>企画・取材・撮影・編集・翻訳まで一貫対応。写真・動画・テキストすべてプロクオリティ。</p>
                 </div>
                 <div class="why-card">
-                    <div class="why-icon">🏆</div>
                     <div class="why-number">03</div>
-                    <div class="why-keyword">12年の実績</div>
-                    <h3>インバウンド黎明期からの信頼</h3>
-                    <p>2012年から一貫してインバウンドに特化。政府機関から個人店舗まで、多様なクライアントとの実績。</p>
+                    <h3><span class="why-highlight">12年</span>の専門実績</h3>
+                    <p>2012年から一貫してインバウンドに特化。政府機関から個人店舗まで多様な実績。</p>
                 </div>
                 <div class="why-card">
-                    <div class="why-icon">📢</div>
                     <div class="why-number">04</div>
-                    <div class="why-keyword">142万ユーザー</div>
-                    <h3>自社メディアで即時配信</h3>
-                    <p>国別SNSチャンネルから即座に配信。広告費ゼロでも継続的にリーチし続ける資産になります。</p>
+                    <h3><span class="why-highlight">142万ユーザー</span>へ即時配信</h3>
+                    <p>国別SNSチャンネルから即座に配信。広告費ゼロでも継続的にリーチし続ける資産に。</p>
                 </div>
                 <div class="why-card">
-                    <div class="why-icon">🔗</div>
                     <div class="why-number">05</div>
-                    <div class="why-keyword">拡散システム</div>
-                    <h3>海外メディア転載・連携</h3>
-                    <p>保有チャネルに加え、海外メディアへの転載で露出を最大化。コミュニティを通じた自然な拡散も。</p>
+                    <h3>海外メディア<span class="why-highlight">転載・連携</span></h3>
+                    <p>Yahoo奇摩・LINE TODAY・HYPERJAPANなど海外メディアへの転載で露出を最大化。</p>
                 </div>
                 <div class="why-card">
-                    <div class="why-icon">♻️</div>
                     <div class="why-number">06</div>
-                    <div class="why-keyword">素材活用</div>
-                    <h3>多様な用途で使い倒せる</h3>
-                    <p>制作した素材は自社HP、SNS、パンフレット、海外営業ツールなど、あらゆる場面で活用可能。</p>
+                    <h3>素材を<span class="why-highlight">多用途</span>で活用</h3>
+                    <p>制作した素材は自社HP、SNS、パンフレット等あらゆる場面で活用可能。</p>
+                </div>
+                <div class="why-card">
+                    <div class="why-number">07</div>
+                    <h3><span class="why-highlight">SNSコミュニティ</span>で自然拡散</h3>
+                    <p>「日本好き」が集まるFacebookグループに直接投稿。口コミで数百万人へ波及。</p>
+                </div>
+                <div class="why-card">
+                    <div class="why-number">08</div>
+                    <h3><span class="why-highlight">縦型動画</span>にも柔軟対応</h3>
+                    <p>Instagram Reels・TikTok・YouTube Shortsなど、トレンドに合わせた動画制作が可能。</p>
+                </div>
+                <div class="why-card">
+                    <div class="why-number">09</div>
+                    <h3><span class="why-highlight">KPIベース</span>で成果を可視化</h3>
+                    <p>PV・リーチ・クーポン使用数など、数値で効果を報告。費用対効果が明確に。</p>
+                </div>
+            </div>
+            
+            <!-- 差別化ポイント (타이포그래피 스타일) -->
+            <div class="differentiator reveal">
+                <div class="diff-header">
+                    <p class="diff-lead">他社では実現しにくい</p>
+                    <h3>「制作 × 発信 × 多言語 × 海外メディア」<br>一体型の強み</h3>
+                </div>
+                
+                <div class="diff-content">
+                    <div class="diff-block">
+                        <div class="diff-keyword">視点</div>
+                        <p>日本人編集部の「情報編集」ではなく、<br><strong>外国人クリエイターによる「体験・共感」</strong>で伝える</p>
+                    </div>
+                    
+                    <div class="diff-block">
+                        <div class="diff-keyword">拡散力</div>
+                        <p>自社SNS投稿だけで終わらない。<br><strong>記事 + SNS + 海外メディア + FBコミュニティ</strong>の複合配信</p>
+                    </div>
+                    
+                    <div class="diff-block">
+                        <div class="diff-keyword">転載先</div>
+                        <p>自社メディアだけでは届かない層へ。<br><strong>Yahoo奇摩・LINE TODAY・HYPERJAPAN</strong>など実績多数</p>
+                    </div>
+                    
+                    <div class="diff-block">
+                        <div class="diff-keyword">成果報告</div>
+                        <p>「何人に届いたか分からない」では終わらせない。<br><strong>PV・リーチ・クーポン使用数</strong>をKPIベースで報告</p>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
-
-    <!-- Channels with Real Platform Links -->
-    <section class="channels-section">
+    <section class="channel-section" id="channel">
         <div class="section-inner">
-            <div class="channels-header reveal">
+            <div class="channel-header-row reveal">
                 <div>
                     <div class="section-eyebrow">GLOBAL CHANNELS</div>
                     <h2 class="section-title">国別専用チャンネル</h2>
                     <p class="section-desc">各国のネイティブチームが、現地で使われるプラットフォームに最適化して配信</p>
                 </div>
-                <div class="channels-total">
-                    <div class="channels-total-value">142万+</div>
-                    <div class="channels-total-label">総フォロワー</div>
+                <div class="channel-total">
+                    <div class="channel-total-value">142万+</div>
+                    <div class="channel-total-label">総フォロワー</div>
                 </div>
             </div>
             
-            <div class="channel-grid reveal">
-                <!-- Korea -->
-                <div class="channel-card">
-                    <div class="channel-header">
-                        <span class="channel-country">韓国</span>
-                        <span class="channel-flag">🇰🇷</span>
+            <!-- Total Stats Dashboard -->
+            <div class="dashboard-wrapper reveal">
+                <div class="dashboard-note">2025年11月時点</div>
+                <div class="channel-dashboard">
+                    <div class="dashboard-card">
+                        <div class="dashboard-icon">
+                            <svg viewBox="0 0 24 24" fill="#666"><circle cx="12" cy="12" r="10"/><text x="12" y="16" text-anchor="middle" fill="white" font-size="10" font-weight="bold">W</text></svg>
+                        </div>
+                        <div class="dashboard-value">400万</div>
+                        <div class="dashboard-label">PV / 月</div>
+                        <div class="dashboard-desc">JAPANKURU.com</div>
                     </div>
-                    <div class="channel-value">10万+</div>
-                    <div class="channel-label">subscribers</div>
-                    <div class="platform-links">
-                        <a href="https://blog.naver.com/japankuru" target="_blank" class="platform-link">
-                            <svg class="platform-logo" viewBox="0 0 24 24" fill="#03C75A"><path d="M16.273 12.845L7.376 0H0v24h7.727V11.155L16.624 24H24V0h-7.727z"/></svg>
-                            <span>Naver Blog</span>
-                            <span class="arrow">→</span>
-                        </a>
-                        <a href="https://www.instagram.com/japankuru_korean" target="_blank" class="platform-link">
-                            <svg class="platform-logo" viewBox="0 0 24 24" fill="#E4405F"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
-                            <span>Instagram</span>
-                            <span class="arrow">→</span>
-                        </a>
+                    <div class="dashboard-card">
+                        <div class="dashboard-icon">
+                            <svg viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                        </div>
+                        <div class="dashboard-value">97万</div>
+                        <div class="dashboard-label">Likes</div>
+                        <div class="dashboard-desc">Global・Taiwan・Thailand・Korea</div>
                     </div>
-                </div>
-                
-                <!-- Taiwan -->
-                <div class="channel-card">
-                    <div class="channel-header">
-                        <span class="channel-country">台湾</span>
-                        <span class="channel-flag">🇹🇼</span>
+                    <div class="dashboard-card">
+                        <div class="dashboard-icon">
+                            <svg viewBox="0 0 24 24" fill="#E4405F"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0z"/></svg>
+                        </div>
+                        <div class="dashboard-value">2.1万</div>
+                        <div class="dashboard-label">Followers</div>
+                        <div class="dashboard-desc">Global・English・Chinese・Korean</div>
                     </div>
-                    <div class="channel-value">35万+</div>
-                    <div class="channel-label">followers</div>
-                    <div class="platform-links">
-                        <a href="https://www.facebook.com/japankurutw" target="_blank" class="platform-link">
-                            <svg class="platform-logo" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-                            <span>Facebook</span>
-                            <span class="arrow">→</span>
-                        </a>
-                        <a href="https://page.line.me/japankuru" target="_blank" class="platform-link">
-                            <svg class="platform-logo" viewBox="0 0 24 24" fill="#00B900"><path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>
-                            <span>LINE</span>
-                            <span class="arrow">→</span>
-                        </a>
+                    <div class="dashboard-card">
+                        <div class="dashboard-icon">
+                            <svg viewBox="0 0 24 24" fill="#1e40af"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                        </div>
+                        <div class="dashboard-value">4,400万</div>
+                        <div class="dashboard-label">Reach</div>
+                        <div class="dashboard-desc">全チャンネル月間リーチ</div>
                     </div>
-                </div>
-                
-                <!-- Thailand -->
-                <div class="channel-card">
-                    <div class="channel-header">
-                        <span class="channel-country">タイ</span>
-                        <span class="channel-flag">🇹🇭</span>
-                    </div>
-                    <div class="channel-value">28万+</div>
-                    <div class="channel-label">followers</div>
-                    <div class="platform-links">
-                        <a href="https://www.facebook.com/japankuruth" target="_blank" class="platform-link">
-                            <svg class="platform-logo" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-                            <span>Facebook</span>
-                            <span class="arrow">→</span>
-                        </a>
-                        <a href="https://www.tiktok.com/@japankuru_th" target="_blank" class="platform-link">
-                            <svg class="platform-logo" viewBox="0 0 24 24" fill="#fff"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
-                            <span>TikTok</span>
-                            <span class="arrow">→</span>
-                        </a>
-                    </div>
-                </div>
-                
-                <!-- China -->
-                <div class="channel-card">
-                    <div class="channel-header">
-                        <span class="channel-country">中国</span>
-                        <span class="channel-flag">🇨🇳</span>
-                    </div>
-                    <div class="channel-value">15万+</div>
-                    <div class="channel-label">followers</div>
-                    <div class="platform-links">
-                        <a href="https://weibo.com/japankuru" target="_blank" class="platform-link">
-                            <svg class="platform-logo" viewBox="0 0 24 24" fill="#E6162D"><path d="M10.098 20.323c-3.977.391-7.414-1.406-7.672-4.02-.259-2.609 2.759-5.047 6.74-5.441 3.979-.394 7.413 1.404 7.671 4.018.259 2.6-2.759 5.049-6.739 5.443zM9.05 17.219c-.384.616-1.208.884-1.829.602-.612-.279-.793-.991-.406-1.593.379-.595 1.176-.861 1.793-.601.622.263.82.972.442 1.592zm1.27-1.627c-.141.237-.449.353-.689.253-.236-.09-.313-.361-.177-.586.138-.227.436-.346.672-.24.239.09.315.36.194.573zm.176-2.719c-1.893-.494-4.039.45-4.857 2.118-.836 1.704-.026 3.591 1.886 4.21 1.983.64 4.318-.341 5.132-2.179.8-1.793-.201-3.642-2.161-4.149zm10.098-2.252c-.201-.645-.814-1.093-1.442-1.107-.115-.003-.23.005-.344.021-.115.015-.228.039-.338.069l.053-.013c.168-.042.303-.076.303-.076l-.053.013c-.115.03-.228.054-.338.069a2.099 2.099 0 01-.344.021 1.614 1.614 0 01-1.442-1.107c-.201-.645.159-1.333.805-1.534l.053-.013c.168-.042.303-.076.303-.076-.201-.645-.814-1.093-1.442-1.107-.115-.003-.23.005-.344.021-.115.015-.228.039-.338.069l.053-.013a.888.888 0 00-.053.013 2.099 2.099 0 01-.344.021c-.628-.014-1.241-.462-1.442-1.107-.201-.645.159-1.333.805-1.534.168-.042.303-.076.303-.076-.201-.645-.814-1.093-1.442-1.107-.115-.003-.23.005-.344.021a2.21 2.21 0 01-.338.069c-.053.012-.053.012-.053.012.646-.201 1.094-.814 1.107-1.442.014-.628-.462-1.241-1.107-1.442-.645-.201-1.333.159-1.534.805-.042.168-.076.303-.076.303"/></svg>
-                            <span>Weibo</span>
-                            <span class="arrow">→</span>
-                        </a>
-                        <a href="https://www.xiaohongshu.com/user/profile/japankuru" target="_blank" class="platform-link">
-                            <svg class="platform-logo" viewBox="0 0 24 24" fill="#FF2442"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h-2v-6h2v6zm4 0h-2v-6h2v6zm0-8h-6V7h6v2z"/></svg>
-                            <span>小紅書 (RED)</span>
-                            <span class="arrow">→</span>
-                        </a>
-                    </div>
-                </div>
-                
-                <!-- English -->
-                <div class="channel-card">
-                    <div class="channel-header">
-                        <span class="channel-country">英語圏</span>
-                        <span class="channel-flag">🇺🇸</span>
-                    </div>
-                    <div class="channel-value">20万+</div>
-                    <div class="channel-label">users</div>
-                    <div class="platform-links">
-                        <a href="https://japankuru.com" target="_blank" class="platform-link">
-                            <svg class="platform-logo" viewBox="0 0 24 24" fill="#fff"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
-                            <span>JAPANKURU.com</span>
-                            <span class="arrow">→</span>
-                        </a>
-                        <a href="https://www.instagram.com/japankuru" target="_blank" class="platform-link">
-                            <svg class="platform-logo" viewBox="0 0 24 24" fill="#E4405F"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
-                            <span>Instagram</span>
-                            <span class="arrow">→</span>
-                        </a>
+                    <div class="dashboard-card">
+                        <div class="dashboard-icon">
+                            <svg viewBox="0 0 24 24" fill="#1e40af"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                        </div>
+                        <div class="dashboard-value">142万</div>
+                        <div class="dashboard-label">Users</div>
+                        <div class="dashboard-desc">全SNS・Blog・Websiteユーザー</div>
                     </div>
                 </div>
             </div>
             
-            <!-- Creator Bar -->
-            <div class="creator-bar reveal">
-                <div class="creator-bar-label">NATIVE CREATORS</div>
-                <div class="creator-list">
-                    <div class="creator-item">
+            <!-- Country Channels (테이블 형식) -->
+            <div class="country-table reveal">
+                <!-- 韓国 -->
+                <div class="country-row">
+                    <div class="country-info">
+                        <span class="country-flag">KR</span>
+                        <div class="country-meta">
+                            <span class="country-name">韓国</span>
+                            <span class="country-stat">Naver Blog 11,000名</span>
+                        </div>
+                    </div>
+                    <div class="country-channels">
+                        <a href="https://japankuru.com/ko" target="_blank" class="channel-chip">
+                            <svg viewBox="0 0 24 24" fill="#666"><circle cx="12" cy="12" r="10"/></svg>
+                            JAPANKURU.com
+                        </a>
+                        <a href="https://blog.naver.com/japankuru" target="_blank" class="channel-chip">
+                            <svg viewBox="0 0 24 24" fill="#03C75A"><path d="M16.273 12.845L7.376 0H0v24h7.727V11.155L16.624 24H24V0h-7.727z"/></svg>
+                            Naver Blog
+                        </a>
+                        <a href="https://in.naver.com/japankuru" target="_blank" class="channel-chip">
+                            <svg viewBox="0 0 24 24" fill="#03C75A"><path d="M16.273 12.845L7.376 0H0v24h7.727V11.155L16.624 24H24V0h-7.727z"/></svg>
+                            Influencer
+                        </a>
+                        <a href="https://www.instagram.com/japankuru_korean" target="_blank" class="channel-chip">
+                            <svg viewBox="0 0 24 24" fill="#E4405F"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0z"/></svg>
+                            Instagram
+                        </a>
+                        <a href="https://www.youtube.com/@%EC%9E%AC%ED%8C%AC%EC%BF%A0%EB%A3%A8%EC%BD%94%EB%A6%AC%EC%95%84" target="_blank" class="channel-chip">
+                            <svg viewBox="0 0 24 24" fill="#FF0000"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814z"/></svg>
+                            YouTube
+                        </a>
+                        <a href="https://www.tiktok.com/@japankuru_kr" target="_blank" class="channel-chip">
+                            <svg viewBox="0 0 24 24" fill="#fff"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+                            TikTok
+                        </a>
+                        <a href="https://www.threads.net/@japankuru_kr" target="_blank" class="channel-chip">
+                            <svg viewBox="0 0 24 24" fill="#fff"><path d="M12.186 24h-.007c-3.581-.024-6.334-1.205-8.184-3.509C2.35 18.44 1.5 15.586 1.472 12.01v-.017c.03-3.579.879-6.43 2.525-8.482C5.845 1.205 8.6.024 12.18 0h.014c2.746.02 5.043.725 6.826 2.098 1.677 1.29 2.858 3.13 3.509 5.467l-2.04.569c-1.104-3.96-3.898-5.984-8.304-6.015-2.91.022-5.11.936-6.54 2.717C4.307 6.504 3.616 8.914 3.589 12c.027 3.086.718 5.496 2.057 7.164 1.43 1.783 3.631 2.698 6.54 2.717 2.623-.02 4.358-.631 5.8-2.045 1.647-1.613 1.618-3.593 1.09-4.798-.31-.71-.873-1.3-1.634-1.75-.192 1.352-.622 2.446-1.284 3.272-.886 1.102-2.14 1.704-3.73 1.79-1.202.065-2.361-.218-3.259-.801-1.063-.689-1.685-1.74-1.752-2.96-.065-1.182.408-2.256 1.33-3.022.88-.73 2.108-1.152 3.457-1.187 1.357-.035 2.527.16 3.503.506l.082-.168c.143-.304.167-.479.167-.818-.056-1.703-1.186-2.628-3.263-2.673-1.128.02-2.06.283-2.768.78l-1.103-1.69c1.084-.74 2.538-1.136 4.163-1.136h.142c1.49.03 2.727.472 3.678 1.315.99.878 1.538 2.163 1.584 3.716.02.542-.08 1.149-.295 1.803 1.326.741 2.338 1.833 2.907 3.168.69 1.62.758 4.212-1.312 6.238-1.8 1.763-4.07 2.616-7.318 2.644z"/></svg>
+                            Threads
+                        </a>
+                        <a href="https://pin.it/1HKGFLjHs" target="_blank" class="channel-chip">
+                            <svg viewBox="0 0 24 24" fill="#E60023"><path d="M12 0C5.373 0 0 5.372 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 01.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12 0-6.628-5.373-12-12-12z"/></svg>
+                            Pinterest
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- 台湾 -->
+                <div class="country-row">
+                    <div class="country-info">
+                        <span class="country-flag">TW</span>
+                        <div class="country-meta">
+                            <span class="country-name">台湾</span>
+                            <span class="country-stat">FB 35万+ フォロワー</span>
+                        </div>
+                    </div>
+                    <div class="country-channels">
+                        <a href="https://japankuru.com/tc" target="_blank" class="channel-chip">
+                            <svg viewBox="0 0 24 24" fill="#666"><circle cx="12" cy="12" r="10"/></svg>
+                            JAPANKURU.com
+                        </a>
+                        <a href="https://www.facebook.com/japankurutw" target="_blank" class="channel-chip">
+                            <svg viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                            Facebook
+                        </a>
+                        <a href="https://www.instagram.com/japankuru_tw" target="_blank" class="channel-chip">
+                            <svg viewBox="0 0 24 24" fill="#E4405F"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0z"/></svg>
+                            Instagram
+                        </a>
+                        <a href="https://page.line.me/japankuru" target="_blank" class="channel-chip">
+                            <svg viewBox="0 0 24 24" fill="#00B900"><circle cx="12" cy="12" r="10"/></svg>
+                            LINE
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- タイ -->
+                <div class="country-row">
+                    <div class="country-info">
+                        <span class="country-flag">TH</span>
+                        <div class="country-meta">
+                            <span class="country-name">タイ</span>
+                            <span class="country-stat">FB 28万+ フォロワー</span>
+                        </div>
+                    </div>
+                    <div class="country-channels">
+                        <a href="https://japankuru.com/th" target="_blank" class="channel-chip">
+                            <svg viewBox="0 0 24 24" fill="#666"><circle cx="12" cy="12" r="10"/></svg>
+                            JAPANKURU.com
+                        </a>
+                        <a href="https://www.facebook.com/japankuruth" target="_blank" class="channel-chip">
+                            <svg viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                            Facebook
+                        </a>
+                        <a href="https://www.instagram.com/japankuru_th" target="_blank" class="channel-chip">
+                            <svg viewBox="0 0 24 24" fill="#E4405F"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0z"/></svg>
+                            Instagram
+                        </a>
+                        <a href="https://www.tiktok.com/@japankuru_th" target="_blank" class="channel-chip">
+                            <svg viewBox="0 0 24 24" fill="#fff"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+                            TikTok
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- 中国 -->
+                <div class="country-row">
+                    <div class="country-info">
+                        <span class="country-flag">CN</span>
+                        <div class="country-meta">
+                            <span class="country-name">中国</span>
+                            <span class="country-stat">Weibo 15万+ フォロワー</span>
+                        </div>
+                    </div>
+                    <div class="country-channels">
+                        <a href="https://japankuru.com/sc" target="_blank" class="channel-chip">
+                            <svg viewBox="0 0 24 24" fill="#666"><circle cx="12" cy="12" r="10"/></svg>
+                            JAPANKURU.com
+                        </a>
+                        <a href="https://weibo.com/japankuru" target="_blank" class="channel-chip">
+                            <svg viewBox="0 0 24 24" fill="#E6162D"><circle cx="12" cy="12" r="10"/></svg>
+                            Weibo
+                        </a>
+                        <a href="#" class="channel-chip">
+                            <svg viewBox="0 0 24 24" fill="#07C160"><circle cx="12" cy="12" r="10"/></svg>
+                            WeChat
+                        </a>
+                        <a href="#" class="channel-chip">
+                            <svg viewBox="0 0 24 24" fill="#FF2442"><circle cx="12" cy="12" r="10"/></svg>
+                            小紅書 RED
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- 英語圏 -->
+                <div class="country-row">
+                    <div class="country-info">
+                        <span class="country-flag">EN</span>
+                        <div class="country-meta">
+                            <span class="country-name">英語圏</span>
+                            <span class="country-stat">FB 64万+ フォロワー</span>
+                        </div>
+                    </div>
+                    <div class="country-channels">
+                        <a href="https://japankuru.com" target="_blank" class="channel-chip">
+                            <svg viewBox="0 0 24 24" fill="#666"><circle cx="12" cy="12" r="10"/></svg>
+                            JAPANKURU.com
+                        </a>
+                        <a href="https://www.facebook.com/Japankuru" target="_blank" class="channel-chip">
+                            <svg viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                            Facebook
+                        </a>
+                        <a href="https://www.instagram.com/japankuru" target="_blank" class="channel-chip">
+                            <svg viewBox="0 0 24 24" fill="#E4405F"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0z"/></svg>
+                            Instagram
+                        </a>
+                        <a href="https://www.pinterest.com/japankuru" target="_blank" class="channel-chip">
+                            <svg viewBox="0 0 24 24" fill="#E60023"><path d="M12 0C5.373 0 0 5.372 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 01.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12 0-6.628-5.373-12-12-12z"/></svg>
+                            Pinterest
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- 拡張対応 (영어권 옆) -->
+                <div class="country-row expansion-row">
+                    <div class="country-info">
+                        <span class="expansion-badge">+3</span>
+                        <div class="country-meta">
+                            <span class="country-name">拡張対応</span>
+                            <span class="country-stat">リクエストに応じて対応</span>
+                        </div>
+                    </div>
+                    <div class="expansion-flags">
+                        <div class="expansion-item">
+                            <span class="exp-code">ID</span>
+                            <span>Indonesia</span>
+                            <span class="expansion-channel">IG</span>
+                        </div>
+                        <div class="expansion-item">
+                            <span class="exp-code">VN</span>
+                            <span>Vietnam</span>
+                        </div>
+                        <div class="expansion-item">
+                            <span class="exp-code">FR</span>
+                            <span>France</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Audience Quality -->
+            <div class="audience-quality reveal">
+                <div class="audience-header">
+                    <h3>広告で買ったフォロワーではありません</h3>
+                    <p>12年間、地道に築いてきた「本当に日本に興味がある人々」のコミュニティです</p>
+                </div>
+                <div class="audience-evidence">
+                    <div class="evidence-card">
+                        <div class="evidence-image">
+                            <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/DSC_0064-1.jpg" alt="海外旅行博">
+                        </div>
+                        <div class="evidence-content">
+                            <h4>海外旅行博で直接獲得</h4>
+                            <p>韓国・台湾・タイなど各国の旅行博に毎年出展。ブースを訪れた「日本に行きたい」人々が直接フォロー。</p>
+                            <div class="evidence-tag">毎年10万人以上が来場</div>
+                        </div>
+                    </div>
+                    <div class="evidence-card">
+                        <div class="evidence-image">
+                            <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/Img_Layout03-1-800x450-1.webp" alt="大学日本語学科">
+                        </div>
+                        <div class="evidence-content">
+                            <h4>大学の日本語学科へアプローチ</h4>
+                            <p>韓国・台湾・タイの大学で日本語を学ぶ学生たちに直接リーチ。将来の訪日旅行者・在留外国人予備軍。</p>
+                            <div class="evidence-tag">日本文化への関心が高い層</div>
+                        </div>
+                    </div>
+                    <div class="evidence-card">
+                        <div class="evidence-image">
+                            <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/JINS_Kyoto_CC33-800x533-1.webp" alt="在留外国人">
+                        </div>
+                        <div class="evidence-content">
+                            <h4>日本在住の外国人フォロワー</h4>
+                            <p>日本で暮らす外国人が母国語で情報を得るためにフォロー。彼らが母国の友人・家族に日本の情報を拡散。</p>
+                            <div class="evidence-tag">在留外国人340万人の情報源</div>
+                        </div>
+                    </div>
+                    <div class="evidence-card">
+                        <div class="evidence-image">
+                            <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/Sunflower_CC13-1-1-800x533-1.webp" alt="リピーター">
+                        </div>
+                        <div class="evidence-content">
+                            <h4>訪日経験者・リピーター層</h4>
+                            <p>一度日本を訪れた後も継続フォロー。「次はどこに行こう」と情報収集を続けるリピーター予備軍。</p>
+                            <div class="evidence-tag">高いエンゲージメント率</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Creator Section -->
+            <div class="creator-section reveal">
+                <h4>NATIVE CREATORS</h4>
+                <div class="creator-grid">
+                    <div class="creator-card">
                         <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/DSC01179-のコピー-scaled.jpg" alt="Andy" class="creator-avatar">
                         <div class="creator-info">
                             <div class="creator-name">Andy Kin</div>
-                            <div class="creator-role">🇺🇸 Creative Director</div>
+                            <div class="creator-role"><span class="role-code">EN</span> Creative Director</div>
                         </div>
                     </div>
-                    <div class="creator-item">
-                        <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/Choi_01_mono-scaled-e1724920184879.jpg" alt="Choi" class="creator-avatar">
+                    <div class="creator-card">
+                        <img src="https://via.placeholder.com/72" alt="Sophia" class="creator-avatar">
                         <div class="creator-info">
-                            <div class="creator-name">Hiroyuki Choi</div>
-                            <div class="creator-role">🇰🇷 Producer</div>
+                            <div class="creator-name">Sophia</div>
+                            <div class="creator-role"><span class="role-code">EN</span> English Writer</div>
                         </div>
                     </div>
-                    <div class="creator-item">
-                        <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/IMG_7615.jpg" alt="Lucy" class="creator-avatar">
-                        <div class="creator-info">
-                            <div class="creator-name">Lucy Wu</div>
-                            <div class="creator-role">🇨🇳 Chinese Editor</div>
-                        </div>
-                    </div>
-                    <div class="creator-item">
+                    <div class="creator-card">
                         <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/HEEWON_CC05_mono-scaled-1-e1724920330586.jpg" alt="Hee Won" class="creator-avatar">
                         <div class="creator-info">
                             <div class="creator-name">Hee Won Kim</div>
-                            <div class="creator-role">🇰🇷 Korean Editor</div>
+                            <div class="creator-role"><span class="role-code">KR</span> Korean Editor</div>
                         </div>
                     </div>
-                    <div class="creator-item">
+                    <div class="creator-card">
                         <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/S__168247310-e1724116965778.jpg" alt="Sarita" class="creator-avatar">
                         <div class="creator-info">
                             <div class="creator-name">Sarita</div>
-                            <div class="creator-role">🇹🇭 Thailand Creator</div>
+                            <div class="creator-role"><span class="role-code">TH</span> Thai Creator</div>
+                        </div>
+                    </div>
+                    <div class="creator-card">
+                        <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/IMG_7615.jpg" alt="Lucy" class="creator-avatar">
+                        <div class="creator-info">
+                            <div class="creator-name">Lucy Wu</div>
+                            <div class="creator-role"><span class="role-code">CN</span> Chinese Editor</div>
+                        </div>
+                    </div>
+                    <div class="creator-card">
+                        <img src="https://via.placeholder.com/72" alt="Sou" class="creator-avatar">
+                        <div class="creator-info">
+                            <div class="creator-name">Sou</div>
+                            <div class="creator-role"><span class="role-code">TW</span> Taiwan Writer</div>
+                        </div>
+                    </div>
+                    <div class="creator-card">
+                        <img src="https://via.placeholder.com/72" alt="Taiwan" class="creator-avatar">
+                        <div class="creator-info">
+                            <div class="creator-name">Taiwan Team</div>
+                            <div class="creator-role"><span class="role-code">TW</span> 繁体字 Editor</div>
+                        </div>
+                    </div>
+                    <div class="creator-card">
+                        <img src="https://via.placeholder.com/72" alt="Indonesia" class="creator-avatar">
+                        <div class="creator-info">
+                            <div class="creator-name">Indonesia Team</div>
+                            <div class="creator-role"><span class="role-code">ID</span> Remote Creator</div>
+                        </div>
+                    </div>
+                    <div class="creator-card">
+                        <img src="https://via.placeholder.com/72" alt="Vietnam" class="creator-avatar">
+                        <div class="creator-info">
+                            <div class="creator-name">Vietnam Team</div>
+                            <div class="creator-role"><span class="role-code">VN</span> Remote Creator</div>
+                        </div>
+                    </div>
+                    <div class="creator-card">
+                        <img src="https://via.placeholder.com/72" alt="France" class="creator-avatar">
+                        <div class="creator-info">
+                            <div class="creator-name">France Team</div>
+                            <div class="creator-role"><span class="role-code">FR</span> Remote Creator</div>
                         </div>
                     </div>
                 </div>
@@ -1674,128 +3067,103 @@
         </div>
     </section>
 
-    <!-- Customer Journey - JAPANKURU Connected -->
-    <section class="journey-section">
+    <!-- Customer Journey (순환 도표) -->
+    <section class="journey-section" id="journey">
         <div class="section-inner">
             <div class="section-header center reveal">
                 <div class="section-eyebrow">CUSTOMER JOURNEY</div>
-                <h2 class="section-title">旅行のあらゆる段階で<br>JAPANKURUが接点を作る</h2>
-                <p class="section-desc">訪日前から帰国後まで、継続的にターゲットへリーチ</p>
+                <h2 class="section-title">旅行者の全行程で、接点を確保</h2>
             </div>
             
-            <div class="journey-grid reveal">
-                <div class="journey-phase">
-                    <div class="journey-phase-badge">旅マエ / BEFORE</div>
-                    <h3>情報収集・計画</h3>
-                    <div class="journey-phase-timing">訪日1〜6ヶ月前</div>
-                    <div class="journey-touchpoints">
-                        <div class="journey-touchpoint">
-                            <div class="touchpoint-icon">📝</div>
-                            <div class="touchpoint-content">
-                                <div class="touchpoint-name">多言語記事コンテンツ</div>
-                                <div class="touchpoint-channel">Naver Blog / Web</div>
-                            </div>
-                            <span class="touchpoint-jk">JK</span>
+            <!-- Journey Infographic -->
+            <div class="journey-infographic reveal">
+                <!-- Floating JAPANKURU Contents -->
+                <div class="journey-floating-images">
+                    <img src="https://www.japankuru.com/gld-kanri/data/uploads/2025/12/CANMAKE_Winter_31-800x450.jpg" alt="content1" class="floating-img img-1">
+                    <img src="https://www.japankuru.com/gld-kanri/data/uploads/2025/11/TZPS_CC32-800x533.jpg" alt="content2" class="floating-img img-2">
+                    <img src="https://www.japankuru.com/gld-kanri/data/uploads/2025/11/images2025082216393437-800x533.jpg" alt="content3" class="floating-img img-3">
+                    <img src="https://www.japankuru.com/gld-kanri/data/uploads/2025/11/og-800x420.jpg" alt="content4" class="floating-img img-4">
+                    <img src="https://www.japankuru.com/gld-kanri/data/uploads/2025/11/KIN_1085-533x800.jpg" alt="content5" class="floating-img img-5">
+                    <img src="https://www.japankuru.com/gld-kanri/data/uploads/2024/05/D4S_3411_OG-scaled.jpg" alt="content6" class="floating-img img-6">
+                </div>
+                
+                <!-- Timeline -->
+                <div class="journey-timeline">
+                    <!-- 旅マエ -->
+                    <div class="timeline-phase">
+                        <div class="phase-number">01</div>
+                        <div class="phase-name mae">旅マエ</div>
+                        <div class="phase-period">出発前</div>
+                        <div class="phase-action">「どこ行こう？」</div>
+                        <div class="phase-touchpoints">
+                            <span>Google検索</span>
+                            <span>Instagram</span>
+                            <span>YouTube</span>
+                            <span>FBグループ</span>
                         </div>
-                        <div class="journey-touchpoint">
-                            <div class="touchpoint-icon">📸</div>
-                            <div class="touchpoint-content">
-                                <div class="touchpoint-name">Instagram / Reels</div>
-                                <div class="touchpoint-channel">ビジュアル訴求</div>
-                            </div>
-                            <span class="touchpoint-jk">JK</span>
+                        <div class="japankuru-badge"><img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2025/12/JAPANKURU_LOGO_SNS.jpg" alt="JAPANKURU"></div>
+                    </div>
+                    
+                    <div class="timeline-connector">
+                        <svg viewBox="0 0 60 24"><path d="M0 12 L50 12 M40 4 L50 12 L40 20" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+                    </div>
+                    
+                    <!-- 旅ナカ -->
+                    <div class="timeline-phase">
+                        <div class="phase-number">02</div>
+                        <div class="phase-name naka">旅ナカ</div>
+                        <div class="phase-period">滞在中</div>
+                        <div class="phase-action">「今どこ行く？」</div>
+                        <div class="phase-touchpoints">
+                            <span>現地検索</span>
+                            <span>Googleマップ</span>
+                            <span>ハッシュタグ</span>
                         </div>
-                        <div class="journey-touchpoint">
-                            <div class="touchpoint-icon">🎬</div>
-                            <div class="touchpoint-content">
-                                <div class="touchpoint-name">YouTube動画</div>
-                                <div class="touchpoint-channel">詳細な体験紹介</div>
-                            </div>
-                            <span class="touchpoint-jk">JK</span>
+                        <div class="japankuru-badge"><img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2025/12/JAPANKURU_LOGO_SNS.jpg" alt="JAPANKURU"></div>
+                    </div>
+                    
+                    <div class="timeline-connector">
+                        <svg viewBox="0 0 60 24"><path d="M0 12 L50 12 M40 4 L50 12 L40 20" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+                    </div>
+                    
+                    <!-- 旅アト -->
+                    <div class="timeline-phase">
+                        <div class="phase-number">03</div>
+                        <div class="phase-name ato">旅アト</div>
+                        <div class="phase-period">帰国後</div>
+                        <div class="phase-action">「また行きたい」</div>
+                        <div class="phase-touchpoints">
+                            <span>投稿シェア</span>
+                            <span>フォロー継続</span>
+                            <span>口コミ拡散</span>
                         </div>
-                        <div class="journey-touchpoint">
-                            <div class="touchpoint-icon">🎪</div>
-                            <div class="touchpoint-content">
-                                <div class="touchpoint-name">海外旅行博出展</div>
-                                <div class="touchpoint-channel">対面プロモーション</div>
-                            </div>
-                            <span class="touchpoint-jk">JK</span>
-                        </div>
+                        <div class="japankuru-badge"><img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2025/12/JAPANKURU_LOGO_SNS.jpg" alt="JAPANKURU"></div>
                     </div>
                 </div>
                 
-                <div class="journey-phase">
-                    <div class="journey-phase-badge">旅ナカ / DURING</div>
-                    <h3>現地での活用</h3>
-                    <div class="journey-phase-timing">日本滞在中</div>
-                    <div class="journey-touchpoints">
-                        <div class="journey-touchpoint">
-                            <div class="touchpoint-icon">🔍</div>
-                            <div class="touchpoint-content">
-                                <div class="touchpoint-name">詳細記事・アクセス情報</div>
-                                <div class="touchpoint-channel">多言語で即確認</div>
-                            </div>
-                            <span class="touchpoint-jk">JK</span>
-                        </div>
-                        <div class="journey-touchpoint">
-                            <div class="touchpoint-icon">📍</div>
-                            <div class="touchpoint-content">
-                                <div class="touchpoint-name">Googleマップ連携</div>
-                                <div class="touchpoint-channel">位置情報で誘導</div>
-                            </div>
-                            <span class="touchpoint-jk">JK</span>
-                        </div>
-                        <div class="journey-touchpoint">
-                            <div class="touchpoint-icon">🎟️</div>
-                            <div class="touchpoint-content">
-                                <div class="touchpoint-name">JAPANKURUクーポン</div>
-                                <div class="touchpoint-channel">来店・購買促進</div>
-                            </div>
-                            <span class="touchpoint-jk">JK</span>
-                        </div>
+                <!-- Result -->
+                <div class="journey-result">
+                    <div class="result-arrow">
+                        <svg viewBox="0 0 24 80"><path d="M12 0 L12 60 M4 50 L12 60 L20 50" stroke="currentColor" stroke-width="2" fill="none"/></svg>
                     </div>
-                </div>
-                
-                <div class="journey-phase">
-                    <div class="journey-phase-badge">旅アト / AFTER</div>
-                    <h3>共有・再訪促進</h3>
-                    <div class="journey-phase-timing">帰国後</div>
-                    <div class="journey-touchpoints">
-                        <div class="journey-touchpoint">
-                            <div class="touchpoint-icon">🔄</div>
-                            <div class="touchpoint-content">
-                                <div class="touchpoint-name">UGCリポスト</div>
-                                <div class="touchpoint-channel">コミュニティ拡散</div>
-                            </div>
-                            <span class="touchpoint-jk">JK</span>
+                    <div class="result-box">
+                        <div class="result-main">
+                            全行程で<span class="result-brand"><img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2025/02/JAPANKURU_RGB-1.png" alt="JAPANKURU"></span>に出会う
                         </div>
-                        <div class="journey-touchpoint">
-                            <div class="touchpoint-icon">📧</div>
-                            <div class="touchpoint-content">
-                                <div class="touchpoint-name">継続的な情報配信</div>
-                                <div class="touchpoint-channel">Newsletter / SNS</div>
-                            </div>
-                            <span class="touchpoint-jk">JK</span>
-                        </div>
-                        <div class="journey-touchpoint">
-                            <div class="touchpoint-icon">🎁</div>
-                            <div class="touchpoint-content">
-                                <div class="touchpoint-name">キャンペーン・プレゼント</div>
-                                <div class="touchpoint-channel">再訪意欲喚起</div>
-                            </div>
-                            <span class="touchpoint-jk">JK</span>
+                        <div class="result-sub">
+                            1回きりの広告ではなく、旅行者が情報を探すたびに接点が生まれる
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-
-    <!-- Case Studies -->
-    <section class="cases-section">
+    
+    <!-- Cases -->
+    <section class="cases-section" id="cases">
         <div class="section-inner">
             <div class="section-header center reveal">
-                <div class="section-eyebrow">CASE STUDIES</div>
+                <div class="section-eyebrow">CASES</div>
                 <h2 class="section-title">導入事例</h2>
             </div>
             
@@ -1822,7 +3190,7 @@
                 </div>
                 <div class="case-card">
                     <div class="case-image">
-                        <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/Sunflower_CC13-1-1-800x533-1.webp" alt="商船三井さんふらわ">
+                        <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/Sunflower_CC13-1-1-800x533-1.webp" alt="商船三井">
                     </div>
                     <div class="case-body">
                         <div class="case-category">交通</div>
@@ -1831,164 +3199,100 @@
                     </div>
                 </div>
             </div>
-            
-            <div class="testimonials-grid reveal">
-                <div class="testimonial-card">
-                    <p class="testimonial-text">「前回作っていただいた動画もYoutube上での数値も良かった。継続的にお願いしています。」</p>
-                    <div class="testimonial-author">
-                        <div>
-                            <div class="testimonial-name">ご担当者様</div>
-                            <div class="testimonial-role">黒部・宇奈月温泉観光局</div>
-                        </div>
-                        <span class="testimonial-badge">動画制作</span>
-                    </div>
-                </div>
-                <div class="testimonial-card">
-                    <p class="testimonial-text">「特定期間限定施策としてオリジナルクーポン発行と使用促進プロモーションを実施。想定よりも多くの方に使用いただいた。」</p>
-                    <div class="testimonial-author">
-                        <div>
-                            <div class="testimonial-name">ご担当者様</div>
-                            <div class="testimonial-role">BEAMS</div>
-                        </div>
-                        <span class="testimonial-badge">クーポン施策</span>
-                    </div>
-                </div>
-            </div>
         </div>
     </section>
 
-    <!-- Solutions - Enhanced -->
-    <section class="solutions-section">
+    <!-- Process (이미지2 스타일) -->
+    <section class="process-section" id="process">
         <div class="section-inner">
-            <div class="section-header reveal">
-                <div class="section-eyebrow">SOLUTIONS</div>
-                <h2 class="section-title">提供サービス</h2>
-                <p class="section-desc">目的・予算に応じて、最適な施策を組み合わせてご提案します</p>
+            <div class="section-header center reveal">
+                <div class="section-eyebrow">PROCESS</div>
+                <h2 class="section-title">ご提案の進行フロー</h2>
+                <p class="section-desc">「制作」から「拡散」、そして「効果測定」まで<br>「ワンストップ」でグローバルに届くコンテンツをお届けします。</p>
             </div>
             
-            <div class="solutions-grid reveal">
-                <div class="solution-card">
-                    <div class="solution-header">
-                        <div class="solution-icon">📝</div>
-                        <div class="solution-title-wrap">
-                            <h3>コンテンツ制作</h3>
-                            <div class="solution-tagline">企画から配信まで一貫対応</div>
-                        </div>
+            <div class="process-intro reveal">
+                <p>外国人クリエイターが企画から編集、多言語化まで一貫対応。<br>英語・韓国語・繁体字・簡体字・タイ語などに対応し、高品質な記事・動画・リール・ストーリーを制作します。</p>
+            </div>
+            
+            <div class="process-timeline reveal">
+                <div class="process-step">
+                    <div class="process-step-number">1</div>
+                    <div class="process-step-title">企画提案</div>
+                </div>
+                <div class="process-step">
+                    <div class="process-step-number">2</div>
+                    <div class="process-step-title">撮影・取材</div>
+                </div>
+                <div class="process-step">
+                    <div class="process-step-number">3</div>
+                    <div class="process-step-title">多言語記事作成</div>
+                </div>
+                <div class="process-step">
+                    <div class="process-step-number">4</div>
+                    <div class="process-step-title">SNS配信・拡散</div>
+                </div>
+                <div class="process-step">
+                    <div class="process-step-number">5</div>
+                    <div class="process-step-title">海外メディア転載</div>
+                </div>
+                <div class="process-step">
+                    <div class="process-step-number">6</div>
+                    <div class="process-step-title">報告</div>
+                </div>
+            </div>
+            
+            <div class="process-details reveal">
+                <div class="process-detail-card">
+                    <div class="process-detail-image">
+                        <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/DSC_0064-1.jpg" alt="撮影・取材">
                     </div>
-                    <div class="solution-items">
-                        <div class="solution-item">
-                            <div class="solution-item-icon">📄</div>
-                            <span>多言語記事制作</span>
-                        </div>
-                        <div class="solution-item">
-                            <div class="solution-item-icon">📸</div>
-                            <span>写真撮影・編集</span>
-                        </div>
-                        <div class="solution-item">
-                            <div class="solution-item-icon">🎬</div>
-                            <span>YouTube動画制作</span>
-                        </div>
-                        <div class="solution-item">
-                            <div class="solution-item-icon">📱</div>
-                            <span>Reels / Shorts</span>
-                        </div>
+                    <div class="process-detail-body">
+                        <h4>撮影・取材</h4>
+                        <p>外国人クリエイターが、実際に現地で体験しながら自ら撮影・取材を行います。「外国人目線のリアルな体験」を、そのままコンテンツ化するのがJAPANKURUの強みです。</p>
                     </div>
                 </div>
-                
-                <div class="solution-card">
-                    <div class="solution-header">
-                        <div class="solution-icon">📢</div>
-                        <div class="solution-title-wrap">
-                            <h3>プロモーション</h3>
-                            <div class="solution-tagline">自社メディア×広告で最大化</div>
-                        </div>
+                <div class="process-detail-card">
+                    <div class="process-detail-image">
+                        <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/Img_Layout03-1-800x450-1.webp" alt="多言語記事作成">
                     </div>
-                    <div class="solution-items">
-                        <div class="solution-item">
-                            <div class="solution-item-icon">🌐</div>
-                            <span>自社メディア掲載</span>
-                        </div>
-                        <div class="solution-item">
-                            <div class="solution-item-icon">💰</div>
-                            <span>SNS広告運用</span>
-                        </div>
-                        <div class="solution-item">
-                            <div class="solution-item-icon">👤</div>
-                            <span>インフルエンサー</span>
-                        </div>
-                        <div class="solution-item">
-                            <div class="solution-item-icon">🎟️</div>
-                            <span>クーポン配布</span>
-                        </div>
+                    <div class="process-detail-body">
+                        <h4>多言語記事作成</h4>
+                        <p>外国人クリエイターチームが企画から編集まで一貫対応。<span class="lang-highlight">英語・韓国語・繁体字・簡体字・タイ語</span>の5言語で、高品質な記事を制作します。</p>
                     </div>
                 </div>
-                
-                <div class="solution-card">
-                    <div class="solution-header">
-                        <div class="solution-icon">🎪</div>
-                        <div class="solution-title-wrap">
-                            <h3>イベント・PR</h3>
-                            <div class="solution-tagline">オフラインでの直接接点</div>
-                        </div>
+                <div class="process-detail-card">
+                    <div class="process-detail-image">
+                        <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/JINS_Kyoto_CC33-800x533-1.webp" alt="SNS配信・拡散">
                     </div>
-                    <div class="solution-items">
-                        <div class="solution-item">
-                            <div class="solution-item-icon">✈️</div>
-                            <span>海外旅行博出展</span>
-                        </div>
-                        <div class="solution-item">
-                            <div class="solution-item-icon">🚌</div>
-                            <span>ファムトリップ企画</span>
-                        </div>
-                        <div class="solution-item">
-                            <div class="solution-item-icon">📺</div>
-                            <span>メディア招聘</span>
-                        </div>
-                        <div class="solution-item">
-                            <div class="solution-item-icon">🎉</div>
-                            <span>現地イベント運営</span>
-                        </div>
+                    <div class="process-detail-body">
+                        <h4>SNS配信・拡散</h4>
+                        <p>Facebook、Instagram、Pinterest、WeChat など各国の主要プラットフォームを活用し、情報を発信。高いエンゲージメント実績があります。</p>
                     </div>
                 </div>
-                
-                <div class="solution-card">
-                    <div class="solution-header">
-                        <div class="solution-icon">💡</div>
-                        <div class="solution-title-wrap">
-                            <h3>コンサルティング</h3>
-                            <div class="solution-tagline">戦略から効果測定まで</div>
-                        </div>
+                <div class="process-detail-card">
+                    <div class="process-detail-image">
+                        <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/Sunflower_CC13-1-1-800x533-1.webp" alt="海外メディア転載">
                     </div>
-                    <div class="solution-items">
-                        <div class="solution-item">
-                            <div class="solution-item-icon">🎯</div>
-                            <span>インバウンド戦略</span>
-                        </div>
-                        <div class="solution-item">
-                            <div class="solution-item-icon">🔍</div>
-                            <span>市場リサーチ</span>
-                        </div>
-                        <div class="solution-item">
-                            <div class="solution-item-icon">📊</div>
-                            <span>競合分析</span>
-                        </div>
-                        <div class="solution-item">
-                            <div class="solution-item-icon">📈</div>
-                            <span>効果測定レポート</span>
-                        </div>
+                    <div class="process-detail-body">
+                        <h4>海外メディア転載</h4>
+                        <p>現地で信頼性の高い大手メディアと提携し、現地視点に最適化された形での二次配信を実現。コンテンツのリーチと信頼性を同時に高めます。</p>
                     </div>
                 </div>
+            </div>
+            
+            <div class="process-note reveal">
+                ※一括制作 × 多言語対応 × 全方位配信により、<strong>時間・コストの最適化と効果的なグローバル展開</strong>を実現します。
             </div>
         </div>
     </section>
 
     <!-- Pricing -->
-    <section class="pricing-section">
+    <section class="pricing-section" id="pricing">
         <div class="section-inner">
             <div class="section-header center reveal">
                 <div class="section-eyebrow">PRICING</div>
                 <h2 class="section-title">料金の目安</h2>
-                <p class="section-desc">ご予算・目的に応じて最適なプランをご提案します</p>
             </div>
             
             <div class="pricing-grid reveal">
@@ -2044,74 +3348,32 @@
         </div>
     </section>
 
-    <!-- Process -->
-    <section class="process-section">
-        <div class="section-inner">
-            <div class="section-header center reveal">
-                <div class="section-eyebrow">PROCESS</div>
-                <h2 class="section-title">導入の流れ</h2>
-            </div>
-            
-            <div class="process-grid reveal">
-                <div class="process-step">
-                    <div class="process-number">01</div>
-                    <h4>お問い合わせ</h4>
-                    <p>フォームから送信</p>
-                </div>
-                <div class="process-step">
-                    <div class="process-number">02</div>
-                    <h4>ヒアリング</h4>
-                    <p>課題・目標を確認</p>
-                </div>
-                <div class="process-step">
-                    <div class="process-number">03</div>
-                    <h4>ご提案</h4>
-                    <p>最適プランを提示</p>
-                </div>
-                <div class="process-step">
-                    <div class="process-number">04</div>
-                    <h4>制作・配信</h4>
-                    <p>コンテンツ展開</p>
-                </div>
-                <div class="process-step">
-                    <div class="process-number">05</div>
-                    <h4>効果検証</h4>
-                    <p>レポート・改善</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- CTA -->
     <section class="cta-section" id="contact">
         <div class="cta-inner reveal">
             <h2>まずは30分の無料相談から</h2>
             <p>営業トークではなく、貴社の状況をお聞きして最適な方法をご提案します</p>
-            <a href="https://www.gldaily.com/contact" class="cta-btn">無料相談を予約する →</a>
-            <p class="cta-note">相談後の営業電話はありません。情報収集だけでもお気軽にどうぞ。</p>
+            <a href="https://www.gldaily.com/contact" class="cta-btn">無料相談を予約する</a>
         </div>
     </section>
 
     <!-- Footer -->
     <footer class="footer">
-        <div class="footer-logo">JAPANKURU</div>
+        <div class="footer-logo"><img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2025/02/JAPANKURU_RGB-1.png" alt="JAPANKURU" style="height: 20px; width: auto; filter: brightness(0) invert(1);"></div>
         <div class="footer-copy">© 2025 Global Daily Co., Ltd.</div>
     </footer>
 
     <script>
-        // Nav scroll
-        const nav = document.getElementById('nav');
-        window.addEventListener('scroll', () => {
-            nav.classList.toggle('scrolled', window.scrollY > 80);
-        });
+        // Mobile menu toggle
+        function toggleMenu() {
+            document.getElementById('mobileMenu').classList.toggle('active');
+        }
 
         // Reveal animation
         const revealElements = document.querySelectorAll('.reveal');
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
+                if (entry.isIntersecting) entry.target.classList.add('visible');
             });
         }, { threshold: 0.1 });
 
@@ -2122,9 +3384,7 @@
             anchor.addEventListener('click', function(e) {
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
+                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
             });
         });
     </script>
