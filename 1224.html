@@ -23,6 +23,7 @@
             --accent-dark: #2563eb;
             --accent-light: #60a5fa;
             --bg-card: #1e293b;
+            --navy: #0f172a;
         }
 
         html { scroll-behavior: smooth; }
@@ -366,6 +367,62 @@
             line-height: 1.6;
             font-weight: 500;
             text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+
+        /* Hero Mini Flow */
+        .hero-mini-flow {
+            margin-top: 32px;
+            padding: 20px 24px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+
+        .mini-flow-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--accent);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .mini-flow-items {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .mini-flow-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            background: rgba(59, 130, 246, 0.15);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 8px;
+        }
+
+        .mini-flow-num {
+            font-family: 'Inter', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent);
+            line-height: 1;
+        }
+
+        .mini-flow-unit {
+            font-size: 11px;
+            color: rgba(255,255,255,0.8);
+            line-height: 1.3;
+            font-weight: 500;
+        }
+
+        .mini-flow-arrow {
+            color: rgba(255,255,255,0.3);
         }
 
         /* Hero Main (2-column) */
@@ -1149,6 +1206,235 @@
             color: rgba(255,255,255,0.3);
             margin-top: 24px;
             text-align: center;
+        }
+
+        /* ===== SERVICE RIBBON ===== */
+        .service-ribbon {
+            background: linear-gradient(135deg, var(--accent) 0%, #1a4d8c 100%);
+            padding: 20px 0;
+            overflow: hidden;
+        }
+
+        .service-ribbon-track {
+            display: flex;
+            animation: service-scroll 25s linear infinite;
+        }
+
+        .service-ribbon-content {
+            display: flex;
+            gap: 0;
+            flex-shrink: 0;
+        }
+
+        .service-ribbon-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 40px;
+            color: white;
+            white-space: nowrap;
+            border-right: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .service-ribbon-item:last-child {
+            border-right: none;
+        }
+
+        .service-ribbon-icon {
+            width: 32px;
+            height: 32px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .service-ribbon-text {
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+        }
+
+        @keyframes service-scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* ===== PAIN TO SOLUTION ===== */
+        .pain-solution-section {
+            background: var(--navy);
+            padding: 120px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pain-solution-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 40%;
+            height: 100%;
+            background: linear-gradient(135deg, transparent 0%, rgba(59, 130, 246, 0.03) 100%);
+            pointer-events: none;
+        }
+
+        .pain-solution-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .pain-solution-eyebrow {
+            font-family: 'Inter', sans-serif;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.3em;
+            color: var(--accent);
+            text-transform: uppercase;
+            margin-bottom: 24px;
+        }
+
+        .pain-solution-title {
+            color: var(--white);
+            font-size: clamp(28px, 4vw, 42px);
+            line-height: 1.4;
+            font-weight: 400;
+        }
+
+        .pain-solution-title .title-thin {
+            font-weight: 300;
+            color: var(--gray-400);
+        }
+
+        .pain-solution-title .title-bold {
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .pain-solution-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .pain-solution-item {
+            display: grid;
+            grid-template-columns: 80px 1fr;
+            background: var(--navy);
+            transition: background 0.3s ease;
+        }
+
+        .pain-solution-item:hover {
+            background: rgba(59, 130, 246, 0.05);
+        }
+
+        .item-number {
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-right: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .item-content {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+            padding: 40px;
+            gap: 40px;
+        }
+
+        .item-pain {
+            text-align: left;
+        }
+
+        .pain-label {
+            font-family: 'Inter', sans-serif;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            color: var(--gray-500);
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        .item-pain p {
+            font-size: 15px;
+            color: var(--gray-400);
+            line-height: 1.7;
+            font-weight: 400;
+        }
+
+        .item-arrow {
+            color: var(--accent);
+            opacity: 0.6;
+        }
+
+        .item-solution {
+            text-align: left;
+        }
+
+        .solution-label {
+            font-family: 'Inter', sans-serif;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            color: var(--accent);
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        .item-solution p {
+            font-size: 15px;
+            color: var(--white);
+            line-height: 1.7;
+        }
+
+        .item-solution strong {
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        @media (max-width: 768px) {
+            .pain-solution-section {
+                padding: 80px 0;
+            }
+
+            .pain-solution-item {
+                grid-template-columns: 1fr;
+            }
+
+            .item-number {
+                padding: 16px;
+                border-right: none;
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+                justify-content: flex-start;
+            }
+
+            .item-content {
+                grid-template-columns: 1fr;
+                gap: 24px;
+                padding: 24px;
+            }
+
+            .item-arrow {
+                transform: rotate(90deg);
+                justify-self: center;
+            }
+
+            .item-pain, .item-solution {
+                text-align: center;
+            }
         }
 
         /* ===== PORTFOLIO MARQUEE ===== */
@@ -2473,61 +2759,298 @@
         }
 
         /* Differentiator (타이포그래피 스타일) */
-        .differentiator {
-            margin-top: 48px;
+        /* ===== DELIVERY FLOW INFOGRAPHIC ===== */
+        .delivery-flow {
+            margin-top: 80px;
             background: var(--bg-card);
-            border-radius: 16px;
-            padding: 48px;
+            border-radius: 20px;
+            padding: 64px 48px;
             color: white;
             border: 1px solid rgba(255,255,255,0.08);
         }
 
-        .diff-header {
+        .flow-header {
             text-align: center;
-            margin-bottom: 48px;
+            margin-bottom: 56px;
         }
 
-        .diff-lead {
-            font-size: 14px;
-            color: var(--gray-400);
-            margin-bottom: 12px;
-        }
-
-        .diff-header h3 {
-            font-size: 24px;
-            font-weight: 700;
-            line-height: 1.5;
-            color: white;
-        }
-
-        .diff-content {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 32px;
-        }
-
-        .diff-block {
-            padding: 24px;
-            border-left: 3px solid var(--accent);
-        }
-
-        .diff-keyword {
-            font-size: 32px;
-            font-weight: 800;
-            color: var(--accent);
-            margin-bottom: 12px;
-            letter-spacing: -0.02em;
-        }
-
-        .diff-block p {
-            font-size: 14px;
-            line-height: 1.8;
-            color: var(--gray-300);
-        }
-
-        .diff-block strong {
-            color: white;
+        .flow-eyebrow {
+            font-family: 'Inter', sans-serif;
+            font-size: 11px;
             font-weight: 600;
+            letter-spacing: 0.3em;
+            color: var(--accent);
+            margin-bottom: 16px;
+        }
+
+        .flow-title {
+            font-size: clamp(24px, 4vw, 36px);
+            font-weight: 300;
+            color: var(--gray-300);
+            line-height: 1.4;
+        }
+
+        .flow-accent {
+            font-weight: 700;
+            color: white;
+        }
+
+        .flow-diagram {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .flow-start {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .flow-start-circle {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3);
+        }
+
+        .start-label {
+            font-size: 18px;
+            font-weight: 700;
+            color: white;
+            text-align: center;
+        }
+
+        .flow-line-down {
+            width: 2px;
+            height: 40px;
+            background: linear-gradient(to bottom, var(--accent), var(--gray-600));
+        }
+
+        .flow-branches {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .flow-branches::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70%;
+            height: 2px;
+            background: var(--gray-600);
+        }
+
+        .flow-branch {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            max-width: 160px;
+        }
+
+        .branch-line {
+            width: 2px;
+            height: 32px;
+            background: var(--gray-600);
+        }
+
+        .branch-node {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 16px;
+            padding: 24px 20px;
+            text-align: center;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .branch-node:hover {
+            background: rgba(59, 130, 246, 0.15);
+            border-color: var(--accent);
+            transform: translateY(-4px);
+        }
+
+        .node-number {
+            font-family: 'Inter', sans-serif;
+            font-size: 42px;
+            font-weight: 700;
+            color: var(--accent);
+            line-height: 1;
+        }
+
+        .node-unit {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--accent);
+            margin-left: 2px;
+        }
+
+        .node-label {
+            display: block;
+            margin-top: 8px;
+            font-size: 13px;
+            color: var(--gray-400);
+            font-weight: 500;
+        }
+
+        .flow-converge {
+            display: flex;
+            justify-content: center;
+            padding: 32px 0;
+        }
+
+        .converge-line {
+            width: 2px;
+            height: 40px;
+            background: linear-gradient(to bottom, var(--gray-600), var(--accent));
+        }
+
+        .flow-syndication {
+            display: flex;
+            justify-content: center;
+        }
+
+        .syndication-box {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0.05) 100%);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 16px;
+            padding: 32px 48px;
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .syndication-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--accent);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 20px;
+        }
+
+        .syndication-logos {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .syndication-item {
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 6px;
+        }
+
+        .syndication-divider {
+            width: 4px;
+            height: 4px;
+            background: var(--gray-600);
+            border-radius: 50%;
+        }
+
+        .flow-note {
+            text-align: center;
+            margin-top: 48px;
+            padding-top: 32px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .flow-note p {
+            font-size: 15px;
+            color: var(--gray-400);
+        }
+
+        .flow-note strong {
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        .sp-only { display: none; }
+
+        @media (max-width: 768px) {
+            .sp-only { display: inline; }
+            
+            .delivery-flow {
+                padding: 40px 24px;
+            }
+
+            .flow-start-circle {
+                width: 120px;
+                height: 120px;
+            }
+
+            .start-label {
+                font-size: 15px;
+            }
+
+            .flow-branches {
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .flow-branches::before {
+                display: none;
+            }
+
+            .flow-branch {
+                flex-direction: row;
+                max-width: 100%;
+                gap: 16px;
+            }
+
+            .branch-line {
+                width: 24px;
+                height: 2px;
+            }
+
+            .branch-node {
+                padding: 16px 20px;
+                display: flex;
+                align-items: center;
+                gap: 12px;
+            }
+
+            .node-number {
+                font-size: 32px;
+            }
+
+            .node-label {
+                display: inline;
+                margin-top: 0;
+                margin-left: 8px;
+            }
+
+            .syndication-box {
+                padding: 24px 20px;
+            }
+
+            .syndication-logos {
+                gap: 8px;
+            }
+
+            .syndication-item {
+                font-size: 12px;
+                padding: 6px 12px;
+            }
+
+            .syndication-divider {
+                display: none;
+            }
         }
 
         /* ===== VIDEO SHOWCASE ===== */
@@ -3271,6 +3794,31 @@
             .usp-highlight {
                 font-size: 28px;
             }
+            
+            /* Hero Mini Flow 모바일 */
+            .hero-mini-flow {
+                margin-top: 24px;
+                padding: 16px;
+            }
+            .mini-flow-items {
+                gap: 8px;
+            }
+            .mini-flow-item {
+                padding: 6px 10px;
+                flex-direction: column;
+                gap: 2px;
+            }
+            .mini-flow-num {
+                font-size: 18px;
+            }
+            .mini-flow-unit {
+                font-size: 9px;
+                text-align: center;
+            }
+            .mini-flow-arrow svg {
+                width: 12px;
+                height: 12px;
+            }
         }
 
         /* ===== FOOTER ===== */
@@ -3430,13 +3978,6 @@
             .result-box { padding: 28px 24px; }
             .result-main { font-size: 20px; }
             
-            /* Differentiator 모바일 */
-            .differentiator { padding: 32px 20px; }
-            .diff-header h3 { font-size: 18px; }
-            .diff-content { grid-template-columns: 1fr; gap: 24px; }
-            .diff-keyword { font-size: 24px; }
-            .diff-block p { font-size: 13px; }
-            
             .flow-steps { flex-direction: column; gap: 20px; }
             .flow-divider { width: 2px; height: 20px; margin: 0 auto; }
             
@@ -3588,7 +4129,7 @@
                         <div class="phone-notch"></div>
                         <div class="phone-screen">
                             <video autoplay muted loop playsinline class="reels-video" poster="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/DSC_0064-1.jpg">
-                                <source src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2025/09/1221_GLD03.m4v" type="video/mp4">
+                                <source src="YOUR_REELS_VIDEO_URL.mp4" type="video/mp4">
                             </video>
                             <div class="reels-overlay">
                                 <div class="reels-header">
@@ -3660,6 +4201,82 @@
                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/JINS_logo.svg/200px-JINS_logo.svg.png" alt="JINS" class="client-logo">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Beams_logo.svg/200px-Beams_logo.svg.png" alt="BEAMS" class="client-logo">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Sanrio_logo.svg/200px-Sanrio_logo.svg.png" alt="Sanrio" class="client-logo">
+            </div>
+        </div>
+    </div>
+
+    <!-- Service Ribbon -->
+    <div class="service-ribbon">
+        <div class="marquee-wrapper">
+            <div class="service-ribbon-track">
+                <div class="service-ribbon-content">
+                    <div class="service-ribbon-item">
+                        <div class="service-ribbon-icon">✍</div>
+                        <span class="service-ribbon-text">記事制作</span>
+                    </div>
+                    <div class="service-ribbon-item">
+                        <div class="service-ribbon-icon">▶</div>
+                        <span class="service-ribbon-text">動画制作</span>
+                    </div>
+                    <div class="service-ribbon-item">
+                        <div class="service-ribbon-icon">◎</div>
+                        <span class="service-ribbon-text">SNS運用</span>
+                    </div>
+                    <div class="service-ribbon-item">
+                        <div class="service-ribbon-icon">⚡</div>
+                        <span class="service-ribbon-text">Reels / Shorts / TikTok</span>
+                    </div>
+                    <div class="service-ribbon-item">
+                        <div class="service-ribbon-icon">↗</div>
+                        <span class="service-ribbon-text">海外メディア転載</span>
+                    </div>
+                    <div class="service-ribbon-item">
+                        <div class="service-ribbon-icon">★</div>
+                        <span class="service-ribbon-text">インフルエンサー連携</span>
+                    </div>
+                    <div class="service-ribbon-item">
+                        <div class="service-ribbon-icon">言</div>
+                        <span class="service-ribbon-text">翻訳・ローカライズ</span>
+                    </div>
+                    <div class="service-ribbon-item">
+                        <div class="service-ribbon-icon">⚑</div>
+                        <span class="service-ribbon-text">イベント企画</span>
+                    </div>
+                </div>
+                <div class="service-ribbon-content">
+                    <div class="service-ribbon-item">
+                        <div class="service-ribbon-icon">✍</div>
+                        <span class="service-ribbon-text">記事制作</span>
+                    </div>
+                    <div class="service-ribbon-item">
+                        <div class="service-ribbon-icon">▶</div>
+                        <span class="service-ribbon-text">動画制作</span>
+                    </div>
+                    <div class="service-ribbon-item">
+                        <div class="service-ribbon-icon">◎</div>
+                        <span class="service-ribbon-text">SNS運用</span>
+                    </div>
+                    <div class="service-ribbon-item">
+                        <div class="service-ribbon-icon">⚡</div>
+                        <span class="service-ribbon-text">Reels / Shorts / TikTok</span>
+                    </div>
+                    <div class="service-ribbon-item">
+                        <div class="service-ribbon-icon">↗</div>
+                        <span class="service-ribbon-text">海外メディア転載</span>
+                    </div>
+                    <div class="service-ribbon-item">
+                        <div class="service-ribbon-icon">★</div>
+                        <span class="service-ribbon-text">インフルエンサー連携</span>
+                    </div>
+                    <div class="service-ribbon-item">
+                        <div class="service-ribbon-icon">言</div>
+                        <span class="service-ribbon-text">翻訳・ローカライズ</span>
+                    </div>
+                    <div class="service-ribbon-item">
+                        <div class="service-ribbon-icon">⚑</div>
+                        <span class="service-ribbon-text">イベント企画</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -3807,86 +4424,42 @@
             <div class="section-header center reveal">
                 <div class="section-eyebrow">選ばれる理由</div>
                 <h2 class="section-title">選ばれる理由</h2>
-                <p class="section-desc">外国人クリエイターが直接体験し、企画から制作・配信・拡散まで一貫対応。<br>自社メディア × SNS × 海外メディアの複合配信で、1つのコンテンツを最大化します。</p>
+                <p class="section-desc">インバウンドプロモーションに必要な要素を、ワンストップで。</p>
             </div>
             
             <div class="why-grid reveal">
                 <div class="why-card">
                     <div class="why-number">01</div>
-                    <h3><span class="why-highlight">外国人クリエイター</span>による制作</h3>
-                    <p>日本在住5〜20年の外国籍クリエイターが制作。翻訳ではなく「伝わる」表現で、心に響くコンテンツを。</p>
+                    <h3><span class="why-highlight">持つ</span>メディア</h3>
+                    <p>配信先を借りるのではなく、<strong>142万の自社メディア</strong>を持つ。広告費ゼロでも届き続ける資産に。</p>
                 </div>
                 <div class="why-card">
                     <div class="why-number">02</div>
-                    <h3><span class="why-highlight">ワンストップ</span>で全て対応</h3>
-                    <p>企画・取材・撮影・編集・翻訳まで一貫対応。写真・動画・テキストすべてプロクオリティ。</p>
+                    <h3><span class="why-highlight">7カ国</span>同時配信</h3>
+                    <p>国別に発注不要。<strong>1回の取材で7カ国へ</strong>同時に届ける効率とスピード。</p>
                 </div>
                 <div class="why-card">
                     <div class="why-number">03</div>
-                    <h3><span class="why-highlight">14年</span>の専門実績</h3>
-                    <p>2012年から一貫してインバウンドに特化。政府機関から個人店舗まで多様な実績。</p>
+                    <h3><span class="why-highlight">現地</span>の視点</h3>
+                    <p>翻訳ではなく、<strong>外国人クリエイターが体験</strong>して発信。「伝わる」表現で届ける。</p>
                 </div>
                 <div class="why-card">
                     <div class="why-number">04</div>
-                    <h3><span class="why-highlight">142万ユーザー</span>へ即時配信</h3>
-                    <p>国別SNSチャンネルから即座に配信。広告費ゼロでも継続的にリーチし続ける資産に。</p>
+                    <h3><span class="why-highlight">届く先</span>を拡大</h3>
+                    <p>SNS投稿だけで終わらない。<strong>Yahoo奇摩・LINE TODAY</strong>等、大手ポータルへ転載。</p>
                 </div>
                 <div class="why-card">
                     <div class="why-number">05</div>
-                    <h3>海外メディア<span class="why-highlight">転載・連携</span></h3>
-                    <p>Yahoo奇摩・LINE TODAY・HYPERJAPANなど海外メディアへの転載で露出を最大化。</p>
+                    <h3><span class="why-highlight">資産</span>になる</h3>
+                    <p>単発で消えない。<strong>SEO資産として検索され続ける</strong>。制作素材は2次利用もOK。</p>
                 </div>
                 <div class="why-card">
                     <div class="why-number">06</div>
-                    <h3>素材を<span class="why-highlight">多用途</span>で活用</h3>
-                    <p>制作した素材は自社HP、SNS、パンフレット等あらゆる場面で活用可能。</p>
-                </div>
-                <div class="why-card">
-                    <div class="why-number">07</div>
-                    <h3><span class="why-highlight">SNSコミュニティ</span>で自然拡散</h3>
-                    <p>「日本好き」が集まるFacebookグループに直接投稿。口コミで数百万人へ波及。</p>
-                </div>
-                <div class="why-card">
-                    <div class="why-number">08</div>
-                    <h3><span class="why-highlight">縦型動画</span>にも柔軟対応</h3>
-                    <p>Instagram Reels・TikTok・YouTube Shortsなど、トレンドに合わせた動画制作が可能。</p>
-                </div>
-                <div class="why-card">
-                    <div class="why-number">09</div>
-                    <h3><span class="why-highlight">KPIベース</span>で成果を可視化</h3>
-                    <p>PV・リーチ・クーポン使用数など、数値で効果を報告。費用対効果が明確に。</p>
+                    <h3><span class="why-highlight">成果</span>が見える</h3>
+                    <p>「バズった」で終わらない。<strong>PV・リーチ・クーポン使用数</strong>をKPIベースで報告。</p>
                 </div>
             </div>
             
-            <!-- 差別化ポイント (타이포그래피 스타일) -->
-            <div class="differentiator reveal">
-                <div class="diff-header">
-                    <p class="diff-lead">他社では実現しにくい</p>
-                    <h3>「制作 × 発信 × 多言語 × 海外メディア」<br>一体型の強み</h3>
-                </div>
-                
-                <div class="diff-content">
-                    <div class="diff-block">
-                        <div class="diff-keyword">視点</div>
-                        <p>日本人編集部の「情報編集」ではなく、<br><strong>外国人クリエイターによる「体験・共感」</strong>で伝える</p>
-                    </div>
-                    
-                    <div class="diff-block">
-                        <div class="diff-keyword">拡散力</div>
-                        <p>自社SNS投稿だけで終わらない。<br><strong>記事 + SNS + 海外メディア + FBコミュニティ</strong>の複合配信</p>
-                    </div>
-                    
-                    <div class="diff-block">
-                        <div class="diff-keyword">転載先</div>
-                        <p>自社メディアだけでは届かない層へ。<br><strong>Yahoo奇摩・LINE TODAY・HYPERJAPAN</strong>など実績多数</p>
-                    </div>
-                    
-                    <div class="diff-block">
-                        <div class="diff-keyword">成果報告</div>
-                        <p>「何人に届いたか分からない」では終わらせない。<br><strong>PV・リーチ・クーポン使用数</strong>をKPIベースで報告</p>
-                    </div>
-                </div>
-            </div>
         </div>
     </section>
 
@@ -4017,6 +4590,14 @@
                             <svg viewBox="0 0 24 24" fill="#E60023"><path d="M12 0C5.373 0 0 5.372 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 01.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12 0-6.628-5.373-12-12-12z"/></svg>
                             Pinterest
                         </a>
+                        <a href="https://www.threads.com/@japankuru" target="_blank" class="channel-chip">
+                            <svg viewBox="0 0 24 24" fill="#000"><path d="M12.186 24h-.007c-3.581-.024-6.334-1.205-8.184-3.509C2.35 18.44 1.5 15.586 1.472 12.01v-.017c.03-3.579.879-6.43 2.525-8.482C5.845 1.205 8.6.024 12.18 0h.014c2.746.02 5.043.725 6.826 2.098 1.677 1.29 2.858 3.13 3.509 5.467l-2.04.569c-1.104-3.96-3.898-5.984-8.304-6.015-2.91.022-5.11.936-6.54 2.717C4.307 6.504 3.616 8.914 3.589 12c.027 3.086.718 5.496 2.057 7.164 1.43 1.783 3.631 2.698 6.54 2.717 2.623-.02 4.358-.631 5.8-2.045 1.647-1.613 1.618-3.593 1.09-4.798-.31-.71-.873-1.3-1.634-1.75-.192 1.352-.622 2.446-1.284 3.272-.886 1.102-2.14 1.704-3.73 1.79-1.202.065-2.361-.218-3.259-.801-1.063-.689-1.685-1.74-1.752-2.96-.065-1.182.408-2.256 1.332-3.023.88-.73 2.088-1.146 3.5-1.208 1.028-.045 1.964.062 2.793.32l.025-.006c-.06-.548-.177-.985-.358-1.313-.258-.468-.674-.793-1.276-.996-.669-.224-1.528-.293-2.553-.204l-.166-2.082c1.263-.11 2.378-.026 3.316.25.993.293 1.77.823 2.31 1.576.49.683.805 1.544.942 2.567.684.199 1.303.456 1.855.773 1.166.668 2.022 1.56 2.543 2.652.784 1.648.85 4.313-1.323 6.446-1.857 1.822-4.152 2.655-7.394 2.679zm-.766-5.925c1.134-.062 1.99-.478 2.543-1.237.476-.654.756-1.533.84-2.63-.526-.14-1.105-.216-1.73-.228l-.164-.002c-1.958 0-3.326.762-3.246 2.205.053.972.768 1.834 2.757 1.892z"/></svg>
+                            Threads
+                        </a>
+                        <a href="https://www.youtube.com/@cometojapankuru" target="_blank" class="channel-chip">
+                            <svg viewBox="0 0 24 24" fill="#FF0000"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814z"/><path d="M9.545 15.568V8.432L15.818 12z" fill="#fff"/></svg>
+                            YouTube
+                        </a>
                     </div>
                 </div>
                 
@@ -4045,9 +4626,13 @@
                             <svg viewBox="0 0 24 24" fill="#E4405F"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
                             Instagram
                         </a>
-                        <a href="#" class="channel-chip">
-                            <svg viewBox="0 0 24 24" fill="#06C755"><circle cx="12" cy="12" r="10"/></svg>
-                            LINE
+                        <a href="https://japankuru.pixnet.net/blog" target="_blank" class="channel-chip">
+                            <img src="https://www.pixnet.net/_nuxt/img/pixnet_logo.a6c2254.svg" alt="Pixnet" style="width:16px;height:16px;">
+                            Pixnet
+                        </a>
+                        <a href="https://www.threads.com/@japankuru_tc" target="_blank" class="channel-chip">
+                            <svg viewBox="0 0 24 24" fill="#000"><path d="M12.186 24h-.007c-3.581-.024-6.334-1.205-8.184-3.509C2.35 18.44 1.5 15.586 1.472 12.01v-.017c.03-3.579.879-6.43 2.525-8.482C5.845 1.205 8.6.024 12.18 0h.014c2.746.02 5.043.725 6.826 2.098 1.677 1.29 2.858 3.13 3.509 5.467l-2.04.569c-1.104-3.96-3.898-5.984-8.304-6.015-2.91.022-5.11.936-6.54 2.717C4.307 6.504 3.616 8.914 3.589 12c.027 3.086.718 5.496 2.057 7.164 1.43 1.783 3.631 2.698 6.54 2.717 2.623-.02 4.358-.631 5.8-2.045 1.647-1.613 1.618-3.593 1.09-4.798-.31-.71-.873-1.3-1.634-1.75-.192 1.352-.622 2.446-1.284 3.272-.886 1.102-2.14 1.704-3.73 1.79-1.202.065-2.361-.218-3.259-.801-1.063-.689-1.685-1.74-1.752-2.96-.065-1.182.408-2.256 1.332-3.023.88-.73 2.088-1.146 3.5-1.208 1.028-.045 1.964.062 2.793.32l.025-.006c-.06-.548-.177-.985-.358-1.313-.258-.468-.674-.793-1.276-.996-.669-.224-1.528-.293-2.553-.204l-.166-2.082c1.263-.11 2.378-.026 3.316.25.993.293 1.77.823 2.31 1.576.49.683.805 1.544.942 2.567.684.199 1.303.456 1.855.773 1.166.668 2.022 1.56 2.543 2.652.784 1.648.85 4.313-1.323 6.446-1.857 1.822-4.152 2.655-7.394 2.679zm-.766-5.925c1.134-.062 1.99-.478 2.543-1.237.476-.654.756-1.533.84-2.63-.526-.14-1.105-.216-1.73-.228l-.164-.002c-1.958 0-3.326.762-3.246 2.205.053.972.768 1.834 2.757 1.892z"/></svg>
+                            Threads
                         </a>
                     </div>
                 </div>
@@ -4077,7 +4662,7 @@
                             <svg viewBox="0 0 24 24" fill="#E4405F"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
                             Instagram
                         </a>
-                        <a href="https://www.tiktok.com/@japankuru_th" target="_blank" class="channel-chip">
+                        <a href="https://www.tiktok.com/@japankuru_thai" target="_blank" class="channel-chip">
                             <svg viewBox="0 0 24 24" fill="#fff"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
                             TikTok
                         </a>
