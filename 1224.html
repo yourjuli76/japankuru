@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JAPANKURU - インバウンドプロモーション</title>
+    <title>インバウンド集客・海外プロモーション支援ならJAPANKURU｜訪日外国人向けコンテンツマーケティング</title>
+    <meta name="description" content="7カ国142万人のフォロワーへ届ける、JAPANKURUのインバウンド・プロモーション支援。ネイティブ視点のコンテンツ制作から配信まで一貫対応。">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -193,6 +194,57 @@
             line-height: 1.3;
             letter-spacing: -0.02em;
             margin-bottom: 28px;
+            text-shadow: 
+                0 0 20px rgba(59, 130, 246, 0.5),
+                0 0 40px rgba(59, 130, 246, 0.3),
+                0 0 60px rgba(59, 130, 246, 0.2),
+                0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        .hero-title .highlight-num {
+            color: var(--accent);
+            font-weight: 900;
+        }
+
+        .country-flags {
+            font-size: 0.9em;
+            letter-spacing: 0.1em;
+            margin-right: 8px;
+        }
+
+        .hero-sub-headline {
+            font-size: 18px;
+            color: var(--accent);
+            font-weight: 700;
+            margin-bottom: 20px;
+            letter-spacing: 0.02em;
+        }
+
+        .hero-value-box {
+            display: inline-flex;
+            align-items: center;
+            gap: 16px;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(59, 130, 246, 0.1) 100%);
+            border: 1px solid rgba(59, 130, 246, 0.4);
+            border-radius: 12px;
+            padding: 16px 24px;
+            margin-bottom: 28px;
+        }
+
+        .value-number {
+            font-family: 'Inter', sans-serif;
+            font-size: 42px;
+            font-weight: 900;
+            color: var(--accent);
+            line-height: 1;
+        }
+
+        .value-text {
+            font-size: 16px;
+            font-weight: 600;
+            color: rgba(255,255,255,0.9);
+            line-height: 1.5;
+            text-align: left;
         }
 
         .title-line {
@@ -217,15 +269,17 @@
 
         .hero-desc {
             font-size: 17px;
-            color: rgba(255,255,255,0.7);
+            color: rgba(255,255,255,0.85);
             max-width: 520px;
             line-height: 1.9;
             margin-bottom: 36px;
+            font-weight: 500;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.3);
         }
 
         .hero-desc strong {
             color: white;
-            font-weight: 600;
+            font-weight: 700;
         }
 
         .sp-only { display: none; }
@@ -260,17 +314,23 @@
 
         .hero-metric-value {
             font-family: 'Inter', sans-serif;
-            font-size: clamp(32px, 4vw, 44px);
+            font-size: clamp(40px, 5vw, 56px);
             font-weight: 900;
             line-height: 1;
         }
 
-        .hero-metric-value span { color: var(--accent); }
+        .hero-metric-value span { 
+            color: var(--accent); 
+            font-size: 0.5em;
+            font-weight: 700;
+        }
 
         .hero-metric-label {
-            font-size: 11px;
-            color: rgba(255,255,255,0.5);
+            font-size: 12px;
+            color: rgba(255,255,255,0.8);
             margin-top: 8px;
+            font-weight: 600;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
         }
 
         /* Hero Credentials */
@@ -302,8 +362,10 @@
         }
 
         .credentials-items {
-            color: rgba(255,255,255,0.5);
+            color: rgba(255,255,255,0.7);
             line-height: 1.6;
+            font-weight: 500;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
         }
 
         /* Hero Main (2-column) */
@@ -323,15 +385,26 @@
         .hero-mockup {
             flex-shrink: 0;
             position: relative;
+            transform: perspective(800px) rotateY(-12deg) rotateX(3deg);
+            transition: transform 0.3s ease;
+        }
+
+        .hero-mockup:hover {
+            transform: perspective(800px) rotateY(-6deg) rotateX(1deg);
         }
 
         .phone-frame {
             width: 280px;
             height: 560px;
-            background: #1a1a1a;
+            background: linear-gradient(145deg, #2a2a2a 0%, #1a1a1a 50%, #0a0a0a 100%);
             border-radius: 40px;
             padding: 12px;
-            box-shadow: 0 40px 80px rgba(0,0,0,0.5);
+            box-shadow: 
+                0 50px 100px rgba(0,0,0,0.6),
+                0 20px 40px rgba(0,0,0,0.4),
+                0 0 0 1px rgba(255,255,255,0.15),
+                inset 0 1px 0 rgba(255,255,255,0.1),
+                inset 0 0 0 1px rgba(255,255,255,0.05);
             position: relative;
         }
 
@@ -623,6 +696,175 @@
 
         .section-header.center { text-align: center; }
 
+        /* ===== PAIN POINTS SECTION ===== */
+        .pain-section {
+            background: var(--gray-50);
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .pain-intro {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .pain-intro h2 {
+            font-size: clamp(24px, 4vw, 36px);
+            font-weight: 800;
+            margin-bottom: 16px;
+            color: var(--gray-900);
+        }
+
+        .pain-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+
+        .pain-card {
+            background: white;
+            border-radius: 16px;
+            padding: 32px 24px;
+            text-align: center;
+            border: 1px solid var(--gray-200);
+            transition: all 0.3s ease;
+        }
+
+        .pain-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.08);
+        }
+
+        .pain-icon {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 28px;
+        }
+
+        .pain-card h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--gray-900);
+        }
+
+        .pain-card p {
+            font-size: 14px;
+            color: var(--gray-600);
+            line-height: 1.7;
+        }
+
+        /* ===== USP SECTION ===== */
+        .usp-section {
+            background: linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%);
+            color: white;
+        }
+
+        .usp-intro {
+            text-align: center;
+            margin-bottom: 56px;
+        }
+
+        .usp-intro h2 {
+            font-size: clamp(28px, 4vw, 40px);
+            font-weight: 800;
+            margin-bottom: 16px;
+            color: white;
+        }
+
+        .usp-intro p {
+            font-size: 17px;
+            color: rgba(255,255,255,0.7);
+        }
+
+        .usp-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+        }
+
+        .usp-card {
+            text-align: center;
+            padding: 40px 24px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .usp-card:hover {
+            background: rgba(255,255,255,0.08);
+            transform: translateY(-4px);
+        }
+
+        .usp-number {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--accent) 0%, #60a5fa 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            font-family: 'Inter', sans-serif;
+            font-size: 32px;
+            font-weight: 900;
+            color: white;
+            box-shadow: 0 8px 24px rgba(59, 130, 246, 0.4);
+        }
+
+        .usp-card h3 {
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 16px;
+            color: white;
+        }
+
+        .usp-highlight {
+            font-family: 'Inter', sans-serif;
+            font-size: 36px;
+            font-weight: 900;
+            color: var(--accent);
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .usp-card p {
+            font-size: 15px;
+            color: rgba(255,255,255,0.7);
+            line-height: 1.8;
+        }
+
+        .usp-cta {
+            text-align: center;
+            margin-top: 56px;
+        }
+
+        .usp-cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 18px 40px;
+            background: white;
+            color: var(--gray-900);
+            font-size: 17px;
+            font-weight: 700;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .usp-cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.3);
+        }
+
         .section-eyebrow {
             font-size: 11px;
             font-weight: 700;
@@ -658,44 +900,59 @@
 
         .section-subtitle {
             font-size: 17px;
-            color: rgba(255,255,255,0.5);
+            color: rgba(255,255,255,0.6);
             margin-top: 16px;
             line-height: 1.8;
             max-width: 640px;
             margin-left: auto;
             margin-right: auto;
+            font-weight: 500;
         }
 
         .market-story {
             display: flex;
             flex-direction: column;
-            gap: 40px;
+            gap: 48px;
         }
 
         .story-block {
             display: grid;
-            grid-template-columns: auto 1fr 160px;
-            gap: 24px;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
             align-items: center;
-            padding: 24px;
+            padding: 40px;
             background: rgba(255,255,255,0.03);
-            border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .story-block:nth-child(even) {
+            direction: rtl;
+        }
+
+        .story-block:nth-child(even) > * {
+            direction: ltr;
+        }
+
+        .story-text-side {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
         }
 
         .story-number {
             font-family: 'Inter', sans-serif;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 800;
             color: var(--accent);
-            flex-shrink: 0;
+            letter-spacing: 0.05em;
         }
 
         .story-content h3 {
-            font-size: 20px;
+            font-size: 24px;
             font-weight: 700;
-            line-height: 1.6;
-            margin-bottom: 10px;
+            line-height: 1.5;
+            margin-bottom: 12px;
             color: white;
         }
 
@@ -705,39 +962,43 @@
 
         .story-content p {
             font-size: 15px;
-            color: rgba(255,255,255,0.5);
+            color: rgba(255,255,255,0.6);
             line-height: 1.9;
+            font-weight: 500;
         }
 
         .story-content p strong {
-            color: rgba(255,255,255,0.9);
+            color: rgba(255,255,255,0.95);
         }
 
         .story-source {
             display: block;
             font-size: 12px;
-            color: rgba(255,255,255,0.3);
-            margin-top: 10px;
+            color: rgba(255,255,255,0.35);
+            margin-top: 12px;
         }
 
-        /* Visual Elements */
+        /* Visual Elements - Larger */
         .story-visual {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 8px;
+            justify-content: center;
+            gap: 12px;
+            padding: 20px;
         }
 
         .visual-caption {
-            font-size: 11px;
-            color: rgba(255,255,255,0.4);
+            font-size: 13px;
+            color: rgba(255,255,255,0.5);
+            font-weight: 600;
         }
 
-        /* Donut Chart */
+        /* Donut Chart - Larger */
         .donut-chart {
             position: relative;
-            width: 80px;
-            height: 80px;
+            width: 160px;
+            height: 160px;
         }
 
         .donut-chart svg {
@@ -751,66 +1012,77 @@
             left: 50%;
             transform: translate(-50%, -50%);
             font-family: 'Inter', sans-serif;
-            font-size: 18px;
+            font-size: 32px;
             font-weight: 800;
             color: white;
         }
 
-        /* Bar Chart */
+        /* Bar Chart - Larger */
         .bar-chart {
             width: 100%;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 16px;
         }
 
         .bar-item {
             display: grid;
-            grid-template-columns: 36px 1fr 32px;
-            gap: 8px;
+            grid-template-columns: 60px 1fr 50px;
+            gap: 12px;
             align-items: center;
         }
 
         .bar-label {
-            font-size: 10px;
-            color: rgba(255,255,255,0.5);
+            font-size: 14px;
+            color: rgba(255,255,255,0.6);
+            font-weight: 500;
         }
 
         .bar-track {
-            height: 6px;
+            height: 12px;
             background: rgba(255,255,255,0.1);
-            border-radius: 3px;
+            border-radius: 6px;
             overflow: hidden;
         }
 
         .bar-fill {
             height: 100%;
-            background: var(--accent);
-            border-radius: 3px;
+            background: linear-gradient(90deg, var(--accent), #60a5fa);
+            border-radius: 6px;
         }
 
         .bar-value {
             font-family: 'Inter', sans-serif;
-            font-size: 11px;
+            font-size: 16px;
             font-weight: 700;
             color: white;
             text-align: right;
         }
 
-        /* Compare Visual */
+        /* Compare Visual - Larger */
         .compare-visual {
             display: flex;
             align-items: center;
-            gap: 12px;
+            justify-content: center;
+            gap: 24px;
         }
 
         .compare-item {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 4px;
-            padding: 10px;
-            border-radius: 8px;
+            gap: 8px;
+            padding: 20px 24px;
+            border-radius: 12px;
+        }
+
+        .compare-icon {
+            font-size: 40px;
+        }
+
+        .compare-text {
+            font-size: 14px;
+            font-weight: 600;
         }
 
         .compare-item.bad {
@@ -819,22 +1091,13 @@
         }
 
         .compare-item.good {
-            background: rgba(220,38,38,0.15);
-            border: 1px solid rgba(220,38,38,0.3);
-        }
-
-        .compare-icon {
-            font-size: 20px;
-        }
-
-        .compare-text {
-            font-size: 9px;
-            color: rgba(255,255,255,0.7);
+            background: rgba(59,130,246,0.15);
+            border: 2px solid rgba(59,130,246,0.4);
         }
 
         .compare-arrow {
-            color: rgba(255,255,255,0.3);
-            font-size: 14px;
+            font-size: 24px;
+            color: var(--accent);
         }
 
         .market-bottom-text {
@@ -962,14 +1225,25 @@
 
         .why-number {
             font-family: 'Inter', sans-serif;
-            font-size: 48px;
+            font-size: 24px;
             font-weight: 900;
-            color: var(--gray-100);
+            color: white;
             line-height: 1;
-            margin-bottom: 16px;
+            margin-bottom: 20px;
+            width: 56px;
+            height: 56px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
         }
 
-        .why-card:hover .why-number { color: #fee2e2; }
+        .why-card:hover .why-number { 
+            background: var(--accent-dark);
+            transform: scale(1.1);
+        }
 
         .why-card h3 {
             font-size: 17px;
@@ -2904,6 +3178,101 @@
             color: var(--accent);
         }
 
+        /* ===== FLOATING CTA ===== */
+        .floating-cta {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 999;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .floating-cta.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .floating-cta-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 28px;
+            background: linear-gradient(135deg, var(--accent) 0%, #2563eb 100%);
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: 50px;
+            box-shadow: 0 8px 32px rgba(59, 130, 246, 0.5);
+            transition: all 0.3s ease;
+            animation: cta-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes cta-pulse {
+            0%, 100% { box-shadow: 0 8px 32px rgba(59, 130, 246, 0.5); }
+            50% { box-shadow: 0 8px 48px rgba(59, 130, 246, 0.7); }
+        }
+
+        .floating-cta-btn:hover {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            transform: scale(1.05);
+            box-shadow: 0 12px 48px rgba(59, 130, 246, 0.6);
+            animation: none;
+        }
+
+        .cta-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @media (max-width: 768px) {
+            .floating-cta {
+                bottom: 16px;
+                right: 16px;
+                left: 16px;
+            }
+            .floating-cta-btn {
+                width: 100%;
+                justify-content: center;
+                padding: 16px 24px;
+                font-size: 15px;
+            }
+            
+            /* Pain & USP 모바일 */
+            .pain-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            .pain-card {
+                padding: 24px 20px;
+            }
+            .pain-icon {
+                width: 56px;
+                height: 56px;
+                font-size: 24px;
+            }
+            .usp-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            .usp-card {
+                padding: 32px 20px;
+            }
+            .usp-number {
+                width: 64px;
+                height: 64px;
+                font-size: 26px;
+            }
+            .usp-highlight {
+                font-size: 28px;
+            }
+        }
+
         /* ===== FOOTER ===== */
         .footer {
             padding: 24px;
@@ -2937,9 +3306,27 @@
             .process-details { grid-template-columns: repeat(2, 1fr); }
             .pricing-grid { grid-template-columns: 1fr; max-width: 360px; margin: 0 auto; }
             
+            /* Pain & USP tablet */
+            .pain-grid { grid-template-columns: 1fr; }
+            .usp-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
+            
+            /* Story block - smaller gap */
+            .story-block { gap: 32px; padding: 32px; }
+            .donut-chart { width: 140px; height: 140px; }
+            .donut-label { font-size: 28px; }
+            
             /* Hero 2-column → 1-column */
             .hero-main { flex-direction: column; text-align: center; }
-            .hero-mockup { display: none; }
+            .hero-mockup { 
+                transform: none;
+                margin-top: 40px;
+            }
+            .hero-mockup:hover { transform: none; }
+            .phone-frame {
+                width: 200px;
+                height: 400px;
+                margin: 0 auto;
+            }
         }
 
         @media (max-width: 768px) {
@@ -2956,12 +3343,40 @@
             .hero-metrics { gap: 24px; }
             .hero-bg { width: 100%; opacity: 0.2; }
             
-            .story-block { 
-                grid-template-columns: auto 1fr; 
-                gap: 16px;
+            /* Hero value box mobile */
+            .hero-value-box {
+                flex-direction: column;
+                gap: 8px;
+                padding: 16px 20px;
+                text-align: center;
             }
-            .story-visual { display: none; }
-            .story-content h3 { font-size: 17px; }
+            .value-number { font-size: 32px; }
+            .value-text { 
+                font-size: 14px; 
+                text-align: center;
+            }
+            
+            .story-block { 
+                grid-template-columns: 1fr; 
+                gap: 24px;
+                padding: 24px;
+            }
+            .story-block:nth-child(even) {
+                direction: ltr;
+            }
+            .story-visual { 
+                order: -1;
+            }
+            .donut-chart {
+                width: 120px;
+                height: 120px;
+            }
+            .donut-label { font-size: 24px; }
+            .story-content h3 { font-size: 18px; }
+            .bar-item { grid-template-columns: 50px 1fr 40px; }
+            .bar-track { height: 10px; }
+            .compare-item { padding: 12px 16px; }
+            .compare-icon { font-size: 28px; }
             .market-question { font-size: 18px; }
             .market-numbers { flex-direction: column; gap: 16px; }
             .num-divider { display: none; }
@@ -3123,15 +3538,15 @@
         <div class="hero-container">
             <div class="hero-main">
                 <div class="hero-text">
-                    <div class="hero-eyebrow">INBOUND CONTENTS MARKETING</div>
+                    <div class="hero-eyebrow">7カ国142万人へ届ける｜訪日外国人向けプロモーション支援</div>
                     <h1 class="hero-title">
                         <span class="title-line">外国人目線で、作る。</span>
                         <span class="title-line"><span class="country-ruby"><span class="ruby-flags">🇰🇷🇹🇼🇹🇭🇨🇳🇺🇸🇮🇩🇻🇳</span>7カ国</span>に、届ける。</span>
                         <span class="title-line">世界へ、広げる。</span>
                     </h1>
                     <p class="hero-desc">
-                        インバウンドに特化した<strong>多言語コンテンツメディア</strong>。<br>
-                        ネイティブクリエイターが企画から配信まで一貫対応。<br>
+                        <strong>142万人のファン</strong>へ届ける、インバウンド・プロモーション支援。<br>
+                        7カ国のネイティブクリエイターが企画から配信まで一貫対応。<br>
                         海外メディア転載・SNSコミュニティで拡散します。
                     </p>
                     <a href="#contact" class="hero-cta">無料相談を予約</a>
@@ -3145,7 +3560,7 @@
                             <div class="hero-metric-label">月間リーチ</div>
                         </div>
                         <div>
-                            <div class="hero-metric-value">12<span>年</span></div>
+                            <div class="hero-metric-value">14<span>年</span></div>
                             <div class="hero-metric-label">運営実績</div>
                         </div>
                     </div>
@@ -3173,12 +3588,12 @@
                         <div class="phone-notch"></div>
                         <div class="phone-screen">
                             <video autoplay muted loop playsinline class="reels-video" poster="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/DSC_0064-1.jpg">
-                                <source src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2022/05/2c40bf89eee2d83349f55692f50778ca.mp4" type="video/mp4">
+                                <source src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2025/09/1221_GLD03.m4v" type="video/mp4">
                             </video>
                             <div class="reels-overlay">
                                 <div class="reels-header">
-                                    <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2025/12/JAPANKURU_LOGO_SNS.jpg" alt="JAPANKURU" class="reels-avatar">
-                                    <span class="reels-username">Japankuru</span>
+                                    <img src="https://japankuru.com/favicon.ico" alt="JAPANKURU" class="reels-avatar">
+                                    <span class="reels-username">japankuru</span>
                                     <button class="reels-follow">フォロー</button>
                                 </div>
                                 <div class="reels-actions">
@@ -3210,10 +3625,10 @@
                                 </div>
                                 <div class="reels-bottom">
                                     <div class="reels-caption">
-                                        <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2025/12/JAPANKURU_LOGO_SNS.jpg" alt="" class="caption-avatar">
+                                        <img src="https://japankuru.com/favicon.ico" alt="" class="caption-avatar">
                                         <div class="caption-text">
-                                            <strong>japankuru</strong> 日本の隠れた名店を発見🍜
-                                            <span class="caption-tags">#japankuru #japan #おすすめスポット</span>
+                                            <strong>japankuru</strong> 東京の隠れた名店を発見🍜
+                                            <span class="caption-tags">#japankuru #tokyo #japan</span>
                                         </div>
                                     </div>
                                     <div class="reels-music">
@@ -3253,37 +3668,47 @@
     <section class="market-section">
         <div class="section-inner">
             <div class="section-header center reveal">
-                <div class="section-eyebrow">WHY MULTILINGUAL</div>
+                <div class="section-eyebrow">なぜ多言語コンテンツ？</div>
                 <h2 class="section-title">なぜ多言語コンテンツが必要なのか</h2>
                 <p class="section-subtitle">翻訳の精度だけでは足りない。インフルエンサーの一過性でも届かない。<br>実際に体験した現地クリエイターの言葉だから、届く。</p>
             </div>
             
             <div class="market-story reveal">
                 <div class="story-block">
-                    <div class="story-number">01</div>
-                    <div class="story-content">
-                        <h3>訪日外国人の<strong>80%</strong>は、旅行前に行き先を決めている</h3>
-                        <p>彼らは母国語で検索します。貴社の情報が日本語しかなければ、検索結果に表示されません。つまり、<strong>存在しないのと同じ</strong>です。</p>
-                        <span class="story-source">出典: 観光庁「訪日外国人消費動向調査」2024</span>
+                    <div class="story-text-side">
+                        <div class="story-number">FACT 01</div>
+                        <div class="story-content">
+                            <h3>訪日外国人の<strong>80%</strong>は、<br>旅行前に行き先を決めている</h3>
+                            <p>彼らは母国語で検索します。貴社の情報が日本語しかなければ、検索結果に表示されません。つまり、<strong>存在しないのと同じ</strong>です。</p>
+                            <span class="story-source">出典: 観光庁「訪日外国人消費動向調査」2024</span>
+                        </div>
                     </div>
                     <div class="story-visual">
                         <div class="donut-chart">
                             <svg viewBox="0 0 100 100">
-                                <circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="12"/>
-                                <circle cx="50" cy="50" r="40" fill="none" stroke="#1e40af" stroke-width="12" stroke-dasharray="201 251" stroke-linecap="round" transform="rotate(-90 50 50)"/>
+                                <circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="10"/>
+                                <circle cx="50" cy="50" r="40" fill="none" stroke="url(#blueGradient)" stroke-width="10" stroke-dasharray="201 251" stroke-linecap="round" transform="rotate(-90 50 50)"/>
+                                <defs>
+                                    <linearGradient id="blueGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                        <stop offset="0%" stop-color="#3b82f6"/>
+                                        <stop offset="100%" stop-color="#60a5fa"/>
+                                    </linearGradient>
+                                </defs>
                             </svg>
                             <div class="donut-label">80%</div>
                         </div>
-                        <span class="visual-caption">旅マエで決定</span>
+                        <span class="visual-caption">旅マエで行き先決定</span>
                     </div>
                 </div>
                 
                 <div class="story-block">
-                    <div class="story-number">02</div>
-                    <div class="story-content">
-                        <h3>情報収集の<strong>1位はSNS</strong>、動画も<strong>21%</strong>が活用</h3>
-                        <p>Webサイトだけでは届きません。Instagram、YouTube、Facebook、TikTok ー <strong>彼らがいる場所</strong>に、彼らの言葉で存在する必要があります。</p>
-                        <span class="story-source">出典: JNTO「訪日旅行データハンドブック」2024</span>
+                    <div class="story-text-side">
+                        <div class="story-number">FACT 02</div>
+                        <div class="story-content">
+                            <h3>情報収集の<strong>1位はSNS</strong>、<br>動画も<strong>21%</strong>が活用</h3>
+                            <p>Webサイトだけでは届きません。Instagram、YouTube、Facebook、TikTok ー <strong>彼らがいる場所</strong>に、彼らの言葉で存在する必要があります。</p>
+                            <span class="story-source">出典: JNTO「訪日旅行データハンドブック」2024</span>
+                        </div>
                     </div>
                     <div class="story-visual">
                         <div class="bar-chart">
@@ -3307,11 +3732,13 @@
                 </div>
                 
                 <div class="story-block">
-                    <div class="story-number">03</div>
-                    <div class="story-content">
-                        <h3>自動翻訳では、<strong>魅力が伝わらない</strong></h3>
-                        <p>「おもてなし」を "hospitality" と訳しても、本当の意味は伝わりません。<strong>その国の人が「行きたい」と思う言葉</strong>は、その国の人にしか書けません。</p>
-                        <span class="story-source">出典: JTB総研「インバウンド旅行者の情報接触実態」2024</span>
+                    <div class="story-text-side">
+                        <div class="story-number">FACT 03</div>
+                        <div class="story-content">
+                            <h3>自動翻訳では、<br><strong>魅力が伝わらない</strong></h3>
+                            <p>「おもてなし」を "hospitality" と訳しても、本当の意味は伝わりません。<strong>その国の人が「行きたい」と思う言葉</strong>は、その国の人にしか書けません。</p>
+                            <span class="story-source">出典: JTB総研「インバウンド旅行者の情報接触実態」2024</span>
+                        </div>
                     </div>
                     <div class="story-visual">
                         <div class="compare-visual">
@@ -3378,7 +3805,7 @@
     <section class="why-section" id="why">
         <div class="section-inner">
             <div class="section-header center reveal">
-                <div class="section-eyebrow">WHY JAPANKURU</div>
+                <div class="section-eyebrow">選ばれる理由</div>
                 <h2 class="section-title">選ばれる理由</h2>
                 <p class="section-desc">外国人クリエイターが直接体験し、企画から制作・配信・拡散まで一貫対応。<br>自社メディア × SNS × 海外メディアの複合配信で、1つのコンテンツを最大化します。</p>
             </div>
@@ -3396,7 +3823,7 @@
                 </div>
                 <div class="why-card">
                     <div class="why-number">03</div>
-                    <h3><span class="why-highlight">12年</span>の専門実績</h3>
+                    <h3><span class="why-highlight">14年</span>の専門実績</h3>
                     <p>2012年から一貫してインバウンドに特化。政府機関から個人店舗まで多様な実績。</p>
                 </div>
                 <div class="why-card">
@@ -3491,7 +3918,7 @@
         <div class="section-inner">
             <div class="channel-header-row reveal">
                 <div>
-                    <div class="section-eyebrow">GLOBAL CHANNELS</div>
+                    <div class="section-eyebrow">グローバルチャンネル</div>
                     <h2 class="section-title">国別専用チャンネル</h2>
                     <p class="section-desc">各国のネイティブチームが、現地で使われるプラットフォームに最適化して配信</p>
                 </div>
@@ -3763,7 +4190,7 @@
             <div class="audience-quality reveal">
                 <div class="audience-header">
                     <h3>広告で買ったフォロワーではありません</h3>
-                    <p>12年間、地道に築いてきた「本当に日本に興味がある人々」のコミュニティです</p>
+                    <p>14年間、地道に築いてきた「本当に日本に興味がある人々」のコミュニティです</p>
                 </div>
                 <div class="audience-evidence">
                     <div class="evidence-card">
@@ -3892,7 +4319,7 @@
     <section class="journey-section" id="journey">
         <div class="section-inner">
             <div class="section-header center reveal">
-                <div class="section-eyebrow">CUSTOMER JOURNEY</div>
+                <div class="section-eyebrow">カスタマージャーニー</div>
                 <h2 class="section-title">旅行者の全行程で、接点を確保</h2>
             </div>
             
@@ -4083,7 +4510,7 @@
     <section class="cases-section" id="cases">
         <div class="section-inner">
             <div class="section-header center reveal">
-                <div class="section-eyebrow">CASES</div>
+                <div class="section-eyebrow">導入事例</div>
                 <h2 class="section-title">導入事例</h2>
             </div>
             
@@ -4126,7 +4553,7 @@
     <section class="process-section" id="process">
         <div class="section-inner">
             <div class="section-header center reveal">
-                <div class="section-eyebrow">PROCESS</div>
+                <div class="section-eyebrow">進め方</div>
                 <h2 class="section-title">ご提案の進行フロー</h2>
                 <p class="section-desc">「制作」から「拡散」、そして「効果測定」まで<br>「ワンストップ」でグローバルに届くコンテンツをお届けします。</p>
             </div>
@@ -4211,7 +4638,7 @@
     <section class="pricing-section" id="pricing">
         <div class="section-inner">
             <div class="section-header center reveal">
-                <div class="section-eyebrow">PRICING</div>
+                <div class="section-eyebrow">料金プラン</div>
                 <h2 class="section-title">料金の目安</h2>
             </div>
             
@@ -4286,7 +4713,8 @@
     <script>
         // Mobile menu toggle
         function toggleMenu() {
-            document.getElementById('mobileMenu').classList.toggle('active');
+            const menu = document.getElementById('mobileMenu');
+            if (menu) menu.classList.toggle('active');
         }
 
         // Reveal animation
@@ -4320,6 +4748,28 @@
             container.innerHTML = '';
             container.appendChild(iframe);
         }
+
+        // Show/hide floating CTA based on scroll
+        const floatingCta = document.getElementById('floating-cta');
+        if (floatingCta) {
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 600) {
+                    floatingCta.classList.add('show');
+                } else {
+                    floatingCta.classList.remove('show');
+                }
+            });
+        }
     </script>
+
+    <!-- Floating CTA Button -->
+    <div class="floating-cta" id="floating-cta">
+        <a href="#contact" class="floating-cta-btn">
+            <span class="cta-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+            </span>
+            <span class="cta-text">無料相談</span>
+        </a>
+    </div>
 </body>
 </html>
