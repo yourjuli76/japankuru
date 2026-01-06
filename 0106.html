@@ -24,6 +24,8 @@
             --accent-light: #60a5fa;
             --bg-card: #1e293b;
             --navy: #0f172a;
+            --primary: #0f172a;
+            --secondary: #475569;
         }
 
         html { scroll-behavior: smooth; }
@@ -731,11 +733,47 @@
         }
 
         .client-logo {
-            height: 24px;
-            width: auto;
-            object-fit: contain;
-            opacity: 0.6;
-        }
+    height: 32px;
+    width: auto;
+    object-fit: contain;
+    opacity: 0.5;
+    filter: grayscale(100%);
+    transition: all 0.3s ease;
+}
+
+.client-logo:hover {
+    opacity: 1;
+    filter: grayscale(0%);
+}
+
+.clients-marquee .marquee-track {
+    display: flex;
+    gap: 0;
+    animation: marquee 40s linear infinite;
+    width: max-content;
+}
+
+.clients-marquee .marquee-content {
+    display: flex;
+    align-items: center;
+    gap: 48px;
+    flex-shrink: 0;
+    padding-right: 48px;
+}
+
+.clients-marquee .client-logo {
+    height: 32px;
+    width: auto;
+    object-fit: contain;
+    opacity: 0.5;
+    filter: grayscale(100%);
+    transition: all 0.3s ease;
+}
+
+.clients-marquee .client-logo:hover {
+    opacity: 1;
+    filter: grayscale(0%);
+}
 
         /* ===== SECTION BASE ===== */
         section {
@@ -1206,60 +1244,6 @@
             color: rgba(255,255,255,0.3);
             margin-top: 24px;
             text-align: center;
-        }
-
-        /* ===== SERVICE RIBBON ===== */
-        .service-ribbon {
-            background: linear-gradient(135deg, var(--accent) 0%, #1a4d8c 100%);
-            padding: 20px 0;
-            overflow: hidden;
-        }
-
-        .service-ribbon-track {
-            display: flex;
-            animation: service-scroll 25s linear infinite;
-        }
-
-        .service-ribbon-content {
-            display: flex;
-            gap: 0;
-            flex-shrink: 0;
-        }
-
-        .service-ribbon-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 0 40px;
-            color: white;
-            white-space: nowrap;
-            border-right: 1px solid rgba(255,255,255,0.2);
-        }
-
-        .service-ribbon-item:last-child {
-            border-right: none;
-        }
-
-        .service-ribbon-icon {
-            width: 32px;
-            height: 32px;
-            background: rgba(255,255,255,0.15);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-        }
-
-        .service-ribbon-text {
-            font-size: 14px;
-            font-weight: 600;
-            letter-spacing: 0.02em;
-        }
-
-        @keyframes service-scroll {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
         }
 
         /* ===== PAIN TO SOLUTION ===== */
@@ -4041,6 +4025,467 @@
             opacity: 1;
             transform: translateY(0);
         }
+
+
+        /* ===== 選ばれる理由 セクション CSS ===== */
+
+/* 選ばれる理由 그리드 */
+.reasons-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: #e5e5e7;
+    border: 1px solid #e5e5e7;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.reason-card {
+    background: white;
+    padding: 2.5rem;
+    transition: all 0.3s ease;
+}
+.reason-card:hover { background: #fafafa; }
+
+.reason-card .number {
+    width: 60px; height: 60px;
+    background: var(--accent); color: white;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem; font-weight: 700;
+    margin-bottom: 1.5rem;
+}
+
+.reason-card h4 { font-size: 1.3rem; font-weight: 700; margin-bottom: 1rem; color: var(--primary); }
+.reason-card p { color: var(--secondary); line-height: 1.8; font-size: 0.95rem; }
+.reason-card strong { color: var(--primary); }
+
+/* 옅은 파랑 하이라이트 */
+.highlight {
+    background: linear-gradient(transparent 60%, rgba(0, 102, 204, 0.12) 60%);
+    padding: 0 2px;
+}
+
+/* 04番 특별 강조 */
+.reason-card.featured {
+    background: linear-gradient(135deg, rgba(0, 102, 204, 0.03) 0%, rgba(0, 102, 204, 0.06) 100%);
+    box-shadow: inset 0 0 0 2px var(--accent);
+}
+
+.reason-card.featured:hover {
+    background: linear-gradient(135deg, rgba(0, 102, 204, 0.05) 0%, rgba(0, 102, 204, 0.08) 100%);
+}
+
+.reason-card.featured .number {
+    background: var(--accent);
+    box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
+}
+
+/* 파트너 라인 */
+.country-lines {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.country-line {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: rgba(255,255,255,0.8);
+    padding: 0.4rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.7rem;
+}
+
+.country-flag { font-size: 0.85rem; }
+.country-partners { color: var(--secondary); font-weight: 500; }
+.country-partners strong { color: var(--primary); font-weight: 700; }
+
+.partner-summary {
+    margin-top: 0.8rem;
+    text-align: center;
+}
+
+.partner-summary span {
+    display: inline-block;
+    background: var(--accent);
+    color: white;
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+/* 05, 06 부연 설명 */
+.sub-points {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #f0f0f0;
+}
+
+.sub-point {
+    font-size: 0.8rem;
+    color: var(--secondary);
+    line-height: 1.6;
+    margin-bottom: 0.4rem;
+    padding-left: 1rem;
+    position: relative;
+}
+
+.sub-point::before {
+    content: "·";
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-weight: bold;
+}
+
+.option-tag {
+    font-size: 0.6rem;
+    background: #e0e0e0;
+    color: #666;
+    padding: 0.1rem 0.3rem;
+    border-radius: 3px;
+    margin-left: 0.3rem;
+    font-weight: 600;
+}
+
+/* 미니 일러스트 */
+.mini-illust {
+    margin-top: 1rem;
+    height: 30px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 4px;
+    opacity: 0.15;
+}
+
+.illust-graph {
+    display: flex;
+    gap: 3px;
+}
+
+.illust-graph::after {
+    content: '';
+    width: 8px; height: 12px;
+    background: var(--accent);
+    border-radius: 2px;
+}
+
+.illust-graph::before {
+    content: '';
+    width: 8px; height: 18px;
+    background: var(--accent);
+    border-radius: 2px;
+}
+
+.illust-dashboard {
+    gap: 6px;
+}
+
+.illust-dashboard::before {
+    content: '';
+    width: 25px; height: 8px;
+    background: var(--accent);
+    border-radius: 2px;
+}
+
+.illust-dashboard::after {
+    content: '';
+    width: 25px; height: 14px;
+    background: var(--accent);
+    border-radius: 2px;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+    .reasons-grid { grid-template-columns: 1fr; }
+}
+
+/* ===== SERVICE CAROUSEL STYLES ===== */
+.service-carousel-section {
+    background: linear-gradient(135deg, #1a56db 0%, #0d3a91 100%);
+    padding: 60px 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.service-carousel-section::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/></svg>') repeat;
+    background-size: 100px 100px;
+    pointer-events: none;
+}
+
+.service-carousel-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+.carousel-header {
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.carousel-header h2 {
+    color: white;
+    font-size: clamp(1.4rem, 4vw, 1.8rem);
+    margin-bottom: 8px;
+    font-weight: 700;
+}
+
+.carousel-header p {
+    color: rgba(255,255,255,0.8);
+    font-size: 0.95rem;
+}
+
+.service-pills {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding: 8px 4px;
+    margin-bottom: 24px;
+    scrollbar-width: none;
+}
+
+.service-pills::-webkit-scrollbar { display: none; }
+
+.service-pill {
+    padding: 10px 18px;
+    background: rgba(255,255,255,0.12);
+    border: 2px solid transparent;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+    color: white;
+    font-weight: 500;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+    font-family: inherit;
+}
+
+.service-pill:hover {
+    background: rgba(255,255,255,0.2);
+    border-color: rgba(255,255,255,0.3);
+}
+
+.service-pill.active {
+    background: white;
+    color: #1a56db;
+    font-weight: 600;
+    transform: scale(1.03);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+}
+
+.service-detail-card {
+    background: white;
+    border-radius: 20px;
+    padding: 28px;
+    box-shadow: 0 15px 50px rgba(0,0,0,0.15);
+    animation: cardFadeIn 0.4s ease;
+}
+
+@keyframes cardFadeIn {
+    from { opacity: 0; transform: translateY(15px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.card-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+}
+
+.card-icon-wrapper {
+    width: 72px; height: 72px;
+    background: linear-gradient(135deg, #e8f0fe 0%, #d2e3fc 100%);
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    flex-shrink: 0;
+}
+
+.card-text { flex: 1; min-width: 0; }
+.card-text h3 { margin: 0 0 6px 0; color: #1a1a1a; font-size: 1.4rem; font-weight: 700; }
+.card-text .tagline { margin: 0 0 12px 0; color: #1a56db; font-size: 0.95rem; font-weight: 600; }
+.card-text .description { margin: 0 0 18px 0; color: #555; font-size: 0.95rem; line-height: 1.75; }
+
+.card-features { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 22px; }
+.feature-tag { padding: 6px 14px; background: #f0f4ff; color: #1a56db; border-radius: 6px; font-size: 0.8rem; font-weight: 600; }
+
+.card-buttons { display: flex; gap: 12px; }
+.card-buttons .btn-primary,
+.card-buttons .btn-secondary {
+    flex: 1;
+    padding: 14px 24px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    text-align: center;
+    transition: all 0.2s ease;
+}
+.card-buttons .btn-primary { background: #1a56db; color: white; border: none; }
+.card-buttons .btn-primary:hover { background: #0d3a91; transform: translateY(-2px); }
+.card-buttons .btn-secondary { background: white; color: #1a56db; border: 2px solid #1a56db; }
+
+.carousel-dots { display: flex; justify-content: center; gap: 8px; margin-top: 24px; }
+.carousel-dot { width: 8px; height: 8px; background: rgba(255,255,255,0.35); border: none; border-radius: 4px; cursor: pointer; transition: all 0.3s; padding: 0; }
+.carousel-dot.active { width: 32px; background: white; }
+
+.autoplay-indicator { text-align: center; margin-top: 16px; color: rgba(255,255,255,0.5); font-size: 0.75rem; }
+
+@media (max-width: 768px) {
+    .card-content { flex-direction: column; align-items: center; text-align: center; }
+    .card-buttons { flex-direction: column; }
+    .card-features { justify-content: center; }
+}
+
+/* ===== SERVICE CAROUSEL - DYNAMIC CONTENT STYLES ===== */
+.carousel-card-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+}
+
+.carousel-card-icon {
+    width: 72px;
+    height: 72px;
+    background: linear-gradient(135deg, #e8f0fe 0%, #d2e3fc 100%);
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    flex-shrink: 0;
+}
+
+.carousel-card-text {
+    flex: 1;
+    min-width: 0;
+}
+
+.carousel-card-text h3 {
+    margin: 0 0 6px 0;
+    color: #1a1a1a;
+    font-size: 1.4rem;
+    font-weight: 700;
+}
+
+.carousel-tagline {
+    margin: 0 0 12px 0;
+    color: #1a56db;
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+.carousel-description {
+    margin: 0 0 18px 0;
+    color: #555;
+    font-size: 0.95rem;
+    line-height: 1.75;
+}
+
+.carousel-card-features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 22px;
+}
+
+.carousel-feature-tag {
+    padding: 6px 14px;
+    background: #f0f4ff;
+    color: #1a56db;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.carousel-card-buttons {
+    display: flex;
+    gap: 12px;
+}
+
+.carousel-btn-primary,
+.carousel-btn-secondary {
+    flex: 1;
+    padding: 14px 24px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    text-align: center;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.carousel-btn-primary {
+    background: #1a56db;
+    color: white;
+    border: none;
+}
+
+.carousel-btn-primary:hover {
+    background: #0d3a91;
+    transform: translateY(-2px);
+}
+
+.carousel-btn-secondary {
+    background: white;
+    color: #1a56db;
+    border: 2px solid #1a56db;
+}
+
+.carousel-btn-secondary:hover {
+    background: #f0f4ff;
+}
+
+@keyframes carouselCardFadeIn {
+    from { opacity: 0; transform: translateY(15px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@media (max-width: 768px) {
+    .carousel-card-content {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    .carousel-card-buttons { flex-direction: column; }
+    .carousel-card-features { justify-content: center; }
+}
+.portfolio-marquee-section .marquee-track {
+    display: flex;
+    gap: 0;
+    animation: marquee 60s linear infinite;
+    width: max-content;
+}
+
+.portfolio-marquee-section .marquee-content {
+    display: flex;
+    gap: 16px;
+    flex-shrink: 0;
+    padding-right: 16px;
+}
+/* 마우스 호버 시 마키 일시정지 */
+.clients-marquee .marquee-track:hover,
+.portfolio-marquee-section .marquee-track:hover {
+    animation-play-state: paused;
+}
     </style>
 </head>
 <body>
@@ -4048,28 +4493,28 @@
     <nav class="nav">
         <a href="#" class="nav-logo"><img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2025/02/JAPANKURU_RGB-1.png" alt="JAPANKURU" style="height: 24px; width: auto;"></a>
         <div class="nav-menu">
-            <a href="#why" class="nav-link">選ばれる理由</a>
-            <a href="#channel" class="nav-link">チャンネル</a>
-            <a href="#journey" class="nav-link">仕組み</a>
-            <a href="#cases" class="nav-link">事例</a>
-            <a href="#process" class="nav-link">進め方</a>
-            <a href="#pricing" class="nav-link">料金</a>
-            <a href="#contact" class="nav-cta">無料相談</a>
-        </div>
+    <a href="#why" class="nav-link">選ばれる理由</a>
+    <a href="#services" class="nav-link">サービス</a>
+    <a href="#channel" class="nav-link">チャンネル</a>
+    <a href="#cases" class="nav-link">事例</a>
+    <a href="#process" class="nav-link">進め方</a>
+    <a href="#pricing" class="nav-link">料金</a>
+    <a href="#contact" class="nav-cta">無料相談</a>
+</div>
         <button class="nav-toggle" onclick="toggleMenu()">
             <span></span><span></span><span></span>
         </button>
     </nav>
 
     <div class="mobile-menu" id="mobileMenu">
-        <a href="#why" onclick="toggleMenu()">選ばれる理由</a>
-        <a href="#channel" onclick="toggleMenu()">チャンネル</a>
-        <a href="#journey" onclick="toggleMenu()">仕組み</a>
-        <a href="#cases" onclick="toggleMenu()">事例</a>
-        <a href="#process" onclick="toggleMenu()">進め方</a>
-        <a href="#pricing" onclick="toggleMenu()">料金</a>
-        <a href="#contact" onclick="toggleMenu()">無料相談</a>
-    </div>
+    <a href="#why" onclick="toggleMenu()">選ばれる理由</a>
+    <a href="#services" onclick="toggleMenu()">サービス</a>
+    <a href="#channel" onclick="toggleMenu()">チャンネル</a>
+    <a href="#cases" onclick="toggleMenu()">事例</a>
+    <a href="#process" onclick="toggleMenu()">進め方</a>
+    <a href="#pricing" onclick="toggleMenu()">料金</a>
+    <a href="#contact" onclick="toggleMenu()">無料相談</a>
+</div>
 
     <!-- Hero -->
     <section class="hero">
@@ -4188,98 +4633,35 @@
 
     <!-- Clients -->
     <div class="clients-marquee">
-        <div class="clients-label">導入企業・団体</div>
-        <div class="marquee-wrapper">
-            <div class="marquee-track">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Seibu_logo.svg/200px-Seibu_logo.svg.png" alt="西武" class="client-logo">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Odakyu_logo.svg/200px-Odakyu_logo.svg.png" alt="小田急" class="client-logo">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/JINS_logo.svg/200px-JINS_logo.svg.png" alt="JINS" class="client-logo">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Beams_logo.svg/200px-Beams_logo.svg.png" alt="BEAMS" class="client-logo">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Sanrio_logo.svg/200px-Sanrio_logo.svg.png" alt="Sanrio" class="client-logo">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Seibu_logo.svg/200px-Seibu_logo.svg.png" alt="西武" class="client-logo">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Odakyu_logo.svg/200px-Odakyu_logo.svg.png" alt="小田急" class="client-logo">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/JINS_logo.svg/200px-JINS_logo.svg.png" alt="JINS" class="client-logo">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Beams_logo.svg/200px-Beams_logo.svg.png" alt="BEAMS" class="client-logo">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Sanrio_logo.svg/200px-Sanrio_logo.svg.png" alt="Sanrio" class="client-logo">
+    <div class="clients-label">導入企業・団体</div>
+    <div class="marquee-wrapper">
+        <div class="marquee-track">
+            <div class="marquee-content">
+                <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2025/04/c91304d6d6b0962156e9957ed9ddb99d.jpg" alt="西武" class="client-logo">
+                <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2025/04/ALBION.jpg" alt="ALBION" class="client-logo">
+                <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/JINS_Logo.svg_.png" alt="JINS" class="client-logo">
+                <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/07/JR-West-carries-out-a-demonstration-experiment-of-tourism-type-MaaS-in-the-Setouchi-area-20190827-2-300x186-1.jpeg" alt="JR West" class="client-logo">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTI8PJlKV3YqboFYnFGaZAXTzkteC2hnyN_w&s" alt="Sanrio" class="client-logo">
+                <img src="https://kowa-recruit.jp/assets/images/common/logo.png" alt="KOWA" class="client-logo">
+                <img src="https://metoree.s3.ap-northeast-1.amazonaws.com/img/companies/logo/44916.png" alt="Client" class="client-logo">
+                <img src="https://chiikinews.co.jp/wp-content/uploads/2024/03/%E3%88%AA%E5%8D%83%E8%91%89%E7%9C%8C%E5%BA%81%E6%A7%98%E3%83%AD%E3%82%B3%E3%82%99.jpg" alt="千葉県" class="client-logo">
+                <img src="https://www.city.nagareyama.chiba.jp/_template_/_site_/_default_/_res/asp/images/header/tlogo_n.png" alt="流山市" class="client-logo">
+            </div>
+            <div class="marquee-content">
+                <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2025/04/c91304d6d6b0962156e9957ed9ddb99d.jpg" alt="西武" class="client-logo">
+                <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2025/04/ALBION.jpg" alt="ALBION" class="client-logo">
+                <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/JINS_Logo.svg_.png" alt="JINS" class="client-logo">
+                <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/07/JR-West-carries-out-a-demonstration-experiment-of-tourism-type-MaaS-in-the-Setouchi-area-20190827-2-300x186-1.jpeg" alt="JR West" class="client-logo">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTI8PJlKV3YqboFYnFGaZAXTzkteC2hnyN_w&s" alt="Sanrio" class="client-logo">
+                <img src="https://kowa-recruit.jp/assets/images/common/logo.png" alt="KOWA" class="client-logo">
+                <img src="https://metoree.s3.ap-northeast-1.amazonaws.com/img/companies/logo/44916.png" alt="Client" class="client-logo">
+                <img src="https://chiikinews.co.jp/wp-content/uploads/2024/03/%E3%88%AA%E5%8D%83%E8%91%89%E7%9C%8C%E5%BA%81%E6%A7%98%E3%83%AD%E3%82%B3%E3%82%99.jpg" alt="千葉県" class="client-logo">
+                <img src="https://www.city.nagareyama.chiba.jp/_template_/_site_/_default_/_res/asp/images/header/tlogo_n.png" alt="流山市" class="client-logo">
             </div>
         </div>
     </div>
+</div>
 
-    <!-- Service Ribbon -->
-    <div class="service-ribbon">
-        <div class="marquee-wrapper">
-            <div class="service-ribbon-track">
-                <div class="service-ribbon-content">
-                    <div class="service-ribbon-item">
-                        <div class="service-ribbon-icon">✍</div>
-                        <span class="service-ribbon-text">記事制作</span>
-                    </div>
-                    <div class="service-ribbon-item">
-                        <div class="service-ribbon-icon">▶</div>
-                        <span class="service-ribbon-text">動画制作</span>
-                    </div>
-                    <div class="service-ribbon-item">
-                        <div class="service-ribbon-icon">◎</div>
-                        <span class="service-ribbon-text">SNS運用</span>
-                    </div>
-                    <div class="service-ribbon-item">
-                        <div class="service-ribbon-icon">⚡</div>
-                        <span class="service-ribbon-text">Reels / Shorts / TikTok</span>
-                    </div>
-                    <div class="service-ribbon-item">
-                        <div class="service-ribbon-icon">↗</div>
-                        <span class="service-ribbon-text">海外メディア転載</span>
-                    </div>
-                    <div class="service-ribbon-item">
-                        <div class="service-ribbon-icon">★</div>
-                        <span class="service-ribbon-text">インフルエンサー連携</span>
-                    </div>
-                    <div class="service-ribbon-item">
-                        <div class="service-ribbon-icon">言</div>
-                        <span class="service-ribbon-text">翻訳・ローカライズ</span>
-                    </div>
-                    <div class="service-ribbon-item">
-                        <div class="service-ribbon-icon">⚑</div>
-                        <span class="service-ribbon-text">イベント企画</span>
-                    </div>
-                </div>
-                <div class="service-ribbon-content">
-                    <div class="service-ribbon-item">
-                        <div class="service-ribbon-icon">✍</div>
-                        <span class="service-ribbon-text">記事制作</span>
-                    </div>
-                    <div class="service-ribbon-item">
-                        <div class="service-ribbon-icon">▶</div>
-                        <span class="service-ribbon-text">動画制作</span>
-                    </div>
-                    <div class="service-ribbon-item">
-                        <div class="service-ribbon-icon">◎</div>
-                        <span class="service-ribbon-text">SNS運用</span>
-                    </div>
-                    <div class="service-ribbon-item">
-                        <div class="service-ribbon-icon">⚡</div>
-                        <span class="service-ribbon-text">Reels / Shorts / TikTok</span>
-                    </div>
-                    <div class="service-ribbon-item">
-                        <div class="service-ribbon-icon">↗</div>
-                        <span class="service-ribbon-text">海外メディア転載</span>
-                    </div>
-                    <div class="service-ribbon-item">
-                        <div class="service-ribbon-icon">★</div>
-                        <span class="service-ribbon-text">インフルエンサー連携</span>
-                    </div>
-                    <div class="service-ribbon-item">
-                        <div class="service-ribbon-icon">言</div>
-                        <span class="service-ribbon-text">翻訳・ローカライズ</span>
-                    </div>
-                    <div class="service-ribbon-item">
-                        <div class="service-ribbon-icon">⚑</div>
-                        <span class="service-ribbon-text">イベント企画</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-- Market -->
     <section class="market-section">
@@ -4397,9 +4779,9 @@
                     <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/Sunflower_CC13-1-1-800x533-1.webp" alt="Portfolio 3">
                     <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/DSC_0064-1.jpg" alt="Portfolio 4">
                     <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/DSC01179-のコピー-scaled.jpg" alt="Portfolio 5">
-                    <img src="https://via.placeholder.com/400x300" alt="Portfolio 6">
-                    <img src="https://via.placeholder.com/400x300" alt="Portfolio 7">
-                    <img src="https://via.placeholder.com/400x300" alt="Portfolio 8">
+                    <img src="https://www.japankuru.com/gld-kanri/data/uploads/2025/12/Jins_Osaka_CC03_OG-1-768x512.jpg" alt="Portfolio 6">
+                    <img src="https://www.japankuru.com/gld-kanri/data/uploads/2024/07/JINS_Kyoto_CC10-800x533.jpg" alt="Portfolio 7">
+                    <img src="https://img.japankuru.com/prg_img/img/img2023013013431202499500.jpg" alt="Portfolio 8">
                 </div>
                 <div class="marquee-content">
                     <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/JINS_Kyoto_CC33-800x533-1.webp" alt="Portfolio 1">
@@ -4407,9 +4789,9 @@
                     <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/Sunflower_CC13-1-1-800x533-1.webp" alt="Portfolio 3">
                     <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/DSC_0064-1.jpg" alt="Portfolio 4">
                     <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/DSC01179-のコピー-scaled.jpg" alt="Portfolio 5">
-                    <img src="https://via.placeholder.com/400x300" alt="Portfolio 6">
-                    <img src="https://via.placeholder.com/400x300" alt="Portfolio 7">
-                    <img src="https://via.placeholder.com/400x300" alt="Portfolio 8">
+                    <img src="https://www.japankuru.com/gld-kanri/data/uploads/2025/12/Jins_Osaka_CC03_OG-1-768x512.jpg" alt="Portfolio 6">
+                    <img src="https://www.japankuru.com/gld-kanri/data/uploads/2024/07/JINS_Kyoto_CC10-800x533.jpg" alt="Portfolio 7">
+                    <img src="https://img.japankuru.com/prg_img/img/img2023013013431202499500.jpg" alt="Portfolio 8">
                 </div>
             </div>
         </div>
@@ -4419,49 +4801,332 @@
     </section>
 
     <!-- Why -->
-    <section class="why-section" id="why">
-        <div class="section-inner">
-            <div class="section-header center reveal">
-                <div class="section-eyebrow">選ばれる理由</div>
-                <h2 class="section-title">選ばれる理由</h2>
-                <p class="section-desc">インバウンドプロモーションに必要な要素を、ワンストップで。</p>
-            </div>
-            
-            <div class="why-grid reveal">
-                <div class="why-card">
-                    <div class="why-number">01</div>
-                    <h3><span class="why-highlight">持つ</span>メディア</h3>
-                    <p>配信先を借りるのではなく、<strong>142万の自社メディア</strong>を持つ。広告費ゼロでも届き続ける資産に。</p>
-                </div>
-                <div class="why-card">
-                    <div class="why-number">02</div>
-                    <h3><span class="why-highlight">7カ国</span>同時配信</h3>
-                    <p>国別に発注不要。<strong>1回の取材で7カ国へ</strong>同時に届ける効率とスピード。</p>
-                </div>
-                <div class="why-card">
-                    <div class="why-number">03</div>
-                    <h3><span class="why-highlight">現地</span>の視点</h3>
-                    <p>翻訳ではなく、<strong>外国人クリエイターが体験</strong>して発信。「伝わる」表現で届ける。</p>
-                </div>
-                <div class="why-card">
-                    <div class="why-number">04</div>
-                    <h3><span class="why-highlight">届く先</span>を拡大</h3>
-                    <p>SNS投稿だけで終わらない。<strong>Yahoo奇摩・LINE TODAY</strong>等、大手ポータルへ転載。</p>
-                </div>
-                <div class="why-card">
-                    <div class="why-number">05</div>
-                    <h3><span class="why-highlight">資産</span>になる</h3>
-                    <p>単発で消えない。<strong>SEO資産として検索され続ける</strong>。制作素材は2次利用もOK。</p>
-                </div>
-                <div class="why-card">
-                    <div class="why-number">06</div>
-                    <h3><span class="why-highlight">成果</span>が見える</h3>
-                    <p>「バズった」で終わらない。<strong>PV・リーチ・クーポン使用数</strong>をKPIベースで報告。</p>
-                </div>
-            </div>
-            
+    <!-- ===== 選ばれる理由 セクション ===== -->
+<section class="reasons-section" id="why" style="background: #f5f5f7; padding: 80px 24px;">
+    <div class="section-inner">
+        <div class="section-header" style="text-align: center; margin-bottom: 3rem;">
+            <div class="section-badge" style="color: #0066CC; font-size: 0.9rem; font-weight: 600; letter-spacing: 0.1em; margin-bottom: 1rem;">WHY JAPANKURU</div>
+            <h2>選ばれる理由</h2>
+            <p style="color: #666;">インバウンドプロモーションに必要な要素を、ワンストップで。</p>
         </div>
-    </section>
+        
+        <div class="reasons-grid">
+            <div class="reason-card">
+                <div class="number">01</div>
+                <h4>持つメディア</h4>
+                <p>配信先を借りるのではなく、<span class="highlight">142万の自社メディア</span>を持つ。広告費ゼロでも届き続ける資産に。</p>
+            </div>
+            
+            <div class="reason-card">
+                <div class="number">02</div>
+                <h4>7カ国同時配信</h4>
+                <p>国別に発注不要。<span class="highlight">1回の取材で7カ国へ</span>同時に届ける効率とスピード。</p>
+            </div>
+            
+            <div class="reason-card">
+                <div class="number">03</div>
+                <h4>現地の視点</h4>
+                <p>翻訳ではなく、<span class="highlight">外国人クリエイターが体験</span>して発信。「伝わる」表現で届ける。</p>
+            </div>
+            
+            <div class="reason-card featured">
+                <div class="number">04</div>
+                <h4>届く先を拡大</h4>
+                <p>SNS投稿だけで終わらない。<span class="highlight">大手ポータル</span>へ転載。</p>
+                <div class="country-lines">
+                    <div class="country-line">
+                        <span class="country-flag">🇹🇼</span>
+                        <span class="country-partners"><strong>Yahoo!奇摩</strong> / LINE TODAY / JR TIMES / +3</span>
+                    </div>
+                    <div class="country-line">
+                        <span class="country-flag">🇰🇷</span>
+                        <span class="country-partners"><strong>NAVER</strong> / JK DAILY / Oh My News / +1</span>
+                    </div>
+                    <div class="country-line">
+                        <span class="country-flag">🇹🇭</span>
+                        <span class="country-partners"><strong>trueID</strong> / SANOOK / +1</span>
+                    </div>
+                    <div class="country-line">
+                        <span class="country-flag">🇬🇧</span>
+                        <span class="country-partners"><strong>HYPER JAPAN</strong> / Medium / +2</span>
+                    </div>
+                    <div class="country-line">
+                        <span class="country-flag">🇮🇩</span>
+                        <span class="country-partners"><strong>SKYhub</strong> / +1</span>
+                    </div>
+                </div>
+                <div class="partner-summary">
+                    <span>18+ メディアパートナー</span>
+                </div>
+            </div>
+            
+            <div class="reason-card">
+                <div class="number">05</div>
+                <h4>資産になる</h4>
+                <p>単発で消えない。<span class="highlight">SEO資産として検索され続ける</span>。制作素材は2次利用もOK。</p>
+                <div class="sub-points">
+                    <div class="sub-point">記事・写真・動画すべて永続保存</div>
+                    <div class="sub-point">自社サイト・販促物に転用可能</div>
+                    <div class="sub-point">検索順位が時間とともに上昇</div>
+                    <div class="sub-point">過去記事も継続的にアクセス獲得</div>
+                    <div class="sub-point">素材納品はオプションで対応 <span class="option-tag">OP</span></div>
+                </div>
+                <div class="mini-illust illust-graph"></div>
+            </div>
+            
+            <div class="reason-card">
+                <div class="number">06</div>
+                <h4>成果が見える</h4>
+                <p>「バズった」で終わらない。<span class="highlight">PV・リーチ・クーポン使用数</span>をKPIベースで報告。</p>
+                <div class="sub-points">
+                    <div class="sub-point">月次レポートで効果を可視化</div>
+                    <div class="sub-point">国別・チャンネル別の詳細分析</div>
+                    <div class="sub-point">次回施策への改善提案</div>
+                    <div class="sub-point">競合比較・トレンド分析 <span class="option-tag">OP</span></div>
+                    <div class="sub-point">ROI算出サポート <span class="option-tag">OP</span></div>
+                </div>
+                <div class="mini-illust illust-dashboard"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="service-carousel-section" id="services">
+    <div class="service-carousel-container">
+        <div class="carousel-header">
+            <h2>JAPANKURUの統合サービス</h2>
+            <p>ワンストップでインバウンドマーケティングを実現</p>
+        </div>
+
+        <!-- Service Pills -->
+        <div class="service-pills" id="servicePills"></div>
+
+        <!-- Detail Card -->
+        <div class="service-detail-card" id="serviceDetailCard"></div>
+
+        <!-- Navigation Dots -->
+        <div class="carousel-dots" id="carouselDots"></div>
+
+        <div class="autoplay-indicator" id="autoplayIndicator">
+            自動再生中 • ホバーで停止
+        </div>
+    </div>
+</section>
+
+
+<!-- ========== 3. JS (기존 <script> 태그 안에 추가) ========== -->
+<script>
+// Service Carousel
+(function() {
+    const services = [
+        {
+            id: 1,
+            icon: '✍',
+            name: '記事制作',
+            tagline: '7カ国語対応・SEO最適化',
+            description: 'ネイティブライターが各国の検索トレンドに合わせた記事を制作。Google検索で上位表示され、永続的な集客資産として機能します。',
+            features: ['ネイティブ執筆', 'SEO最適化', '写真15-20枚', '永続掲載']
+        },
+        {
+            id: 2,
+            icon: '▶',
+            name: '動画制作',
+            tagline: 'YouTube・Reels・TikTok対応',
+            description: '4K撮影からプロ編集、多言語字幕まで一貫対応。各プラットフォームに最適化した動画で、視覚的な訴求を実現します。',
+            features: ['4K撮影', 'プロ編集', '多言語字幕', 'サムネイル制作']
+        },
+        {
+            id: 3,
+            icon: '◎',
+            name: 'SNS運用',
+            tagline: '35チャンネル・142万フォロワー',
+            description: '自社運営の35チャンネルで即時露出。投稿からコミュニティ管理まで、継続的なエンゲージメントを創出します。',
+            features: ['即時配信', 'コミュニティ管理', 'レポート提供', '35チャンネル']
+        },
+        {
+            id: 4,
+            icon: '⚡',
+            name: 'Reels / Shorts',
+            tagline: 'ショート動画でバイラル',
+            description: 'Z世代・ミレニアル世代に刺さるトレンド感のあるショート動画を企画・制作。バイラル拡散を狙います。',
+            features: ['トレンド分析', '縦型最適化', '音楽選定', '拡散設計']
+        },
+        {
+            id: 5,
+            icon: '↗',
+            name: '海外メディア転載',
+            tagline: '現地メディアへ直接配信',
+            description: 'Yahoo奇摩・LINE TODAY等、各国の主要メディアへコンテンツを直接配信。現地での認知度と信頼性を高めます。',
+            features: ['現地メディア連携', '記事転載', 'PR配信', '露出レポート']
+        },
+        {
+            id: 6,
+            icon: '★',
+            name: 'インフルエンサー連携',
+            tagline: '50+クリエイターネットワーク',
+            description: '厳選された50名以上のインフルエンサーとのコラボレーション。ターゲット層への効果的なリーチを実現します。',
+            features: ['厳選クリエイター', 'マッチング', '効果測定', 'キャンペーン設計']
+        },
+        {
+            id: 7,
+            icon: '言',
+            name: '翻訳・ローカライズ',
+            tagline: '文化的背景まで考慮',
+            description: '単なる翻訳ではなく、各国の文化・習慣に合わせたローカライズ。現地の方に自然に伝わる表現を実現します。',
+            features: ['ネイティブ翻訳', '文化最適化', '7カ国語対応', '専門用語対応']
+        },
+        {
+            id: 8,
+            icon: '⚑',
+            name: 'イベント企画',
+            tagline: 'オフライン施策も対応',
+            description: 'FAMツアー、メディア向けイベント、現地プロモーションの企画から運営まで。オンライン×オフラインの相乗効果を創出します。',
+            features: ['FAMツアー', 'メディア招致', '現地イベント', '運営サポート']
+        }
+    ];
+
+    let currentIndex = 0;
+    let isAutoPlay = true;
+    let autoPlayInterval;
+
+    function init() {
+        const pillsContainer = document.getElementById('servicePills');
+        if (!pillsContainer) return; // 요소가 없으면 실행 안함
+        
+        renderPills();
+        renderDots();
+        updateDetailCard();
+        startAutoPlay();
+        
+        const section = document.querySelector('.service-carousel-section');
+        if (section) {
+            section.addEventListener('mouseenter', pauseAutoPlay);
+            section.addEventListener('mouseleave', resumeAutoPlay);
+            section.addEventListener('touchstart', pauseAutoPlay, { passive: true });
+        }
+    }
+
+    function pauseAutoPlay() {
+        isAutoPlay = false;
+        clearInterval(autoPlayInterval);
+        const indicator = document.getElementById('autoplayIndicator');
+        if (indicator) indicator.textContent = '一時停止中';
+    }
+
+    function resumeAutoPlay() {
+        isAutoPlay = true;
+        startAutoPlay();
+        const indicator = document.getElementById('autoplayIndicator');
+        if (indicator) indicator.textContent = '自動再生中 • ホバーで停止';
+    }
+
+    function renderPills() {
+        const container = document.getElementById('servicePills');
+        if (!container) return;
+        
+        container.innerHTML = services.map((service, index) => 
+            `<button class="service-pill ${index === currentIndex ? 'active' : ''}" data-index="${index}">
+                <span class="pill-icon">${service.icon}</span>
+                <span>${service.name}</span>
+            </button>`
+        ).join('');
+
+        container.querySelectorAll('.service-pill').forEach(pill => {
+            pill.addEventListener('click', () => {
+                goToSlide(parseInt(pill.dataset.index));
+            });
+        });
+    }
+
+    function renderDots() {
+        const container = document.getElementById('carouselDots');
+        if (!container) return;
+        
+        container.innerHTML = services.map((_, index) => 
+            `<button class="carousel-dot ${index === currentIndex ? 'active' : ''}" data-index="${index}"></button>`
+        ).join('');
+
+        container.querySelectorAll('.carousel-dot').forEach(dot => {
+            dot.addEventListener('click', () => {
+                goToSlide(parseInt(dot.dataset.index));
+            });
+        });
+    }
+
+    function updateDetailCard() {
+        const service = services[currentIndex];
+        const container = document.getElementById('serviceDetailCard');
+        if (!container) return;
+        
+        container.innerHTML = `
+            <div class="carousel-card-content">
+                <div class="carousel-card-icon">${service.icon}</div>
+                <div class="carousel-card-text">
+                    <h3>${service.name}</h3>
+                    <p class="carousel-tagline">${service.tagline}</p>
+                    <p class="carousel-description">${service.description}</p>
+                    <div class="carousel-card-features">
+                        ${service.features.map(f => `<span class="carousel-feature-tag">${f}</span>`).join('')}
+                    </div>
+                    <div class="carousel-card-buttons">
+                        <a href="#contact" class="carousel-btn-primary">詳細を相談</a>
+                        <a href="#cases" class="carousel-btn-secondary">事例を見る</a>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        // Re-trigger animation
+        container.style.animation = 'none';
+        container.offsetHeight; // Force reflow
+        container.style.animation = 'carouselCardFadeIn 0.4s ease';
+    }
+
+    function goToSlide(index) {
+        currentIndex = index;
+        
+        document.querySelectorAll('.service-pill').forEach((pill, i) => {
+            pill.classList.toggle('active', i === index);
+        });
+        
+        document.querySelectorAll('.carousel-dot').forEach((dot, i) => {
+            dot.classList.toggle('active', i === index);
+        });
+        
+        updateDetailCard();
+        
+        // Scroll pill into view (컨테이너 내부만 스크롤)
+        const pillsContainer = document.getElementById('servicePills');
+        const pills = document.querySelectorAll('.service-pill');
+        if (pillsContainer && pills[index]) {
+            const pill = pills[index];
+            const containerRect = pillsContainer.getBoundingClientRect();
+            const pillRect = pill.getBoundingClientRect();
+            const scrollLeft = pillsContainer.scrollLeft + (pillRect.left - containerRect.left) - (containerRect.width / 2) + (pillRect.width / 2);
+            pillsContainer.scrollTo({
+                left: scrollLeft,
+                behavior: 'smooth'
+            });
+        }
+        }
+    function startAutoPlay() {
+        clearInterval(autoPlayInterval);
+        autoPlayInterval = setInterval(() => {
+            if (isAutoPlay) {
+                currentIndex = (currentIndex + 1) % services.length;
+                goToSlide(currentIndex);
+            }
+        }, 4000);
+    }
+
+    // Initialize when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+})();
+</script>
 
     <!-- Video Showcase -->
     <section class="video-showcase">
