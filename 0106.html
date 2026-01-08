@@ -5299,6 +5299,283 @@
 .portfolio-marquee-section .marquee-track:hover {
     animation-play-state: paused;
 }
+
+/* ARTICLE 카드를 다른 카드들과 동일한 여백(90% 너비)으로 맞춤 */
+.services-section .service-card.wide .card-mockup {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 15px !important; /* 다른 카드들과 동일한 프레임 여백 생성 */
+}
+
+.services-section .service-card.wide .browser-mockup {
+    width: 100% !important; /* 위에서 설정한 패딩(15px) 안에서 100% 채움 */
+    max-width: none !important;
+    margin: 0 !important;
+    border-radius: 12px !important; /* 테두리를 둥글게 해서 프레임 느낌 생성 */
+    overflow: hidden !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3) !important; /* 다른 카드와 그림자 통일 */
+}
+
+.services-section .service-card.wide .browser-content {
+    height: 220px !important; /* 전체 높이 밸런스 조정 */
+}
+
+.services-section .service-card.wide .browser-content img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: top !important;
+}
+.services-section .browser-content {
+    position: relative;
+    height: 220px;
+    overflow: hidden;
+}
+.services-section .browser-content img {
+    transition: transform 5s linear; /* 마우스 올리면 천천히 내려감 */
+}
+.services-section .service-card:hover .browser-content img {
+    transform: translateY(-50%); /* 이미지 길이에 따라 조절 */
+}
+.client-logo {
+    filter: grayscale(0%); /* 흑백 해제 */
+    opacity: 0.7; /* 투명도로만 조절 */
+}
+@media (max-width: 768px) {
+    .mobile-tabs {
+        display: flex;
+        overflow-x: auto; /* 가로 스크롤 가능하게 */
+        gap: 8px;
+        padding: 5px 0 15px;
+        margin-bottom: 10px;
+        scrollbar-width: none; /* 스크롤바 숨기기 (Firefox) */
+    }
+    .mobile-tabs::-webkit-scrollbar { display: none; } /* 스크롤바 숨기기 (Chrome) */
+
+    .tab-btn {
+        flex: 0 0 auto;
+        padding: 10px 18px;
+        border-radius: 30px;
+        border: 1px solid rgba(255,255,255,0.1);
+        background: rgba(255,255,255,0.05);
+        color: #94a3b8;
+        font-size: 13px;
+        font-weight: 700;
+    }
+    .tab-btn.active {
+        background: var(--accent);
+        color: white;
+        border-color: var(--accent);
+        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+    }
+    /* 탭 로직: 기본적으로 숨기고 active 클래스만 보여줌 */
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+}
+
+/* PC에서는 탭 콘텐츠가 모두 보여야 하므로 강제 표시 */
+@media (min-width: 769px) {
+    .tab-content { display: block !important; }
+}
+
+/* 커스터머 저니 강화 스타일 */
+.journey-section .section-subtitle {
+    margin-top: 10px;
+    font-size: 14px;
+    color: var(--accent);
+    font-weight: 700;
+}
+
+/* 페이즈별 애니메이션 */
+.timeline-phase:hover .browser-screen img {
+    transform: translateY(-30%); /* 기사 스크롤 효과 */
+    transition: transform 4s linear;
+}
+
+.timeline-phase:hover .mobile-screen img {
+    transform: scale(1.1); /* 영상 확대 느낌 */
+    transition: transform 0.5s ease;
+}
+
+.timeline-phase:hover .sns-avatar {
+    box-shadow: 0 0 15px var(--accent);
+    transition: 0.3s;
+}
+
+/* 하단 올인원 연결부 아이콘 */
+.all-in-one-icons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 5;
+}
+
+.all-in-one-icons span {
+    width: 32px;
+    height: 32px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    font-size: 16px;
+}
+
+/* 중복 프레임 제거 및 이미지 최적화 */
+.phase-visual {
+    margin: 20px 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.phase-image-wrap {
+    width: 100%;
+    max-width: 260px; /* 카드의 너비에 맞게 조절 */
+    height: 180px;    /* 일정한 높이 유지 */
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1); /* 깔끔한 그림자 */
+    background: #f8fafc;
+}
+
+.phase-image-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* 이미지가 찌그러지지 않고 영역을 꽉 채움 */
+    object-position: top; /* 기사의 윗부분 위주로 노출 */
+    transition: transform 0.4s ease;
+}
+
+/* 호버 시 이미지가 살짝 커지는 효과 */
+.timeline-phase:hover .phase-image-wrap img {
+    transform: scale(1.08);
+}
+
+/* 1. 브라우저 (PHASE 01) - 가로 비율 유지 */
+.browser-mockup-final {
+    width: 100%;
+    max-width: 280px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    overflow: hidden;
+    margin: 0 auto;
+}
+.browser-header-simple { background: #f1f3f4; padding: 8px; display: flex; }
+.browser-header-simple .dots { display: flex; gap: 4px; }
+.browser-header-simple .dots span { width: 6px; height: 6px; border-radius: 50%; background: #ccc; }
+.browser-img-area { width: 100%; aspect-ratio: 1.6 / 1; overflow: hidden; }
+.browser-img-area img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+
+/* 2. 릴스 (PHASE 02) - 프레임 제거 및 비율 최적화 */
+.reels-display-clean {
+    width: 160px; /* 이미지가 목업이므로 폭만 적절히 조절 */
+    margin: 0 auto;
+    /* 테두리(border)와 그림자(box-shadow)를 제거하거나 아주 연하게 설정 */
+    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.15)); 
+    transition: transform 0.3s ease;
+}
+
+.reels-display-clean img {
+    width: 100%;
+    height: auto; /* 세로로 긴 이미지가 잘리지 않고 다 나오게 함 */
+    display: block;
+    border-radius: 20px; /* 이미지 자체의 모서리가 뾰족하다면 살짝 굴려줌 */
+}
+
+/* 호버 시 효과 */
+.timeline-phase:hover .reels-display-clean {
+    transform: scale(1.05) translateY(-5px);
+}
+
+/* 3. 인스타 포스팅 (PHASE 03) - 레이아웃 밸런스 수정 */
+.insta-mockup-final {
+    width: 100%;
+    max-width: 220px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    border: 1px solid #efefef;
+    overflow: hidden; /* 영역 밖으로 나가는 이미지 숨김 */
+    
+    /* [중요] 카드가 아래로 밀리지 않도록 최대 높이 제한 */
+    max-height: 320px; 
+    display: flex;
+    flex-direction: column;
+}
+
+.insta-img-area { 
+    width: 100%; 
+    /* 이미지가 길 경우 내부에서 스크롤하거나 상단 위주로 보여줌 */
+    overflow-y: auto; 
+    scrollbar-width: none; /* Firefox 스크롤바 숨김 */
+}
+
+.insta-img-area::-webkit-scrollbar {
+    display: none; /* Chrome, Safari 스크롤바 숨김 */
+}
+
+.insta-img-area img { 
+    width: 100%; 
+    height: auto; 
+    display: block; 
+}
+
+/* 공통: 호버 효과 (선택자 중복 정리) */
+.timeline-phase:hover .browser-mockup-final,
+.timeline-phase:hover .reels-display-clean,
+.timeline-phase:hover .insta-mockup-final {
+    transform: scale(1.05) translateY(-5px);
+    transition: 0.3s ease;
+}
+/* 2. 릴스 (PHASE 02) */
+.reels-display-clean {
+    width: 160px;
+    margin: 0 auto;
+    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.15));
+}
+.reels-display-clean img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 18px;
+}
+
+/* 3. 인스타 포스팅 (PHASE 03) */
+.insta-mockup-final {
+    width: 100%;
+    max-width: 220px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    border: 1px solid #efefef;
+    max-height: 300px; /* PC에서 카드가 밀리지 않게 높이 제한 */
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+.insta-img-area { 
+    width: 100%; 
+    overflow-y: auto; /* 이미지가 길면 내부 스크롤 */
+    scrollbar-width: none; 
+}
+.insta-img-area::-webkit-scrollbar { display: none; }
+.insta-img-area img { width: 100%; height: auto; display: block; }
+
+/* 공통 호버 효과 정리 */
+.timeline-phase:hover .browser-mockup-final,
+.timeline-phase:hover .reels-display-clean,
+.timeline-phase:hover .insta-mockup-final {
+    transform: scale(1.05) translateY(-5px);
+    transition: 0.3s ease;
+}
     </style>
 </head>
 <body>
@@ -5881,25 +6158,25 @@
             
             <!-- 1. 記事制作 -->
             <div class="service-card wide">
-                <div class="card-mockup">
-                    <div class="browser-mockup">
-                        <div class="browser-header">
-                            <div class="browser-dots">
-                                <span></span><span></span><span></span>
-                            </div>
-                            <div class="browser-url">japankuru.com/article</div>
-                        </div>
-                        <div class="browser-content">
-                            <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2026/01/スクリーンショット-2026-01-07-17.20.27.png" alt="Article">
-                        </div>
-                    </div>
+    <div class="card-mockup">
+        <div class="browser-mockup" style="height: 100%;">
+            <div class="browser-header">
+                <div class="browser-dots">
+                    <span></span><span></span><span></span>
                 </div>
-                <div class="card-info">
-                    <div class="card-label">ARTICLE</div>
-                    <div class="card-title">記事制作</div>
-                    <p class="card-desc">クリエイターが体験取材。SEO最適化された記事を永続掲載。</p>
-                </div>
+                <div class="browser-url">japankuru.com/article</div>
             </div>
+            <div class="browser-content">
+                <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2026/01/スクリーンショット-2026-01-07-17.20.27.png" alt="Article">
+            </div>
+        </div>
+    </div>
+    <div class="card-info">
+        <div class="card-label">ARTICLE</div>
+        <div class="card-title">記事制作</div>
+        <p class="card-desc">クリエイターが体験取材。SEO最適化された記事を永続掲載。</p>
+    </div>
+</div>
 
             <!-- 2. イベントカレンダー -->
             <div class="service-card wide">
@@ -5980,7 +6257,7 @@
                 <div class="card-info">
                     <div class="card-label">SHORT VIDEO</div>
                     <div class="card-title">Reels / Shorts</div>
-                    <p class="card-desc">トレンド感のあるショート動画でバイラル拡散。</p>
+                    <p class="card-desc">Z世代の共感を呼び起こす、圧倒的な拡散力を持つ縦型ショート動画。</p>
                 </div>
             </div>
 
@@ -6230,247 +6507,260 @@
             </div>
             
             <!-- Country Channels (테이블 형식) -->
+
+            <div class="mobile-tabs sp-only">
+    <button class="tab-btn active" onclick="openTab(event, 'tab-en')">🇺🇸 EN</button>
+    <button class="tab-btn" onclick="openTab(event, 'tab-tw')">🇹🇼 TW</button>
+    <button class="tab-btn" onclick="openTab(event, 'tab-th')">🇹🇭 TH</button>
+    <button class="tab-btn" onclick="openTab(event, 'tab-kr')">🇰🇷 KR</button>
+    <button class="tab-btn" onclick="openTab(event, 'tab-cn')">🇨🇳 CN</button>
+</div>
+
             <div class="country-table reveal">
-                <!-- 英語圏 (1st) -->
-                <div class="country-row">
-                    <div class="country-row-header">
-                        <div class="country-info">
-                            <span class="country-flag">EN</span>
-                            <div class="country-meta">
-                                <span class="country-name">英語圏</span>
-                                <span class="country-stat">FB+IG 90万 フォロワー</span>
-                            </div>
-                        </div>
-                        <span class="country-trait">🌏 北米・欧州中心・旅好き層</span>
-                    </div>
-                    <div class="country-channels">
-                        <a href="https://japankuru.com" target="_blank" class="channel-chip">
-                            <svg viewBox="0 0 24 24" fill="#666"><circle cx="12" cy="12" r="10"/></svg>
-                            JAPANKURU.com
-                        </a>
-                        <a href="https://www.facebook.com/Japankuru" target="_blank" class="channel-chip active">
-                            <svg viewBox="0 0 24 24" fill="#fff"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-                            Facebook
-                        </a>
-                        <a href="https://www.instagram.com/japankuru" target="_blank" class="channel-chip active">
-                            <svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
-                            Instagram
-                        </a>
-                        <a href="https://www.pinterest.com/japankuru" target="_blank" class="channel-chip">
-                            <svg viewBox="0 0 24 24" fill="#E60023"><path d="M12 0C5.373 0 0 5.372 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 01.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12 0-6.628-5.373-12-12-12z"/></svg>
-                            Pinterest
-                        </a>
-                        <a href="https://www.threads.com/@japankuru" target="_blank" class="channel-chip">
-                            <svg viewBox="0 0 24 24" fill="#000"><path d="M12.186 24h-.007c-3.581-.024-6.334-1.205-8.184-3.509C2.35 18.44 1.5 15.586 1.472 12.01v-.017c.03-3.579.879-6.43 2.525-8.482C5.845 1.205 8.6.024 12.18 0h.014c2.746.02 5.043.725 6.826 2.098 1.677 1.29 2.858 3.13 3.509 5.467l-2.04.569c-1.104-3.96-3.898-5.984-8.304-6.015-2.91.022-5.11.936-6.54 2.717C4.307 6.504 3.616 8.914 3.589 12c.027 3.086.718 5.496 2.057 7.164 1.43 1.783 3.631 2.698 6.54 2.717 2.623-.02 4.358-.631 5.8-2.045 1.647-1.613 1.618-3.593 1.09-4.798-.31-.71-.873-1.3-1.634-1.75-.192 1.352-.622 2.446-1.284 3.272-.886 1.102-2.14 1.704-3.73 1.79-1.202.065-2.361-.218-3.259-.801-1.063-.689-1.685-1.74-1.752-2.96-.065-1.182.408-2.256 1.332-3.023.88-.73 2.088-1.146 3.5-1.208 1.028-.045 1.964.062 2.793.32l.025-.006c-.06-.548-.177-.985-.358-1.313-.258-.468-.674-.793-1.276-.996-.669-.224-1.528-.293-2.553-.204l-.166-2.082c1.263-.11 2.378-.026 3.316.25.993.293 1.77.823 2.31 1.576.49.683.805 1.544.942 2.567.684.199 1.303.456 1.855.773 1.166.668 2.022 1.56 2.543 2.652.784 1.648.85 4.313-1.323 6.446-1.857 1.822-4.152 2.655-7.394 2.679zm-.766-5.925c1.134-.062 1.99-.478 2.543-1.237.476-.654.756-1.533.84-2.63-.526-.14-1.105-.216-1.73-.228l-.164-.002c-1.958 0-3.326.762-3.246 2.205.053.972.768 1.834 2.757 1.892z"/></svg>
-                            Threads
-                        </a>
-                        <a href="https://www.youtube.com/@cometojapankuru" target="_blank" class="channel-chip">
-                            <svg viewBox="0 0 24 24" fill="#FF0000"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814z"/><path d="M9.545 15.568V8.432L15.818 12z" fill="#fff"/></svg>
-                            YouTube
-                        </a>
+    <div id="tab-en" class="tab-content active">
+        <div class="country-row">
+            <div class="country-row-header">
+                <div class="country-info">
+                    <span class="country-flag">EN</span>
+                    <div class="country-meta">
+                        <span class="country-name">英語圏</span>
+                        <span class="country-stat">FB+IG 90万 フォロワー</span>
                     </div>
                 </div>
-                
-                <!-- 台湾 (2nd) -->
-                <div class="country-row">
-                    <div class="country-row-header">
-                        <div class="country-info">
-                            <span class="country-flag">TW</span>
-                            <div class="country-meta">
-                                <span class="country-name">台湾</span>
-                                <span class="country-stat">FB 1.3万 フォロワー</span>
-                            </div>
-                        </div>
-                        <span class="country-trait">👩 30〜40代女性・リピーター多</span>
-                    </div>
-                    <div class="country-channels">
-                        <a href="https://japankuru.com/tc" target="_blank" class="channel-chip">
-                            <svg viewBox="0 0 24 24" fill="#666"><circle cx="12" cy="12" r="10"/></svg>
-                            JAPANKURU.com
-                        </a>
-                        <a href="https://www.facebook.com/japankurutw" target="_blank" class="channel-chip active">
-                            <svg viewBox="0 0 24 24" fill="#fff"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-                            Facebook
-                        </a>
-                        <a href="https://www.instagram.com/japankurutw" target="_blank" class="channel-chip">
-                            <svg viewBox="0 0 24 24" fill="#E4405F"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
-                            Instagram
-                        </a>
-                        <a href="https://japankuru.pixnet.net/blog" target="_blank" class="channel-chip">
-                            <img src="https://www.pixnet.net/_nuxt/img/pixnet_logo.a6c2254.svg" alt="Pixnet" style="width:16px;height:16px;">
-                            Pixnet
-                        </a>
-                        <a href="https://www.threads.com/@japankuru_tc" target="_blank" class="channel-chip">
-                            <svg viewBox="0 0 24 24" fill="#000"><path d="M12.186 24h-.007c-3.581-.024-6.334-1.205-8.184-3.509C2.35 18.44 1.5 15.586 1.472 12.01v-.017c.03-3.579.879-6.43 2.525-8.482C5.845 1.205 8.6.024 12.18 0h.014c2.746.02 5.043.725 6.826 2.098 1.677 1.29 2.858 3.13 3.509 5.467l-2.04.569c-1.104-3.96-3.898-5.984-8.304-6.015-2.91.022-5.11.936-6.54 2.717C4.307 6.504 3.616 8.914 3.589 12c.027 3.086.718 5.496 2.057 7.164 1.43 1.783 3.631 2.698 6.54 2.717 2.623-.02 4.358-.631 5.8-2.045 1.647-1.613 1.618-3.593 1.09-4.798-.31-.71-.873-1.3-1.634-1.75-.192 1.352-.622 2.446-1.284 3.272-.886 1.102-2.14 1.704-3.73 1.79-1.202.065-2.361-.218-3.259-.801-1.063-.689-1.685-1.74-1.752-2.96-.065-1.182.408-2.256 1.332-3.023.88-.73 2.088-1.146 3.5-1.208 1.028-.045 1.964.062 2.793.32l.025-.006c-.06-.548-.177-.985-.358-1.313-.258-.468-.674-.793-1.276-.996-.669-.224-1.528-.293-2.553-.204l-.166-2.082c1.263-.11 2.378-.026 3.316.25.993.293 1.77.823 2.31 1.576.49.683.805 1.544.942 2.567.684.199 1.303.456 1.855.773 1.166.668 2.022 1.56 2.543 2.652.784 1.648.85 4.313-1.323 6.446-1.857 1.822-4.152 2.655-7.394 2.679zm-.766-5.925c1.134-.062 1.99-.478 2.543-1.237.476-.654.756-1.533.84-2.63-.526-.14-1.105-.216-1.73-.228l-.164-.002c-1.958 0-3.326.762-3.246 2.205.053.972.768 1.834 2.757 1.892z"/></svg>
-                            Threads
-                        </a>
-                    </div>
-                </div>
-                
-                <!-- タイ (3rd) -->
-                <div class="country-row">
-                    <div class="country-row-header">
-                        <div class="country-info">
-                            <span class="country-flag">TH</span>
-                            <div class="country-meta">
-                                <span class="country-name">タイ</span>
-                                <span class="country-stat">FB 1.1万 フォロワー</span>
-                            </div>
-                        </div>
-                        <span class="country-trait">🧑 若年層中心・初訪日が多い</span>
-                    </div>
-                    <div class="country-channels">
-                        <a href="https://japankuru.com/th" target="_blank" class="channel-chip">
-                            <svg viewBox="0 0 24 24" fill="#666"><circle cx="12" cy="12" r="10"/></svg>
-                            JAPANKURU.com
-                        </a>
-                        <a href="https://www.facebook.com/japankuruth" target="_blank" class="channel-chip active">
-                            <svg viewBox="0 0 24 24" fill="#fff"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-                            Facebook
-                        </a>
-                        <a href="https://www.instagram.com/japankuru_th" target="_blank" class="channel-chip">
-                            <svg viewBox="0 0 24 24" fill="#E4405F"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
-                            Instagram
-                        </a>
-                        <a href="https://www.tiktok.com/@japankuru_thai" target="_blank" class="channel-chip">
-                            <svg viewBox="0 0 24 24" fill="#fff"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
-                            TikTok
-                        </a>
+                <span class="country-trait">🌏 北米・欧州中心・旅好き層</span>
+            </div>
+            <div class="country-channels">
+                <a href="https://japankuru.com" target="_blank" class="channel-chip">
+                    <svg viewBox="0 0 24 24" fill="#666"><circle cx="12" cy="12" r="10"/></svg>
+                    JAPANKURU.com
+                </a>
+                <a href="https://www.facebook.com/Japankuru" target="_blank" class="channel-chip active">
+                    <svg viewBox="0 0 24 24" fill="#fff"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                    Facebook
+                </a>
+                <a href="https://www.instagram.com/japankuru" target="_blank" class="channel-chip active">
+                    <svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                    Instagram
+                </a>
+                <a href="https://www.pinterest.com/japankuru" target="_blank" class="channel-chip">
+                    <svg viewBox="0 0 24 24" fill="#E60023"><path d="M12 0C5.373 0 0 5.372 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 01.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12 0-6.628-5.373-12-12-12z"/></svg>
+                    Pinterest
+                </a>
+                <a href="https://www.threads.com/@japankuru" target="_blank" class="channel-chip">
+                    <svg viewBox="0 0 24 24" fill="#000"><path d="M12.186 24h-.007c-3.581-.024-6.334-1.205-8.184-3.509C2.35 18.44 1.5 15.586 1.472 12.01v-.017c.03-3.579.879-6.43 2.525-8.482C5.845 1.205 8.6.024 12.18 0h.014c2.746.02 5.043.725 6.826 2.098 1.677 1.29 2.858 3.13 3.509 5.467l-2.04.569c-1.104-3.96-3.898-5.984-8.304-6.015-2.91.022-5.11.936-6.54 2.717C4.307 6.504 3.616 8.914 3.589 12c.027 3.086.718 5.496 2.057 7.164 1.43 1.783 3.631 2.698 6.54 2.717 2.623-.02 4.358-.631 5.8-2.045 1.647-1.613 1.618-3.593 1.09-4.798-.31-.71-.873-1.3-1.634-1.75-.192 1.352-.622 2.446-1.284 3.272-.886 1.102-2.14 1.704-3.73 1.79-1.202.065-2.361-.218-3.259-.801-1.063-.689-1.685-1.74-1.752-2.96-.065-1.182.408-2.256 1.332-3.023.88-.73 2.088-1.146 3.5-1.208 1.028-.045 1.964.062 2.793.32l.025-.006c-.06-.548-.177-.985-.358-1.313-.258-.468-.674-.793-1.276-.996-.669-.224-1.528-.293-2.553-.204l-.166-2.082c1.263-.11 2.378-.026 3.316.25.993.293 1.77.823 2.31 1.576.49.683.805 1.544.942 2.567.684.199 1.303.456 1.855.773 1.166.668 2.022 1.56 2.543 2.652.784 1.648.85 4.313-1.323 6.446-1.857 1.822-4.152 2.655-7.394 2.679zm-.766-5.925c1.134-.062 1.99-.478 2.543-1.237.476-.654.756-1.533.84-2.63-.526-.14-1.105-.216-1.73-.228l-.164-.002c-1.958 0-3.326.762-3.246 2.205.053.972.768 1.834 2.757 1.892z"/></svg>
+                    Threads
+                </a>
+                <a href="https://www.youtube.com/@cometojapankuru" target="_blank" class="channel-chip">
+                    <svg viewBox="0 0 24 24" fill="#FF0000"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814z"/><path d="M9.545 15.568V8.432L15.818 12z" fill="#fff"/></svg>
+                    YouTube
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div id="tab-tw" class="tab-content">
+        <div class="country-row">
+            <div class="country-row-header">
+                <div class="country-info">
+                    <span class="country-flag">TW</span>
+                    <div class="country-meta">
+                        <span class="country-name">台湾</span>
+                        <span class="country-stat">FB 1.3万 フォロワー</span>
                     </div>
                 </div>
-                
-                <!-- 韓国 (4th) -->
-                <div class="country-row">
-                    <div class="country-row-header">
-                        <div class="country-info">
-                            <span class="country-flag">KR</span>
-                            <div class="country-meta">
-                                <span class="country-name">韓国</span>
-                                <span class="country-stat">Naver Blog 1.1万 読者</span>
-                            </div>
-                        </div>
-                        <span class="country-trait">💄 20〜30代・トレンド敏感</span>
-                    </div>
-                    <div class="country-channels">
-                        <a href="https://japankuru.com/ko" target="_blank" class="channel-chip">
-                            <svg viewBox="0 0 24 24" fill="#666"><circle cx="12" cy="12" r="10"/></svg>
-                            JAPANKURU.com
-                        </a>
-                        <a href="https://blog.naver.com/japankuru" target="_blank" class="channel-chip active">
-                            <svg viewBox="0 0 24 24" fill="#fff"><path d="M16.273 12.845L7.376 0H0v24h7.727V11.155L16.624 24H24V0h-7.727z"/></svg>
-                            Naver Blog
-                        </a>
-                        <a href="https://in.naver.com/japankuru" target="_blank" class="channel-chip">
-                            <svg viewBox="0 0 24 24" fill="#03C75A"><path d="M16.273 12.845L7.376 0H0v24h7.727V11.155L16.624 24H24V0h-7.727z"/></svg>
-                            Influencer
-                        </a>
-                        <a href="https://www.instagram.com/japankuru_korean" target="_blank" class="channel-chip">
-                            <svg viewBox="0 0 24 24" fill="#E4405F"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
-                            Instagram
-                        </a>
-                        <a href="https://www.youtube.com/@%EC%9E%AC%ED%8C%AC%EC%BF%A0%EB%A3%A8%EC%BD%94%EB%A6%AC%EC%95%84" target="_blank" class="channel-chip">
-                            <svg viewBox="0 0 24 24" fill="#FF0000"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814z"/></svg>
-                            YouTube
-                        </a>
-                        <a href="https://www.tiktok.com/@japankuru_kr" target="_blank" class="channel-chip">
-                            <svg viewBox="0 0 24 24" fill="#fff"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
-                            TikTok
-                        </a>
+                <span class="country-trait">👩 30〜40代女性・リピーター多</span>
+            </div>
+            <div class="country-channels">
+                <a href="https://japankuru.com/tc" target="_blank" class="channel-chip">
+                    <svg viewBox="0 0 24 24" fill="#666"><circle cx="12" cy="12" r="10"/></svg>
+                    JAPANKURU.com
+                </a>
+                <a href="https://www.facebook.com/japankurutw" target="_blank" class="channel-chip active">
+                    <svg viewBox="0 0 24 24" fill="#fff"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                    Facebook
+                </a>
+                <a href="https://www.instagram.com/japankurutw" target="_blank" class="channel-chip">
+                    <svg viewBox="0 0 24 24" fill="#E4405F"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                    Instagram
+                </a>
+                <a href="https://japankuru.pixnet.net/blog" target="_blank" class="channel-chip">
+                    <img src="https://www.pixnet.net/_nuxt/img/pixnet_logo.a6c2254.svg" alt="Pixnet" style="width:16px;height:16px;">
+                    Pixnet
+                </a>
+                <a href="https://www.threads.com/@japankuru_tc" target="_blank" class="channel-chip">
+                    <svg viewBox="0 0 24 24" fill="#000"><path d="M12.186 24h-.007c-3.581-.024-6.334-1.205-8.184-3.509C2.35 18.44 1.5 15.586 1.472 12.01v-.017c.03-3.579.879-6.43 2.525-8.482C5.845 1.205 8.6.024 12.18 0h.014c2.746.02 5.043.725 6.826 2.098 1.677 1.29 2.858 3.13 3.509 5.467l-2.04.569c-1.104-3.96-3.898-5.984-8.304-6.015-2.91.022-5.11.936-6.54 2.717C4.307 6.504 3.616 8.914 3.589 12c.027 3.086.718 5.496 2.057 7.164 1.43 1.783 3.631 2.698 6.54 2.717 2.623-.02 4.358-.631 5.8-2.045 1.647-1.613 1.618-3.593 1.09-4.798-.31-.71-.873-1.3-1.634-1.75-.192 1.352-.622 2.446-1.284 3.272-.886 1.102-2.14 1.704-3.73 1.79-1.202.065-2.361-.218-3.259-.801-1.063-.689-1.685-1.74-1.752-2.96-.065-1.182.408-2.256 1.332-3.023.88-.73 2.088-1.146 3.5-1.208 1.028-.045 1.964.062 2.793.32l.025-.006c-.06-.548-.177-.985-.358-1.313-.258-.468-.674-.793-1.276-.996-.669-.224-1.528-.293-2.553-.204l-.166-2.082c1.263-.11 2.378-.026 3.316.25.993.293 1.77.823 2.31 1.576.49.683.805 1.544.942 2.567.684.199 1.303.456 1.855.773 1.166.668 2.022 1.56 2.543 2.652.784 1.648.85 4.313-1.323 6.446-1.857 1.822-4.152 2.655-7.394 2.679zm-.766-5.925c1.134-.062 1.99-.478 2.543-1.237.476-.654.756-1.533.84-2.63-.526-.14-1.105-.216-1.73-.228l-.164-.002c-1.958 0-3.326.762-3.246 2.205.053.972.768 1.834 2.757 1.892z"/></svg>
+                    Threads
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div id="tab-th" class="tab-content">
+        <div class="country-row">
+            <div class="country-row-header">
+                <div class="country-info">
+                    <span class="country-flag">TH</span>
+                    <div class="country-meta">
+                        <span class="country-name">タイ</span>
+                        <span class="country-stat">FB 1.1만 フォロワー</span>
                     </div>
                 </div>
-                
-                <!-- 中国 (5th) -->
-                <div class="country-row">
-                    <div class="country-row-header">
-                        <div class="country-info">
-                            <span class="country-flag">CN</span>
-                            <div class="country-meta">
-                                <span class="country-name">中国</span>
-                                <span class="country-stat">Weibo 2万 フォロワー</span>
-                            </div>
-                        </div>
-                        <span class="country-trait">💎 富裕層・高額消費傾向</span>
-                    </div>
-                    <div class="country-channels">
-                        <a href="https://japankuru.com/sc" target="_blank" class="channel-chip">
-                            <svg viewBox="0 0 24 24" fill="#666"><circle cx="12" cy="12" r="10"/></svg>
-                            JAPANKURU.com
-                        </a>
-                        <a href="https://weibo.com/japankuru" target="_blank" class="channel-chip active">
-                            <svg viewBox="0 0 24 24" fill="#fff"><circle cx="12" cy="12" r="10"/></svg>
-                            Weibo
-                        </a>
-                        <a href="#" class="channel-chip">
-                            <svg viewBox="0 0 24 24" fill="#07C160"><circle cx="12" cy="12" r="10"/></svg>
-                            WeChat
-                        </a>
-                        <a href="#" class="channel-chip">
-                            <svg viewBox="0 0 24 24" fill="#FF2442"><circle cx="12" cy="12" r="10"/></svg>
-                            小紅書 RED
-                        </a>
+                <span class="country-trait">🧑 若年層中心・初訪日が多い</span>
+            </div>
+            <div class="country-channels">
+                <a href="https://japankuru.com/th" target="_blank" class="channel-chip">
+                    <svg viewBox="0 0 24 24" fill="#666"><circle cx="12" cy="12" r="10"/></svg>
+                    JAPANKURU.com
+                </a>
+                <a href="https://www.facebook.com/japankuruth" target="_blank" class="channel-chip active">
+                    <svg viewBox="0 0 24 24" fill="#fff"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                    Facebook
+                </a>
+                <a href="https://www.instagram.com/japankuru_th" target="_blank" class="channel-chip">
+                    <svg viewBox="0 0 24 24" fill="#E4405F"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                    Instagram
+                </a>
+                <a href="https://www.tiktok.com/@japankuru_thai" target="_blank" class="channel-chip">
+                    <svg viewBox="0 0 24 24" fill="#fff"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+                    TikTok
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div id="tab-kr" class="tab-content">
+        <div class="country-row">
+            <div class="country-row-header">
+                <div class="country-info">
+                    <span class="country-flag">KR</span>
+                    <div class="country-meta">
+                        <span class="country-name">韓国</span>
+                        <span class="country-stat">Naver Blog 1.1만 読者</span>
                     </div>
                 </div>
-                
-                <!-- 拡張対応 (6th) -->
-                <div class="country-row expansion-row">
-                    <div class="country-row-header">
-                        <div class="country-info">
-                            <span class="expansion-badge">+3</span>
-                            <div class="country-meta">
-                                <span class="country-name">拡張対応</span>
-                                <span class="country-stat">リクエストに応じて対応</span>
-                            </div>
-                        </div>
-                        <span class="country-trait">📩 お問い合わせください</span>
+                <span class="country-trait">💄 20〜30代・トレンド敏感</span>
+            </div>
+            <div class="country-channels">
+                <a href="https://japankuru.com/ko" target="_blank" class="channel-chip">
+                    <svg viewBox="0 0 24 24" fill="#666"><circle cx="12" cy="12" r="10"/></svg>
+                    JAPANKURU.com
+                </a>
+                <a href="https://blog.naver.com/japankuru" target="_blank" class="channel-chip active">
+                    <svg viewBox="0 0 24 24" fill="#fff"><path d="M16.273 12.845L7.376 0H0v24h7.727V11.155L16.624 24H24V0h-7.727z"/></svg>
+                    Naver Blog
+                </a>
+                <a href="https://in.naver.com/japankuru" target="_blank" class="channel-chip">
+                    <svg viewBox="0 0 24 24" fill="#03C75A"><path d="M16.273 12.845L7.376 0H0v24h7.727V11.155L16.624 24H24V0h-7.727z"/></svg>
+                    Influencer
+                </a>
+                <a href="https://www.instagram.com/japankuru_korean" target="_blank" class="channel-chip">
+                    <svg viewBox="0 0 24 24" fill="#E4405F"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                    Instagram
+                </a>
+                <a href="https://www.youtube.com/@%EC%9E%AC%ED%8C%AC%EC%BF%A0%EB%A3%A8%EC%BD%94%EB%A6%AC%EC%95%84" target="_blank" class="channel-chip">
+                    <svg viewBox="0 0 24 24" fill="#FF0000"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814z"/><path d="M9.545 15.568V8.432L15.818 12z" fill="#fff"/></svg>
+                    YouTube
+                </a>
+                <a href="https://www.tiktok.com/@japankuru_kr" target="_blank" class="channel-chip">
+                    <svg viewBox="0 0 24 24" fill="#fff"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+                    TikTok
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div id="tab-cn" class="tab-content">
+        <div class="country-row">
+            <div class="country-row-header">
+                <div class="country-info">
+                    <span class="country-flag">CN</span>
+                    <div class="country-meta">
+                        <span class="country-name">中国</span>
+                        <span class="country-stat">Weibo 2万 フォロワー</span>
                     </div>
-                    <div class="expansion-flags">
-                        <div class="expansion-item">
-                            <span class="exp-code">ID</span>
-                            <span>Indonesia</span>
-                            <span class="expansion-channel">IG</span>
-                        </div>
-                        <div class="expansion-item">
-                            <span class="exp-code">VN</span>
-                            <span>Vietnam</span>
-                        </div>
-                        <div class="expansion-item">
-                            <span class="exp-code">FR</span>
-                            <span>France</span>
-                        </div>
-                    </div>
+                </div>
+                <span class="country-trait">💎 富裕層・高額消費傾向</span>
+            </div>
+            <div class="country-channels">
+                <a href="https://japankuru.com/sc" target="_blank" class="channel-chip">
+                    <svg viewBox="0 0 24 24" fill="#666"><circle cx="12" cy="12" r="10"/></svg>
+                    JAPANKURU.com
+                </a>
+                <a href="https://weibo.com/japankuru" target="_blank" class="channel-chip active">
+                    <svg viewBox="0 0 24 24" fill="#fff"><circle cx="12" cy="12" r="10"/></svg>
+                    Weibo
+                </a>
+                <a href="#" class="channel-chip">
+                    <svg viewBox="0 0 24 24" fill="#07C160"><circle cx="12" cy="12" r="10"/></svg>
+                    WeChat
+                </a>
+                <a href="#" class="channel-chip">
+                    <svg viewBox="0 0 24 24" fill="#FF2442"><circle cx="12" cy="12" r="10"/></svg>
+                    小紅書 RED
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="country-row expansion-row">
+        <div class="country-row-header">
+            <div class="country-info">
+                <span class="expansion-badge">+3</span>
+                <div class="country-meta">
+                    <span class="country-name">拡張対応</span>
+                    <span class="country-stat">リクエストに応じて対応</span>
                 </div>
             </div>
+            <span class="country-trait">📩 お問い合わせください</span>
+        </div>
+        <div class="expansion-flags">
+            <div class="expansion-item">
+                <span class="exp-code">ID</span>
+                <span>Indonesia</span>
+                <span class="expansion-channel">IG</span>
+            </div>
+            <div class="expansion-item">
+                <span class="exp-code">VN</span>
+                <span>Vietnam</span>
+            </div>
+            <div class="expansion-item">
+                <span class="exp-code">FR</span>
+                <span>France</span>
+            </div>
+        </div>
+    </div>
+</div>
             
             <!-- Audience Quality -->
             <div class="audience-quality reveal">
                 <div class="audience-header">
-                    <h3>広告で買ったフォロワーではありません</h3>
-                    <p>14年間、地道に築いてきた「本当に日本に興味がある人々」のコミュニティです</p>
+                    <h3>広告ではなく「共感」で繋がる、JAPANKURU独自のファンベース</h3>
+                    <p>JAPANKURUの全チャネルに集うのは、単なる閲覧者ではありません。14年間にわたるメディア運営を通じ、実際の訪日行動に直결する深い関心と熱量を持った「質の高いアクティブユーザー」を独自に蓄積してきました。</p>
                 </div>
                 <div class="audience-evidence">
                     <div class="evidence-card">
                         <div class="evidence-image">
-                            <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/DSC_0064-1.jpg" alt="海外旅行博">
+                            <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2025/10/R5_05040-scaled.jpg" alt="海外旅行博">
                         </div>
                         <div class="evidence-content">
                             <h4>海外旅行博で直接獲得</h4>
-                            <p>韓国・台湾・タイなど各国の旅行博に毎年出展。ブースを訪れた「日本に行きたい」人々が直接フォロー。</p>
+                            <p>台湾・タイ・米高・フランスなど各国の旅行博に毎年出展。ブースを訪れた「日本に行きたい」人々が直接フォロー。</p>
                             <div class="evidence-tag">毎年10万人以上が来場</div>
                         </div>
                     </div>
                     <div class="evidence-card">
                         <div class="evidence-image">
-                            <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/Img_Layout03-1-800x450-1.webp" alt="大学日本語学科">
+                            <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2019/07/WORK20190716-7.png" alt="大学日本語学科">
                         </div>
                         <div class="evidence-content">
-                            <h4>大学の日本語学科へアプローチ</h4>
-                            <p>韓国・台湾・タイの大学で日本語を学ぶ学生たちに直接リーチ。将来の訪日旅行者・在留外国人予備軍。</p>
-                            <div class="evidence-tag">日本文化への関心が高い層</div>
+                            <h4>海外大学・コミュニティへの直接アプローチ</h4>
+                            <p>海外大学、日本語学校、留学生会、さらにSNSやポータルの日本旅行コミュニティ等へ有益な情報を発信。活発な交流を通じて、日本好きの真剣なファンを直接獲得しています。</p>
+                            <div class="evidence-tag">日本への関心が高い層</div>
                         </div>
                     </div>
                     <div class="evidence-card">
                         <div class="evidence-image">
-                            <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/JINS_Kyoto_CC33-800x533-1.webp" alt="在留外国人">
+                            <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2017/04/8d42991466a3b640cab0f84587e66451.jpg" alt="在留外国人">
                         </div>
                         <div class="evidence-content">
                             <h4>日本在住の外国人フォロワー</h4>
@@ -6480,12 +6770,12 @@
                     </div>
                     <div class="evidence-card">
                         <div class="evidence-image">
-                            <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/Sunflower_CC13-1-1-800x533-1.webp" alt="リピーター">
+                            <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2026/01/127.0.0.1_3000_Users_jk_andy_Desktop_HTMLE8ABB8E38085_seminars_ex1.html_serverWindowId8aec40f7-67f0-4257-852a-7f030b3b9151.png" alt="リピーター">
                         </div>
                         <div class="evidence-content">
-                            <h4>訪日経験者・リピーター層</h4>
+                            <h4>訪日経験者・リピーター層の蓄積</h4>
                             <p>一度日本を訪れた後も継続フォロー。「次はどこに行こう」と情報収集を続けるリピーター予備軍。</p>
-                            <div class="evidence-tag">高いエンゲージメント率</div>
+                            <div class="evidence-tag">実訪日と消費に直結する優良層</div>
                         </div>
                     </div>
                 </div>
@@ -6576,14 +6866,18 @@
             <div class="section-header center reveal">
                 <div class="section-eyebrow">カスタマージャーニー</div>
                 <h2 class="section-title">旅行者の全行程で、接点を確保</h2>
+                <div class="target-badge-row">
+                    <span class="target-badge">#訪日外国人</span>
+                    <span class="target-badge">#在留外国人</span>
+                </div>
             </div>
             
             <!-- Journey Infographic -->
             <div class="journey-infographic reveal">
                 <!-- Floating JAPANKURU Contents -->
                 <div class="journey-floating-images">
-                    <img src="https://www.japankuru.com/gld-kanri/data/uploads/2025/12/CANMAKE_Winter_31-800x450.jpg" alt="content1" class="floating-img img-1">
-                    <img src="https://www.japankuru.com/gld-kanri/data/uploads/2025/11/TZPS_CC32-800x533.jpg" alt="content2" class="floating-img img-2">
+                    <img src="https://img.japankuru.com/prg_img/img/img2023060713262082852100.jpg" alt="content1" class="floating-img img-1">
+                    <img src="https://img.japankuru.com/prg_img/img/img2023060713262082852100.jpg" alt="content2" class="floating-img img-2">
                     <img src="https://www.japankuru.com/gld-kanri/data/uploads/2025/11/images2025082216393437-800x533.jpg" alt="content3" class="floating-img img-3">
                     <img src="https://www.japankuru.com/gld-kanri/data/uploads/2025/11/og-800x420.jpg" alt="content4" class="floating-img img-4">
                     <img src="https://www.japankuru.com/gld-kanri/data/uploads/2025/11/KIN_1085-533x800.jpg" alt="content5" class="floating-img img-5">
@@ -6591,132 +6885,77 @@
                 </div>
                 
                 <!-- Timeline -->
-                <div class="journey-timeline">
-                    <!-- 旅マエ -->
-                    <div class="timeline-phase phase-mae">
-                        <div class="phase-number">PHASE 01</div>
-                        <div class="phase-name mae">旅マエ</div>
-                        <div class="phase-period">出発前</div>
-                        <div class="phase-action">「どこ行こう？」</div>
-                        <div class="phase-visual">
-                            <div class="browser-mockup">
-                                <div class="browser-header">
-                                    <div class="browser-dots">
-                                        <span></span><span></span><span></span>
-                                    </div>
-                                    <div class="browser-url">japankuru.com</div>
-                                </div>
-                                <div class="browser-screen">
-                                    <img src="https://www.japankuru.com/gld-kanri/data/uploads/2025/12/CANMAKE_Winter_31-800x450.jpg" alt="JAPANKURU Website">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="phase-touchpoints" style="margin-top: 16px;">
-                            <span>
-                                <svg class="touchpoint-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-                                Google検索
-                            </span>
-                            <span>
-                                <svg class="touchpoint-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0z"/></svg>
-                                Instagram / YouTube
-                            </span>
-                            <span>
-                                <svg class="touchpoint-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-                                現地旅行博覧会
-                            </span>
-                        </div>
-                        <div class="phase-tagline">
-                            旅行を<strong>「決める瞬間」</strong>から<br>JAPANKURUと出会う
-                        </div>
-                    </div>
-                    
-                    <div class="timeline-connector">
-                        <svg viewBox="0 0 60 24"><path d="M0 12 L50 12 M40 4 L50 12 L40 20" stroke="currentColor" stroke-width="2" fill="none"/></svg>
-                    </div>
-                    
-                    <!-- 旅ナカ -->
-                    <div class="timeline-phase phase-naka">
-                        <div class="phase-number">PHASE 02</div>
-                        <div class="phase-name naka">旅ナカ</div>
-                        <div class="phase-period">滞在中</div>
-                        <div class="phase-action">「何食べる？何買う？」</div>
-                        <div class="phase-visual">
-                            <div class="mobile-mockup">
-                                <div class="mobile-notch"></div>
-                                <div class="mobile-screen">
-                                    <img src="https://www.japankuru.com/gld-kanri/data/uploads/2025/11/TZPS_CC32-800x533.jpg" alt="JAPANKURU Mobile">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="phase-touchpoints" style="margin-top: 16px;">
-                            <span>
-                                <svg class="touchpoint-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-                                現地検索
-                            </span>
-                            <span>
-                                <svg class="touchpoint-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/></svg>
-                                Googleマップ
-                            </span>
-                            <span>
-                                <svg class="touchpoint-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"/></svg>
-                                ハッシュタグ
-                            </span>
-                        </div>
-                        <div class="phase-tagline">
-                            <strong>「今すぐ行く場所」</strong>を<br>探す瞬間にもJAPANKURU
-                        </div>
-                    </div>
-                    
-                    <div class="timeline-connector">
-                        <svg viewBox="0 0 60 24"><path d="M0 12 L50 12 M40 4 L50 12 L40 20" stroke="currentColor" stroke-width="2" fill="none"/></svg>
-                    </div>
-                    
-                    <!-- 旅アト -->
-                    <div class="timeline-phase phase-ato">
-                        <div class="phase-number">PHASE 03</div>
-                        <div class="phase-name ato">旅アト</div>
-                        <div class="phase-period">帰国後</div>
-                        <div class="phase-action">「また行きたい」</div>
-                        <div class="phase-visual">
-                            <div class="sns-mockup">
-                                <div class="sns-post">
-                                    <div class="sns-header">
-                                        <div class="sns-avatar"></div>
-                                        <div class="sns-user">
-                                            <span class="sns-name">Tourist</span>
-                                            <span class="sns-handle">@traveler</span>
-                                        </div>
-                                    </div>
-                                    <div class="sns-image">
-                                        <img src="https://www.japankuru.com/gld-kanri/data/uploads/2025/11/og-800x420.jpg" alt="Travel Photo">
-                                    </div>
-                                    <div class="sns-actions">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="phase-touchpoints" style="margin-top: 16px;">
-                            <span>
-                                <svg class="touchpoint-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>
-                                投稿シェア
-                            </span>
-                            <span>
-                                <svg class="touchpoint-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                                フォロー継続
-                            </span>
-                            <span>
-                                <svg class="touchpoint-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
-                                リピート訪問
-                            </span>
-                        </div>
-                        <div class="phase-tagline">
-                            旅が終わっても<br><strong>JAPANKURUとの関係は続く</strong>
-                        </div>
-                    </div>
-                </div>
+               <div class="journey-timeline">
+    <div class="timeline-phase phase-mae">
+        <div class="phase-number">PHASE 01</div>
+        <div class="phase-name mae">旅マエ</div>
+        <div class="phase-period">出発前</div>
+        <div class="phase-action">「どこ行こう？」</div>
+        <div class="phase-visual">
+    <div class="browser-mockup-final">
+        <div class="browser-header-simple">
+            <div class="dots"><span></span><span></span><span></span></div>
+        </div>
+        <div class="browser-img-area">
+            <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2026/01/127.0.0.1_3000_Users_jk_andy_Desktop_HTMLE8ABB8E38085_seminars_ex1.html_serverWindowId8aec40f7-67f0-4257-852a-7f030b3b9151-3.png" alt="Search Result">
+        </div>
+    </div>
+</div>
+        <div class="phase-touchpoints" style="margin-top: 16px;">
+            <span><svg class="touchpoint-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg> Google検索 (SEO)</span>
+            <span><svg class="touchpoint-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0z"/></svg> SNS / YouTube</span>
+            <span><svg class="touchpoint-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg> 現地旅行博覧会</span>
+        </div>
+        <div class="phase-tagline">旅行を<strong>「決める瞬間」</strong>から出会う</div>
+    </div>
+
+    <div class="timeline-connector">
+        <svg viewBox="0 0 60 24"><path d="M0 12 L50 12 M40 4 L50 12 L40 20" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+    </div>
+
+    <div class="timeline-phase phase-naka">
+        <div class="phase-number">PHASE 02</div>
+        <div class="phase-name naka">旅ナカ</div>
+        <div class="phase-period">滞在中</div>
+        <div class="phase-action">「何食べる？」</div>
+       <div class="phase-visual">
+    <div class="reels-display-clean">
+        <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2026/01/127.0.0.1_3000_Users_jk_andy_Desktop_HTMLE8ABB8E38085_seminars_ex1.html_serverWindowId8aec40f7-67f0-4257-852a-7f030b3b9151-2.png" alt="Reels">
+    </div>
+</div>
+
+        <div class="phase-touchpoints" style="margin-top: 16px;">
+            <span><svg class="touchpoint-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg> 現地検索</span>
+            <span><svg class="touchpoint-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/></svg> Googleマップ</span>
+            <span><svg class="touchpoint-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"/></svg> ハッシュタグ</span>
+        </div>
+        <div class="phase-tagline"><strong>「今すぐ行く場所」</strong>を探す瞬間に</div>
+    </div>
+
+    <div class="timeline-connector">
+        <svg viewBox="0 0 60 24"><path d="M0 12 L50 12 M40 4 L50 12 L40 20" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+    </div>
+
+    <div class="timeline-phase phase-ato">
+        <div class="phase-number">PHASE 03</div>
+        <div class="phase-name ato">旅アト</div>
+        <div class="phase-period">帰国後</div>
+        <div class="phase-action">「また行きたい」</div>
+        <div class="phase-visual">
+    <div class="insta-mockup-final">
+        <div class="insta-img-area">
+            <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2026/01/スクリーンショット-2026-01-08-11.13.54.png" alt="Full Instagram Post">
+        </div>
+    </div>
+</div>
+        <div class="phase-touchpoints" style="margin-top: 16px;">
+            <span><svg class="touchpoint-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg> 投稿シェア・口コミ</span>
+            <span><svg class="touchpoint-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg> フォロー継続</span>
+            <span><svg class="touchpoint-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg> 再訪の検討</span>
+        </div>
+        <div class="phase-tagline"><strong>JAPANKURUとの関係</strong>은 계속됩니다</div>
+    </div>
+</div>
                 
                 <!-- Connection Lines -->
                 <div class="journey-connection">
@@ -6847,7 +7086,7 @@
             <div class="process-details reveal">
                 <div class="process-detail-card">
                     <div class="process-detail-image">
-                        <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/DSC_0064-1.jpg" alt="撮影・取材">
+                        <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2026/01/shooting.jpg" alt="撮影・取材">
                     </div>
                     <div class="process-detail-body">
                         <h4>撮影・取材</h4>
@@ -6856,16 +7095,20 @@
                 </div>
                 <div class="process-detail-card">
                     <div class="process-detail-image">
-                        <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/Img_Layout03-1-800x450-1.webp" alt="多言語記事作成">
+                        <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2026/01/スクリーンショット-2026-01-08-10.27.16-1-scaled.png" alt="多言語記事作成">
                     </div>
                     <div class="process-detail-body">
                         <h4>多言語記事作成</h4>
-                        <p>外国人クリエイターチームが企画から編集まで一貫対応。<span class="lang-highlight">英語・韓国語・繁体字・簡体字・タイ語</span>の5言語で、高品質な記事を制作します。</p>
+                        <p>
+    外国人クリエイターチームが企画から編集まで一貫対応。
+    <span class="lang-highlight">英語・韓国語・繁体字・簡体字・タイ語</span>を軸に、
+    <br class="sp-only"> <span style="font-size: 0.9em; opacity: 0.8;">ご要望に合わせて最大7カ国語まで展開可能です。</span>
+</p>
                     </div>
                 </div>
                 <div class="process-detail-card">
                     <div class="process-detail-image">
-                        <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/JINS_Kyoto_CC33-800x533-1.webp" alt="SNS配信・拡散">
+                        <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2026/01/スクリーンショット-2026-01-08-10.33.20.png" alt="SNS配信・拡散">
                     </div>
                     <div class="process-detail-body">
                         <h4>SNS配信・拡散</h4>
@@ -6874,7 +7117,7 @@
                 </div>
                 <div class="process-detail-card">
                     <div class="process-detail-image">
-                        <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/Sunflower_CC13-1-1-800x533-1.webp" alt="海外メディア転載">
+                        <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2026/01/unnamed-6.jpg" alt="海外メディア転載">
                     </div>
                     <div class="process-detail-body">
                         <h4>海外メディア転載</h4>
@@ -7015,6 +7258,22 @@
                 }
             });
         }
+
+        function openTab(evt, tabName) {
+    // 1. 모든 탭 콘텐츠 숨기기
+    const tabcontent = document.getElementsByClassName("tab-content");
+    for (let i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].classList.remove("active");
+    }
+    // 2. 모든 버튼 비활성화
+    const tablinks = document.getElementsByClassName("tab-btn");
+    for (let i = 0; i < tablinks.length; i++) {
+        tablinks[i].classList.remove("active");
+    }
+    // 3. 선택된 탭만 보여주고 버튼 활성화
+    document.getElementById(tabName).classList.add("active");
+    evt.currentTarget.classList.add("active");
+}
     </script>
 
     <!-- Floating CTA Button -->
