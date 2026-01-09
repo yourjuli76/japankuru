@@ -5321,23 +5321,18 @@
     height: 220px !important; /* 전체 높이 밸런스 조정 */
 }
 
-.services-section .service-card.wide .browser-content img {
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: cover !important;
-    object-position: top !important;
-}
 .services-section .browser-content {
     position: relative;
     height: 220px;
     overflow: hidden;
 }
-.services-section .browser-content img {
-    transition: transform 5s linear; /* 마우스 올리면 천천히 내려감 */
+/* 이걸로 교체 */
+.services-section .service-card.wide .browser-content {
+    position: relative;
+    height: 220px;
+    overflow: hidden;
 }
-.services-section .service-card:hover .browser-content img {
-    transform: translateY(-50%); /* 이미지 길이에 따라 조절 */
-}
+
 .client-logo {
     filter: grayscale(0%); /* 흑백 해제 */
     opacity: 0.7; /* 투명도로만 조절 */
@@ -5576,38 +5571,1075 @@
     transform: scale(1.05) translateY(-5px);
     transition: 0.3s ease;
 }
+
+/* ============================================
+   JAPANKURU Landing Page - Feedback Implementation CSS Patch
+   피드백 반영 수정사항
+   ============================================ */
+
+/* ===== 1. 히어로 섹션 가독성 개선 ===== */
+
+/* 배경 이미지 투명도 낮춤 */
+.hero-bg {
+    opacity: 0.35; /* 0.5에서 0.35로 더 낮춤 */
+}
+
+/* 강화된 그라디언트 오버레이 */
+.hero-bg::after {
+    background: linear-gradient(90deg, 
+        var(--black) 0%, 
+        var(--black) 30%, 
+        rgba(15, 23, 42, 0.9) 50%,
+        rgba(15, 23, 42, 0.7) 70%,
+        rgba(15, 23, 42, 0.4) 100%);
+}
+
+/* 텍스트 뒤 백드롭 블러 강화 */
+.hero-text {
+    position: relative;
+}
+
+.hero-text::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    left: -30px;
+    right: -30px;
+    bottom: -20px;
+    background: rgba(15, 23, 42, 0.4);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 20px;
+    z-index: -1;
+}
+
+/* 텍스트 그림자 강화 */
+.hero-title {
+    text-shadow: 
+        0 0 40px rgba(0, 0, 0, 0.9),
+        0 0 80px rgba(0, 0, 0, 0.6),
+        0 4px 16px rgba(0,0,0,0.7);
+}
+
+.hero-desc {
+    color: rgba(255,255,255,0.95);
+    text-shadow: 0 2px 12px rgba(0,0,0,0.6);
+}
+
+
+/* ===== 2. 네비게이션 스크롤 시 로고 가독성 ===== */
+
+.nav {
+    transition: all 0.3s ease;
+}
+
+/* 스크롤 시 다크 모드 */
+.nav.scrolled {
+    background: rgba(15, 23, 42, 0.98);
+    border-bottom-color: rgba(255,255,255,0.1);
+}
+
+.nav.scrolled .nav-link {
+    color: rgba(255,255,255,0.7);
+}
+
+.nav.scrolled .nav-link:hover {
+    color: white;
+}
+
+.nav.scrolled .nav-toggle span {
+    background: white;
+}
+
+/* 로고 반전 (스크롤 시) */
+.nav.scrolled .nav-logo img {
+    filter: brightness(0) invert(1);
+}
+
+
+/* ===== 3. 마키(Marquee) 속도 조절 - 더 느리게 ===== */
+
+/* 클라이언트 로고 마키 - 50초에서 70초로 */
+.clients-marquee .marquee-track {
+    animation: marquee 70s linear infinite;
+}
+
+/* 포트폴리오 마키 - 60초에서 100초로 */
+.portfolio-marquee-section .marquee-track {
+    animation: marquee 100s linear infinite;
+}
+
+/* 마우스 호버 시 부드러운 감속 후 정지 */
+.marquee-track {
+    transition: animation-play-state 0.5s ease;
+}
+
+.marquee-track:hover {
+    animation-play-state: paused;
+}
+
+
+/* ===== 4. 국가별 인사이트 팁 박스 스타일 ===== */
+
+.country-insight {
+    margin-top: 10px;
+    padding: 10px 14px;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.12) 0%, rgba(59, 130, 246, 0.05) 100%);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    font-size: 11px;
+    color: rgba(255,255,255,0.85);
+    line-height: 1.6;
+}
+
+.country-insight::before {
+    content: '💡 ';
+}
+
+.country-insight strong {
+    color: var(--accent);
+    font-weight: 700;
+}
+
+
+/* ===== 5. KPI 대시보드 강화 - 리포트 샘플 비주얼 ===== */
+
+.illust-dashboard {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+/* 미니 대시보드 카드 스타일 강화 */
+.dashboard-mini-card {
+    flex: 1;
+    padding: 12px;
+    background: linear-gradient(135deg, var(--gray-50) 0%, white 100%);
+    border-radius: 10px;
+    border: 1px solid var(--gray-200);
+    position: relative;
+    overflow: hidden;
+}
+
+.dashboard-mini-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 30%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.05));
+}
+
+.mini-card-value {
+    font-family: 'Inter', sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--accent);
+}
+
+.mini-card-label {
+    font-size: 10px;
+    color: var(--gray-500);
+    margin-top: 2px;
+    font-weight: 600;
+}
+
+/* 차트 바 애니메이션 */
+.mini-chart-bar {
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+    height: 28px;
+    margin-top: 8px;
+}
+
+.mini-bar {
+    flex: 1;
+    background: linear-gradient(180deg, var(--accent) 0%, var(--accent-dark) 100%);
+    border-radius: 2px;
+    transition: height 0.3s ease;
+}
+
+.mini-bar:nth-child(1) { height: 40%; animation: barGrow 2s ease-out infinite; animation-delay: 0s; }
+.mini-bar:nth-child(2) { height: 60%; animation: barGrow 2s ease-out infinite; animation-delay: 0.2s; }
+.mini-bar:nth-child(3) { height: 50%; animation: barGrow 2s ease-out infinite; animation-delay: 0.4s; }
+.mini-bar:nth-child(4) { height: 80%; animation: barGrow 2s ease-out infinite; animation-delay: 0.6s; }
+.mini-bar:nth-child(5) { height: 100%; animation: barGrow 2s ease-out infinite; animation-delay: 0.8s; }
+
+@keyframes barGrow {
+    0%, 100% { opacity: 0.7; }
+    50% { opacity: 1; }
+}
+
+/* 트렌드 표시 강화 */
+.dashboard-trend {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+    border-radius: 8px;
+    border: 1px solid #86efac;
+}
+
+.trend-arrow {
+    color: #16a34a;
+    font-size: 16px;
+    font-weight: 800;
+}
+
+.trend-text {
+    font-size: 11px;
+    color: #166534;
+    font-weight: 700;
+}
+
+/* 리포트 프리뷰 추가 */
+.report-preview {
+    margin-top: 12px;
+    padding: 12px;
+    background: white;
+    border-radius: 8px;
+    border: 1px solid var(--gray-200);
+}
+
+.report-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--gray-100);
+}
+
+.report-title {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--black);
+}
+
+.report-date {
+    font-size: 9px;
+    color: var(--gray-400);
+}
+
+.report-metrics {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+
+.report-metric {
+    text-align: center;
+    padding: 8px 4px;
+    background: var(--gray-50);
+    border-radius: 6px;
+}
+
+.report-metric-value {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--accent);
+}
+
+.report-metric-label {
+    font-size: 8px;
+    color: var(--gray-500);
+    margin-top: 2px;
+}
+
+
+/* ===== 6. 크리에이터 네이티브성 강조 ===== */
+
+.creator-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 20px 14px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    min-height: 160px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.creator-card:hover {
+    border-color: var(--accent);
+    background: rgba(59, 130, 246, 0.08);
+    transform: translateY(-4px);
+}
+
+.creator-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--accent);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.creator-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    align-items: center;
+}
+
+.creator-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: white;
+}
+
+.creator-role {
+    font-size: 10px;
+    color: var(--gray-400);
+}
+
+.role-code {
+    font-weight: 700;
+    color: var(--accent);
+    font-family: 'Inter', sans-serif;
+    background: rgba(59, 130, 246, 0.15);
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-right: 4px;
+}
+
+/* 네이티브 태그 - "일본 거주 X년차" 등 */
+.creator-native-tag {
+    font-size: 9px;
+    color: rgba(255,255,255,0.7);
+    background: rgba(59, 130, 246, 0.2);
+    padding: 4px 10px;
+    border-radius: 12px;
+    margin-top: 4px;
+    border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+/* 전문 분야 태그 */
+.creator-expertise {
+    font-size: 9px;
+    color: #10b981;
+    font-weight: 600;
+    margin-top: 2px;
+}
+
+.creator-expertise::before {
+    content: '✓ ';
+}
+
+
+/* ===== 7. CTA 버튼 추적용 ID 스타일 (시각적 변화 없음, 구조만) ===== */
+/* GA4 추적을 위한 버튼들은 HTML에서 고유 ID 부여 필요 */
+
+/* 히어로 CTA */
+#btn-hero-contact {
+    /* 기존 .hero-cta 스타일 유지 */
+}
+
+/* 플로팅 CTA */
+#btn-floating-contact {
+    /* 기존 .floating-cta-btn 스타일 유지 */
+}
+
+/* 섹션별 CTA */
+#btn-why-contact,
+#btn-services-contact,
+#btn-pricing-contact,
+#btn-footer-contact {
+    /* 기존 스타일 유지 - GA4에서 구분 가능 */
+}
+
+
+/* ===== 8. 애니메이션 최적화 - reveal 클래스 조절 ===== */
+
+/* 핵심 섹션에만 reveal 적용, threshold 높임 */
+.reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* 모바일에서 애니메이션 간소화 */
+@media (max-width: 768px) {
+    .reveal {
+        transform: translateY(10px); /* 이동 거리 줄임 */
+        transition: opacity 0.4s ease, transform 0.4s ease; /* 시간 단축 */
+    }
+    
+    /* 모바일에서 일부 애니메이션 비활성화 */
+    .floating-img {
+        animation: none;
+        opacity: 0.6;
+    }
+    
+    .channel-orbit {
+        animation: none;
+    }
+    
+    .channel-icon {
+        animation: none;
+    }
+}
+
+/* 저사양 기기를 위한 애니메이션 감소 */
+@media (prefers-reduced-motion: reduce) {
+    .reveal {
+        transition: none;
+        opacity: 1;
+        transform: none;
+    }
+    
+    .marquee-track {
+        animation: none;
+    }
+    
+    .floating-img,
+    .channel-orbit,
+    .channel-icon,
+    .mini-bar {
+        animation: none;
+    }
+}
+
+
+/* ===== 9. 이미지 최적화 관련 힌트 (CSS로는 한계가 있음) ===== */
+/* 
+   NOTE: WebP 변환은 서버/워드프레스에서 처리 필요
+   - Smush, ShortPixel, EWWW 플러그인 사용 권장
+   - <picture> 태그로 WebP 폴백 구현
+*/
+
+/* 이미지 로딩 최적화 */
+img {
+    loading: lazy;
+}
+
+/* 중요 이미지는 eager 로딩 */
+.hero-bg img,
+.nav-logo img {
+    loading: eager;
+}
+
+/* ============================================
+   選ばれる理由 04, 05, 06 - 추가 CSS
+   ============================================ */
+
+/* 카드 높이 통일 */
+.reasons-grid .reason-card {
+    min-height: 480px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 06번 카드 전용 */
+.reason-card.card-06 .kpi-boxes {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.reason-card.card-06 .kpi-box {
+    text-align: center;
+    padding: 14px 8px;
+    background: rgba(59, 130, 246, 0.1);
+    border-radius: 10px;
+    border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.reason-card.card-06 .kpi-box .label {
+    font-size: 14px;
+    color: var(--text);
+    font-weight: 700;
+}
+
+.reason-card.card-06 .kpi-box .sub {
+    font-size: 10px;
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+
+/* 슬라이드쇼 컨테이너 */
+.slideshow-container {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16/9;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #000;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    margin-top: auto;
+}
+
+.slideshow-container .slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.8s ease-in-out;
+}
+
+.slideshow-container .slide.active {
+    opacity: 1;
+}
+
+.slideshow-container .slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background: #fff;
+}
+
+/* 네비게이션 */
+.slideshow-container .slide-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0,0,0,0.5);
+    color: white;
+    border: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s;
+    z-index: 10;
+}
+
+.slideshow-container .slide-nav:hover {
+    background: var(--accent);
+}
+
+.slideshow-container .slide-nav.prev { left: 6px; }
+.slideshow-container .slide-nav.next { right: 6px; }
+
+/* 인디케이터 */
+.slideshow-container .slide-indicators {
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 5px;
+    z-index: 10;
+}
+
+.slideshow-container .indicator {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.4);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.slideshow-container .indicator.active {
+    background: var(--accent);
+    width: 16px;
+    border-radius: 3px;
+}
+
+/* 카운터 */
+.slideshow-container .slide-counter {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(0,0,0,0.6);
+    color: white;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 10px;
+    z-index: 10;
+}
+
+/* 프로그레스 바 */
+.slideshow-container .progress-container {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: rgba(255,255,255,0.1);
+    z-index: 10;
+}
+
+.slideshow-container .progress-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--accent), #60a5fa, var(--accent));
+    background-size: 200% 100%;
+    border-radius: 0 2px 2px 0;
+    box-shadow: 0 0 8px rgba(59, 130, 246, 0.5);
+    animation: shimmer 2s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* 모바일 대응 */
+@media (max-width: 768px) {
+    .reasons-grid .reason-card {
+        min-height: auto;
+    }
+    
+    .slideshow-container {
+        aspect-ratio: 4/3;
+    }
+}
+
+/* =============================================
+   記事制作 카드 전용 스크롤 애니메이션
+   ============================================= */
+
+/* 記事制作 카드만 스크롤 애니메이션 적용 */
+.services-section .service-card.article-scroll .browser-content {
+    position: relative !important;
+    overflow: hidden !important;
+    height: 220px !important;
+}
+
+.services-section .service-card.article-scroll .browser-content img {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    object-fit: unset !important;
+    animation: articleScroll 20s ease-in-out infinite !important;
+}
+
+@keyframes articleScroll {
+    0% { transform: translateY(0); }
+    35% { transform: translateY(0); }
+    50% { transform: translateY(calc(-100% + 220px)); }
+    85% { transform: translateY(calc(-100% + 220px)); }
+    100% { transform: translateY(0); }
+}
+
+.services-section .service-card.article-scroll:hover .browser-content img {
+    animation-play-state: paused !important;
+}
+
+.side-nav {
+    position: fixed;
+    right: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.side-dot {
+    position: relative;
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.side-dot a {
+    display: block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.25);
+    border: 2px solid rgba(255,255,255,0.4);
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.side-dot a:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    transform: scale(1.4);
+}
+
+.side-dot.active a {
+    background: var(--accent);
+    border-color: var(--accent);
+    width: 12px;
+    height: 12px;
+    box-shadow: 0 0 16px rgba(59, 130, 246, 0.7);
+}
+
+/* 툴팁 */
+.side-dot .tooltip {
+    position: absolute;
+    right: 28px;
+    background: rgba(15, 23, 42, 0.95);
+    color: white;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s, transform 0.2s;
+    transform: translateX(10px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.side-dot .tooltip::after {
+    content: '';
+    position: absolute;
+    right: -6px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 6px solid transparent;
+    border-left-color: rgba(15, 23, 42, 0.95);
+}
+
+.side-dot:hover .tooltip {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* 밝은 배경 섹션에서 도트 색상 변경 */
+.side-nav.on-light .side-dot a {
+    background: rgba(0,0,0,0.15);
+    border-color: rgba(0,0,0,0.25);
+}
+
+.side-nav.on-light .side-dot.active a {
+    background: var(--accent);
+    border-color: var(--accent);
+}
+
+/* 모바일에서 숨김 - Floating CTA만 사용 */
+@media (max-width: 768px) {
+    .side-nav {
+        display: none;
+    }
+}
+
+/* 태블릿에서 위치 조정 */
+@media (max-width: 1024px) {
+    .side-nav {
+        right: 16px;
+    }
+}
+
+/* ===== 기존 NAV 관련 CSS 숨김 (삭제 대신 숨김 처리) ===== */
+.nav {
+    display: none !important;
+}
+
+.mobile-menu {
+    display: none !important;
+}
+
+/* Hero 섹션 padding-top 조정 (상단 네비 없으므로) */
+.hero {
+    padding-top: 0 !important;
+}
+
+/* ===== 기존 NAV 숨김 ===== */
+.nav,
+.mobile-menu {
+    display: none !important;
+}
+
+/* Hero padding 조정 */
+.hero {
+    padding-top: 0 !important;
+}
+
+/* ===== PC: SIDE DOT NAVIGATION ===== */
+.side-nav {
+    position: fixed;
+    right: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.side-dot {
+    position: relative;
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.side-dot a {
+    display: block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.25);
+    border: 2px solid rgba(255,255,255,0.4);
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.side-dot a:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    transform: scale(1.4);
+}
+
+.side-dot.active a {
+    background: var(--accent);
+    border-color: var(--accent);
+    width: 12px;
+    height: 12px;
+    box-shadow: 0 0 16px rgba(59, 130, 246, 0.7);
+}
+
+/* 툴팁 */
+.side-dot .tooltip {
+    position: absolute;
+    right: 28px;
+    background: rgba(15, 23, 42, 0.95);
+    color: white;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s, transform 0.2s;
+    transform: translateX(10px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.side-dot .tooltip::after {
+    content: '';
+    position: absolute;
+    right: -6px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 6px solid transparent;
+    border-left-color: rgba(15, 23, 42, 0.95);
+}
+
+.side-dot:hover .tooltip {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* 밝은 배경에서 도트 색상 */
+.side-nav.on-light .side-dot a {
+    background: rgba(0,0,0,0.15);
+    border-color: rgba(0,0,0,0.25);
+}
+.side-nav.on-light .side-dot.active a {
+    background: var(--accent);
+    border-color: var(--accent);
+}
+
+/* ===== 모바일: BOTTOM TAB BAR ===== */
+.bottom-tab-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 64px;
+    background: var(--white);
+    border-top: 1px solid var(--gray-200);
+    display: none; /* 기본 숨김, 모바일에서만 표시 */
+    justify-content: space-around;
+    align-items: center;
+    z-index: 1000;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+}
+
+.tab-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    padding: 8px 4px;
+    text-decoration: none;
+    color: var(--gray-400);
+    font-size: 10px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.tab-item svg {
+    width: 22px;
+    height: 22px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+}
+
+/* Active state */
+.tab-item.active {
+    color: var(--accent);
+}
+.tab-item.active::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 32px;
+    height: 3px;
+    background: var(--accent);
+    border-radius: 0 0 3px 3px;
+}
+
+/* CTA 탭 강조 */
+.tab-item.cta-tab {
+    color: var(--white);
+    background: var(--accent);
+    border-radius: 12px;
+    margin: 8px 4px;
+    flex: 1.2;
+}
+.tab-item.cta-tab svg {
+    stroke: white;
+}
+.tab-item.cta-tab span {
+    font-weight: 700;
+}
+.tab-item.cta-tab::before {
+    display: none;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+    /* 모바일: 사이드 도트 숨김, 하단 탭 표시 */
+    .side-nav {
+        display: none !important;
+    }
+    .bottom-tab-bar {
+        display: flex !important;
+    }
+    /* 기존 Floating CTA 숨김 (하단 탭에 CTA 있으므로) */
+    .floating-cta {
+        display: none !important;
+    }
+    /* 하단 탭 높이만큼 여백 */
+    body {
+        padding-bottom: 70px;
+    }
+    /* CTA 섹션 여백 */
+    .cta-section {
+        padding-bottom: 100px;
+    }
+}
+
+@media (min-width: 769px) {
+    /* PC: 사이드 도트 표시, 하단 탭 숨김 */
+    .side-nav {
+        display: flex !important;
+    }
+    .bottom-tab-bar {
+        display: none !important;
+    }
+}
+
+/* iOS Safe Area 대응 */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+    .bottom-tab-bar {
+        padding-bottom: env(safe-area-inset-bottom);
+        height: calc(64px + env(safe-area-inset-bottom));
+    }
+    @media (max-width: 768px) {
+        body {
+            padding-bottom: calc(70px + env(safe-area-inset-bottom));
+        }
+    }
+}
     </style>
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="nav">
-        <a href="#" class="nav-logo"><img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2025/02/JAPANKURU_RGB-1.png" alt="JAPANKURU" style="height: 24px; width: auto;"></a>
-        <div class="nav-menu">
-    <a href="#why" class="nav-link">選ばれる理由</a>
-    <a href="#services" class="nav-link">サービス</a>
-    <a href="#channel" class="nav-link">チャンネル</a>
-    <a href="#cases" class="nav-link">事例</a>
-    <a href="#process" class="nav-link">進め方</a>
-    <a href="#pricing" class="nav-link">料金</a>
-    <a href="#contact" class="nav-cta">無料相談</a>
-</div>
-        <button class="nav-toggle" onclick="toggleMenu()">
-            <span></span><span></span><span></span>
-        </button>
-    </nav>
+    <nav class="side-nav" id="sideNav">
+    <div class="side-dot active" data-section="hero">
+        <a href="#hero"></a>
+        <span class="tooltip">トップ</span>
+    </div>
+    <div class="side-dot" data-section="why">
+        <a href="#why"></a>
+        <span class="tooltip">選ばれる理由</span>
+    </div>
+    <div class="side-dot" data-section="services">
+        <a href="#services"></a>
+        <span class="tooltip">サービス</span>
+    </div>
+    <div class="side-dot" data-section="channel">
+        <a href="#channel"></a>
+        <span class="tooltip">チャンネル</span>
+    </div>
+    <div class="side-dot" data-section="cases">
+        <a href="#cases"></a>
+        <span class="tooltip">事例</span>
+    </div>
+    <div class="side-dot" data-section="pricing">
+        <a href="#pricing"></a>
+        <span class="tooltip">料金</span>
+    </div>
+    <div class="side-dot" data-section="contact">
+        <a href="#contact"></a>
+        <span class="tooltip">お問い合わせ</span>
+    </div>
+</nav>
+        
 
-    <div class="mobile-menu" id="mobileMenu">
-    <a href="#why" onclick="toggleMenu()">選ばれる理由</a>
-    <a href="#services" onclick="toggleMenu()">サービス</a>
-    <a href="#channel" onclick="toggleMenu()">チャンネル</a>
-    <a href="#cases" onclick="toggleMenu()">事例</a>
-    <a href="#process" onclick="toggleMenu()">進め方</a>
-    <a href="#pricing" onclick="toggleMenu()">料金</a>
-    <a href="#contact" onclick="toggleMenu()">無料相談</a>
-</div>
+<nav class="bottom-tab-bar" id="bottomTabBar">
+    <a href="#why" class="tab-item active" data-section="why">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+        <span>理由</span>
+    </a>
+    <a href="#services" class="tab-item" data-section="services">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        <span>サービス</span>
+    </a>
+    <a href="#channel" class="tab-item" data-section="channel">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        <span>チャンネル</span>
+    </a>
+    <a href="#cases" class="tab-item" data-section="cases">
+        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        <span>事例</span>
+    </a>
+    <a href="#contact" class="tab-item cta-tab" data-section="contact">
+        <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <span>相談</span>
+    </a>
+</nav>
+
 
     <!-- Hero -->
-    <section class="hero">
+    <section class="hero" id="hero">
         <div class="hero-bg">
             <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/DSC_0064-1.jpg" alt="JAPANKURU">
         </div>
@@ -5625,7 +6657,7 @@
                         7カ国のネイティブクリエイターが企画から配信まで一貫対応。<br>
                         海外メディア転載・SNSコミュニティで拡散します。
                     </p>
-                    <a href="#contact" class="hero-cta">無料相談を予約</a>
+                    <a href="#contact" class="hero-cta" id="btn-hero-contact">無料相談を予約</a>
                     <div class="hero-metrics">
                         <div>
                             <div class="hero-metric-value">142<span>万+</span></div>
@@ -5890,8 +6922,7 @@
         </div>
     </section>
 
-    <!-- ===== 選ばれる理由 セクション v5 - Bento Grid HTML ===== -->
-<!-- 기존 <section class="reasons-section" id="why" ...> 전체를 삭제하고 아래로 교체 -->
+   <!-- ===== 選ばれる理由 セクション -===== -->
 
 <section class="reasons-section" id="why" style="background: #f8fafc; padding: 80px 24px;">
     <div class="section-inner">
@@ -5968,7 +6999,7 @@
                 </div>
             </div>
 
-            <!-- ===== 02 - 7カ国配信 + 맵 일러스트 ===== -->
+            <!-- ===== 02 - 7カ国配信 ===== -->
             <div class="bento-card bento-side">
                 <div class="card-number">02</div>
                 <h4 class="card-title-sm">1回の取材で<br><span class="card-highlight">7カ国へ同時配信</span></h4>
@@ -5988,13 +7019,12 @@
                 </div>
             </div>
 
-            <!-- ===== 03 - 体験→発信 비교 ===== -->
+            <!-- ===== 03 - 体験→発信 ===== -->
             <div class="bento-card bento-side">
                 <div class="card-number">03</div>
                 <h4 class="card-title-sm">翻訳ではなく<br><span class="card-highlight">外国人が体験して発信</span></h4>
                 
                 <div class="comparison-wrapper">
-                    <!-- 다국적 크리에이터 프로필 -->
                     <div class="creators-row">
                         <div class="creator-thumb"><img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/HEEWON_CC05_mono-scaled-1-e1724920330586.jpg" alt=""><span>🇰🇷</span></div>
                         <div class="creator-thumb"><img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/S__168247310-e1724116965778.jpg" alt=""><span>🇹🇭</span></div>
@@ -6020,127 +7050,197 @@
                 </div>
             </div>
 
-            <!-- ===== 04 - Partners ===== -->
-            <div class="bento-card bento-bottom bento-partners">
+            <!-- ===== 04 - 대手ポータル転載 (국가별 파트너 전체) ===== -->
+            <div class="bento-card bento-bottom" style="min-height: 380px;">
                 <div class="card-number">04</div>
-                <h4 class="card-title-sm">SNSで終わらない。<br><span class="card-highlight">大手ポータルへ転載</span></h4>
+                <h4 class="card-title-sm" style="font-size: 18px; line-height: 1.4;">SNSで終わらない。<br><span class="card-highlight">大手ポータルへ転載</span></h4>
+                <p class="card-desc-sm" style="font-size: 13px; margin-bottom: 16px;">制作したコンテンツは各国の大手メディアに転載。リーチを大幅に拡大。</p>
                 
-                <div class="partners-by-country">
-                    <div class="country-partners-row">
-                        <span class="country-flag-label">🇹🇼</span>
-                        <div class="partner-names">
-                            <span class="partner-name main">Yahoo!奇摩</span>
-                            <span class="partner-name main">LINE TODAY</span>
-                            <span class="partner-name">JR TIMES</span>
-                            <span class="partner-name more">+3</span>
+                <!-- 국가별 파트너 전체 목록 -->
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <!-- 대만 -->
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span style="font-size: 18px; min-width: 24px;">🇹🇼</span>
+                        <div style="display: flex; flex-wrap: wrap; gap: 4px; flex: 1;">
+                            <span style="font-size: 11px; padding: 4px 10px; background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%); border-radius: 4px; color: #0369a1; font-weight: 600;">Yahoo!奇摩</span>
+                            <span style="font-size: 11px; padding: 4px 10px; background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%); border-radius: 4px; color: #0369a1; font-weight: 600;">LINE TODAY</span>
+                            <span style="font-size: 11px; padding: 4px 10px; background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%); border-radius: 4px; color: #0369a1; font-weight: 600;">JR TIMES</span>
+                            <span style="font-size: 10px; padding: 4px 8px; background: #f1f5f9; border-radius: 4px; color: #64748b;">+3</span>
                         </div>
                     </div>
-                    <div class="country-partners-row">
-                        <span class="country-flag-label">🇰🇷</span>
-                        <div class="partner-names">
-                            <span class="partner-name main">NAVER</span>
-                            <span class="partner-name">JK DAILY</span>
-                            <span class="partner-name">Oh My News</span>
-                            <span class="partner-name more">+1</span>
+                    <!-- 한국 -->
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span style="font-size: 18px; min-width: 24px;">🇰🇷</span>
+                        <div style="display: flex; flex-wrap: wrap; gap: 4px; flex: 1;">
+                            <span style="font-size: 11px; padding: 4px 10px; background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%); border-radius: 4px; color: #0369a1; font-weight: 600;">NAVER</span>
+                            <span style="font-size: 11px; padding: 4px 10px; background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%); border-radius: 4px; color: #0369a1; font-weight: 600;">JK DAILY</span>
+                            <span style="font-size: 11px; padding: 4px 10px; background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%); border-radius: 4px; color: #0369a1; font-weight: 600;">Oh My News</span>
+                            <span style="font-size: 10px; padding: 4px 8px; background: #f1f5f9; border-radius: 4px; color: #64748b;">+1</span>
                         </div>
                     </div>
-                    <div class="country-partners-row">
-                        <span class="country-flag-label">🇹🇭</span>
-                        <div class="partner-names">
-                            <span class="partner-name main">trueID</span>
-                            <span class="partner-name main">SANOOK</span>
-                            <span class="partner-name more">+1</span>
+                    <!-- 태국 -->
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span style="font-size: 18px; min-width: 24px;">🇹🇭</span>
+                        <div style="display: flex; flex-wrap: wrap; gap: 4px; flex: 1;">
+                            <span style="font-size: 11px; padding: 4px 10px; background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%); border-radius: 4px; color: #0369a1; font-weight: 600;">trueID</span>
+                            <span style="font-size: 11px; padding: 4px 10px; background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%); border-radius: 4px; color: #0369a1; font-weight: 600;">SANOOK</span>
+                            <span style="font-size: 10px; padding: 4px 8px; background: #f1f5f9; border-radius: 4px; color: #64748b;">+1</span>
                         </div>
                     </div>
-                    <div class="country-partners-row">
-                        <span class="country-flag-label">🇬🇧</span>
-                        <div class="partner-names">
-                            <span class="partner-name main">HYPER JAPAN</span>
-                            <span class="partner-name">Medium</span>
-                            <span class="partner-name more">+2</span>
+                    <!-- 영어권 -->
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span style="font-size: 18px; min-width: 24px;">🇬🇧</span>
+                        <div style="display: flex; flex-wrap: wrap; gap: 4px; flex: 1;">
+                            <span style="font-size: 11px; padding: 4px 10px; background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%); border-radius: 4px; color: #0369a1; font-weight: 600;">HYPER JAPAN</span>
+                            <span style="font-size: 11px; padding: 4px 10px; background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%); border-radius: 4px; color: #0369a1; font-weight: 600;">Medium</span>
+                            <span style="font-size: 10px; padding: 4px 8px; background: #f1f5f9; border-radius: 4px; color: #64748b;">+2</span>
                         </div>
                     </div>
-                    <div class="country-partners-row">
-                        <span class="country-flag-label">🇮🇩</span>
-                        <div class="partner-names">
-                            <span class="partner-name main">SKYhub</span>
-                            <span class="partner-name more">+1</span>
+                    <!-- 인도네시아 -->
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span style="font-size: 18px; min-width: 24px;">🇮🇩</span>
+                        <div style="display: flex; flex-wrap: wrap; gap: 4px; flex: 1;">
+                            <span style="font-size: 11px; padding: 4px 10px; background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%); border-radius: 4px; color: #0369a1; font-weight: 600;">SKYhub</span>
+                            <span style="font-size: 10px; padding: 4px 8px; background: #f1f5f9; border-radius: 4px; color: #64748b;">+1</span>
                         </div>
                     </div>
                 </div>
                 
-                <div class="partners-total">
-                    <span>🤝</span>
-                    <span>18+ メディアパートナー</span>
+                <!-- CTA 버튼 -->
+                <div style="margin-top: 20px; padding: 12px 16px; background: linear-gradient(135deg, var(--accent) 0%, #2563eb 100%); color: white; border-radius: 10px; text-align: center; font-size: 14px; font-weight: 700; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);">
+                    👑 18+ メディアパートナー
                 </div>
             </div>
 
-            <!-- ===== 05 - SEO資産 + 검색결과 일러스트 ===== -->
-            <div class="bento-card bento-bottom">
+            <!-- ===== 05 - SEO + SNS 검색 상위노출 ===== -->
+            <div class="bento-card bento-bottom" style="min-height: 380px;">
                 <div class="card-number">05</div>
-                <h4 class="card-title-sm">単発で消えない。<br><span class="card-highlight">SEO資産として残る</span></h4>
-                <p class="card-desc-sm">検索され続ける記事。制作素材は販促にも活用可能。</p>
+                <h4 class="card-title-sm" style="font-size: 18px; line-height: 1.4;">単発で消えない。<br><span class="card-highlight">SEO資産として残る</span></h4>
+                <p class="card-desc-sm" style="font-size: 13px; margin-bottom: 12px;">検索され続ける記事。Google・SNS両方で上位表示。</p>
                 
-                <div class="illust-seo">
-                    <div class="search-bar">
-                        <svg class="search-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-                        <span class="search-text">tokyo ramen best</span>
+                <!-- Google 검색 -->
+                <div style="margin-bottom: 16px;">
+                    <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
+                        <svg viewBox="0 0 24 24" width="14" height="14"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+                        <span style="font-size: 11px; font-weight: 700; color: #333;">Google検索</span>
                     </div>
-                    <div class="search-results">
-                        <div class="search-result result-jk">
-                            <span class="result-rank">1</span>
-                            <img class="result-logo" src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2025/02/JAPANKURU_RGB-1.png" alt="JAPANKURU">
-                            <span class="result-text">東京のラーメン名店10選</span>
+                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 8px 12px;">
+                        <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
+                            <svg viewBox="0 0 24 24" width="12" height="12" fill="#9ca3af"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                            <span style="font-size: 10px; color: #64748b;">tokyo ramen best</span>
                         </div>
-                        <div class="search-result result-other">
-                            <span class="result-rank gray">2</span>
-                            <div class="result-skeleton">
-                                <div class="skeleton-line long"></div>
-                                <div class="skeleton-line short"></div>
+                        <div style="display: flex; align-items: center; gap: 8px; padding: 6px 8px; background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%); border: 1px solid var(--accent); border-radius: 6px;">
+                            <span style="background: var(--accent); color: white; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 4px;">1</span>
+                            <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2025/12/JAPANKURU_LOGO_SNS.jpg" style="width: 12px; height: 12px;" onerror="this.style.display='none'">
+                            <span style="font-size: 11px; font-weight: 600; color: #1e40af;">東京のラーメン名店10選</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- SNS 검색 -->
+                <div>
+                    <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
+                        <span style="font-size: 11px; font-weight: 700; color: #333;">📱 SNS検索でも上位表示</span>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                        <!-- Instagram -->
+                        <div style="background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%); border: 1px solid #f9a8d4; border-radius: 8px; padding: 10px;">
+                            <div style="display: flex; align-items: center; gap: 4px; margin-bottom: 6px;">
+                                <svg viewBox="0 0 24 24" width="12" height="12" fill="#E4405F"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0z"/></svg>
+                                <span style="font-size: 9px; font-weight: 600; color: #db2777;">#japantravel</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 4px;">
+                                <span style="background: #db2777; color: white; font-size: 8px; font-weight: 800; padding: 1px 4px; border-radius: 3px;">TOP</span>
+                                <span style="font-size: 9px; color: #831843; font-weight: 600;">@japankuru</span>
                             </div>
                         </div>
-                        <div class="search-result result-other">
-                            <span class="result-rank gray">3</span>
-                            <div class="result-skeleton">
-                                <div class="skeleton-line long"></div>
-                                <div class="skeleton-line short"></div>
+                        <!-- Facebook -->
+                        <div style="background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border: 1px solid #93c5fd; border-radius: 8px; padding: 10px;">
+                            <div style="display: flex; align-items: center; gap: 4px; margin-bottom: 6px;">
+                                <svg viewBox="0 0 24 24" width="12" height="12" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                                <span style="font-size: 9px; font-weight: 600; color: #1d4ed8;">Japan Travel</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 4px;">
+                                <span style="background: #1d4ed8; color: white; font-size: 8px; font-weight: 800; padding: 1px 4px; border-radius: 3px;">TOP</span>
+                                <span style="font-size: 9px; color: #1e3a8a; font-weight: 600;">JAPANKURU</span>
                             </div>
                         </div>
+                    </div>
+                </div>
+                
+                <!-- 하단 메시지 -->
+                <div style="margin-top: 16px; padding: 10px; background: #f0fdf4; border: 1px solid #86efac; border-radius: 8px; text-align: center;">
+                    <span style="font-size: 11px; color: #166534; font-weight: 600;">✓ 広告終了後も検索で見つかり続ける</span>
+                </div>
+            </div>
+
+            <!-- ===== 06 - KPIレポート + 슬라이드쇼 ===== -->
+            <div class="bento-card bento-bottom" style="min-height: 380px;">
+                <div class="card-number">06</div>
+                <h4 class="card-title-sm" style="font-size: 18px; line-height: 1.4;">「バズった」で終わらない。<br><span class="card-highlight">KPIベースで報告</span></h4>
+                <p class="card-desc-sm" style="font-size: 13px;">PV・リーチなどの定量データに加え、フォロワーの反応やインサイトもレポート。</p>
+                
+                <!-- KPI 박스 -->
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 12px 0;">
+                    <div style="text-align: center; padding: 12px 6px; background: rgba(59, 130, 246, 0.1); border-radius: 8px; border: 1px solid rgba(59, 130, 246, 0.2);">
+                        <div style="font-size: 14px; font-weight: 700; color: var(--black);">定量</div>
+                        <div style="font-size: 10px; color: var(--gray-500); margin-top: 2px;">PV・Reach等</div>
+                    </div>
+                    <div style="text-align: center; padding: 12px 6px; background: rgba(59, 130, 246, 0.1); border-radius: 8px; border: 1px solid rgba(59, 130, 246, 0.2);">
+                        <div style="font-size: 14px; font-weight: 700; color: var(--black);">定性</div>
+                        <div style="font-size: 10px; color: var(--gray-500); margin-top: 2px;">反応・声</div>
+                    </div>
+                    <div style="text-align: center; padding: 12px 6px; background: rgba(59, 130, 246, 0.1); border-radius: 8px; border: 1px solid rgba(59, 130, 246, 0.2);">
+                        <div style="font-size: 14px; font-weight: 700; color: var(--black);">SEO</div>
+                        <div style="font-size: 10px; color: var(--gray-500); margin-top: 2px;">検索順位</div>
+                    </div>
+                </div>
+                
+                <!-- 슬라이드쇼 -->
+                <div id="reportSlideshow06" style="position: relative; width: 100%; aspect-ratio: 16/10; border-radius: 10px; overflow: hidden; background: #000; box-shadow: 0 4px 16px rgba(0,0,0,0.15);">
+                    <!-- 프로그레스 바 -->
+                    <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: rgba(255,255,255,0.1); z-index: 10;">
+                        <div id="progressBar06" style="height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent), #60a5fa, var(--accent)); background-size: 200% 100%; border-radius: 0 2px 2px 0; box-shadow: 0 0 8px rgba(59, 130, 246, 0.5);"></div>
+                    </div>
+                    
+                    <!-- 카운터 -->
+                    <span id="slideCounter06" style="position: absolute; top: 6px; right: 8px; background: rgba(0,0,0,0.6); color: white; font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 10px; z-index: 10;">1/5</span>
+                    
+                    <!-- 슬라이드 -->
+                    <div class="slide06 active" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 1; transition: opacity 0.8s ease-in-out;">
+                        <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2026/01/slide_1.jpg" alt="Cover" style="width: 100%; height: 100%; object-fit: contain; background: #fff;">
+                    </div>
+                    <div class="slide06" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 0.8s ease-in-out;">
+                        <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2026/01/slide_2.jpg" alt="Summary" style="width: 100%; height: 100%; object-fit: contain; background: #fff;">
+                    </div>
+                    <div class="slide06" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 0.8s ease-in-out;">
+                        <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2026/01/slide_3.jpg" alt="Language" style="width: 100%; height: 100%; object-fit: contain; background: #fff;">
+                    </div>
+                    <div class="slide06" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 0.8s ease-in-out;">
+                        <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2026/01/slide_4.jpg" alt="Video" style="width: 100%; height: 100%; object-fit: contain; background: #fff;">
+                    </div>
+                    <div class="slide06" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 0.8s ease-in-out;">
+                        <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2026/01/slide_5.jpg" alt="SNS" style="width: 100%; height: 100%; object-fit: contain; background: #fff;">
+                    </div>
+                    
+                    <!-- 네비게이션 버튼 -->
+                    <button onclick="changeSlide06(-1)" style="position: absolute; top: 50%; left: 6px; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; width: 24px; height: 24px; border-radius: 50%; cursor: pointer; font-size: 10px; z-index: 10;">❮</button>
+                    <button onclick="changeSlide06(1)" style="position: absolute; top: 50%; right: 6px; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; width: 24px; height: 24px; border-radius: 50%; cursor: pointer; font-size: 10px; z-index: 10;">❯</button>
+                    
+                    <!-- 인디케이터 -->
+                    <div style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); display: flex; gap: 4px; z-index: 10;">
+                        <div class="indicator06 active" onclick="goToSlide06(0)" style="width: 14px; height: 5px; border-radius: 3px; background: var(--accent); cursor: pointer; transition: all 0.3s;"></div>
+                        <div class="indicator06" onclick="goToSlide06(1)" style="width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,0.4); cursor: pointer; transition: all 0.3s;"></div>
+                        <div class="indicator06" onclick="goToSlide06(2)" style="width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,0.4); cursor: pointer; transition: all 0.3s;"></div>
+                        <div class="indicator06" onclick="goToSlide06(3)" style="width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,0.4); cursor: pointer; transition: all 0.3s;"></div>
+                        <div class="indicator06" onclick="goToSlide06(4)" style="width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,0.4); cursor: pointer; transition: all 0.3s;"></div>
                     </div>
                 </div>
             </div>
 
-            <!-- ===== 06 - KPI報告 + 대시보드 일러스트 ===== -->
-            <div class="bento-card bento-bottom">
-                <div class="card-number">06</div>
-                <h4 class="card-title-sm">「バズった」で終わらない。<br><span class="card-highlight">KPIベースで報告</span></h4>
-                <p class="card-desc-sm">PV・リーチ・クーポン使用数を可視化。</p>
-                
-                <div class="illust-dashboard">
-                    <div class="dashboard-row">
-                        <div class="dashboard-mini-card">
-                            <div class="mini-card-value">24.5K</div>
-                            <div class="mini-card-label">PV</div>
-                        </div>
-                        <div class="dashboard-mini-card">
-                            <div class="mini-card-value">142K</div>
-                            <div class="mini-card-label">Reach</div>
-                        </div>
-                        <div class="dashboard-mini-card">
-                            <div class="mini-card-value">3.2%</div>
-                            <div class="mini-card-label">CTR</div>
-                        </div>
-                    </div>
-                    <div class="dashboard-trend">
-                        <span class="trend-arrow">↗</span>
-                        <span class="trend-text">前月比 +23% 改善</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+        </div><!-- bento-grid 종료 -->
     </div>
 </section>
-
 <!-- =============================================
      JAPANKURU Services Section - HTML
      JAPANKURUにできること
@@ -6157,7 +7257,7 @@
         <div class="service-showcase">
             
             <!-- 1. 記事制作 -->
-            <div class="service-card wide">
+            <div class="service-card wide article-scroll">
     <div class="card-mockup">
         <div class="browser-mockup" style="height: 100%;">
             <div class="browser-header">
@@ -6167,7 +7267,7 @@
                 <div class="browser-url">japankuru.com/article</div>
             </div>
             <div class="browser-content">
-                <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2026/01/スクリーンショット-2026-01-07-17.20.27.png" alt="Article">
+                <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2026/01/スクリーンショット-2026-01-09-14.51.08.png" alt="Article">
             </div>
         </div>
     </div>
@@ -6398,7 +7498,7 @@
 
         <!-- CTA -->
         <div class="cta-row">
-            <a href="#contact" class="cta-btn">
+            <a href="#contact" class="cta-btn" id="btn-why-contact">
                 サービス詳細を相談する
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
             </a>
@@ -6507,201 +7607,203 @@
             </div>
             
             <!-- Country Channels (테이블 형식) -->
-
-            <div class="mobile-tabs sp-only">
-    <button class="tab-btn active" onclick="openTab(event, 'tab-en')">🇺🇸 EN</button>
-    <button class="tab-btn" onclick="openTab(event, 'tab-tw')">🇹🇼 TW</button>
-    <button class="tab-btn" onclick="openTab(event, 'tab-th')">🇹🇭 TH</button>
-    <button class="tab-btn" onclick="openTab(event, 'tab-kr')">🇰🇷 KR</button>
-    <button class="tab-btn" onclick="openTab(event, 'tab-cn')">🇨🇳 CN</button>
-</div>
-
             <div class="country-table reveal">
-    <div id="tab-en" class="tab-content active">
-        <div class="country-row">
-            <div class="country-row-header">
-                <div class="country-info">
-                    <span class="country-flag">EN</span>
-                    <div class="country-meta">
-                        <span class="country-name">英語圏</span>
-                        <span class="country-stat">FB+IG 90万 フォロワー</span>
-                    </div>
+    <!-- 영어권 (EN) -->
+    <div class="country-row">
+        <div class="country-row-header">
+            <div class="country-info">
+                <span class="country-flag">EN</span>
+                <div class="country-meta">
+                    <span class="country-name">英語圏</span>
+                    <span class="country-stat">FB+IG 90万 フォロワー</span>
                 </div>
-                <span class="country-trait">🌏 北米・欧州中心・旅好き層</span>
             </div>
-            <div class="country-channels">
-                <a href="https://japankuru.com" target="_blank" class="channel-chip">
-                    <svg viewBox="0 0 24 24" fill="#666"><circle cx="12" cy="12" r="10"/></svg>
-                    JAPANKURU.com
-                </a>
-                <a href="https://www.facebook.com/Japankuru" target="_blank" class="channel-chip active">
-                    <svg viewBox="0 0 24 24" fill="#fff"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-                    Facebook
-                </a>
-                <a href="https://www.instagram.com/japankuru" target="_blank" class="channel-chip active">
-                    <svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
-                    Instagram
-                </a>
-                <a href="https://www.pinterest.com/japankuru" target="_blank" class="channel-chip">
-                    <svg viewBox="0 0 24 24" fill="#E60023"><path d="M12 0C5.373 0 0 5.372 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 01.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12 0-6.628-5.373-12-12-12z"/></svg>
-                    Pinterest
-                </a>
-                <a href="https://www.threads.com/@japankuru" target="_blank" class="channel-chip">
-                    <svg viewBox="0 0 24 24" fill="#000"><path d="M12.186 24h-.007c-3.581-.024-6.334-1.205-8.184-3.509C2.35 18.44 1.5 15.586 1.472 12.01v-.017c.03-3.579.879-6.43 2.525-8.482C5.845 1.205 8.6.024 12.18 0h.014c2.746.02 5.043.725 6.826 2.098 1.677 1.29 2.858 3.13 3.509 5.467l-2.04.569c-1.104-3.96-3.898-5.984-8.304-6.015-2.91.022-5.11.936-6.54 2.717C4.307 6.504 3.616 8.914 3.589 12c.027 3.086.718 5.496 2.057 7.164 1.43 1.783 3.631 2.698 6.54 2.717 2.623-.02 4.358-.631 5.8-2.045 1.647-1.613 1.618-3.593 1.09-4.798-.31-.71-.873-1.3-1.634-1.75-.192 1.352-.622 2.446-1.284 3.272-.886 1.102-2.14 1.704-3.73 1.79-1.202.065-2.361-.218-3.259-.801-1.063-.689-1.685-1.74-1.752-2.96-.065-1.182.408-2.256 1.332-3.023.88-.73 2.088-1.146 3.5-1.208 1.028-.045 1.964.062 2.793.32l.025-.006c-.06-.548-.177-.985-.358-1.313-.258-.468-.674-.793-1.276-.996-.669-.224-1.528-.293-2.553-.204l-.166-2.082c1.263-.11 2.378-.026 3.316.25.993.293 1.77.823 2.31 1.576.49.683.805 1.544.942 2.567.684.199 1.303.456 1.855.773 1.166.668 2.022 1.56 2.543 2.652.784 1.648.85 4.313-1.323 6.446-1.857 1.822-4.152 2.655-7.394 2.679zm-.766-5.925c1.134-.062 1.99-.478 2.543-1.237.476-.654.756-1.533.84-2.63-.526-.14-1.105-.216-1.73-.228l-.164-.002c-1.958 0-3.326.762-3.246 2.205.053.972.768 1.834 2.757 1.892z"/></svg>
-                    Threads
-                </a>
-                <a href="https://www.youtube.com/@cometojapankuru" target="_blank" class="channel-chip">
-                    <svg viewBox="0 0 24 24" fill="#FF0000"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814z"/><path d="M9.545 15.568V8.432L15.818 12z" fill="#fff"/></svg>
-                    YouTube
-                </a>
-            </div>
+            <span class="country-trait">🌏 北米・欧州中心・旅好き層</span>
+        </div>
+        <div class="country-insight">
+            <strong>英語圏の特徴:</strong> Instagram Reelsの平均エンゲージメント率5.2%。長文よりビジュアル重視のショートコンテンツが効果的。
+        </div>
+        <div class="country-channels">
+            <a href="https://japankuru.com/" target="_blank" class="channel-chip">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><circle cx="12" cy="12" r="10"/></svg>
+                JAPANKURU.com
+            </a>
+            <a href="https://www.facebook.com/japankuru/" target="_blank" class="channel-chip active">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                Facebook
+            </a>
+            <a href="https://www.instagram.com/japankuru/" target="_blank" class="channel-chip active">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0z"/></svg>
+                Instagram
+            </a>
+            <a href="https://www.pinterest.com/japankuru/" target="_blank" class="channel-chip">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M12 0C5.373 0 0 5.372 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 01.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12 0-6.628-5.373-12-12-12z"/></svg>
+                Pinterest
+            </a>
+            <a href="https://www.threads.net/@japankuru" target="_blank" class="channel-chip">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M12.186 24h-.007c-3.581-.024-6.334-1.205-8.184-3.509C2.35 18.44 1.5 15.586 1.472 12.01v-.017c.03-3.579.879-6.43 2.525-8.482C5.845 1.205 8.6.024 12.18 0h.014c2.746.02 5.043.725 6.826 2.098 1.677 1.29 2.858 3.13 3.509 5.467l-2.04.569c-1.104-3.96-3.898-5.984-8.304-6.015-2.91.022-5.11.936-6.54 2.717C4.307 6.504 3.616 8.914 3.589 12c.027 3.086.718 5.496 2.057 7.164 1.43 1.783 3.631 2.698 6.54 2.717 2.623-.02 4.358-.631 5.8-2.045 1.647-1.613 1.618-3.593 1.09-4.798-.31-.71-.873-1.3-1.634-1.75-.192 1.352-.622 2.446-1.284 3.272-.886 1.102-2.14 1.704-3.73 1.79-1.202.065-2.361-.218-3.259-.801-1.063-.689-1.685-1.74-1.752-2.96-.065-1.182.408-2.256 1.332-3.023.88-.73 2.088-1.146 3.5-1.208 1.028-.045 1.964.062 2.793.32l.025-.006c-.06-.548-.177-.985-.358-1.313-.258-.468-.674-.793-1.276-.996-.669-.224-1.528-.293-2.553-.204l-.166-2.082c1.263-.11 2.378-.026 3.316.25.993.293 1.77.823 2.31 1.576.49.683.805 1.544.942 2.567.684.199 1.303.456 1.855.773 1.166.668 2.022 1.56 2.543 2.652.784 1.648.85 4.313-1.323 6.446-1.857 1.822-4.152 2.655-7.394 2.679z"/></svg>
+                Threads
+            </a>
+            <a href="https://www.youtube.com/@JAPANKURU" target="_blank" class="channel-chip">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814z"/><path d="M9.545 15.568V8.432L15.818 12z" fill="#fff"/></svg>
+                YouTube
+            </a>
         </div>
     </div>
 
-    <div id="tab-tw" class="tab-content">
-        <div class="country-row">
-            <div class="country-row-header">
-                <div class="country-info">
-                    <span class="country-flag">TW</span>
-                    <div class="country-meta">
-                        <span class="country-name">台湾</span>
-                        <span class="country-stat">FB 1.3万 フォロワー</span>
-                    </div>
+    <!-- 대만 (TW) -->
+    <div class="country-row">
+        <div class="country-row-header">
+            <div class="country-info">
+                <span class="country-flag">TW</span>
+                <div class="country-meta">
+                    <span class="country-name">台湾</span>
+                    <span class="country-stat">FB 1.3万 フォロワー</span>
                 </div>
-                <span class="country-trait">👩 30〜40代女性・リピーター多</span>
             </div>
-            <div class="country-channels">
-                <a href="https://japankuru.com/tc" target="_blank" class="channel-chip">
-                    <svg viewBox="0 0 24 24" fill="#666"><circle cx="12" cy="12" r="10"/></svg>
-                    JAPANKURU.com
-                </a>
-                <a href="https://www.facebook.com/japankurutw" target="_blank" class="channel-chip active">
-                    <svg viewBox="0 0 24 24" fill="#fff"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-                    Facebook
-                </a>
-                <a href="https://www.instagram.com/japankurutw" target="_blank" class="channel-chip">
-                    <svg viewBox="0 0 24 24" fill="#E4405F"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
-                    Instagram
-                </a>
-                <a href="https://japankuru.pixnet.net/blog" target="_blank" class="channel-chip">
-                    <img src="https://www.pixnet.net/_nuxt/img/pixnet_logo.a6c2254.svg" alt="Pixnet" style="width:16px;height:16px;">
-                    Pixnet
-                </a>
-                <a href="https://www.threads.com/@japankuru_tc" target="_blank" class="channel-chip">
-                    <svg viewBox="0 0 24 24" fill="#000"><path d="M12.186 24h-.007c-3.581-.024-6.334-1.205-8.184-3.509C2.35 18.44 1.5 15.586 1.472 12.01v-.017c.03-3.579.879-6.43 2.525-8.482C5.845 1.205 8.6.024 12.18 0h.014c2.746.02 5.043.725 6.826 2.098 1.677 1.29 2.858 3.13 3.509 5.467l-2.04.569c-1.104-3.96-3.898-5.984-8.304-6.015-2.91.022-5.11.936-6.54 2.717C4.307 6.504 3.616 8.914 3.589 12c.027 3.086.718 5.496 2.057 7.164 1.43 1.783 3.631 2.698 6.54 2.717 2.623-.02 4.358-.631 5.8-2.045 1.647-1.613 1.618-3.593 1.09-4.798-.31-.71-.873-1.3-1.634-1.75-.192 1.352-.622 2.446-1.284 3.272-.886 1.102-2.14 1.704-3.73 1.79-1.202.065-2.361-.218-3.259-.801-1.063-.689-1.685-1.74-1.752-2.96-.065-1.182.408-2.256 1.332-3.023.88-.73 2.088-1.146 3.5-1.208 1.028-.045 1.964.062 2.793.32l.025-.006c-.06-.548-.177-.985-.358-1.313-.258-.468-.674-.793-1.276-.996-.669-.224-1.528-.293-2.553-.204l-.166-2.082c1.263-.11 2.378-.026 3.316.25.993.293 1.77.823 2.31 1.576.49.683.805 1.544.942 2.567.684.199 1.303.456 1.855.773 1.166.668 2.022 1.56 2.543 2.652.784 1.648.85 4.313-1.323 6.446-1.857 1.822-4.152 2.655-7.394 2.679zm-.766-5.925c1.134-.062 1.99-.478 2.543-1.237.476-.654.756-1.533.84-2.63-.526-.14-1.105-.216-1.73-.228l-.164-.002c-1.958 0-3.326.762-3.246 2.205.053.972.768 1.834 2.757 1.892z"/></svg>
-                    Threads
-                </a>
-            </div>
+            <span class="country-trait">👩 30〜40代女性・リピーター多</span>
+        </div>
+        <div class="country-insight">
+            <strong>台湾市場の特徴:</strong> 訪日リピート率70%超。Pixnetブログ検索が根強く、詳細な旅行記が人気。LINE TODAYへの転載で月間100万リーチ達成実績。
+        </div>
+        <div class="country-channels">
+            <a href="https://tw.japankuru.com/" target="_blank" class="channel-chip">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><circle cx="12" cy="12" r="10"/></svg>
+                JAPANKURU.com
+            </a>
+            <a href="https://www.facebook.com/japankurutw/" target="_blank" class="channel-chip active">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                Facebook
+            </a>
+            <a href="https://www.instagram.com/japankuru_tw/" target="_blank" class="channel-chip active">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0z"/></svg>
+                Instagram
+            </a>
+            <a href="https://japankuru.pixnet.net/" target="_blank" class="channel-chip">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M7.3 2.7c-.4.4-.4 1 0 1.4L10.2 7H4c-.6 0-1 .4-1 1s.4 1 1 1h6.2l-2.9 2.9c-.4.4-.4 1 0 1.4.2.2.5.3.7.3s.5-.1.7-.3l4.6-4.6c.4-.4.4-1 0-1.4l-4.6-4.6c-.4-.4-1-.4-1.4 0z"/></svg>
+                Pixnet
+            </a>
+            <a href="https://www.threads.net/@japankuru_tw" target="_blank" class="channel-chip">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M12.186 24h-.007c-3.581-.024-6.334-1.205-8.184-3.509C2.35 18.44 1.5 15.586 1.472 12.01v-.017c.03-3.579.879-6.43 2.525-8.482C5.845 1.205 8.6.024 12.18 0h.014c2.746.02 5.043.725 6.826 2.098 1.677 1.29 2.858 3.13 3.509 5.467l-2.04.569c-1.104-3.96-3.898-5.984-8.304-6.015-2.91.022-5.11.936-6.54 2.717C4.307 6.504 3.616 8.914 3.589 12c.027 3.086.718 5.496 2.057 7.164 1.43 1.783 3.631 2.698 6.54 2.717 2.623-.02 4.358-.631 5.8-2.045 1.647-1.613 1.618-3.593 1.09-4.798-.31-.71-.873-1.3-1.634-1.75-.192 1.352-.622 2.446-1.284 3.272-.886 1.102-2.14 1.704-3.73 1.79-1.202.065-2.361-.218-3.259-.801-1.063-.689-1.685-1.74-1.752-2.96-.065-1.182.408-2.256 1.332-3.023.88-.73 2.088-1.146 3.5-1.208 1.028-.045 1.964.062 2.793.32l.025-.006c-.06-.548-.177-.985-.358-1.313-.258-.468-.674-.793-1.276-.996-.669-.224-1.528-.293-2.553-.204l-.166-2.082c1.263-.11 2.378-.026 3.316.25.993.293 1.77.823 2.31 1.576.49.683.805 1.544.942 2.567.684.199 1.303.456 1.855.773 1.166.668 2.022 1.56 2.543 2.652.784 1.648.85 4.313-1.323 6.446-1.857 1.822-4.152 2.655-7.394 2.679z"/></svg>
+                Threads
+            </a>
         </div>
     </div>
 
-    <div id="tab-th" class="tab-content">
-        <div class="country-row">
-            <div class="country-row-header">
-                <div class="country-info">
-                    <span class="country-flag">TH</span>
-                    <div class="country-meta">
-                        <span class="country-name">タイ</span>
-                        <span class="country-stat">FB 1.1만 フォロワー</span>
-                    </div>
+    <!-- 태국 (TH) -->
+    <div class="country-row">
+        <div class="country-row-header">
+            <div class="country-info">
+                <span class="country-flag">TH</span>
+                <div class="country-meta">
+                    <span class="country-name">タイ</span>
+                    <span class="country-stat">FB 1.1万 フォロワー</span>
                 </div>
-                <span class="country-trait">🧑 若年層中心・初訪日が多い</span>
             </div>
-            <div class="country-channels">
-                <a href="https://japankuru.com/th" target="_blank" class="channel-chip">
-                    <svg viewBox="0 0 24 24" fill="#666"><circle cx="12" cy="12" r="10"/></svg>
-                    JAPANKURU.com
-                </a>
-                <a href="https://www.facebook.com/japankuruth" target="_blank" class="channel-chip active">
-                    <svg viewBox="0 0 24 24" fill="#fff"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-                    Facebook
-                </a>
-                <a href="https://www.instagram.com/japankuru_th" target="_blank" class="channel-chip">
-                    <svg viewBox="0 0 24 24" fill="#E4405F"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
-                    Instagram
-                </a>
-                <a href="https://www.tiktok.com/@japankuru_thai" target="_blank" class="channel-chip">
-                    <svg viewBox="0 0 24 24" fill="#fff"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
-                    TikTok
-                </a>
-            </div>
+            <span class="country-trait">🧑 若年層中心・初訪日が多い</span>
+        </div>
+        <div class="country-insight">
+            <strong>タイ市場の特徴:</strong> Z世代が中心でTikTok経由の流入急増中。SANOOKへの転載で月間500万インプレッション。ビザ免除後、初訪日客の情報収集ニーズ高。
+        </div>
+        <div class="country-channels">
+            <a href="https://th.japankuru.com/" target="_blank" class="channel-chip">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><circle cx="12" cy="12" r="10"/></svg>
+                JAPANKURU.com
+            </a>
+            <a href="https://www.facebook.com/japankuruth/" target="_blank" class="channel-chip active">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                Facebook
+            </a>
+            <a href="https://www.instagram.com/japankuru_th/" target="_blank" class="channel-chip">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0z"/></svg>
+                Instagram
+            </a>
+            <a href="https://www.tiktok.com/@japankuru_th" target="_blank" class="channel-chip">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+                TikTok
+            </a>
         </div>
     </div>
 
-    <div id="tab-kr" class="tab-content">
-        <div class="country-row">
-            <div class="country-row-header">
-                <div class="country-info">
-                    <span class="country-flag">KR</span>
-                    <div class="country-meta">
-                        <span class="country-name">韓国</span>
-                        <span class="country-stat">Naver Blog 1.1만 読者</span>
-                    </div>
+    <!-- 한국 (KR) -->
+    <div class="country-row">
+        <div class="country-row-header">
+            <div class="country-info">
+                <span class="country-flag">KR</span>
+                <div class="country-meta">
+                    <span class="country-name">韓国</span>
+                    <span class="country-stat">Naver Blog 1.1万 読者</span>
                 </div>
-                <span class="country-trait">💄 20〜30代・トレンド敏感</span>
             </div>
-            <div class="country-channels">
-                <a href="https://japankuru.com/ko" target="_blank" class="channel-chip">
-                    <svg viewBox="0 0 24 24" fill="#666"><circle cx="12" cy="12" r="10"/></svg>
-                    JAPANKURU.com
-                </a>
-                <a href="https://blog.naver.com/japankuru" target="_blank" class="channel-chip active">
-                    <svg viewBox="0 0 24 24" fill="#fff"><path d="M16.273 12.845L7.376 0H0v24h7.727V11.155L16.624 24H24V0h-7.727z"/></svg>
-                    Naver Blog
-                </a>
-                <a href="https://in.naver.com/japankuru" target="_blank" class="channel-chip">
-                    <svg viewBox="0 0 24 24" fill="#03C75A"><path d="M16.273 12.845L7.376 0H0v24h7.727V11.155L16.624 24H24V0h-7.727z"/></svg>
-                    Influencer
-                </a>
-                <a href="https://www.instagram.com/japankuru_korean" target="_blank" class="channel-chip">
-                    <svg viewBox="0 0 24 24" fill="#E4405F"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
-                    Instagram
-                </a>
-                <a href="https://www.youtube.com/@%EC%9E%AC%ED%8C%AC%EC%BF%A0%EB%A3%A8%EC%BD%94%EB%A6%AC%EC%95%84" target="_blank" class="channel-chip">
-                    <svg viewBox="0 0 24 24" fill="#FF0000"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814z"/><path d="M9.545 15.568V8.432L15.818 12z" fill="#fff"/></svg>
-                    YouTube
-                </a>
-                <a href="https://www.tiktok.com/@japankuru_kr" target="_blank" class="channel-chip">
-                    <svg viewBox="0 0 24 24" fill="#fff"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
-                    TikTok
-                </a>
-            </div>
+            <span class="country-trait">💄 20〜30代・トレンド敏感</span>
+        </div>
+        <div class="country-insight">
+            <strong>韓国市場の特徴:</strong> Naver検索シェア60%以上。「日本旅行」関連キーワードでNaver Blog上位表示多数。Instagram Reelsとの相乗効果でZ世代へのリーチ拡大中。
+        </div>
+        <div class="country-channels">
+            <a href="https://kr.japankuru.com/" target="_blank" class="channel-chip">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><circle cx="12" cy="12" r="10"/></svg>
+                JAPANKURU.com
+            </a>
+            <a href="https://blog.naver.com/japankuru" target="_blank" class="channel-chip active">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M16.273 12.845 7.376 0H0v24h7.727V11.155L16.624 24H24V0h-7.727v12.845z"/></svg>
+                Naver Blog
+            </a>
+            <a href="https://in.naver.com/japankuru" target="_blank" class="channel-chip active">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M16.273 12.845 7.376 0H0v24h7.727V11.155L16.624 24H24V0h-7.727v12.845z"/></svg>
+                Influencer
+            </a>
+            <a href="https://www.instagram.com/japankuru_kr/" target="_blank" class="channel-chip">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0z"/></svg>
+                Instagram
+            </a>
+            <a href="https://www.youtube.com/@japankuru_kr" target="_blank" class="channel-chip">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814z"/><path d="M9.545 15.568V8.432L15.818 12z" fill="#fff"/></svg>
+                YouTube
+            </a>
+            <a href="https://www.tiktok.com/@japankuru_kr" target="_blank" class="channel-chip">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+                TikTok
+            </a>
         </div>
     </div>
 
-    <div id="tab-cn" class="tab-content">
-        <div class="country-row">
-            <div class="country-row-header">
-                <div class="country-info">
-                    <span class="country-flag">CN</span>
-                    <div class="country-meta">
-                        <span class="country-name">中国</span>
-                        <span class="country-stat">Weibo 2万 フォロワー</span>
-                    </div>
+    <!-- 중국 (CN) -->
+    <div class="country-row">
+        <div class="country-row-header">
+            <div class="country-info">
+                <span class="country-flag">CN</span>
+                <div class="country-meta">
+                    <span class="country-name">中国</span>
+                    <span class="country-stat">Weibo 2万 フォロワー</span>
                 </div>
-                <span class="country-trait">💎 富裕層・高額消費傾向</span>
             </div>
-            <div class="country-channels">
-                <a href="https://japankuru.com/sc" target="_blank" class="channel-chip">
-                    <svg viewBox="0 0 24 24" fill="#666"><circle cx="12" cy="12" r="10"/></svg>
-                    JAPANKURU.com
-                </a>
-                <a href="https://weibo.com/japankuru" target="_blank" class="channel-chip active">
-                    <svg viewBox="0 0 24 24" fill="#fff"><circle cx="12" cy="12" r="10"/></svg>
-                    Weibo
-                </a>
-                <a href="#" class="channel-chip">
-                    <svg viewBox="0 0 24 24" fill="#07C160"><circle cx="12" cy="12" r="10"/></svg>
-                    WeChat
-                </a>
-                <a href="#" class="channel-chip">
-                    <svg viewBox="0 0 24 24" fill="#FF2442"><circle cx="12" cy="12" r="10"/></svg>
-                    小紅書 RED
-                </a>
-            </div>
+            <span class="country-trait">💎 富裕層・高額消費傾向</span>
+        </div>
+        <div class="country-insight">
+            <strong>中国市場の特徴:</strong> 小紅書(RED)での口コミ効果が絶大。訪日客の平均消費額は全国籍中トップクラス。WeChat公式アカウントでリピーター育成。
+        </div>
+        <div class="country-channels">
+            <a href="https://cn.japankuru.com/" target="_blank" class="channel-chip">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><circle cx="12" cy="12" r="10"/></svg>
+                JAPANKURU.com
+            </a>
+            <a href="https://weibo.com/japankuru" target="_blank" class="channel-chip active">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M10.098 20.323c-3.977.391-7.414-1.406-7.672-4.02-.259-2.609 2.759-5.047 6.74-5.441 3.979-.394 7.413 1.404 7.671 4.018.259 2.6-2.759 5.049-6.739 5.443z"/></svg>
+                Weibo
+            </a>
+            <a href="#" target="_blank" class="channel-chip">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 01.213.665l-.39 1.48c-.019.07-.048.141-.048.213 0 .163.13.295.29.295a.326.326 0 00.167-.054l1.903-1.114a.864.864 0 01.717-.098 10.16 10.16 0 002.837.403c.276 0 .543-.027.811-.05-.857-2.578.157-4.972 1.932-6.446 1.703-1.415 3.882-1.98 5.853-1.838-.576-3.583-4.196-6.348-8.596-6.348z"/></svg>
+                WeChat
+            </a>
+            <a href="#" target="_blank" class="channel-chip">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><circle cx="12" cy="12" r="10"/><text x="12" y="16" text-anchor="middle" fill="white" font-size="8" font-weight="bold">红</text></svg>
+                小紅書 RED
+            </a>
         </div>
     </div>
 
+    <!-- 확장 대응 -->
     <div class="country-row expansion-row">
         <div class="country-row-header">
             <div class="country-info">
@@ -6730,6 +7832,7 @@
         </div>
     </div>
 </div>
+
             
             <!-- Audience Quality -->
             <div class="audience-quality reveal">
@@ -6783,80 +7886,100 @@
             
             <!-- Creator Section -->
             <div class="creator-section reveal">
-                <h4>NATIVE CREATORS</h4>
-                <div class="creator-grid">
-                    <div class="creator-card">
-                        <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/DSC01179-のコピー-scaled.jpg" alt="Andy" class="creator-avatar">
-                        <div class="creator-info">
-                            <div class="creator-name">Andy Kin</div>
-                            <div class="creator-role"><span class="role-code">EN</span> Creative Director</div>
-                        </div>
-                    </div>
-                    <div class="creator-card">
-                        <img src="https://via.placeholder.com/72" alt="Sophia" class="creator-avatar">
-                        <div class="creator-info">
-                            <div class="creator-name">Sophia</div>
-                            <div class="creator-role"><span class="role-code">EN</span> English Writer</div>
-                        </div>
-                    </div>
-                    <div class="creator-card">
-                        <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/HEEWON_CC05_mono-scaled-1-e1724920330586.jpg" alt="Hee Won" class="creator-avatar">
-                        <div class="creator-info">
-                            <div class="creator-name">Hee Won Kim</div>
-                            <div class="creator-role"><span class="role-code">KR</span> Korean Editor</div>
-                        </div>
-                    </div>
-                    <div class="creator-card">
-                        <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/S__168247310-e1724116965778.jpg" alt="Sarita" class="creator-avatar">
-                        <div class="creator-info">
-                            <div class="creator-name">Sarita</div>
-                            <div class="creator-role"><span class="role-code">TH</span> Thai Creator</div>
-                        </div>
-                    </div>
-                    <div class="creator-card">
-                        <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/IMG_7615.jpg" alt="Lucy" class="creator-avatar">
-                        <div class="creator-info">
-                            <div class="creator-name">Lucy Wu</div>
-                            <div class="creator-role"><span class="role-code">CN</span> Chinese Editor</div>
-                        </div>
-                    </div>
-                    <div class="creator-card">
-                        <img src="https://via.placeholder.com/72" alt="Sou" class="creator-avatar">
-                        <div class="creator-info">
-                            <div class="creator-name">Sou</div>
-                            <div class="creator-role"><span class="role-code">TW</span> Taiwan Writer</div>
-                        </div>
-                    </div>
-                    <div class="creator-card">
-                        <img src="https://via.placeholder.com/72" alt="Taiwan" class="creator-avatar">
-                        <div class="creator-info">
-                            <div class="creator-name">Taiwan Team</div>
-                            <div class="creator-role"><span class="role-code">TW</span> 繁体字 Editor</div>
-                        </div>
-                    </div>
-                    <div class="creator-card">
-                        <img src="https://via.placeholder.com/72" alt="Indonesia" class="creator-avatar">
-                        <div class="creator-info">
-                            <div class="creator-name">Indonesia Team</div>
-                            <div class="creator-role"><span class="role-code">ID</span> Remote Creator</div>
-                        </div>
-                    </div>
-                    <div class="creator-card">
-                        <img src="https://via.placeholder.com/72" alt="Vietnam" class="creator-avatar">
-                        <div class="creator-info">
-                            <div class="creator-name">Vietnam Team</div>
-                            <div class="creator-role"><span class="role-code">VN</span> Remote Creator</div>
-                        </div>
-                    </div>
-                    <div class="creator-card">
-                        <img src="https://via.placeholder.com/72" alt="France" class="creator-avatar">
-                        <div class="creator-info">
-                            <div class="creator-name">France Team</div>
-                            <div class="creator-role"><span class="role-code">FR</span> Remote Creator</div>
-                        </div>
-                    </div>
-                </div>
+    <h4>NATIVE CREATORS</h4>
+    <div class="creator-grid">
+        <div class="creator-card">
+            <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/DSC01179-のコピー-scaled.jpg" alt="Andy" class="creator-avatar">
+            <div class="creator-info">
+                <div class="creator-name">Andy Kin</div>
+                <div class="creator-role"><span class="role-code">EN</span> Creative Director</div>
+                <div class="creator-native-tag">🇺🇸 日本在住15年</div>
+                <div class="creator-expertise">映像・写真プロデュース</div>
             </div>
+        </div>
+        <div class="creator-card">
+            <img src="https://via.placeholder.com/72" alt="Sophia" class="creator-avatar">
+            <div class="creator-info">
+                <div class="creator-name">Sophia</div>
+                <div class="creator-role"><span class="role-code">EN</span> English Writer</div>
+                <div class="creator-native-tag">🇬🇧 日本在住8年</div>
+                <div class="creator-expertise">旅行・カルチャー専門</div>
+            </div>
+        </div>
+        <div class="creator-card">
+            <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/HEEWON_CC05_mono-scaled-1-e1724920330586.jpg" alt="Hee Won" class="creator-avatar">
+            <div class="creator-info">
+                <div class="creator-name">Hee Won Kim</div>
+                <div class="creator-role"><span class="role-code">KR</span> Korean Editor</div>
+                <div class="creator-native-tag">🇰🇷 日本在住12年</div>
+                <div class="creator-expertise">Naverトレンド分析</div>
+            </div>
+        </div>
+        <div class="creator-card">
+            <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/S__168247310-e1724116965778.jpg" alt="Sarita" class="creator-avatar">
+            <div class="creator-info">
+                <div class="creator-name">Sarita</div>
+                <div class="creator-role"><span class="role-code">TH</span> Thai Creator</div>
+                <div class="creator-native-tag">🇹🇭 日本在住6年</div>
+                <div class="creator-expertise">SNS・ショート動画</div>
+            </div>
+        </div>
+        <div class="creator-card">
+            <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/IMG_7615.jpg" alt="Lucy" class="creator-avatar">
+            <div class="creator-info">
+                <div class="creator-name">Lucy Wu</div>
+                <div class="creator-role"><span class="role-code">CN</span> Chinese Editor</div>
+                <div class="creator-native-tag">🇨🇳 日本在住10年</div>
+                <div class="creator-expertise">小紅書・Weibo運用</div>
+            </div>
+        </div>
+        <div class="creator-card">
+            <img src="https://via.placeholder.com/72" alt="Sou" class="creator-avatar">
+            <div class="creator-info">
+                <div class="creator-name">Sou</div>
+                <div class="creator-role"><span class="role-code">TW</span> Taiwan Writer</div>
+                <div class="creator-native-tag">🇹🇼 日本在住7年</div>
+                <div class="creator-expertise">繁体字ローカライズ</div>
+            </div>
+        </div>
+        <div class="creator-card">
+            <img src="https://www.gldaily.com/gld-kanri/wp-content/uploads/2024/08/Chia-2-e1724920459498.jpg" alt="Chia" class="creator-avatar">
+            <div class="creator-info">
+                <div class="creator-name">Chia</div>
+                <div class="creator-role"><span class="role-code">TW</span> Taiwan Creator</div>
+                <div class="creator-native-tag">🇹🇼 日本在住5年</div>
+                <div class="creator-expertise">Pixnet・FB運用</div>
+            </div>
+        </div>
+        <div class="creator-card">
+            <img src="https://via.placeholder.com/72" alt="Indonesia" class="creator-avatar">
+            <div class="creator-info">
+                <div class="creator-name">Rani</div>
+                <div class="creator-role"><span class="role-code">ID</span> Indonesia Creator</div>
+                <div class="creator-native-tag">🇮🇩 現地トレンド精通</div>
+                <div class="creator-expertise">ムスリム旅行専門</div>
+            </div>
+        </div>
+        <div class="creator-card">
+            <img src="https://via.placeholder.com/72" alt="Vietnam" class="creator-avatar">
+            <div class="creator-info">
+                <div class="creator-name">Linh</div>
+                <div class="creator-role"><span class="role-code">VN</span> Vietnam Creator</div>
+                <div class="creator-native-tag">🇻🇳 現地メディア経験</div>
+                <div class="creator-expertise">Facebook運用</div>
+            </div>
+        </div>
+        <div class="creator-card">
+            <img src="https://via.placeholder.com/72" alt="France" class="creator-avatar">
+            <div class="creator-info">
+                <div class="creator-name">Marie</div>
+                <div class="creator-role"><span class="role-code">FR</span> France Creator</div>
+                <div class="creator-native-tag">🇫🇷 欧州市場専門</div>
+                <div class="creator-expertise">カルチャー・美食</div>
+            </div>
+        </div>
+    </div>
+</div>
         </div>
     </section>
 
@@ -7153,7 +8276,7 @@
                             <li>自社メディア掲載</li>
                             <li>基本レポート</li>
                         </ul>
-                        <a href="#contact" class="pricing-cta">相談する</a>
+                        <a href="#contact" class="pricing-cta" id="btn-pricing-trial">相談する</a>
                     </div>
                 </div>
                 <div class="pricing-card featured">
@@ -7170,7 +8293,7 @@
                             <li>SNS運用サポート</li>
                             <li>詳細レポート</li>
                         </ul>
-                        <a href="#contact" class="pricing-cta">相談する</a>
+                        <a href="#contact" class="pricing-cta" id="btn-pricing-standard">相談する</a>
                     </div>
                 </div>
                 <div class="pricing-card">
@@ -7186,7 +8309,7 @@
                             <li>イベント企画</li>
                             <li>戦略コンサルティング</li>
                         </ul>
-                        <a href="#contact" class="pricing-cta">相談する</a>
+                        <a href="#contact" class="pricing-cta" id="btn-pricing-standard">相談する</a>
                     </div>
                 </div>
             </div>
@@ -7198,7 +8321,7 @@
         <div class="cta-inner reveal">
             <h2>まずは30分の無料相談から</h2>
             <p>営業トークではなく、貴社の状況をお聞きして最適な方法をご提案します</p>
-            <a href="https://www.gldaily.com/contact" class="cta-btn">無料相談を予約する</a>
+            <a href="https://www.gldaily.com/contact" class="cta-btn" id="btn-footer-contact" >無料相談を予約する</a>
         </div>
     </section>
 
@@ -7214,16 +8337,6 @@
             const menu = document.getElementById('mobileMenu');
             if (menu) menu.classList.toggle('active');
         }
-
-        // Reveal animation
-        const revealElements = document.querySelectorAll('.reveal');
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) entry.target.classList.add('visible');
-            });
-        }, { threshold: 0.1 });
-
-        revealElements.forEach(el => observer.observe(el));
 
         // Smooth scroll
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -7274,11 +8387,236 @@
     document.getElementById(tabName).classList.add("active");
     evt.currentTarget.classList.add("active");
 }
+// 스크롤 시 네비게이션 스타일 변경
+window.addEventListener('scroll', function() {
+    const nav = document.querySelector('.nav');
+    if (window.scrollY > 100) {
+        nav.classList.add('scrolled');
+    } else {
+        nav.classList.remove('scrolled');
+    }
+});
+
+// Intersection Observer threshold 조절 (핵심 섹션만)
+const revealElements = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+        }
+    });
+}, { 
+    threshold: 0.15, // 0.1에서 0.15로 높임
+    rootMargin: '-50px' // 뷰포트 안쪽으로 50px 들어왔을 때 트리거
+});
+
+revealElements.forEach(el => observer.observe(el));
+// 탭 버튼 클릭 이벤트 연결
+document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        const tabId = this.getAttribute('data-tab');
+        
+        // 모든 탭 콘텐츠 숨기기
+        document.querySelectorAll('.tab-content').forEach(content => {
+            content.classList.remove('active');
+        });
+        
+        // 모든 버튼 비활성화
+        document.querySelectorAll('.tab-btn').forEach(b => {
+            b.classList.remove('active');
+        });
+        
+        // 선택된 탭 보여주기
+        document.getElementById(tabId).classList.add('active');
+        this.classList.add('active');
+    });
+});
+
+<!-- 06번 슬라이드쇼 전용 JavaScript -->
+
+(function() {
+    let currentIndex06 = 0;
+    const totalSlides06 = 5;
+    const autoplayDelay06 = 3000;
+    let animationId06, startTime06;
+    
+    const slides06 = document.querySelectorAll('.slide06');
+    const indicators06 = document.querySelectorAll('.indicator06');
+    const progressBar06 = document.getElementById('progressBar06');
+    const counter06 = document.getElementById('slideCounter06');
+    
+    function updateSlide06() {
+        slides06.forEach((s, i) => {
+            s.style.opacity = i === currentIndex06 ? '1' : '0';
+        });
+        indicators06.forEach((ind, i) => {
+            if (i === currentIndex06) {
+                ind.style.width = '14px';
+                ind.style.borderRadius = '3px';
+                ind.style.background = 'var(--accent)';
+            } else {
+                ind.style.width = '5px';
+                ind.style.borderRadius = '50%';
+                ind.style.background = 'rgba(255,255,255,0.4)';
+            }
+        });
+        if (counter06) counter06.textContent = (currentIndex06 + 1) + '/5';
+    }
+    
+    window.changeSlide06 = function(dir) {
+        currentIndex06 = (currentIndex06 + dir + totalSlides06) % totalSlides06;
+        updateSlide06();
+        restartProgress06();
+    };
+    
+    window.goToSlide06 = function(i) {
+        currentIndex06 = i;
+        updateSlide06();
+        restartProgress06();
+    };
+    
+    function animateProgress06(timestamp) {
+        if (!startTime06) startTime06 = timestamp;
+        const progress = Math.min(((timestamp - startTime06) / autoplayDelay06) * 100, 100);
+        if (progressBar06) progressBar06.style.width = progress + '%';
+        
+        if (progress < 100) {
+            animationId06 = requestAnimationFrame(animateProgress06);
+        } else {
+            currentIndex06 = (currentIndex06 + 1) % totalSlides06;
+            updateSlide06();
+            restartProgress06();
+        }
+    }
+    
+    function restartProgress06() {
+        cancelAnimationFrame(animationId06);
+        startTime06 = null;
+        if (progressBar06) progressBar06.style.width = '0%';
+        animationId06 = requestAnimationFrame(animateProgress06);
+    }
+    
+    // 시작
+    if (slides06.length > 0) {
+        animationId06 = requestAnimationFrame(animateProgress06);
+    }
+})();
+
+// ===== Navigation Controller =====
+(function() {
+    const sideNav = document.getElementById('sideNav');
+    const bottomTabBar = document.getElementById('bottomTabBar');
+    const sideDots = document.querySelectorAll('.side-dot');
+    const tabItems = document.querySelectorAll('.tab-item:not(.cta-tab)');
+    
+    // 트래킹할 섹션 ID
+    const trackedSections = ['hero', 'why', 'services', 'channel', 'cases', 'pricing', 'contact'];
+    
+    // Hero에 id 없으면 추가
+    const heroSection = document.querySelector('.hero');
+    if (heroSection && !heroSection.id) {
+        heroSection.id = 'hero';
+    }
+    
+    // 현재 섹션 감지
+    function getCurrentSection() {
+        let current = 'hero';
+        trackedSections.forEach(sectionId => {
+            const section = document.getElementById(sectionId);
+            if (section) {
+                const rect = section.getBoundingClientRect();
+                if (rect.top <= window.innerHeight / 3) {
+                    current = sectionId;
+                }
+            }
+        });
+        return current;
+    }
+    
+    // 네비게이션 업데이트
+    function updateNavigation() {
+        const current = getCurrentSection();
+        
+        // Side dots 업데이트
+        sideDots.forEach(dot => {
+            dot.classList.remove('active');
+            if (dot.getAttribute('data-section') === current) {
+                dot.classList.add('active');
+            }
+        });
+        
+        // Bottom tabs 업데이트
+        tabItems.forEach(tab => {
+            tab.classList.remove('active');
+            if (tab.getAttribute('data-section') === current) {
+                tab.classList.add('active');
+            }
+        });
+        
+        // 밝은 배경 감지 (side nav)
+        if (sideNav) {
+            const lightSections = ['why', 'cases', 'process', 'pricing'];
+            if (lightSections.includes(current)) {
+                sideNav.classList.add('on-light');
+            } else {
+                sideNav.classList.remove('on-light');
+            }
+        }
+    }
+    
+    // 스크롤 이벤트 (throttle)
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+        if (!ticking) {
+            window.requestAnimationFrame(() => {
+                updateNavigation();
+                ticking = false;
+            });
+            ticking = true;
+        }
+    });
+    
+    // 초기 실행
+    updateNavigation();
+    
+    // 클릭 이벤트 - 부드러운 스크롤
+    function smoothScrollTo(targetId) {
+        const target = document.getElementById(targetId);
+        if (target) {
+            target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    }
+    
+    // Side dots 클릭
+    sideDots.forEach(dot => {
+        const link = dot.querySelector('a');
+        if (link) {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                smoothScrollTo(targetId);
+            });
+        }
+    });
+    
+    // Bottom tabs 클릭
+    document.querySelectorAll('.tab-item').forEach(tab => {
+        tab.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href').substring(1);
+            smoothScrollTo(targetId);
+        });
+    });
+})();
+
     </script>
 
     <!-- Floating CTA Button -->
     <div class="floating-cta" id="floating-cta">
-        <a href="#contact" class="floating-cta-btn">
+        <a href="#contact" class="floating-cta-btn" id="btn-floating-contact">
             <span class="cta-icon">
                 <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
             </span>
